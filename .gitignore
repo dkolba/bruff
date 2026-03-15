@@ -1,0 +1,12 @@
+node_modules
+.pnpm-store
+.DS_Store
+.nyc_output
+coverage
+dist
+site
+test-results
+playwright-report
+packages/game/site
+tsconfig.tsbuildinfo
+SCRATCHPAD.md
