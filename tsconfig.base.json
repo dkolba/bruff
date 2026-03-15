@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    /* Language & Environment */
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["vitest/globals"],
+    "erasableSyntaxOnly": true,
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "useUnknownInCatchVariables": true,
+    "noImplicitAny": true,
+
+    /* Imports & Modules */
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    /* Emit */
+    "noEmit": true,
+
+    /* Performance */
+    "skipLibCheck": true,
+
+    /* DX & Safety */
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}

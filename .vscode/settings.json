@@ -1,0 +1,14 @@
+{
+  "editor.formatOnSave": true,
+  "eslint.enable": true,
+  "eslint.format.enable": true,
+  "eslint.run": "onType",
+  "eslint.workingDirectories": ["./packages/*"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.useFlatConfig": true
+}

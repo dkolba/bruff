@@ -1,0 +1,43 @@
+{
+  "name": "bruff",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A modern JavaScript/TypeScript roguelike game collection with focus on functional programming patterns and type safety.",
+  "keywords": [
+    "broughlike",
+    "roguelike"
+  ],
+  "license": "BSD-3-Clause",
+  "author": "Duncan Kolba <duncankolba@gmail.com>",
+  "contributors": [
+    {
+      "name": "Duncan Kolba",
+      "email": "duncankolba@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dkolba/bruff.git"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "pnpm --filter @bruff/game run build:lib && pnpm --filter @bruff/game run build:site",
+    "changeset:add": "changeset",
+    "changeset:version": "changeset version",
+    "format": "pnpm run format:ai && pnpm -r --parallel run format",
+    "format:ai": "prettier -w AGENTS.md",
+    "lint": "pnpm -r --parallel run lint",
+    "ok": "pnpm run format && pnpm run lint && pnpm run test && pnpm run typecheck && pnpm run build",
+    "start": "pnpm --filter @bruff/game run dev",
+    "test": "pnpm -r --parallel run test",
+    "typecheck": "pnpm -r --parallel run typecheck"
+  },
+  "devDependencies": {
+    "@changesets/cli": "2.30.0",
+    "prettier": "3.8.1"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

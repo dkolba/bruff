@@ -1,0 +1,6 @@
+.nyc_output
+coverage
+dist
+site
+test-results
+playwright-report
