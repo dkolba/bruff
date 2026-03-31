@@ -332,48 +332,6 @@ jobs:
           path: ./packages/game/coverage
           retention-days: 30
 
-  # e2e_test_game:
-  #   name: 🎭 E2E Test Game
-  #   runs-on: ubuntu-latest
-  #   container:
-  #     image: mcr.microsoft.com/playwright:v${{ vars.PLAYWRIGHT_VERSION }}
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       project: [chromium, firefox, webkit, "Mobile Chrome", "Mobile Safari"]
-  #   steps:
-  #     - name: 🛑 Cancel Previous Runs
-  #       uses: styfle/cancel-workflow-action@0.13.1
-
-  #     - name: ⬇️ Checkout repo
-  #       uses: actions/checkout@v6.0.2
-
-  #     - name: 📦 Enable pnpm
-  #       uses: pnpm/action-setup@v4
-  #       with:
-  #         cache: true
-
-  #     - name: ⎔ Setup node
-  #       uses: actions/setup-node@v6
-  #       with:
-  #         node-version: ${{ env.NODE_VERSION }}
-
-  #     - name: 📥 Download deps
-  #       run: pnpm install --frozen-lockfile
-
-  #     - name: 👩‍🔬 Test with Playwright 🎭
-  #       run: HOME=/root pnpm run --filter @bruff/game test:e2e --project="${{ matrix.project }}"
-
-  #     - name: ‍🔬 Create Coverage
-  #       run: pnpm run --filter @bruff/game coverage:e2e:report
-
-  #     - name: 🆙 Upload e2e test coverage
-  #       if: ${{ matrix.project == 'chromium' }}
-  #       uses: actions/upload-artifact@v7
-  #       with:
-  #         name: e2e-test-game-coverage-${{ matrix.project }}
-  #         path: ./packages/game/coverage
-  #         retention-days: 30
   e2e_test_game:
     name: 🎭 E2E Test Game
     runs-on: ubuntu-latest
@@ -390,19 +348,24 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
       - name: ⎔ Setup node
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
+        run: pnpm install --frozen-lockfile
 
       - name: 👩‍🔬 Test with Playwright 🎭
-        run: HOME=/root npm run test:e2e --workspace=@brough/game -- --project="${{ matrix.project }}"
+        run: HOME=/root pnpm run --filter @bruff/game test:e2e --project="${{ matrix.project }}"
 
       - name: ‍🔬 Create Coverage
-        run: npm run coverage:e2e:report --workspace=@brough/game
+        run: pnpm run --filter @bruff/game coverage:e2e:report
 
       - name: 🆙 Upload e2e test coverage
         if: ${{ matrix.project == 'chromium' }}
