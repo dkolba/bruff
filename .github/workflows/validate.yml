@@ -15,17 +15,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
           cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
@@ -45,17 +45,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
           cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
@@ -74,17 +74,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
           cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
@@ -103,17 +103,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
           cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
@@ -130,17 +130,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
           cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
@@ -157,17 +157,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
           cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
@@ -184,17 +184,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
           cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
@@ -211,17 +211,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
           cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
@@ -238,17 +238,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
           cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
@@ -277,17 +277,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
           cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
@@ -317,17 +317,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
-
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
           cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
@@ -359,13 +359,19 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v6.0.2
 
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          cache: true
+
       - name: ⎔ Setup node
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
+        run: pnpm install --frozen-lockfile
 
       - name: 👩‍🔬 Test with Playwright 🎭
         run: HOME=/root pnpm run --filter @bruff/game test:e2e --project="${{ matrix.project }}"
