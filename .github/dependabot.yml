@@ -1,0 +1,44 @@
+---
+version: 2
+updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+      time: '04:00'
+      timezone: 'Europe/Berlin'
+    pull-request-branch-name:
+      separator: '-'
+
+  - package-ecosystem: 'npm'
+    directory: '/'
+    open-pull-requests-limit: 5
+    schedule:
+      interval: 'daily'
+      time: '04:00'
+      timezone: 'Europe/Berlin'
+    cooldown:
+      default-days: 3
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 3
+    pull-request-branch-name:
+      separator: '-'
+    # https://github.com/dependabot/dependabot-core/issues/5226#issuecomment-1179434437
+    versioning-strategy: increase
+    groups:
+      eslint:
+        patterns:
+          - '@eslint/js'
+          - 'eslint*'
+          - 'globals'
+      vite:
+        patterns:
+          - 'vite*'
+      test:
+        patterns:
+          - '@vitest*'
+          - 'vitest'
+          - 'playwright'
+          - '@playwright/test'
+          - '@vitest/browser'
