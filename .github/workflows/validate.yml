@@ -1,0 +1,376 @@
+on:
+  workflow_call:
+
+env:
+  NODE_VERSION: "24"
+
+jobs:
+  format_utils:
+    name: 📏 Format Utils
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - name: 📏 Format Utils
+        run: |
+          pnpm --filter @bruff/utils run format
+          git diff --exit-code
+
+  format_game:
+    name: 📏 Format Game
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: |
+          pnpm --filter @bruff/game run format
+          git diff --exit-code
+
+  format_eslint_config:
+    name: 📏 Format Eslint Config
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: |
+          pnpm --filter @bruff/eslint-config run format
+          git diff --exit-code
+
+  typecheck_utils:
+    name: ʦ TypeScript Utils
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @bruff/utils run typecheck
+
+  typecheck_game:
+    name: ʦ TypeScript Game
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @bruff/game run typecheck
+
+  lint_eslint_config:
+    name: ⬣ ESLint eslint-config
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @bruff/eslint-config run lint
+
+  lint_utils:
+    name: ⬣ ESLint Utils
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @bruff/utils run lint
+
+  lint_game:
+    name: ⬣ ESLint Game
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @bruff/game run lint
+
+  build_game:
+    name: 🏗 Build Game
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @bruff/game run build
+
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-game
+          path: ./packages/game/dist
+
+  unit_test_utils:
+    name: 🎭 Unit Test Utils
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v${{ vars.PLAYWRIGHT_VERSION }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit]
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: HOME=/root pnpm --filter @bruff/utils run test:${{ matrix.project }}
+
+      - if: ${{ matrix.project == 'chromium' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: unit-test-utils-coverage-${{ matrix.project }}
+          path: ./packages/utils/coverage
+          retention-days: 30
+
+  unit_test_game:
+    name: 🎭 Unit Test Game
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v${{ vars.PLAYWRIGHT_VERSION }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit]
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - name: 👩‍🔬 Test with Playwright 🎭
+        run: HOME=/root pnpm run --filter @bruff/game test:unit:"${{ matrix.project }}"
+
+      - name: 🆙 Upload test coverage
+        if: ${{ matrix.project == 'chromium' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: unit-test-game-coverage-${{ matrix.project }}
+          path: ./packages/game/coverage
+          retention-days: 30
+
+  e2e_test_game:
+    name: 🎭 E2E Test Game
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v${{ vars.PLAYWRIGHT_VERSION }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit, "Mobile Chrome", "Mobile Safari"]
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - name: 👩‍🔬 Test with Playwright 🎭
+        run: HOME=/root pnpm run --filter @bruff/game test:e2e --project="${{ matrix.project }}"
+
+      - name: ‍🔬 Create Coverage
+        run: pnpm run --filter @bruff/game coverage:e2e:report
+
+      - name: 🆙 Upload e2e test coverage
+        if: ${{ matrix.project == 'chromium' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-test-game-coverage-${{ matrix.project }}
+          path: ./packages/game/coverage
+          retention-days: 30
