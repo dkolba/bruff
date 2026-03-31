@@ -18,7 +18,6 @@
   // Tell Renovate this repo uses pnpm so it reads pnpm-lock.yaml and
   // pnpm-workspace.yaml correctly.
   npmrc: "//registry.npmjs.org/",
-  pnpmrc: "auto-install-peers=true\nstrict-peer-dependencies=false",
 
   // Renovate natively handles pnpm workspaces; "workspace:*" ranges are kept.
   constraints: {
