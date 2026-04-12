@@ -57,6 +57,13 @@ export const overrideRulesEslint = {
   ],
   "one-var": "off",
   "sort-imports": ["error", { ignoreCase: true }],
+  "capitalized-comments": [
+    "error",
+    "always",
+    {
+      ignorePattern: "c8 ignore",
+    },
+  ],
 };
 
 /**

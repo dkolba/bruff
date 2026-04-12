@@ -11,6 +11,8 @@ export const moveEnemyTowardPlayer = (
   const dy = player.yPos - enemy.yPos;
   const distribution = Math.hypot(dx, dy);
 
+  // Hitting negative zero "-0" would be a meaningless test
+  /* c8 ignore next */
   if (distribution === ZERO) {
     return { ...enemy };
   }

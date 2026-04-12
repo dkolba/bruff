@@ -17,8 +17,10 @@ export const getCardinalDirection = (dx: number, dy: number) => {
     "SOUTHWEST",
   ];
 
-  const index =
-    Math.round((angle + HALF_CIRCLE_DEGREES) / EIGHTH_CIRCLE_DEGREES) % EIGHT;
+  // The following three constants are needed to hit 100% coverage
+  const normalized = (angle + HALF_CIRCLE_DEGREES) / EIGHTH_CIRCLE_DEGREES;
+  const rounded = Math.round(normalized);
+  const index = rounded % EIGHT;
   return directions[index]!;
 };
 
