@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import { ONE, ZERO } from "../constants";
-import getCardinalDirection from "./get-cardinal-direction";
+import { getCardinalDirection } from "./get-cardinal-direction";
 
 const NEGATIVE_ONE = -1;
+const MINUS_POINT_ONE = -0.1;
 
 describe("getCardinalDirection", () => {
   it("should return EAST for positive dx", () => {
@@ -36,5 +37,13 @@ describe("getCardinalDirection", () => {
 
   it("should return SOUTHWEST for negative dx and positive dy", () => {
     expect(getCardinalDirection(NEGATIVE_ONE, ONE)).toBe("SOUTHWEST");
+  });
+
+  it("should handle rounding up using Math.round", () => {
+    expect(getCardinalDirection(ONE, MINUS_POINT_ONE)).toBe("EAST");
+  });
+
+  it("should handle rounding down using Math.round", () => {
+    expect(getCardinalDirection(ONE, MINUS_POINT_ONE)).toBe("EAST");
   });
 });
