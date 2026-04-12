@@ -41,7 +41,7 @@
     "eslint-plugin-jsdoc": "62.7.1",
     "eslint-plugin-playwright": "2.9.0",
     "eslint-plugin-tsdoc": "0.5.2",
-    "nyc": "17.1.0",
+    "nyc": "18.0.0",
     "observable-polyfill": "0.0.29",
     "playwright": "1.58.2",
     "prettier": "3.8.1",
