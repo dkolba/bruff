@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "@bruff/eslint-config": "workspace:0.0.0",
-    "@types/node": "25.3.5",
     "@vitest/browser": "4.0.18",
     "@vitest/browser-playwright": "4.0.18",
     "@vitest/coverage-v8": "4.0.18",
