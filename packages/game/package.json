@@ -34,9 +34,9 @@
     "@bruff/eslint-config": "workspace:0.0.0",
     "@bruff/utils": "workspace:0.0.0",
     "@playwright/test": "1.59.1",
-    "@vitest/browser": "4.1.2",
-    "@vitest/browser-playwright": "4.1.2",
-    "@vitest/coverage-v8": "4.1.2",
+    "@vitest/browser": "4.1.4",
+    "@vitest/browser-playwright": "4.1.4",
+    "@vitest/coverage-v8": "4.1.4",
     "eslint": "10.0.3",
     "eslint-plugin-jsdoc": "62.9.0",
     "eslint-plugin-playwright": "2.10.1",
@@ -50,6 +50,6 @@
     "vite": "8.0.0",
     "vite-plugin-dts": "4.5.4",
     "vite-plugin-istanbul": "8.0.0",
-    "vitest": "4.1.2"
+    "vitest": "4.1.4"
   }
 }
