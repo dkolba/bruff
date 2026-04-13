@@ -20,7 +20,7 @@
     "@vitest/browser": "4.1.4",
     "@vitest/browser-playwright": "4.1.4",
     "@vitest/coverage-v8": "4.1.4",
-    "eslint": "10.0.3",
+    "eslint": "10.2.0",
     "playwright": "1.59.1",
     "prettier": "3.8.1",
     "rimraf": "6.1.3",

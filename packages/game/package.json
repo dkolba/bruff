@@ -37,7 +37,7 @@
     "@vitest/browser": "4.1.4",
     "@vitest/browser-playwright": "4.1.4",
     "@vitest/coverage-v8": "4.1.4",
-    "eslint": "10.0.3",
+    "eslint": "10.2.0",
     "eslint-plugin-jsdoc": "62.9.0",
     "eslint-plugin-playwright": "2.10.1",
     "eslint-plugin-tsdoc": "0.5.2",
