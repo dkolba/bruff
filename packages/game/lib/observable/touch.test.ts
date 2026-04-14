@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { apply, isSupported } from "observable-polyfill/fn";
 import createTouchObservable from "./touch.js";
-import { getCardinalDirection } from "../helpers/get-cardinal-direction.js";
+import { getCardinalDirection } from "@bruff/utils";
 
 if (!isSupported()) {
   apply();
 }
 
-vi.mock("../helpers/get-cardinal-direction.js", () => ({
+vi.mock("@bruff/utils", () => ({
   getCardinalDirection: vi.fn(),
 }));
 
