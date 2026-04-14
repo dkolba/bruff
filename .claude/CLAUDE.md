@@ -35,25 +35,7 @@ These rules ensure maintainability, safety, and developer velocity.
 
 ---
 
-### 3 — Testing
-
-- **T-1 (MUST)** For a simple function, colocate unit tests in `*.test.ts` in same directory as source file. These tests are run via Vitest.
-- **T-2 (MUST)** For any E2E or integration tests involving browser interaction, use `*.spec.ts`. These tests are run via Playwright and typically reside in `packages/game/e2e` or alongside the component they test.
-- **T-3 (MUST)** ALWAYS separate pure-logic unit tests from integration tests.
-- **T-4 (SHOULD)** Prefer integration tests over heavy mocking.
-- **T-5 (SHOULD)** Unit-test complex algorithms thoroughly.
-- **T-6 (SHOULD)** Test the entire structure in one assertion if possible
-
-  ```ts
-  expect(result).toBe([value]); // Good
-
-  expect(result).toHaveLength(1); // Bad
-  expect(result[0]).toBe(value); // Bad
-  ```
-
----
-
-### 4 — Code Organization
+### 3 — Code Organization
 
 - **O-1 (MUST)** Place code in `packages/utils` if reusable, domain agnostic logic.
 - **O-2 (SHOULD)** Incremental progress over big bangs - Small changes that compile and pass tests
@@ -118,9 +100,9 @@ IMPORTANT: you SHOULD NOT refactor out a separate function unless there is a com
   - Follow project formatting/linting
 
 - **Before committing**:
-  - Run formatters/linters
   - Self-review changes
   - Ensure commit message explains "why"
+  - Run "pnpm run ok" before committing
 
 ##### Error Handling
 
@@ -165,7 +147,7 @@ TypeScript:
 
 ---
 
-### 5 — Tooling Gates
+### 4 — Tooling Gates
 
 - **G-1 (MUST)** `pnpm run format` passes.
 - **G-2 (MUST)** `pnpm run lint` passes.
@@ -175,12 +157,12 @@ TypeScript:
 
 ---
 
-### 6 - Git
+### 5 - Git
 
 - **GH-1 (MUST**) Use Conventional Commits format when writing commit messages: https://www.conventionalcommits.org/en/v1.0.0
 - **GH-2 (SHOULD NOT**) Refer to Gemini, Google, Claude or Anthropic in commit messages.
 
-### 7 - Important Reminders
+### 6 - Important Reminders
 
 **NEVER**:
 
@@ -196,85 +178,10 @@ TypeScript:
 - Learn from existing implementations
 - Stop after 3 failed attempts and reassess
 
-### 8 - Code Organization
+### 7 - Code Organization
 
 This outlines the development standards and best practices for this project. Adhering to these guidelines ensures consistency, maintainability, and quality across the codebase.
 The project is organized into a monorepo with the primary packages being:
 
 - `packages/game` - The main game logic and application-specific code.
 - `packages/utils` - Utility and helper functions
-
-### `@bruff/utils`
-
-This package contains shared, reusable utility functions.
-
-- **Language**: **TypeScript**.
-- **Purpose**: To house generic, pure functions (e.g., data manipulation, math helpers) that can be used across the entire project or even in other projects.
-- **Typing**: While using `.ts` files, all type information **must be declared using TSDoc annotations**.
-- **Style**: Must adhere to the "double quotes" and "two-space indentation" rule.
-
-### `@bruff/game` (TypeScript)
-
-This package contains the core game logic and application-specific code.
-
-- **Language**: **TypeScript**.
-- **Purpose**: To implement the main features and logic of the game.
-- **Typing**: While using `.ts` files, all type information **must be declared using TSDoc annotations**.
-- **Dependencies**: This package will consume utilities from `@bruff/utils`.
-
-```typescript
-// packages/game/lib/loop.ts
-
-import {
-  BASE_SIZE,
-  HALF,
-  HUE_MULTIPLIER,
-  ONE,
-  PULSE_MAGNITUDE,
-  PULSE_SPEED,
-  RANGE_SCALE,
-  ROTATION_SPEED,
-  TWO,
-} from "./constants.ts";
-
-/**
- * Creates an animated background pattern of radiating bars that rotate and pulse.
- * The bars emanate from the center of the canvas in both directions, with colors
- * that shift based on position and time.
- *
- * @param CanvasRenderingContext2D - The 2D rendering context of the canvas
- * @param number - The current timestamp for animation timing
- * @returns void
- *
- * @remarks
- * The animation uses the following effects:
- * - Rotation: The entire pattern rotates based on the timestamp
- * - Pulsing: The bars' size pulses using a sine wave
- * - Color shifting: Colors transition across the hue spectrum
- * - Symmetry: Bars radiate both left and right from center
- */
-const radiatingBarsBackgroundAnimation = (
-  context: CanvasRenderingContext2D,
-  timestamp: number,
-) => {
-  context.save();
-  context.translate(context.canvas.width / TWO, context.canvas.height / TWO);
-  context.rotate(timestamp * ROTATION_SPEED);
-
-  const range =
-    Math.max(context.canvas.width, context.canvas.height) * RANGE_SCALE;
-  const size = BASE_SIZE + Math.sin(timestamp * PULSE_SPEED) * PULSE_MAGNITUDE;
-  for (let index = 0; index < range; index += size) {
-    context.fillStyle = hsla({
-      alpha: ONE,
-      hue: (index / range) * HUE_MULTIPLIER + timestamp * ROTATION_SPEED,
-      lightness: HALF,
-      saturation: ONE,
-    });
-    context.fillRect(index, -range, size, range * TWO);
-    context.fillRect(-index, -range, size, range * TWO);
-  }
-
-  context.restore();
-};
-```

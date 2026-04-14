@@ -25,7 +25,7 @@
     "changeset:add": "changeset",
     "changeset:version": "changeset version",
     "format": "pnpm run format:ai && pnpm -r --parallel run format",
-    "format:ai": "prettier -w AGENTS.md",
+    "format:ai": "prettier -w .claude",
     "lint": "pnpm -r --parallel run lint",
     "ok": "pnpm run format && pnpm run lint && pnpm run test && pnpm run typecheck && pnpm run build",
     "start": "pnpm --filter @bruff/game run dev",
