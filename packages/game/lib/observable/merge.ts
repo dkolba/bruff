@@ -11,13 +11,14 @@ const mergeObservables = <T>(
   ...observables: Array<Observable<T>>
 ): Observable<T> =>
   new Observable((observer) => {
-    /* eslint-disable @typescript-eslint/consistent-type-assertions */
+    /* eslint-disable @typescript-eslint/consistent-type-assertions -- observable-polyfill's subscribe() return type does not expose unsubscribe(); the cast is safe because the polyfill implements it at runtime */
     const subs = observables.map(
       (obs) =>
         obs.subscribe((value) => observer.next(value)) as unknown as {
           unsubscribe(): void;
         },
     );
+    /* eslint-enable @typescript-eslint/consistent-type-assertions */
     return () => {
       for (const sub of subs) {
         sub.unsubscribe();

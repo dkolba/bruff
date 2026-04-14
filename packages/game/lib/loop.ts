@@ -9,16 +9,29 @@ import render from "./render.js";
 import { updateEnemies } from "./update-enemies.js";
 import updatePlayer from "./update-player.js";
 
+/** Generator that yields and receives {@link GameState} values to drive the main game loop. */
 type GameStateGenerator = Generator<GameState, GameState, string>;
 
 if (!isSupported()) {
   apply();
 }
 
+/**
+ * Curries {@link radiatingBarsBackgroundAnimation} over a fixed canvas context.
+ *
+ * @param context - The 2D rendering context to draw on
+ * @returns A function that accepts a timestamp and renders one animation frame
+ */
 const curriedRadiatingBarsBackgroundAnimation =
   (context: CanvasRenderingContext2D) => (time: number) =>
     radiatingBarsBackgroundAnimation(context, time);
 
+/**
+ * Generator that drives the main game loop.
+ * Yields the current state and resumes with the next player input.
+ *
+ * @param initialState - The starting game state
+ */
 const createGameLoop = function* (initialState: GameState): GameStateGenerator {
   let state = initialState;
 
@@ -36,13 +49,23 @@ const createGameLoop = function* (initialState: GameState): GameStateGenerator {
   }
 };
 
+/**
+ * Curries a game-loop iterator into a single-argument function.
+ *
+ * @param gameLoop - The running game loop generator
+ * @returns A function that feeds one key input into the loop
+ */
 const curriedGameStateGenerator =
   (gameLoop: GameStateGenerator) => (key: string) => {
     gameLoop.next(key);
   };
 
+/**
+ * Creates the keyboard and touch input observables.
+ *
+ * @returns An object containing the key and touch observable streams
+ */
 const createGameObservables = () => {
-  // === Observe keystrokes and touch events ===
   const keyObservable$ = createKeyDownObservable();
   const touchObservable$ = createTouchObservable();
   return { keyObservable$, touchObservable$ };
@@ -69,6 +92,10 @@ const subscribeToGameObservables = (
   });
 };
 
+/**
+ * Entry point that initialises the canvas, wires up input observables,
+ * and starts the render animation loop.
+ */
 const loop = () => {
   /**
    * INITIAL ONE-TIME SETUP
