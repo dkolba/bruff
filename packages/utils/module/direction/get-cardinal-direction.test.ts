@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { getCardinalDirection } from "./get-cardinal-direction.js";
 
-import { ONE, ZERO } from "../constants";
-import { getCardinalDirection } from "./get-cardinal-direction";
-
+const ZERO = 0;
+const ONE = 1;
 const NEGATIVE_ONE = -1;
 const MINUS_POINT_ONE = -0.1;
 

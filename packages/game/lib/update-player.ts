@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/switch-case-braces */
 import { PLAYER_SIZE, PLAYER_SPEED, ZERO } from "./constants.js";
-import clamp from "./helpers/clamp.js";
+import { clamp } from "@bruff/utils";
 import type { GameState } from "../types/game-state-type.ts";
 
 const getMovementDelta = (

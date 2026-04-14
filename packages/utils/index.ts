@@ -4,3 +4,6 @@ export { getCanvas } from "./module/canvas/get-canvas.js";
 export { getCanvasContext } from "./module/canvas/get-canvas-context.js";
 export { getShadowGameRoot } from "./module/get-shadow-game-root.js";
 export { pipe } from "./module/fp/pipe.js";
+export { clamp } from "./module/math/clamp.js";
+export { hsla } from "./module/color/hsla.js";
+export { getCardinalDirection } from "./module/direction/get-cardinal-direction.js";

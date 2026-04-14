@@ -1,6 +1,6 @@
 import type { CanvasSize, Enemy, Player } from "../types/game-state-type.js";
 import { ENEMY_SIZE, ENEMY_SPEED, ZERO } from "./constants.js";
-import clamp from "./helpers/clamp.js";
+import { clamp } from "@bruff/utils";
 
 /**
  * Moves an enemy one step toward the player, clamped within canvas bounds.

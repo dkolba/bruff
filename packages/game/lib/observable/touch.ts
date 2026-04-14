@@ -1,5 +1,5 @@
 import { FIVE, ONE } from "../constants.js";
-import { getCardinalDirection } from "../helpers/get-cardinal-direction.js";
+import { getCardinalDirection } from "@bruff/utils";
 import type { Observable } from "observable-polyfill/fn";
 
 /**

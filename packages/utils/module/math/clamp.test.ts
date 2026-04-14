@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import clamp from "./clamp.js";
+import { clamp } from "./clamp.js";
 
 const MIN_RANGE = 0;
 const MAX_RANGE = 10;

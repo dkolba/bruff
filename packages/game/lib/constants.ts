@@ -1,5 +1,3 @@
-/** Numeric constant: 8 */
-export const EIGHT = 8;
 /** Numeric constant: 5 */
 export const FIVE = 5;
 /** Numeric constant: 0.5, used as a multiplier for halving values */
@@ -24,15 +22,6 @@ export const BASE_SIZE = 64;
 export const PULSE_MAGNITUDE = 50;
 /** Fraction of the canvas diagonal used as the animation bar range */
 export const RANGE_SCALE = 0.8;
-/** Total degrees in a half circle */
-export const HALF_CIRCLE_DEGREES = 180;
-/** Total degrees in an eighth of a circle */
-export const EIGHTH_CIRCLE_DEGREES = 45;
-
-/** Total degrees in a full hue rotation */
-export const HUE_DEGREES = 360;
-/** Multiplier to convert a 0–1 fraction to a percentage */
-export const PERCENTAGE = 100;
 
 /** Diameter of the player entity in pixels */
 export const PLAYER_SIZE = 20;
