@@ -18,13 +18,23 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # Install global tools (if really needed)
-RUN pnpm add -g @google/gemini-cli
+RUN apt-get update && apt-get install -y curl vim && rm -rf /var/lib/apt/lists/*
+
+USER node
+
+RUN curl -fsSL https://claude.ai/install.sh | bash
 
 # Copy the rest of the app
 COPY . .
 
+USER root
+
 # Install Playwright system dependencies and browsers
-RUN npx playwright install --with-deps
+RUN pnpm dlx playwright install --with-deps
+
+USER node
+
+ENV PATH="/home/node/.local/bin:${PATH}"
 
 # Expose port
 EXPOSE 5173
