@@ -1,0 +1,26 @@
+image:
+  repository: bruff-dev-server
+  tag: latest
+  # Use Never for images built locally and loaded into the cluster (kind: `kind load docker-image bruff:latest`).
+  # Use IfNotPresent if the image is available on the Docker Desktop daemon directly.
+  # pullPolicy: Never
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+  # NodePort works on both Docker Desktop k8s and kind without extra setup.
+  # Use LoadBalancer on Docker Desktop for automatic localhost binding.
+  type: NodePort
+  port: 5173
+  nodePort: 30573 # fixed port so `http://localhost:30573` is stable; omit to let k8s assign one
+
+resources: {}
+
+podAnnotations: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
