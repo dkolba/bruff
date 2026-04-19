@@ -4,7 +4,7 @@ import createKeyDownObservable from "./observable/keydown.js";
 import createTouchObservable from "./observable/touch.js";
 import curtainUp from "./curtain-up.js";
 import type { GameState } from "../types/game-state-type.ts";
-import { radiatingBarsBackgroundAnimation } from "./helpers/radiating-bars-background-animation.js";
+import { radiatingBarsBackgroundAnimation } from "@bruff/utils";
 import render from "./render.js";
 import { updateEnemies } from "./update-enemies.js";
 import updatePlayer from "./update-player.js";

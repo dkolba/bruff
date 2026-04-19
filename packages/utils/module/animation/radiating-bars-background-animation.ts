@@ -10,7 +10,7 @@ import {
   TWO,
   ZERO,
 } from "../constants.js";
-import { hsla } from "@bruff/utils";
+import { hsla } from "../color/hsla.js";
 
 /**
  * Draws a single bar with color shifting based on position.

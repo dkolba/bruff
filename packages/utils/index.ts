@@ -7,3 +7,4 @@ export { pipe } from "./module/fp/pipe.js";
 export { clamp } from "./module/math/clamp.js";
 export { hsla } from "./module/color/hsla.js";
 export { getCardinalDirection } from "./module/direction/get-cardinal-direction.js";
+export { radiatingBarsBackgroundAnimation } from "./module/animation/radiating-bars-background-animation.js";
