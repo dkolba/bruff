@@ -73,3 +73,42 @@ When you are finished, stop the running container. The `--rm` flag in the `docke
 ```bash
 docker stop bruff-dev-server
 ```
+
+## Development in local Docker-Desktop Kubernetes │
+
+This section guides you through setting up a local development environment using Docker Desktop's built-in Kubernetes cluster. This allows you to run the application in a containerized environment that mirrors a production setup.
+
+### Prerequisites
+
+- **Docker Desktop**: Ensure you have Docker Desktop installed and running.
+- **Kubernetes**: Enable the Kubernetes cluster (kind not kubeadm) in Docker Desktop's settings. Go to `Settings > Kubernetes > Enable Kubernetes`. Make sure in Docker Desktop settings that you also use containered image store.
+
+### 1. Build the Docker Image
+
+First, build the Docker image for the development server. The `-t` flag tags the image for easy reference. The `pullPolicy: Never` in the Helm chart means Kubernetes will use this local image.
+
+```bash
+docker build -t brough-dev-server:<revision> -f Dockerfile .
+```
+
+### 2. Deploy to Kubernetes with Helm
+
+Next, use Helm to deploy the application to your local Kubernetes cluster. This command installs a new release named `brough-dev` using the chart located in the `./chart` directory.
+
+```bash
+helm upgrade --install bruff-dev-server ./helm/bruff --set image.tag=<revision>
+```
+
+Once deployed, the service will need to be exposed via port-forwarding. You can access the running application at [http://localhost:5173](http://localhost:5173).
+
+```bash
+kubectl port-forward svc/bruff-dev-server 5173:5173
+```
+
+### 3. Undeploy from Kubernetes with Helm
+
+To remove the application from your Kubernetes cluster, use the `helm uninstall` command. This will delete all resources associated with the `brough-dev` release.
+
+```bash
+helm uninstall brhelm uninstall bruff-dev-serveruff-dev-server
+```
