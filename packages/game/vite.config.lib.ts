@@ -2,8 +2,12 @@
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 import istanbulPlugin from "vite-plugin-istanbul";
+import { version } from "./package.json";
 
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify(version),
+  },
   build: {
     lib: {
       entry: "./lib/bruff-game.ts",
@@ -17,7 +21,7 @@ export default defineConfig({
   plugins: [
     dts({
       exclude: [],
-      include: ["lib/**/*.ts"],
+      include: ["lib/**/*.ts", "types/**/*.ts"],
     }),
     istanbulPlugin({
       exclude: ["node_modules"],

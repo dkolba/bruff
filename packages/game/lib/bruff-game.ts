@@ -8,7 +8,7 @@ class BruffGame extends GameElement {}
 
 if (!customElements.get("bruff-game")) {
   customElements.define("bruff-game", BruffGame);
-  console.warn("bruff game component was defined");
+  console.info(`bruff game component v${__APP_VERSION__} was defined`);
 }
 
 export default BruffGame;
