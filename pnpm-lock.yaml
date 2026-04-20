@@ -33,8 +33,8 @@ importers:
         specifier: 3.1.0
         version: 3.1.0(eslint@10.2.0)
       globals:
-        specifier: 17.4.0
-        version: 17.4.0
+        specifier: 17.5.0
+        version: 17.5.0
       prettier:
         specifier: 3.8.3
         version: 3.8.3
@@ -1556,8 +1556,8 @@ packages:
     resolution: {integrity: sha512-c/c15i26VrJ4IRt5Z89DnIzCGDn9EcebibhAOjw5ibqEHsE1wLUgkPn9RDmNcUKyU87GeaL633nyJ+pplFR2ZQ==, tarball: https://registry.npmjs.org/globals/-/globals-16.5.0.tgz}
     engines: {node: '>=18'}
 
-  globals@17.4.0:
-    resolution: {integrity: sha512-hjrNztw/VajQwOLsMNT1cbJiH2muO3OROCHnbehc8eY5JyD2gqz4AcMHPqgaOR59DjgUjYAYLeH699g/eWi2jw==, tarball: https://registry.npmjs.org/globals/-/globals-17.4.0.tgz}
+  globals@17.5.0:
+    resolution: {integrity: sha512-qoV+HK2yFl/366t2/Cb3+xxPUo5BuMynomoDmiaZBIdbs+0pYbjfZU+twLhGKp4uCZ/+NbtpVepH5bGCxRyy2g==, tarball: https://registry.npmjs.org/globals/-/globals-17.5.0.tgz}
     engines: {node: '>=18'}
 
   globby@11.1.0:
@@ -3789,7 +3789,7 @@ snapshots:
   eslint-plugin-playwright@2.10.1(eslint@10.2.0):
     dependencies:
       eslint: 10.2.0
-      globals: 17.4.0
+      globals: 17.5.0
 
   eslint-plugin-tsdoc@0.5.2(eslint@10.2.0)(typescript@5.9.3):
     dependencies:
@@ -4022,7 +4022,7 @@ snapshots:
 
   globals@16.5.0: {}
 
-  globals@17.4.0: {}
+  globals@17.5.0: {}
 
   globby@11.1.0:
     dependencies:
