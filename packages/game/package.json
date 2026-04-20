@@ -32,6 +32,7 @@
   "devDependencies": {
     "@axe-core/playwright": "4.11.1",
     "@bruff/eslint-config": "workspace:0.0.0",
+    "@bruff/game-element": "workspace:0.0.0",
     "@bruff/utils": "workspace:0.0.0",
     "@playwright/test": "1.59.1",
     "@vitest/browser": "4.1.4",

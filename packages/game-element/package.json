@@ -1,0 +1,30 @@
+{
+  "name": "@bruff/game-element",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint",
+    "test:watch": "vitest",
+    "test": "pnpm run test:chromium && pnpm run test:firefox && pnpm run test:webkit",
+    "test:chromium": "vitest run --browser=chromium --coverage ",
+    "test:firefox": "vitest run --browser=firefox",
+    "test:webkit": "vitest run --browser=webkit",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@bruff/eslint-config": "workspace:0.0.0",
+    "@vitest/browser": "4.1.4",
+    "@vitest/browser-playwright": "4.1.4",
+    "@vitest/coverage-v8": "4.1.4",
+    "eslint": "10.2.0",
+    "playwright": "1.59.1",
+    "prettier": "3.8.3",
+    "rimraf": "6.1.3",
+    "typescript": "5.9.3",
+    "vitest": "4.1.4"
+  }
+}

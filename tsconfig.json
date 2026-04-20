@@ -1,4 +1,8 @@
 {
   "files": [],
-  "references": [{ "path": "./packages/utils" }, { "path": "./packages/game" }]
+  "references": [
+    { "path": "./packages/utils" },
+    { "path": "./packages/game-element" },
+    { "path": "./packages/game" }
+  ]
 }
