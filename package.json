@@ -21,14 +21,14 @@
   },
   "type": "module",
   "scripts": {
-    "build": "pnpm --filter @bruff/game run build:lib && pnpm --filter @bruff/game run build:site",
+    "build": "pnpm --filter @bruff/arcade run build:lib && pnpm --filter @bruff/arcade run build:site",
     "changeset:add": "changeset",
     "changeset:version": "changeset version",
     "format": "pnpm run format:ai && pnpm -r --parallel run format",
     "format:ai": "prettier -w .claude",
     "lint": "pnpm -r --parallel run lint",
     "ok": "pnpm run format && pnpm run lint && pnpm run test && pnpm run typecheck && pnpm run build",
-    "start": "pnpm --filter @bruff/game run dev",
+    "start": "pnpm --filter @bruff/arcade run dev",
     "test": "pnpm -r --parallel run test",
     "typecheck": "pnpm -r --parallel run typecheck"
   },

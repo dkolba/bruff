@@ -34,8 +34,8 @@ jobs:
           pnpm --filter @bruff/utils run format
           git diff --exit-code
 
-  format_game:
-    name: 📏 Format Game
+  format_arcade:
+    name: 📏 Format Arcade
     runs-on: ubuntu-latest
     steps:
       - name: 🛑 Cancel Previous Runs
@@ -59,7 +59,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - run: |
-          pnpm --filter @bruff/game run format
+          pnpm --filter @bruff/arcade run format
           git diff --exit-code
 
   format_game-element:
@@ -144,8 +144,8 @@ jobs:
 
       - run: pnpm --filter @bruff/utils run typecheck
 
-  typecheck_game:
-    name: ʦ TypeScript Game
+  typecheck_arcade:
+    name: ʦ TypeScript Arcade
     runs-on: ubuntu-latest
     steps:
       - name: 🛑 Cancel Previous Runs
@@ -168,7 +168,7 @@ jobs:
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
 
-      - run: pnpm --filter @bruff/game run typecheck
+      - run: pnpm --filter @bruff/arcade run typecheck
 
   typecheck_game-element:
     name: ʦ TypeScript Game-Element
@@ -248,8 +248,8 @@ jobs:
 
       - run: pnpm --filter @bruff/utils run lint
 
-  lint_game:
-    name: ⬣ ESLint Game
+  lint_arcade:
+    name: ⬣ ESLint Arcade
     runs-on: ubuntu-latest
     steps:
       - name: 🛑 Cancel Previous Runs
@@ -272,7 +272,7 @@ jobs:
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
 
-      - run: pnpm --filter @bruff/game run lint
+      - run: pnpm --filter @bruff/arcade run lint
 
   lint_game-element:
     name: ⬣ ESLint Game-Element
@@ -300,8 +300,8 @@ jobs:
 
       - run: pnpm --filter @bruff/game-element run lint
 
-  build_game:
-    name: 🏗 Build Game
+  build_arcade:
+    name: 🏗 Build Arcade
     runs-on: ubuntu-latest
     steps:
       - name: 🛑 Cancel Previous Runs
@@ -324,13 +324,13 @@ jobs:
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
 
-      - run: pnpm --filter @bruff/game run build
+      - run: pnpm --filter @bruff/arcade run build
 
       - if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: dist-game
-          path: ./packages/game/dist
+          name: dist-arcade
+          path: ./packages/arcade/dist
 
   unit_test_utils:
     name: 🎭 Unit Test Utils
@@ -371,8 +371,8 @@ jobs:
           path: ./packages/utils/coverage
           retention-days: 30
 
-  unit_test_game:
-    name: 🎭 Unit Test Game
+  unit_test_arcade:
+    name: 🎭 Unit Test Arcade
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v${{ vars.PLAYWRIGHT_VERSION }}
@@ -402,14 +402,14 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 👩‍🔬 Test with Playwright 🎭
-        run: HOME=/root pnpm run --filter @bruff/game test:unit:"${{ matrix.project }}"
+        run: HOME=/root pnpm run --filter @bruff/arcade test:unit:"${{ matrix.project }}"
 
       - name: 🆙 Upload test coverage
         if: ${{ matrix.project == 'chromium' }}
         uses: actions/upload-artifact@v7
         with:
-          name: unit-test-game-coverage-${{ matrix.project }}
-          path: ./packages/game/coverage
+          name: unit-test-arcade-coverage-${{ matrix.project }}
+          path: ./packages/arcade/coverage
           retention-days: 30
 
   unit_test_game-element:
@@ -453,8 +453,8 @@ jobs:
           path: ./packages/game-element/coverage
           retention-days: 30
 
-  e2e_test_game:
-    name: 🎭 E2E Test Game
+  e2e_test_arcade:
+    name: 🎭 E2E Test Arcade
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v${{ vars.PLAYWRIGHT_VERSION }}
@@ -483,15 +483,15 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 👩‍🔬 Test with Playwright 🎭
-        run: HOME=/root pnpm run --filter @bruff/game test:e2e --project="${{ matrix.project }}"
+        run: HOME=/root pnpm run --filter @bruff/arcade test:e2e --project="${{ matrix.project }}"
 
       - name: ‍🔬 Create Coverage
-        run: pnpm run --filter @bruff/game coverage:e2e:report
+        run: pnpm run --filter @bruff/arcade coverage:e2e:report
 
       - name: 🆙 Upload e2e test coverage
         if: ${{ matrix.project == 'chromium' }}
         uses: actions/upload-artifact@v7
         with:
-          name: e2e-test-game-coverage-${{ matrix.project }}
-          path: ./packages/game/coverage
+          name: e2e-test-arcade-coverage-${{ matrix.project }}
+          path: ./packages/arcade/coverage
           retention-days: 30

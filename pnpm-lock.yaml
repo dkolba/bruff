@@ -15,34 +15,7 @@ importers:
         specifier: 3.8.3
         version: 3.8.3
 
-  packages/eslint-config:
-    dependencies:
-      '@eslint/js':
-        specifier: 10.0.1
-        version: 10.0.1(eslint@10.2.1)
-      eslint:
-        specifier: '>=9'
-        version: 10.2.1
-      eslint-plugin-tsdoc:
-        specifier: 0.5.2
-        version: 0.5.2(eslint@10.2.1)(typescript@5.9.3)
-      eslint-plugin-unicorn:
-        specifier: 63.0.0
-        version: 63.0.0(eslint@10.2.1)
-      eslint-plugin-wc:
-        specifier: 3.1.0
-        version: 3.1.0(eslint@10.2.1)
-      globals:
-        specifier: 17.5.0
-        version: 17.5.0
-      prettier:
-        specifier: 3.8.3
-        version: 3.8.3
-      typescript-eslint:
-        specifier: 8.58.2
-        version: 8.58.2(eslint@10.2.1)(typescript@5.9.3)
-
-  packages/game:
+  packages/arcade:
     devDependencies:
       '@axe-core/playwright':
         specifier: 4.11.2
@@ -110,6 +83,33 @@ importers:
       vitest:
         specifier: 4.1.4
         version: 4.1.4(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.0.8(esbuild@0.27.7))
+
+  packages/eslint-config:
+    dependencies:
+      '@eslint/js':
+        specifier: 10.0.1
+        version: 10.0.1(eslint@10.2.1)
+      eslint:
+        specifier: '>=9'
+        version: 10.2.1
+      eslint-plugin-tsdoc:
+        specifier: 0.5.2
+        version: 0.5.2(eslint@10.2.1)(typescript@5.9.3)
+      eslint-plugin-unicorn:
+        specifier: 63.0.0
+        version: 63.0.0(eslint@10.2.1)
+      eslint-plugin-wc:
+        specifier: 3.1.0
+        version: 3.1.0(eslint@10.2.1)
+      globals:
+        specifier: 17.5.0
+        version: 17.5.0
+      prettier:
+        specifier: 3.8.3
+        version: 3.8.3
+      typescript-eslint:
+        specifier: 8.58.2
+        version: 8.58.2(eslint@10.2.1)(typescript@5.9.3)
 
   packages/game-element:
     devDependencies:
@@ -995,10 +995,6 @@ packages:
 
   '@typescript-eslint/types@8.56.1':
     resolution: {integrity: sha512-dbMkdIUkIkchgGDIv7KLUpa0Mda4IYjo4IAMJUZ+3xNoUXxMsk9YtKpTHSChRS85o+H9ftm51gsK1dZReY9CVw==, tarball: https://registry.npmjs.org/@typescript-eslint/types/-/types-8.56.1.tgz}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@typescript-eslint/types@8.58.1':
-    resolution: {integrity: sha512-io/dV5Aw5ezwzfPBBWLoT+5QfVtP8O7q4Kftjn5azJ88bYyp/ZMCsyW1lpKK46EXJcaYMZ1JtYj+s/7TdzmQMw==, tarball: https://registry.npmjs.org/@typescript-eslint/types/-/types-8.58.1.tgz}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@typescript-eslint/types@8.58.2':
@@ -2853,7 +2849,7 @@ snapshots:
   '@es-joy/jsdoccomment@0.86.0':
     dependencies:
       '@types/estree': 1.0.8
-      '@typescript-eslint/types': 8.58.1
+      '@typescript-eslint/types': 8.58.2
       comment-parser: 1.4.6
       esquery: 1.7.0
       jsdoc-type-pratt-parser: 7.2.0
@@ -3375,8 +3371,6 @@ snapshots:
       - supports-color
 
   '@typescript-eslint/types@8.56.1': {}
-
-  '@typescript-eslint/types@8.58.1': {}
 
   '@typescript-eslint/types@8.58.2': {}
 
