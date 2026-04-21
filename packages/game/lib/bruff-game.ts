@@ -1,4 +1,4 @@
-import { GameElement } from "./game-element.js";
+import { GameElement } from "@bruff/game-element";
 import loop from "./loop.js";
 
 /**

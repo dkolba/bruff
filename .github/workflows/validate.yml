@@ -62,6 +62,34 @@ jobs:
           pnpm --filter @bruff/game run format
           git diff --exit-code
 
+  format_game-element:
+    name: 📏 Format Game-Element
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: |
+          pnpm --filter @bruff/game-element run format
+          git diff --exit-code
+
   format_eslint_config:
     name: 📏 Format Eslint Config
     runs-on: ubuntu-latest
@@ -142,6 +170,32 @@ jobs:
 
       - run: pnpm --filter @bruff/game run typecheck
 
+  typecheck_game-element:
+    name: ʦ TypeScript Game-Element
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @bruff/game-element run typecheck
+
   lint_eslint_config:
     name: ⬣ ESLint eslint-config
     runs-on: ubuntu-latest
@@ -219,6 +273,32 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - run: pnpm --filter @bruff/game run lint
+
+  lint_game-element:
+    name: ⬣ ESLint Game-Element
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @bruff/game-element run lint
 
   build_game:
     name: 🏗 Build Game
@@ -330,6 +410,47 @@ jobs:
         with:
           name: unit-test-game-coverage-${{ matrix.project }}
           path: ./packages/game/coverage
+          retention-days: 30
+
+  unit_test_game-element:
+    name: 🎭 Unit Test Game-Element
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v${{ vars.PLAYWRIGHT_VERSION }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit]
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - name: 👩‍🔬 Test with Playwright 🎭
+        run: HOME=/root pnpm run --filter @bruff/game-element test:"${{ matrix.project }}"
+
+      - name: 🆙 Upload test coverage
+        if: ${{ matrix.project == 'chromium' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: unit-test-game-element-coverage-${{ matrix.project }}
+          path: ./packages/game-element/coverage
           retention-days: 30
 
   e2e_test_game:
