@@ -16,12 +16,6 @@ export default defineConfig([
     },
   },
   {
-    ignores: [
-      "dist",
-      "**/*.css",
-      "**/*.scss",
-      "coverage/**/*.*",
-      "e2e/base-fixtures.ts",
-    ],
+    ignores: ["dist", "**/*.css", "coverage/**/*.*", "e2e/base-fixtures.ts"],
   },
 ]);

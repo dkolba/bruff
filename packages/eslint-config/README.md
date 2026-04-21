@@ -11,7 +11,7 @@ import bruffeslintConfig from "@bruff/eslint-config";
 
 export default [
   {
-    ignores: ["**/*.css", "**/*.scss", "coverage/**/*.*"],
+    ignores: ["**/*.css", "coverage/**/*.*"],
   },
   ...bruffEslintConfig,
 ];
