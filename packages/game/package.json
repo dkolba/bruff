@@ -30,7 +30,7 @@
     "test": "pnpm run coverage:e2e:prune && pnpm run test:e2e && pnpm run coverage:e2e:report && pnpm run test:unit"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.11.1",
+    "@axe-core/playwright": "4.11.2",
     "@bruff/eslint-config": "workspace:0.0.0",
     "@bruff/game-element": "workspace:0.0.0",
     "@bruff/utils": "workspace:0.0.0",
