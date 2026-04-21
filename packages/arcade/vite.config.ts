@@ -10,7 +10,7 @@ export default defineConfig({
     istanbulPlugin({
       exclude: ["node_modules"],
       extension: [".ts"],
-      include: "lib/*",
+      include: "../game/lib/**/*",
     }),
   ],
   server: {
@@ -19,6 +19,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ["@bruff/utils"],
+    exclude: ["@bruff/game", "@bruff/utils"],
   },
 });
