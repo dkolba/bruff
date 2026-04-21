@@ -171,7 +171,7 @@ jobs:
       - run: pnpm --filter @bruff/game run typecheck
 
   typecheck_game-element:
-    name: ʦ TypeScript Game
+    name: ʦ TypeScript Game-Element
     runs-on: ubuntu-latest
     steps:
       - name: 🛑 Cancel Previous Runs
@@ -275,7 +275,7 @@ jobs:
       - run: pnpm --filter @bruff/game run lint
 
   lint_game-element:
-    name: ⬣ ESLint Game
+    name: ⬣ ESLint Game-Element
     runs-on: ubuntu-latest
     steps:
       - name: 🛑 Cancel Previous Runs
@@ -413,7 +413,7 @@ jobs:
           retention-days: 30
 
   unit_test_game-element:
-    name: 🎭 Unit Test Game
+    name: 🎭 Unit Test Game-Element
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v${{ vars.PLAYWRIGHT_VERSION }}
