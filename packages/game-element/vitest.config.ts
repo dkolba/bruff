@@ -16,12 +16,7 @@ export default defineConfig({
     },
     coverage: {
       // Only collect coverage for files in the 'module' folder
-      exclude: [
-        "index.js",
-        "vitest.config.ts",
-        "eslint.config.js",
-        "**/*.d.ts",
-      ],
+      exclude: ["vitest.config.ts", "eslint.config.js", "**/*.d.ts"],
       include: ["module/**/*.ts"],
       thresholds: {
         branches: 100,
