@@ -443,7 +443,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 👩‍🔬 Test with Playwright 🎭
-        run: HOME=/root pnpm run --filter @bruff/game-element test:unit:"${{ matrix.project }}"
+        run: HOME=/root pnpm run --filter @bruff/game-element test:"${{ matrix.project }}"
 
       - name: 🆙 Upload test coverage
         if: ${{ matrix.project == 'chromium' }}
