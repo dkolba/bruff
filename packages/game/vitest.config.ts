@@ -17,7 +17,6 @@ export default defineConfig({
       provider: playwright(),
     },
     coverage: {
-      // Only collect coverage for files in the 'src/components' folder
       exclude: [
         "**/*spec*{js,ts,jsx,tsx}",
         "lib/bruff-game.ts",
@@ -34,9 +33,8 @@ export default defineConfig({
         statements: 100,
       },
     },
-    // Match files containing "test" but not "spec"
-    exclude: ["**/*spec*{js,ts,jsx,tsx}"], // Exclude files with "spec"
-    include: ["lib/**/*test*.{js,ts,jsx,tsx}"], // Match test files
+    exclude: ["**/*spec*{js,ts,jsx,tsx}"],
+    include: ["lib/**/*test*.{js,ts,jsx,tsx}"],
     setupFiles: ["tests/setup.ts"],
   },
 });

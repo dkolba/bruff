@@ -1,4 +1,4 @@
-import { expect, test } from "../e2e/base-fixtures.js";
+import { expect, test } from "./base-fixtures.js";
 import { AxeBuilder } from "@axe-core/playwright";
 import type { Page } from "@playwright/test";
 

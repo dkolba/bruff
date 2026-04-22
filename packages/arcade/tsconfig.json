@@ -2,9 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["lib/*"]
-    }
+    "types": []
   },
-  "include": ["lib/**/*.ts", "types/**/*.ts", "app.ts", "lib/**/*.test.ts"]
+  "include": ["app.ts", "types/**/*.ts", "e2e/**/*.ts"]
 }

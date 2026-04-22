@@ -1,0 +1,45 @@
+{
+  "name": "@bruff/game",
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./lib/bruff-game.ts",
+  "exports": {
+    "types": "./dist/bruff-game.d.ts",
+    "import": "./lib/bruff-game.ts"
+  },
+  "scripts": {
+    "build": "pnpm run typecheck && pnpm run build:lib",
+    "build:lib": "vite build --config vite.config.lib.js",
+    "format": "prettier --write .",
+    "lint": "eslint",
+    "typecheck": "tsc",
+    "test:unit": "pnpm run test:unit:chromium && pnpm run test:unit:firefox && pnpm run test:unit:webkit",
+    "test:unit:chromium": "vitest run --browser=chromium --coverage",
+    "test:unit:firefox": "vitest run --browser=firefox",
+    "test:unit:webkit": "vitest run --browser=webkit",
+    "test:unit:watch": "vitest",
+    "test": "pnpm run test:unit"
+  },
+  "devDependencies": {
+    "@bruff/eslint-config": "workspace:0.0.0",
+    "@bruff/game-element": "workspace:0.0.0",
+    "@bruff/utils": "workspace:0.0.0",
+    "@vitest/browser": "4.1.4",
+    "@vitest/browser-playwright": "4.1.4",
+    "@vitest/coverage-v8": "4.1.4",
+    "eslint": "10.2.1",
+    "eslint-plugin-jsdoc": "62.9.0",
+    "eslint-plugin-tsdoc": "0.5.2",
+    "observable-polyfill": "0.0.29",
+    "playwright": "1.59.1",
+    "prettier": "3.8.3",
+    "typescript": "5.9.3",
+    "vite": "8.0.8",
+    "vite-plugin-dts": "4.5.4",
+    "vite-plugin-istanbul": "8.0.0",
+    "vitest": "4.1.4"
+  }
+}

@@ -23,42 +23,21 @@ importers:
       '@bruff/eslint-config':
         specifier: workspace:0.0.0
         version: link:../eslint-config
-      '@bruff/game-element':
+      '@bruff/game':
         specifier: workspace:0.0.0
-        version: link:../game-element
-      '@bruff/utils':
-        specifier: workspace:0.0.0
-        version: link:../utils
+        version: link:../game
       '@playwright/test':
         specifier: 1.59.1
         version: 1.59.1
-      '@vitest/browser':
-        specifier: 4.1.4
-        version: 4.1.4(vite@8.0.8(esbuild@0.27.7))(vitest@4.1.4)
-      '@vitest/browser-playwright':
-        specifier: 4.1.4
-        version: 4.1.4(playwright@1.59.1)(vite@8.0.8(esbuild@0.27.7))(vitest@4.1.4)
-      '@vitest/coverage-v8':
-        specifier: 4.1.4
-        version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
       eslint:
         specifier: 10.2.1
         version: 10.2.1
-      eslint-plugin-jsdoc:
-        specifier: 62.9.0
-        version: 62.9.0(eslint@10.2.1)
       eslint-plugin-playwright:
         specifier: 2.10.1
         version: 2.10.1(eslint@10.2.1)
-      eslint-plugin-tsdoc:
-        specifier: 0.5.2
-        version: 0.5.2(eslint@10.2.1)(typescript@5.9.3)
       nyc:
         specifier: 18.0.0
         version: 18.0.0
-      observable-polyfill:
-        specifier: 0.0.29
-        version: 0.0.29
       playwright:
         specifier: 1.59.1
         version: 1.59.1
@@ -74,15 +53,9 @@ importers:
       vite:
         specifier: 8.0.8
         version: 8.0.8(esbuild@0.27.7)
-      vite-plugin-dts:
-        specifier: 4.5.4
-        version: 4.5.4(rollup@4.60.1)(typescript@5.9.3)(vite@8.0.8(esbuild@0.27.7))
       vite-plugin-istanbul:
         specifier: 8.0.0
         version: 8.0.0(vite@8.0.8(esbuild@0.27.7))
-      vitest:
-        specifier: 4.1.4
-        version: 4.1.4(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.0.8(esbuild@0.27.7))
 
   packages/eslint-config:
     dependencies:
@@ -110,6 +83,60 @@ importers:
       typescript-eslint:
         specifier: 8.58.2
         version: 8.58.2(eslint@10.2.1)(typescript@5.9.3)
+
+  packages/game:
+    devDependencies:
+      '@bruff/eslint-config':
+        specifier: workspace:0.0.0
+        version: link:../eslint-config
+      '@bruff/game-element':
+        specifier: workspace:0.0.0
+        version: link:../game-element
+      '@bruff/utils':
+        specifier: workspace:0.0.0
+        version: link:../utils
+      '@vitest/browser':
+        specifier: 4.1.4
+        version: 4.1.4(vite@8.0.8(esbuild@0.27.7))(vitest@4.1.4)
+      '@vitest/browser-playwright':
+        specifier: 4.1.4
+        version: 4.1.4(playwright@1.59.1)(vite@8.0.8(esbuild@0.27.7))(vitest@4.1.4)
+      '@vitest/coverage-v8':
+        specifier: 4.1.4
+        version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
+      eslint:
+        specifier: 10.2.1
+        version: 10.2.1
+      eslint-plugin-jsdoc:
+        specifier: 62.9.0
+        version: 62.9.0(eslint@10.2.1)
+      eslint-plugin-tsdoc:
+        specifier: 0.5.2
+        version: 0.5.2(eslint@10.2.1)(typescript@5.9.3)
+      observable-polyfill:
+        specifier: 0.0.29
+        version: 0.0.29
+      playwright:
+        specifier: 1.59.1
+        version: 1.59.1
+      prettier:
+        specifier: 3.8.3
+        version: 3.8.3
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vite:
+        specifier: 8.0.8
+        version: 8.0.8(esbuild@0.27.7)
+      vite-plugin-dts:
+        specifier: 4.5.4
+        version: 4.5.4(rollup@4.60.1)(typescript@5.9.3)(vite@8.0.8(esbuild@0.27.7))
+      vite-plugin-istanbul:
+        specifier: 8.0.0
+        version: 8.0.0(vite@8.0.8(esbuild@0.27.7))
+      vitest:
+        specifier: 4.1.4
+        version: 4.1.4(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.0.8(esbuild@0.27.7))
 
   packages/game-element:
     devDependencies:
