@@ -185,3 +185,70 @@ The project is organized into a monorepo with the primary packages being:
 
 - `packages/game` - The main game logic and application-specific code.
 - `packages/utils` - Utility and helper functions
+
+---
+
+### 8 — Game Architecture (`packages/game`)
+
+Rules specific to the roguelike game engine.
+
+#### 8.1 — Layered Architecture
+
+Strict dependency direction — inner layers must never import outer layers:
+
+| Layer       | May import from          |
+|-------------|--------------------------|
+| `core/`     | nothing (zero imports)   |
+| `state/`    | `core/` only             |
+| `input/`    | `core/`, `state/`        |
+| `render/`   | `core/`, `state/`        |
+| `assets/`   | `core/`, `state/`        |
+| `effects/`  | `core/`, `state/`        |
+
+- **A-1 (MUST)** No circular dependencies.
+- **A-2 (MUST)** `core/` has zero project imports.
+- **A-3 (MUST)** Dependencies flow inward toward `core/` only.
+
+#### 8.2 — Pure Core / Impure Shell
+
+- **A-4 (MUST)** All game logic (`core/`, `state/`, `input/`, `render/`) is pure: no DOM access, no `fetch`, no `Math.random()`, no `Date.now()`.
+- **A-5 (MUST)** All side effects (Canvas draws, event listeners, timers) live in `effects/` or the entry point only.
+
+#### 8.3 — State & Immutability
+
+- **A-6 (MUST)** Single immutable global `GameState` object — no hidden or local state.
+- **A-7 (MUST)** `GameState` includes a `stateVersion: number` for replay compatibility.
+- **A-8 (MUST)** All state transitions are pure functions: `(state, action) => state`.
+- **A-9 (MUST)** Zero mutation anywhere — no mutable variables, no array `.push()`, no object property assignment.
+
+#### 8.4 — Entity Identity
+
+- **A-10 (MUST)** Every entity has a branded ID type: `Brand<string, "EntityNameId">`.
+- **A-11 (MUST)** IDs are generated deterministically via the seeded PRNG stored in state — never `Math.random()` or `crypto.randomUUID()`.
+- **A-12 (MUST)** IDs are never reused within a run.
+- **A-13 (MUST)** `spawnOrder: number` is tracked on every entity for deterministic tie-breaking.
+
+#### 8.5 — Actions & Event System
+
+- **A-14 (MUST)** All events are discriminated unions: `InputAction`, `GameAction`, `SystemEvent`, `RenderCommand`.
+- **A-15 (MUST)** Tag field is always `type` — not `kind`, not `action`.
+- **A-16 (MUST)** Input is normalised into `InputAction` before entering the core pipeline.
+- **A-17 (MUST)** Input actions are processed before system-generated actions within a tick (FIFO order preserved).
+- **A-18 (MUST)** Every `switch` over a discriminated union ends with an exhaustiveness guard:
+  ```ts
+  default: {
+    const _exhaustive: never = action;
+    throw new Error(`Unhandled action: ${JSON.stringify(_exhaustive)}`);
+  }
+  ```
+
+#### 8.6 — Determinism
+
+- **A-19 (MUST)** All randomness flows through a seeded PRNG stored in `GameState` — zero external entropy sources.
+- **A-20 (MUST)** Time is a controlled input fed into the root pipeline — never read from `Date.now()` or `performance.now()` inside core.
+- **A-21 (MUST)** Fixed-timestep simulation — tick rate is configurable via `Config`, never tied to render FPS.
+
+#### 8.7 — Zero External Runtime Dependencies
+
+- **A-22 (MUST)** `packages/game` has zero external runtime dependencies beyond `@bruff/utils` and browser built-ins.
+- **A-23 (MUST)** All FP helpers, PRNG, and math utilities are implemented in-house in `@bruff/utils`.
