@@ -19,7 +19,7 @@
     "@bruff/game": "workspace:0.0.0",
     "@playwright/test": "1.59.1",
     "eslint": "10.2.1",
-    "eslint-plugin-playwright": "2.10.1",
+    "eslint-plugin-playwright": "2.10.2",
     "nyc": "18.0.0",
     "playwright": "1.59.1",
     "prettier": "3.8.3",
