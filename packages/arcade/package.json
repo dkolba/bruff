@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "coverage:e2e:prune": "rimraf .nyc_instrumented .nyc_output",
-    "coverage:e2e:report": "nyc report --reporter=text --reporter=html",
+    "coverage:e2e:report": "nyc report --cwd=.. --temp-dir=arcade/.nyc_output --reporter=text --reporter=html",
     "build:site": "vite build --outDir site",
     "dev": "vite",
     "format": "prettier --write .",

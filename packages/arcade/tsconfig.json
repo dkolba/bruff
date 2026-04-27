@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "composite": true,
     "types": []
   },
   "include": ["app.ts", "types/**/*.ts", "e2e/**/*.ts"]
