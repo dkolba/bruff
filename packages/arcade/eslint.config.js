@@ -4,7 +4,7 @@ import playwright from "eslint-plugin-playwright";
 
 export default defineConfig([
   {
-    files: ["app.ts", "lib/**/*.ts"],
+    files: ["app.ts", "e2e/**/*.ts"],
     extends: [...bruffEslintConfig],
   },
   {
@@ -16,6 +16,12 @@ export default defineConfig([
     },
   },
   {
-    ignores: ["dist", "**/*.css", "coverage/**/*.*", "e2e/base-fixtures.ts"],
+    ignores: [
+      "dist",
+      "**/*.css",
+      "coverage/**/*.*",
+      "e2e/base-fixtures.ts",
+      "site",
+    ],
   },
 ]);

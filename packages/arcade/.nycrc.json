@@ -1,4 +1,7 @@
 {
+  "all": true,
+  "extension": [".ts"],
+  "include": ["game/lib/**/*.ts", "arcade/app.ts"],
   "branches": 100,
   "lines": 100,
   "functions": 100,

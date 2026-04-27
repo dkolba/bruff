@@ -1,1 +1,1 @@
-import "./lib/bruff-game.ts";
+import "@bruff/game";

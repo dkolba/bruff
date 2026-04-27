@@ -34,6 +34,34 @@ jobs:
           pnpm --filter @bruff/utils run format
           git diff --exit-code
 
+  format_game:
+    name: 📏 Format Game
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: |
+          pnpm --filter @bruff/game run format
+          git diff --exit-code
+
   format_arcade:
     name: 📏 Format Arcade
     runs-on: ubuntu-latest
@@ -144,6 +172,32 @@ jobs:
 
       - run: pnpm --filter @bruff/utils run typecheck
 
+  typecheck_game:
+    name: ʦ TypeScript Game
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @bruff/game run typecheck
+
   typecheck_arcade:
     name: ʦ TypeScript Arcade
     runs-on: ubuntu-latest
@@ -248,6 +302,32 @@ jobs:
 
       - run: pnpm --filter @bruff/utils run lint
 
+  lint_game:
+    name: ⬣ ESLint Game
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @bruff/game run lint
+
   lint_arcade:
     name: ⬣ ESLint Arcade
     runs-on: ubuntu-latest
@@ -300,6 +380,38 @@ jobs:
 
       - run: pnpm --filter @bruff/game-element run lint
 
+  build_game:
+    name: 🏗 Build Game
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm install --frozen-lockfile
+
+      - run: pnpm --filter @bruff/game run build
+
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-game
+          path: ./packages/game/dist
+
   build_arcade:
     name: 🏗 Build Arcade
     runs-on: ubuntu-latest
@@ -324,13 +436,13 @@ jobs:
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
 
-      - run: pnpm --filter @bruff/arcade run build
+      - run: pnpm --filter @bruff/arcade run build:site
 
       - if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: dist-arcade
-          path: ./packages/arcade/dist
+          name: site-arcade
+          path: ./packages/arcade/site
 
   unit_test_utils:
     name: 🎭 Unit Test Utils
@@ -371,8 +483,8 @@ jobs:
           path: ./packages/utils/coverage
           retention-days: 30
 
-  unit_test_arcade:
-    name: 🎭 Unit Test Arcade
+  unit_test_game:
+    name: 🎭 Unit Test Game
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v${{ vars.PLAYWRIGHT_VERSION }}
@@ -402,14 +514,14 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 👩‍🔬 Test with Playwright 🎭
-        run: HOME=/root pnpm run --filter @bruff/arcade test:unit:"${{ matrix.project }}"
+        run: HOME=/root pnpm run --filter @bruff/game test:unit:"${{ matrix.project }}"
 
       - name: 🆙 Upload test coverage
         if: ${{ matrix.project == 'chromium' }}
         uses: actions/upload-artifact@v7
         with:
-          name: unit-test-arcade-coverage-${{ matrix.project }}
-          path: ./packages/arcade/coverage
+          name: unit-test-game-coverage-${{ matrix.project }}
+          path: ./packages/game/coverage
           retention-days: 30
 
   unit_test_game-element:
