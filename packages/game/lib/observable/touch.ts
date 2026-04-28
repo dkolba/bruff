@@ -59,7 +59,7 @@ const createTouchDirectionObservable = (
  * @returns Observable that emits cardinal direction strings
  */
 const createTouchObservable = (): Observable<string> => {
-  /* eslint-disable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return -- document.when() is part of the WICG Observable API proposal; TypeScript types do not yet cover this interface */
+  /* eslint-disable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- document.when() is part of the WICG Observable API proposal; TypeScript types do not yet cover this interface */
   const touchStart$ = (document as any)
     .when("touchstart")
     .filter((event: Event): event is TouchEvent =>
@@ -82,8 +82,8 @@ const createTouchObservable = (): Observable<string> => {
 
   return direction$.filter(
     (direction): direction is string => direction !== null,
-  ) as any;
-  /* eslint-enable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
+  );
+  /* eslint-enable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
 };
 
 export default createTouchObservable;
