@@ -20,6 +20,8 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/eslint-config/package.json ./packages/eslint-config/package.json
 COPY packages/utils/package.json ./packages/utils/package.json
 COPY packages/game/package.json ./packages/game/package.json
+COPY packages/arcade/package.json ./packages/arcade/package.json
+COPY packages/game-element/package.json ./packages/game-element/package.json
 
 # Install dependencies (frozen lockfile for reproducibility)
 RUN pnpm install --no-frozen-lockfile --force
