@@ -1,4 +1,14 @@
-minimumReleaseAge: 4320
 autoInstallPeers: true
+engineStrict: true
+ignoreScripts: true
+lockfileIncludeTarballUrl: true
+minimumReleaseAge: 4320
 packages:
-  - 'packages/*'
+  - "packages/*"
+preferFrozenLockfile: true
+private: true
+resolutionMode: highest
+saveExact: true
+strictPeerDependencies: true
+strictSsl: true
+verifyStoreIntegrity: true
