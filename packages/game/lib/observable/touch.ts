@@ -2,7 +2,7 @@ import { FIVE, ONE } from "../constants.js";
 import { getCardinalDirection } from "@bruff/utils";
 import type { Observable } from "observable-polyfill/fn";
 
-// TODO: Currently not included in coverage
+// !TODO: Currently not included in coverage
 
 /**
  * Checks if an event is a touch event.
