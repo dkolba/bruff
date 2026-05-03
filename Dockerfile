@@ -10,7 +10,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 
 # Enable Corepack and prepare pnpm
-RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
+RUN corepack enable && corepack prepare pnpm@11.0.2 --activate
 
 # Set working directory
 WORKDIR /app
