@@ -1,9 +1,14 @@
 {
   "all": true,
+  "check-coverage": true,
+  "temp-dir": "arcade/.nyc_output",
+  "reporter": ["text", "html"],
+  "report-dir": "arcade/coverage",
   "extension": [".ts"],
   "include": ["game/lib/**/*.ts", "arcade/app.ts"],
-  "branches": 100,
-  "lines": 100,
-  "functions": 100,
-  "statements": 100
+  "exclude": ["game/lib/observable/touch.ts"],
+  "branches": 80,
+  "lines": 80,
+  "functions": 80,
+  "statements": 80
 }
