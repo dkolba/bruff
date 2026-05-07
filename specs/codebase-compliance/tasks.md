@@ -8,7 +8,7 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 
 - [x] T1 — Add `Result<T, E>` type (with `Ok<T>` and `Failure<E>` aliases) plus `ok`/`error`/`isOk`/`isError` constructors and their unit tests to new files `packages/utils/module/fp/result.ts` and `packages/utils/module/fp/result.test.ts`. Tests are bundled with the implementation because the package enforces a 100% coverage threshold per `vitest.config.ts`, which rejects S-16's separation rule. Names follow `unicorn/prevent-abbreviations`; object literals follow `sort-keys`.
 - [x] T2 — Add `mapResult`, `flatMapResult`, `mapError`, `unwrapOr` (curried) to `packages/utils/module/fp/result.ts` and corresponding tests in the same `result.test.ts` (map laws, flatMap short-circuit on error, fallback on `unwrapOr`).
-- [ ] T4 — Add `Option<T>` type and `some`/`none`/`isSome`/`isNone` plus their unit tests to new files `packages/utils/module/fp/option.ts` and `packages/utils/module/fp/option.test.ts`.
+- [x] T4 — Add `Option<T>` type and `some`/`none`/`isSome`/`isNone` plus their unit tests to new files `packages/utils/module/fp/option.ts` and `packages/utils/module/fp/option.test.ts`.
 - [ ] T5 — Add `mapOption`, `flatMapOption`, `toResult` (curried) to `packages/utils/module/fp/option.ts` and corresponding tests in the same `option.test.ts`.
 - [ ] T7 — Re-export `Result`, `Option`, and helpers from `packages/utils/index.ts`.
 
