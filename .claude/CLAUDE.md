@@ -12,7 +12,7 @@ These rules ensure maintainability, safety, and developer velocity.
 ### 1 — Before Coding
 
 - **BP-1 (MUST)** Ask the user clarifying questions.
-- **BP-2 (SHOULD)** Draft and confirm an approach for complex work.
+- **BP-2 (SHOULD)** Draft and confirm an approach for complex work. For non-trivial features, invoke the `sdte-loop` skill.
 - **BP-3 (SHOULD)** If ≥ 2 approaches exist, list clear pros and cons.
 
 ---
@@ -32,6 +32,16 @@ These rules ensure maintainability, safety, and developer velocity.
 - **C-7 (SHOULD NOT)** Add comments except for critical caveats; rely on self‑explanatory code.
 - **C-8 (SHOULD)** Default to `type`; use `interface` only when more readable or interface merging is required.
 - **C-9 (SHOULD NOT)** Extract a new function unless it will be reused elsewhere, is the only way to unit-test otherwise untestable logic, or drastically improves readability of an opaque block.
+- **C-10 (SHOULD)** Name by kind: functions use verbs (`updatePlayer`, `clamp`), variables/types use nouns (`GameState`, `enemies`), booleans use predicates (`isActive`, `playerMoved`).
+- **C-11 (SHOULD NOT)** Use boolean parameters to control function behaviour — split into two explicit functions instead.
+- **C-12 (SHOULD NOT)** Reassign function parameters. Treat every parameter as `const`.
+- **C-13 (SHOULD NOT)** Use vague names like `data`, `item`, `thing`, `info`, `value`, `obj`, `result`. Prefer intent-revealing names (`userList`, `pendingActions`, `parsedInput`) — Meaningless Name Anti-Pattern.
+- **C-14 (SHOULD NOT)** Use abbreviations beyond well-established acronyms (DOM, URL, HTTP, ID). `usrLst` is wrong; `userList` is right — Noise Word Anti-Pattern.
+- **C-15 (SHOULD NOT)** Nest control flow more than three levels deep (Arrow Code). Flatten with early returns, extracted predicates, or `pipe()` composition.
+- **C-16 (MUST)** Return explicitly. Every function declares its return type; implicit `undefined` returns are forbidden. A function that legitimately returns nothing returns `void`.
+- **C-17 (SHOULD NOT)** Use imperative loops (`for`, `while`, `do…while`) when `.map()`, `.filter()`, `.reduce()`, or `pipe()` express the intent more clearly. Reach for declarative iteration first.
+- **C-18 (SHOULD NOT)** Use the `this` keyword in domain code. Domain logic is built from standalone arrow functions; `this` may appear only in Web Component lifecycle methods (e.g. `connectedCallback`) where the platform requires it.
+- **C-19 (SHOULD NOT)** Declare module-level mutable state. Modules export `const` bindings and pure functions only — no top-level `let` reassignment, no `var`, no exported mutable objects. Shared mutable state lives in `GameState` (per A-6). A local `let` inside a single function as an accumulator is acceptable but `.reduce()` is usually clearer.
 
 ---
 
@@ -45,11 +55,26 @@ These rules ensure maintainability, safety, and developer velocity.
 - **O-6 (MUST)** Single responsibility per function/class
 - **O-7 (MUST)** Avoid premature abstractions
 - **O-8 (MUST)** If you need to explain it, it's too complex
+- **O-9 (MUST)** DRY — eliminate duplication via abstraction once the same logic appears in three places (Rule of Three). Two near-identical blocks may stay until the third confirms the pattern.
+- **O-10 (MUST)** KISS — choose the boring, obvious approach. Cleverness is a defect; if a colleague has to ask "why is it like this?", simplify.
+- **O-11 (SHOULD)** Keep files ≤ ~200 lines (Small Files Principle). Files larger than this almost always hide a missing module boundary.
+- **O-12 (MUST)** One responsibility per file (extends O-6 from per-function to per-file). The file's name is its contract — if you can't pick a precise name, the file does too much.
 
 #### Technical Standards
 
 ##### Architecture Principles
 
+- **Functional Core, Imperative Shell** - All side effects (DOM, Canvas, I/O, logging) live in the shell; the core is pure and has no knowledge of the shell.
+- **Command–Query Separation** - A function either returns a value (query) or produces a side effect (command), never both.
+- **Illegal States Unrepresentable** - Encode invariants in the type system (discriminated unions, branded types, refinement via narrowing) so impossible states cannot be expressed.
+- **Data-First Design** - Pass data through transformations; do not wrap data in objects with methods. State is plain records; behaviour is free functions.
+- **Point-Free Style** (where readable) - Prefer `pipe(parse, validate, persist)` over `(x) => persist(validate(parse(x)))` when the intermediate names add no information.
+- **Stable Dependencies Principle** - Code depends in the direction of stability; less-stable code depends on more-stable code, never the reverse. The deeper a layer (per §8), the more stable.
+- **Functions as First-Class Values** - Functions are passed, returned, and composed like any other value. Curried factories (`(config) => (input) => output`) are preferred over closures over module state.
+- **Higher-Order Functions** - Functions that take or return functions are the canonical extension mechanism. Reach for `pipe`, `compose`, currying, and factory functions before reaching for new types or classes.
+- **Algebraic Data Types (ADTs)** - Sum types (discriminated unions) for choices, product types (records) for combinations. Every domain type is one or the other; classes are forbidden (C-3).
+- **Wrap Effects in Explicit Functions** - Every side-effecting call (HTTP, Canvas draw, timer, DOM access) lives in a named single-purpose function in the shell. Never inline `fetch()`, `requestAnimationFrame`, or `document.querySelector` into business logic.
+- **Transform Before Update** - Shell effects produce raw data → pure transformations turn it into typed actions → reducers apply actions to state. Never pipe shell results directly into a state mutation.
 - **Composition over inheritance** - Use dependency injection
 - **Interfaces over singletons** - Enable testing and flexibility
 - **Explicit over implicit** - Clear data flow and dependencies
@@ -72,25 +97,6 @@ Function composition is the primary method for building complex logic from simpl
 
 Curry functions when it aids in creating partially applied functions that can be reused in different contexts, especially within a `pipe`.
 
-##### Writing Functions Best Practices
-
-When evaluating whether a function you implemented is good or not, use this checklist:
-
-1. Can you read the function and HONESTLY easily follow what it's doing? If yes, then stop here.
-2. Does the function have very high cyclomatic complexity? (number of independent paths, or, in a lot of cases, number of nesting if if-else as a proxy). If it does, then it's probably sketchy.
-3. Are there any common data structures and algorithms that would make this function much easier to follow and more robust? Parsers, trees, stacks / queues, etc.
-4. Are there any unused parameters in the function?
-5. Are there any unnecessary type casts that can be moved to function arguments?
-6. Is the function easily testable without mocking core features (e.g. sql queries, redis, etc.)? If not, can this function be tested as part of an integration test?
-7. Does it have any hidden untested dependencies or any values that can be factored out into the arguments instead? Only care about non-trivial dependencies that can actually change or affect the function.
-8. Brainstorm 3 better function names and see if the current name is the best, consistent with rest of codebase.
-
-IMPORTANT: you SHOULD NOT refactor out a separate function unless there is a compelling need, such as:
-
-- the refactored function is used in more than one place
-- the refactored function is easily unit testable while the original function is not AND you can't test it any other way
-- the original function is extremely hard to follow and you resort to putting comments everywhere just to explain it
-
 #### Code Quality
 
 - **Every commit must**:
@@ -106,10 +112,20 @@ IMPORTANT: you SHOULD NOT refactor out a separate function unless there is a com
 
 ##### Error Handling
 
-- Fail fast with descriptive messages
-- Include context for debugging
-- Handle errors at appropriate level
-- Never silently swallow exceptions
+The codebase is **exception-free everywhere**. Errors are values, not control flow.
+
+- **Exception-Free Domain Rule** — `core/`, `state/`, `input/`, `render/`, **and** `effects/` never `throw`. Domain functions return `Result<T, E>` or `Option<T>`; shell functions return `Result<T, E>` and surface failures as values.
+- **Railway-Oriented Programming** — chain operations through `Result<T, E>`. The success track threads transformations; the failure track short-circuits without ceremony.
+- **Standard return shapes** — adopt these once in `@bruff/utils` and reuse everywhere:
+
+  ```ts
+  type Result<T, E> = { type: "ok"; value: T } | { type: "error"; error: E };
+  type Option<T> = { type: "some"; value: T } | { type: "none" };
+  ```
+
+- **Boundary conversion** — third-party APIs that throw must be wrapped at the call site so the error becomes a `Result.error`. Throws are never re-thrown into our code.
+- **No silent failures** — every failure mode is encoded in the return type. Drop-on-floor handling is forbidden; an explicit `Result.error` with a typed reason is mandatory.
+- **Descriptive errors** — the `E` type carries enough context for debugging (typed reason code + relevant inputs); string-only errors are forbidden in new code.
 
 ##### TypeScript and Typeing
 
@@ -145,6 +161,15 @@ TypeScript:
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- <reason>
 ```
 
+6. **Mandate Readonly on shared types**: Use `Readonly<T>` and `ReadonlyArray<T>` (or the equivalent `readonly` modifiers) for every type that flows through state, props, or a public API. The compiler enforces immutability at the type level; A-9 enforces it at runtime. Both are required.
+
+   ```ts
+   type GameState = Readonly<{
+     player: Readonly<Player>;
+     enemies: ReadonlyArray<Enemy>;
+   }>;
+   ```
+
 ---
 
 ### 4 — Tooling Gates
@@ -178,77 +203,29 @@ TypeScript:
 - Learn from existing implementations
 - Stop after 3 failed attempts and reassess
 
-### 7 - Code Organization
+### 7 — Workspace Map
 
-This outlines the development standards and best practices for this project. Adhering to these guidelines ensures consistency, maintainability, and quality across the codebase.
-The project is organized into a monorepo with the primary packages being:
+The repo is a pnpm monorepo. Package-specific rules auto-load from `.claude/rules/` when you edit files inside the matching package.
 
-- `packages/game` - The main game logic and application-specific code.
-- `packages/utils` - Utility and helper functions
+| Package | Role | Package-specific rule |
+| --- | --- | --- |
+| `@bruff/game` | Roguelike game logic — pure layered architecture (`core/state/input/render/effects`) | `.claude/rules/packages-game.md` |
+| `@bruff/game-element` | Imperative shell — Web Component base class that mounts the canvas | `.claude/rules/packages-game-element.md` |
+| `@bruff/arcade` | E2E host — Vite app + Playwright tests across desktop/mobile browsers | `.claude/rules/packages-arcade.md` |
+| `@bruff/utils` | Pure FP helpers (`pipe`, `clamp`, `hsla`, canvas utilities, etc.) | `.claude/rules/packages-utils.md` |
+| `@bruff/eslint-config` | Shared ESLint flat config | (none — config-only package) |
 
----
+When working in a single package, also read its `README.md` for build/test commands and architectural role.
 
-### 8 — Game Architecture (`packages/game`)
+### 8 — Testing
 
-Rules specific to the roguelike game engine.
+Testing rules complement the `write-tests` skill (which covers file conventions and assertion style). The rules in this section are non-negotiable properties every test must satisfy.
 
-#### 8.1 — Layered Architecture
-
-Strict dependency direction — inner layers must never import outer layers:
-
-| Layer       | May import from          |
-|-------------|--------------------------|
-| `core/`     | nothing (zero imports)   |
-| `state/`    | `core/` only             |
-| `input/`    | `core/`, `state/`        |
-| `render/`   | `core/`, `state/`        |
-| `assets/`   | `core/`, `state/`        |
-| `effects/`  | `core/`, `state/`        |
-
-- **A-1 (MUST)** No circular dependencies.
-- **A-2 (MUST)** `core/` has zero project imports.
-- **A-3 (MUST)** Dependencies flow inward toward `core/` only.
-
-#### 8.2 — Pure Core / Impure Shell
-
-- **A-4 (MUST)** All game logic (`core/`, `state/`, `input/`, `render/`) is pure: no DOM access, no `fetch`, no `Math.random()`, no `Date.now()`.
-- **A-5 (MUST)** All side effects (Canvas draws, event listeners, timers) live in `effects/` or the entry point only.
-
-#### 8.3 — State & Immutability
-
-- **A-6 (MUST)** Single immutable global `GameState` object — no hidden or local state.
-- **A-7 (MUST)** `GameState` includes a `stateVersion: number` for replay compatibility.
-- **A-8 (MUST)** All state transitions are pure functions: `(state, action) => state`.
-- **A-9 (MUST)** Zero mutation anywhere — no mutable variables, no array `.push()`, no object property assignment.
-
-#### 8.4 — Entity Identity
-
-- **A-10 (MUST)** Every entity has a branded ID type: `Brand<string, "EntityNameId">`.
-- **A-11 (MUST)** IDs are generated deterministically via the seeded PRNG stored in state — never `Math.random()` or `crypto.randomUUID()`.
-- **A-12 (MUST)** IDs are never reused within a run.
-- **A-13 (MUST)** `spawnOrder: number` is tracked on every entity for deterministic tie-breaking.
-
-#### 8.5 — Actions & Event System
-
-- **A-14 (MUST)** All events are discriminated unions: `InputAction`, `GameAction`, `SystemEvent`, `RenderCommand`.
-- **A-15 (MUST)** Tag field is always `type` — not `kind`, not `action`.
-- **A-16 (MUST)** Input is normalised into `InputAction` before entering the core pipeline.
-- **A-17 (MUST)** Input actions are processed before system-generated actions within a tick (FIFO order preserved).
-- **A-18 (MUST)** Every `switch` over a discriminated union ends with an exhaustiveness guard:
-  ```ts
-  default: {
-    const _exhaustive: never = action;
-    throw new Error(`Unhandled action: ${JSON.stringify(_exhaustive)}`);
-  }
-  ```
-
-#### 8.6 — Determinism
-
-- **A-19 (MUST)** All randomness flows through a seeded PRNG stored in `GameState` — zero external entropy sources.
-- **A-20 (MUST)** Time is a controlled input fed into the root pipeline — never read from `Date.now()` or `performance.now()` inside core.
-- **A-21 (MUST)** Fixed-timestep simulation — tick rate is configurable via `Config`, never tied to render FPS.
-
-#### 8.7 — Zero External Runtime Dependencies
-
-- **A-22 (MUST)** `packages/game` has zero external runtime dependencies beyond `@bruff/utils` and browser built-ins.
-- **A-23 (MUST)** All FP helpers, PRNG, and math utilities are implemented in-house in `@bruff/utils`.
+- **T-1 (MUST)** Tests follow **FIRST principles**. Each is a defect if missing:
+  - **F**ast — runs in milliseconds; slow tests get skipped and rot.
+  - **I**ndependent — no shared state, no order dependency. Any test runs in isolation.
+  - **R**epeatable — deterministic. Same input, same result, every machine, every run.
+  - **S**elf-validating — boolean pass/fail with no human inspection of output.
+  - **T**imely — written alongside (or before, per C-1) the code under test, never bolted on later.
+- **T-2 (SHOULD)** Test bodies use **Given–When–Then** structure (or `// arrange`, `// act`, `// assert` comments) so a reader sees the setup, action, and expectation at a glance.
+- **T-3 (MUST)** **Black-box testing** — assert against observable behaviour through the public API only. Never reach into private implementation, internal state shape, or call counts. A behaviour-preserving refactor must not require touching tests.
