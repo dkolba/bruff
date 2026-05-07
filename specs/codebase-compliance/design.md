@@ -18,19 +18,25 @@ references the existing files that will be modified or reused.
 
 ```ts
 // packages/utils/module/fp/result.ts
-export type Result<T, E> =
-  | Readonly<{ type: "ok"; value: T }>
-  | Readonly<{ type: "error"; error: E }>;
+export type Ok<T>      = Readonly<{ type: "ok"; value: T }>;
+export type Failure<E> = Readonly<{ error: E; type: "error" }>;
+export type Result<T, E> = Ok<T> | Failure<E>;
 
-export const ok: <T>(value: T) => Result<T, never>;
-export const err: <E>(error: E) => Result<never, E>;
-export const isOk:  <T, E>(r: Result<T, E>) => r is Readonly<{ type: "ok"; value: T }>;
-export const isErr: <T, E>(r: Result<T, E>) => r is Readonly<{ type: "error"; error: E }>;
-export const mapResult:     <T, U, E>(f: (t: T) => U)             => (r: Result<T, E>) => Result<U, E>;
-export const flatMapResult: <T, U, E>(f: (t: T) => Result<U, E>)  => (r: Result<T, E>) => Result<U, E>;
-export const mapErr:        <T, E, F>(f: (e: E) => F)             => (r: Result<T, E>) => Result<T, F>;
-export const unwrapOr:      <T, E>(fallback: T)                   => (r: Result<T, E>) => T;
+export const ok:    <T>(value: T) => Result<T, never>;
+export const error: <E>(reason: E) => Result<never, E>;
+export const isOk:    <T, E>(r: Result<T, E>) => r is Ok<T>;
+export const isError: <T, E>(r: Result<T, E>) => r is Failure<E>;
+export const mapResult:       <T, U, E>(f: (t: T) => U)            => (r: Result<T, E>) => Result<U, E>;
+export const flatMapResult:   <T, U, E>(f: (t: T) => Result<U, E>) => (r: Result<T, E>) => Result<U, E>;
+export const mapError:        <T, E, F>(f: (e: E) => F)            => (r: Result<T, E>) => Result<T, F>;
+export const unwrapOr:        <T, E>(fallback: T)                  => (r: Result<T, E>) => T;
 ```
+
+Naming notes: the project's `unicorn/prevent-abbreviations` ESLint rule
+forbids `err`/`isErr`/`Err`, and `sort-keys` requires alphabetical
+object keys. The constructor `error` would shadow its parameter, so the
+parameter is named `reason`. Object literals are written in alphabetical
+key order (`{ error, type }`, `{ type, value }`).
 
 ```ts
 // packages/utils/module/fp/option.ts
