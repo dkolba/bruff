@@ -14,7 +14,7 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 
 ## Phase 2 — `Brand<>` utility (only if missing)
 
-- [ ] T8 — Verify whether `Brand<>` already exists in `@bruff/utils`. If yes, skip T9–T10. If no, continue.
+- [x] T8 — Verify whether `Brand<>` already exists in `@bruff/utils`. If yes, skip T9–T10. If no, continue. **Result**: `grep -rn "Brand" packages/utils/ packages/` returned zero matches across the workspace; no `Brand`, `brand.ts`, or `module/types/` directory exists. T9 and T10 remain in scope.
 - [ ] T9 — Add `Brand<Base, Tag>` type to new file `packages/utils/module/types/brand.ts`.
 - [ ] T10 — Re-export `Brand` from `packages/utils/index.ts`.
 
