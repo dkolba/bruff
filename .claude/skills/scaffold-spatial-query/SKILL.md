@@ -51,7 +51,10 @@ type CollisionMap = ReadonlyMap<string, Enemy>;
 
 const buildCollisionMap = (state: GameState): CollisionMap =>
   new Map(
-    state.enemies.map(e => [`${Math.floor(e.xPos)},${Math.floor(e.yPos)}`, e]),
+    state.enemies.map((e) => [
+      `${Math.floor(e.xPos)},${Math.floor(e.yPos)}`,
+      e,
+    ]),
   );
 
 const isOccupied = (map: CollisionMap, x: number, y: number): boolean =>
@@ -103,7 +106,12 @@ const queryNeighbours = (
   x: number,
   y: number,
 ): ReadonlyArray<Enemy> => {
-  const offsets = [[-1,0],[1,0],[0,-1],[0,1]];
+  const offsets = [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+  ];
   return offsets.flatMap(([dx, dy]) => {
     const e = queryAt(map, x + (dx ?? 0), y + (dy ?? 0));
     return e ? [e] : [];

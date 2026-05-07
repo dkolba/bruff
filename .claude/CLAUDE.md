@@ -207,13 +207,13 @@ TypeScript:
 
 The repo is a pnpm monorepo. Package-specific rules auto-load from `.claude/rules/` when you edit files inside the matching package.
 
-| Package | Role | Package-specific rule |
-| --- | --- | --- |
-| `@bruff/game` | Roguelike game logic — pure layered architecture (`core/state/input/render/effects`) | `.claude/rules/packages-game.md` |
-| `@bruff/game-element` | Imperative shell — Web Component base class that mounts the canvas | `.claude/rules/packages-game-element.md` |
-| `@bruff/arcade` | E2E host — Vite app + Playwright tests across desktop/mobile browsers | `.claude/rules/packages-arcade.md` |
-| `@bruff/utils` | Pure FP helpers (`pipe`, `clamp`, `hsla`, canvas utilities, etc.) | `.claude/rules/packages-utils.md` |
-| `@bruff/eslint-config` | Shared ESLint flat config | (none — config-only package) |
+| Package                | Role                                                                                 | Package-specific rule                    |
+| ---------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------- |
+| `@bruff/game`          | Roguelike game logic — pure layered architecture (`core/state/input/render/effects`) | `.claude/rules/packages-game.md`         |
+| `@bruff/game-element`  | Imperative shell — Web Component base class that mounts the canvas                   | `.claude/rules/packages-game-element.md` |
+| `@bruff/arcade`        | E2E host — Vite app + Playwright tests across desktop/mobile browsers                | `.claude/rules/packages-arcade.md`       |
+| `@bruff/utils`         | Pure FP helpers (`pipe`, `clamp`, `hsla`, canvas utilities, etc.)                    | `.claude/rules/packages-utils.md`        |
+| `@bruff/eslint-config` | Shared ESLint flat config                                                            | (none — config-only package)             |
 
 When working in a single package, also read its `README.md` for build/test commands and architectural role.
 

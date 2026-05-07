@@ -8,7 +8,7 @@ paths:
 This package hosts `<bruff-game>` in a Vite-served page so the game can be exercised by end-to-end tests across browsers and viewports. It is the only place that bundles and runs the full game in a browser context.
 
 - **Language**: TypeScript with TSDoc annotations.
-- **Role**: Imperative shell at the *application* level — bootstraps the Web Component, runs Playwright E2E tests, and reports Istanbul coverage.
+- **Role**: Imperative shell at the _application_ level — bootstraps the Web Component, runs Playwright E2E tests, and reports Istanbul coverage.
 
 ## Test conventions specific to this package
 

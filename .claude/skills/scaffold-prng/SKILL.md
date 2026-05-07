@@ -22,8 +22,7 @@ import type { Brand } from "@bruff/utils";
 export type PrngState = Brand<number, "PrngState">;
 
 /** Seed a new PRNG from a plain number. */
-export const seedPrng = (seed: number): PrngState =>
-  seed as PrngState; // safe: Brand is a compile-time marker only
+export const seedPrng = (seed: number): PrngState => seed as PrngState; // safe: Brand is a compile-time marker only
 
 /**
  * Advance the PRNG by one step.
@@ -78,7 +77,10 @@ export const generateId = <Tag extends string>(
 ): [Brand<string, Tag>, PrngState] => {
   const [a, p1] = nextPrng(prng);
   const [b, p2] = nextPrng(p1);
-  const id = `${(a * 0xffffffff) >>> 0}-${(b * 0xffffffff) >>> 0}` as Brand<string, Tag>;
+  const id = `${(a * 0xffffffff) >>> 0}-${(b * 0xffffffff) >>> 0}` as Brand<
+    string,
+    Tag
+  >;
   return [id, p2];
 };
 ```
@@ -87,7 +89,7 @@ Usage in an entity factory:
 
 ```ts
 const [id, nextPrng] = generateId<"EnemyId">(state.prng);
-return [{ id, /* … */ }, { ...state, prng: nextPrng }];
+return [{ id /* … */ }, { ...state, prng: nextPrng }];
 ```
 
 ---

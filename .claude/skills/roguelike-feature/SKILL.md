@@ -24,7 +24,7 @@ If the feature introduces new events, extend the relevant discriminated union in
 ```ts
 type GameAction =
   | { type: "MOVE_PLAYER"; direction: Direction }
-  | { type: "YOUR_NEW_ACTION"; /* typed payload */ };
+  | { type: "YOUR_NEW_ACTION" /* typed payload */ };
 ```
 
 Use `InputAction` for normalised input, `GameAction` for simulation events, `SystemEvent` for engine-level signals, `RenderCommand` for draw instructions.

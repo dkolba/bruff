@@ -38,6 +38,7 @@ npx madge --circular packages/game/lib/
 ## What to Report
 
 For each violation found, report:
+
 - **File**: the file containing the bad import
 - **Import**: the offending import path
 - **Rule broken**: which dependency rule it violates

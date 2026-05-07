@@ -14,6 +14,7 @@ Use when writing tests for `packages/game`. Three levels are required depending 
 Co-locate as `*.test.ts` next to the source file. Run via Vitest.
 
 Rules:
+
 - Test pure functions only — no DOM, no Canvas, no network.
 - One test per logical branch / state transition.
 - Assert the complete return value in one snapshot-style assertion where possible (per T-6).
@@ -43,6 +44,7 @@ describe("updatePlayer", () => {
 Use Vitest + fast-check (or a homegrown property helper if fast-check is not a dev dependency).
 
 Properties to test:
+
 - **PRNG**: same seed → same sequence of values.
 - **Reducers**: applying inverse actions returns to original state (where applicable).
 - **State transitions**: `stateVersion` monotonically increases.
@@ -70,6 +72,7 @@ it("PRNG produces same sequence for same seed", () => {
 Capture a full deterministic run and assert the final state (or a hash of it) matches a stored snapshot.
 
 Pattern:
+
 1. Fix a seed in `Config`.
 2. Feed a scripted sequence of `InputAction` values into the game loop.
 3. Assert the resulting `GameState` matches a stored snapshot.

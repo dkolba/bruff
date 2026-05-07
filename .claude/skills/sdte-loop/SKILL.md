@@ -29,7 +29,7 @@ Each feature owns a folder `/specs/<kebab-feature-name>/` containing:
 - **S-5 (MUST)** All files are plain Markdown, no YAML frontmatter.
 - **S-6 (SHOULD)** Add `constraints.md` whenever performance, dependency, or API-shape rules apply to the feature; add `acceptance.md` whenever the spec is testable as concrete examples.
 
-## Spec phase (the *what & why*)
+## Spec phase (the _what & why_)
 
 `spec.md` answers what is being built and why. It must contain:
 
@@ -44,7 +44,7 @@ Workflow:
 - **S-7 (MUST)** Walk the spec as a fresh reader and surface every ambiguity, missing constraint, or uncovered edge case. Resolve each by editing `spec.md` directly — never carry an open question into Design.
 - **S-8 (SHOULD NOT)** Make implementation decisions in `spec.md`; those belong in `design.md`. If you find yourself describing data structures or function signatures, you have crossed into Design territory.
 
-## Design phase (the *how*)
+## Design phase (the _how_)
 
 `design.md` answers how the spec will be implemented. It must contain:
 
@@ -61,7 +61,7 @@ Workflow:
 - **S-11 (SHOULD)** Inline a small ASCII diagram or table whenever more than two modules collaborate; readers must be able to see the data flow without opening multiple files.
 - **S-12 (MUST)** The design must respect the package's layer rules. If a feature appears to need an upward dependency, the design is wrong — fix the design, not the rules.
 
-## Task breakdown (the *atomic steps*)
+## Task breakdown (the _atomic steps_)
 
 `tasks.md` is an ordered checkbox list of atomic, independently executable steps.
 
@@ -110,5 +110,5 @@ After every task is checked off:
 - **Coarse tasks** — "Build authentication" is a feature, not a task. Decompose until each item is verifiable in isolation.
 - **Imprecise spec** — vague specs cause Claude to fill gaps with assumptions, sometimes incorrectly. Tighten the spec until ambiguities surface as explicit open questions, then resolve them before moving on.
 - **Skipped completion tracking** — `tasks.md` is the source of truth. If it disagrees with reality (work done but unchecked, or checked but uncommitted), the workflow has failed and the run is not auditable.
-- **Acceptance written after the fact** — `acceptance.md` written *after* implementation is theatre. Write it during Spec or Design while the requirements are still fresh.
+- **Acceptance written after the fact** — `acceptance.md` written _after_ implementation is theatre. Write it during Spec or Design while the requirements are still fresh.
 - **Big-bang execution** — completing many tasks in one commit destroys the audit trail and makes it hard to revert one without reverting all. One task = one verifiable commit.

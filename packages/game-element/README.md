@@ -12,7 +12,8 @@ import GameElement from "@bruff/game-element";
 class MyGame extends GameElement {
   connectedCallback() {
     super.connectedCallback();
-    const canvas = this.shadowRoot?.querySelector<HTMLCanvasElement>("#gamecanvas");
+    const canvas =
+      this.shadowRoot?.querySelector<HTMLCanvasElement>("#gamecanvas");
     // start rendering…
   }
 }
@@ -50,7 +51,7 @@ When the element is connected to the DOM, `connectedCallback` creates an open sh
 ```ts
 class GameElement extends HTMLElement {
   connectedCallback(): void;
-  static template(): string;  // returns the shadow DOM HTML string
+  static template(): string; // returns the shadow DOM HTML string
 }
 ```
 

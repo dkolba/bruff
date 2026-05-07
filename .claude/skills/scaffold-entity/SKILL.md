@@ -10,7 +10,7 @@ Use when introducing a new game entity (e.g. `Enemy`, `Item`, `Projectile`).
 ## Rules
 
 - All entity types are `Readonly<{…}>` — no mutable fields.
-- Every entity has a branded ID:  `Brand<string, "EntityNameId">` — never a plain `string`.
+- Every entity has a branded ID: `Brand<string, "EntityNameId">` — never a plain `string`.
 - IDs are deterministically generated via the seeded PRNG stored in state — never `Math.random()`, never `crypto.randomUUID()`.
 - IDs are **never reused** within a run; spawn order is tracked for deterministic tie-breaking.
 - Composition over nesting: share sub-shapes via type aliases, not inheritance.
@@ -18,12 +18,14 @@ Use when introducing a new game entity (e.g. `Enemy`, `Item`, `Projectile`).
 ## Steps
 
 1. **Declare the branded ID type** in `packages/game/types/`:
+
    ```ts
    import type { Brand } from "@bruff/utils";
    export type EnemyId = Brand<string, "EnemyId">;
    ```
 
 2. **Declare the entity type** as a `Readonly` shape:
+
    ```ts
    export type Enemy = Readonly<{
      id: EnemyId;
@@ -35,6 +37,7 @@ Use when introducing a new game entity (e.g. `Enemy`, `Item`, `Projectile`).
    ```
 
 3. **Add a factory function** (pure, no side effects) that accepts PRNG state and returns `[Entity, NextPrngState]`:
+
    ```ts
    const createEnemy = (
      prng: PrngState,
@@ -57,5 +60,6 @@ Use when introducing a new game entity (e.g. `Enemy`, `Item`, `Projectile`).
 ## Tie-breaking
 
 When multiple entities act simultaneously in a tick, order by:
+
 1. `spawnOrder` ascending (earlier spawn wins)
 2. `id` lexicographic ascending as a secondary key

@@ -11,10 +11,10 @@ Use when adding a new visual element to the game (sprite, tile, text, shape, etc
 
 Every render concern is split across two functions — never combined:
 
-| Part | Layer | Pure? | What it does |
-|------|-------|-------|--------------|
-| **Projection** | `render/` | ✅ Pure | `state → RenderCommand[]` — describes *what* to draw |
-| **Executor** | `effects/` | ❌ Impure | `RenderCommand → Canvas draw calls` — *actually* draws it |
+| Part           | Layer      | Pure?     | What it does                                              |
+| -------------- | ---------- | --------- | --------------------------------------------------------- |
+| **Projection** | `render/`  | ✅ Pure   | `state → RenderCommand[]` — describes _what_ to draw      |
+| **Executor**   | `effects/` | ❌ Impure | `RenderCommand → Canvas draw calls` — _actually_ draws it |
 
 **Never write to `CanvasRenderingContext2D` inside the projection.** The projection must be fully testable without a Canvas.
 
@@ -28,8 +28,15 @@ In `packages/game/types/render-command-type.ts` (create if absent):
 
 ```ts
 export type RenderCommand =
-  | { readonly type: "FILL_RECT"; readonly x: number; readonly y: number; readonly w: number; readonly h: number; readonly color: string }
-  | { readonly type: "YOUR_COMMAND"; readonly /* payload fields */ }
+  | {
+      readonly type: "FILL_RECT";
+      readonly x: number;
+      readonly y: number;
+      readonly w: number;
+      readonly h: number;
+      readonly color: string;
+    }
+  | { readonly type: "YOUR_COMMAND"; readonly /* payload fields */ };
 ```
 
 ### 2. Implement the projection (pure)
@@ -41,7 +48,7 @@ import type { GameState } from "../../types/game-state-type.ts";
 import type { RenderCommand } from "../../types/render-command-type.ts";
 
 const projectYourThing = (state: GameState): ReadonlyArray<RenderCommand> =>
-  state.entities.map(e => ({
+  state.entities.map((e) => ({
     type: "YOUR_COMMAND",
     /* derive fields from state only — no Canvas access */
   }));

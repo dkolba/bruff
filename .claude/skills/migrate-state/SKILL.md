@@ -65,6 +65,7 @@ export const migrateV1toV2 = (old: GameStateV1): GameState => ({
 ```
 
 Rules for migration functions:
+
 - Pure — no side effects
 - Exhaustive — every field of the new shape must be present in the return value
 - Tested — unit test with a representative V1 fixture

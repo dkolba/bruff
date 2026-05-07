@@ -14,8 +14,10 @@ Every state transition is a pure function:
 ```ts
 const myReducer = (state: GameState, action: MyAction): GameState => {
   switch (action.type) {
-    case "CASE_A": return { ...state, /* … */ };
-    case "CASE_B": return { ...state, /* … */ };
+    case "CASE_A":
+      return { ...state /* … */ };
+    case "CASE_B":
+      return { ...state /* … */ };
     default: {
       const _exhaustive: never = action;
       throw new Error(`Unhandled action: ${JSON.stringify(_exhaustive)}`);

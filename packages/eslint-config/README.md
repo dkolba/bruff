@@ -20,13 +20,13 @@ export default [
 
 The config composes five layers in order — later layers override earlier ones:
 
-| Layer | Plugin | Starting point |
-|-------|--------|----------------|
-| Core JS | `@eslint/js` | `all` |
-| Best practices | `eslint-plugin-unicorn` | `all` |
-| TypeScript | `typescript-eslint` | strict + type-aware |
-| Docs | `eslint-plugin-tsdoc` | warnings |
-| Web Components | `eslint-plugin-wc` | recommended |
+| Layer          | Plugin                  | Starting point      |
+| -------------- | ----------------------- | ------------------- |
+| Core JS        | `@eslint/js`            | `all`               |
+| Best practices | `eslint-plugin-unicorn` | `all`               |
+| TypeScript     | `typescript-eslint`     | strict + type-aware |
+| Docs           | `eslint-plugin-tsdoc`   | warnings            |
+| Web Components | `eslint-plugin-wc`      | recommended         |
 
 ### Notable enforcements
 
