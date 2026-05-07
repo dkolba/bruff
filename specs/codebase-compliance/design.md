@@ -360,6 +360,30 @@ export const updateEnemies =
 `packages/utils/module/fp/prng.ts` (pure, in-house, zero deps).
 `packages/utils/module/types/brand.ts` if `Brand<>` does not yet exist.
 
+### Brand module shape
+
+```ts
+// packages/utils/module/types/brand.ts
+declare const BRAND: unique symbol;
+
+export type Brand<Base, Tag extends string> = Base & {
+  readonly [BRAND]: Tag;
+};
+
+export const brand: <Tag extends string, Base = string>(
+  value: Base,
+) => Brand<Base, Tag>;
+```
+
+The `brand` function is the single sanctioned construction site for
+branded values. Internally it performs one type assertion guarded by
+an `eslint-disable` comment with justification; every other module
+constructs branded values exclusively through this helper, so casts
+do not leak into domain code. The unique-symbol property on the
+`Brand` type is inaccessible at runtime (the symbol is `declare`d, not
+exported), preventing accidental construction or inspection from
+outside the module.
+
 ### Public API surface
 
 ```ts
