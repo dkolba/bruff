@@ -1,3 +1,5 @@
+import { error, ok, type Result } from "./result.js";
+
 /**
  * The present variant of an {@link Option}.
  */
@@ -50,3 +52,41 @@ export const isSome = <T>(option: Option<T>): option is Some<T> =>
  */
 export const isNone = <T>(option: Option<T>): option is None =>
   option.type === "none";
+
+/**
+ * Curried functor map for {@link Option}. Applies `transform` to the
+ * value of a `some` option; passes `none` through unchanged.
+ *
+ * @param transform - Function applied to the present value
+ * @returns A function that maps an `Option<T>` to an `Option<U>`
+ */
+export const mapOption =
+  <T, U>(transform: (value: T) => U) =>
+  (option: Option<T>): Option<U> =>
+    option.type === "some" ? some(transform(option.value)) : option;
+
+/**
+ * Curried monadic bind for {@link Option}. Threads a `some` value into
+ * a partial continuation; passes `none` through unchanged.
+ *
+ * @param next - Function returning a follow-on `Option`
+ * @returns A function that maps an `Option<T>` to an `Option<U>`
+ */
+export const flatMapOption =
+  <T, U>(next: (value: T) => Option<U>) =>
+  (option: Option<T>): Option<U> =>
+    option.type === "some" ? next(option.value) : option;
+
+/**
+ * Curried bridge from {@link Option} to {@link Result}. Promotes
+ * `some` values to `ok` results and replaces `none` with the supplied
+ * error reason. The parameter is named `reason` rather than `error`
+ * to avoid shadowing the imported `error` constructor.
+ *
+ * @param reason - The error to attach when the option is `none`
+ * @returns A function that maps an `Option<T>` to a `Result<T, E>`
+ */
+export const toResult =
+  <T, E>(reason: E) =>
+  (option: Option<T>): Result<T, E> =>
+    option.type === "some" ? ok(option.value) : error(reason);
