@@ -10,7 +10,7 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 - [x] T2 — Add `mapResult`, `flatMapResult`, `mapError`, `unwrapOr` (curried) to `packages/utils/module/fp/result.ts` and corresponding tests in the same `result.test.ts` (map laws, flatMap short-circuit on error, fallback on `unwrapOr`).
 - [x] T4 — Add `Option<T>` type and `some`/`none`/`isSome`/`isNone` plus their unit tests to new files `packages/utils/module/fp/option.ts` and `packages/utils/module/fp/option.test.ts`.
 - [x] T5 — Add `mapOption`, `flatMapOption`, `toResult` (curried) to `packages/utils/module/fp/option.ts` and corresponding tests in the same `option.test.ts`.
-- [ ] T7 — Re-export `Result`, `Option`, and helpers from `packages/utils/index.ts`.
+- [x] T7 — Re-export `Result`, `Option`, and helpers from `packages/utils/index.ts`.
 
 ## Phase 2 — `Brand<>` utility (only if missing)
 
