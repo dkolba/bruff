@@ -1,4 +1,4 @@
-import type { Brand } from "@bruff/utils";
+import type { Brand, PrngState } from "@bruff/utils";
 
 /**
  * Branded identifier for {@link Enemy} entities.
@@ -12,27 +12,36 @@ export type EnemyId = Brand<string, "EnemyId">;
  */
 export type PlayerId = Brand<string, "PlayerId">;
 
-export type Enemy = {
+/** A single enemy unit on the game board. */
+export type Enemy = Readonly<{
+  id: EnemyId;
+  size: number;
+  spawnOrder: number;
   xPos: number;
   yPos: number;
-  size: number;
-};
+}>;
 
-export type Player = {
+/** The player-controlled entity. */
+export type Player = Readonly<{
+  id: PlayerId;
   size: number;
-  yPos: number;
   xPos: number;
-};
+  yPos: number;
+}>;
 
-export type CanvasSize = {
-  width: number;
+/** Canvas dimensions in pixels. */
+export type CanvasSize = Readonly<{
   height: number;
-};
+  width: number;
+}>;
 
-export type GameState = {
-  input: string[];
+/** Complete immutable snapshot of all game data for one tick. */
+export type GameState = Readonly<{
   canvas: CanvasSize;
+  enemies: ReadonlyArray<Enemy>;
+  input: string[];
   player: Player;
-  enemies: Enemy[];
   playerMoved: boolean;
-};
+  prng: PrngState;
+  stateVersion: number;
+}>;

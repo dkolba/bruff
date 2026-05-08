@@ -37,9 +37,9 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 ## Phase 5 — `GameState` immutability + `stateVersion` + IDs
 
 - [x] T21 — Define `EnemyId` and `PlayerId` branded types in `packages/game/types/game-state-type.ts`.
-- [ ] T22 — Wrap `Enemy`, `Player`, `CanvasSize`, and `GameState` in `Readonly<…>` and `ReadonlyArray<…>` in `packages/game/types/game-state-type.ts`. Add `id`, `spawnOrder` to `Enemy`; add `id` to `Player`. Add `stateVersion: 1` and `prng: PrngState` to `GameState`. Leave `input` field unchanged for now (re-typed in Phase 7).
-- [ ] T23 — Update `packages/game/lib/create-initial-state.ts` to produce the new shape: `stateVersion: 1`, seeded `prng` (fixed seed for now), deterministic `PlayerId`, empty enemies array, `playerMoved: false`.
-- [ ] T24 — Run `pnpm run typecheck` from the repo root and fix every immutability error surfaced (expected: spread-update sites in `update-player.ts` already use spreads; verify no `.push()` / direct property assignment slipped in).
+- [x] T22 — Wrap `Enemy`, `Player`, `CanvasSize`, and `GameState` in `Readonly<…>` and `ReadonlyArray<…>` in `packages/game/types/game-state-type.ts`. Add `id`, `spawnOrder` to `Enemy`; add `id` to `Player`. Add `stateVersion: 1` and `prng: PrngState` to `GameState`. Leave `input` field unchanged for now (re-typed in Phase 7).
+- [x] T23 — Update `packages/game/lib/create-initial-state.ts` to produce the new shape: `stateVersion: 1`, seeded `prng` (fixed seed for now), deterministic `PlayerId`, empty enemies array, `playerMoved: false`.
+- [x] T24 — Run `pnpm run typecheck` from the repo root and fix every immutability error surfaced (expected: spread-update sites in `update-player.ts` already use spreads; verify no `.push()` / direct property assignment slipped in). T22–T24 committed together: adding required fields to `GameState` immediately breaks all test files that construct literal `GameState` objects, so all five test files (`create-initial-state`, `move-enemy-toward-player`, `render`, `update-enemies`, `update-player`) were updated atomically. Tests restructured to use `toMatchObject` for grouping assertions (respects `max-statements` limit). Import ordering follows single-before-multiple ESLint rule.
 
 ## Phase 6 — Layer directories + boundary lint
 

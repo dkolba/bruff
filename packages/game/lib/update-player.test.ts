@@ -1,16 +1,26 @@
+import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
 import { PLAYER_SIZE, PLAYER_SPEED } from "./constants.js";
 import type { GameState } from "../types/game-state-type.ts";
 import updatePlayer from "./update-player.js";
 
 const ZERO = 0;
+const TEST_SEED = 1;
+const STATE_VERSION = 1;
 
 const createBaseState = (): GameState => ({
   canvas: { height: 600, width: 800 },
   enemies: [],
   input: [],
-  player: { size: PLAYER_SIZE, xPos: 200, yPos: 200 },
+  player: {
+    id: brand<"PlayerId">("test-player"),
+    size: PLAYER_SIZE,
+    xPos: 200,
+    yPos: 200,
+  },
   playerMoved: false,
+  prng: createPrng(TEST_SEED),
+  stateVersion: STATE_VERSION,
 });
 
 const MOVEMENT_TEST_CASES = [

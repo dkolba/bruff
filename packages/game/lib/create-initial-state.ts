@@ -1,5 +1,9 @@
-import { ENEMY_SIZE, PLAYER_SIZE } from "./constants.js";
+import { brand, createPrng, nextId } from "@bruff/utils";
 import type { GameState } from "../types/game-state-type.ts";
+import { PLAYER_SIZE } from "./constants.js";
+
+const INITIAL_SEED = 1;
+const STATE_VERSION = 1;
 
 /**
  * Creates the initial game state based on the canvas dimensions.
@@ -10,35 +14,28 @@ import type { GameState } from "../types/game-state-type.ts";
 const createInitialState = (canvas: {
   height: number;
   width: number;
-}): GameState => ({
-  canvas: {
-    height: canvas.height,
-    width: canvas.width,
-  },
-  enemies: [
-    {
-      size: ENEMY_SIZE,
-      xPos: 50,
-      yPos: 50,
+}): GameState => {
+  const seedPrng = createPrng(INITIAL_SEED);
+  const { prng, value: playerIdRaw } = nextId(seedPrng);
+  const playerId = brand<"PlayerId">(playerIdRaw);
+
+  return {
+    canvas: {
+      height: canvas.height,
+      width: canvas.width,
     },
-    {
-      size: ENEMY_SIZE,
-      xPos: 300,
-      yPos: 100,
+    enemies: [],
+    input: [],
+    player: {
+      id: playerId,
+      size: PLAYER_SIZE,
+      xPos: 200,
+      yPos: 200,
     },
-    {
-      size: ENEMY_SIZE,
-      xPos: 100,
-      yPos: 300,
-    },
-  ],
-  input: [],
-  player: {
-    size: PLAYER_SIZE,
-    xPos: 200,
-    yPos: 200,
-  },
-  playerMoved: false,
-});
+    playerMoved: false,
+    prng,
+    stateVersion: STATE_VERSION,
+  };
+};
 
 export default createInitialState;
