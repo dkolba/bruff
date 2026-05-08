@@ -4,12 +4,20 @@ import { beforeEach, expect, test, vi } from "vitest";
 import { createCanvasResizeObserver } from "./create-canvas-resize-observer.js";
 import { getCanvasContext } from "./get-canvas-context.js";
 
+const unwrapContext = (target: HTMLCanvasElement): CanvasRenderingContext2D => {
+  const result = getCanvasContext(target);
+  if (result.type === "error") {
+    throw new TypeError(`test setup: ${result.error}`);
+  }
+  return result.value;
+};
+
 let canvas: HTMLCanvasElement = document.createElement("canvas");
-let context: CanvasRenderingContext2D = getCanvasContext(canvas);
+let context: CanvasRenderingContext2D = unwrapContext(canvas);
 
 beforeEach(() => {
   canvas = document.createElement("canvas");
-  context = getCanvasContext(canvas);
+  context = unwrapContext(canvas);
   vi.restoreAllMocks();
 });
 

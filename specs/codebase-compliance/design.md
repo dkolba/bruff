@@ -26,10 +26,10 @@ export const ok:    <T>(value: T) => Result<T, never>;
 export const error: <E>(reason: E) => Result<never, E>;
 export const isOk:    <T, E>(r: Result<T, E>) => r is Ok<T>;
 export const isError: <T, E>(r: Result<T, E>) => r is Failure<E>;
-export const mapResult:       <T, U, E>(f: (t: T) => U)            => (r: Result<T, E>) => Result<U, E>;
-export const flatMapResult:   <T, U, E>(f: (t: T) => Result<U, E>) => (r: Result<T, E>) => Result<U, E>;
-export const mapError:        <T, E, F>(f: (e: E) => F)            => (r: Result<T, E>) => Result<T, F>;
-export const unwrapOr:        <T, E>(fallback: T)                  => (r: Result<T, E>) => T;
+export const mapResult:       <T, U, E>(f: (t: T) => U)                       => (r: Result<T, E>) => Result<U, E>;
+export const flatMapResult:   <T, U, NextError>(f: (t: T) => Result<U, NextError>) => <UpstreamError>(r: Result<T, UpstreamError>) => Result<U, UpstreamError | NextError>;
+export const mapError:        <T, E, F>(f: (e: E) => F)                       => (r: Result<T, E>) => Result<T, F>;
+export const unwrapOr:        <T, E>(fallback: T)                             => (r: Result<T, E>) => T;
 ```
 
 Naming notes: the project's `unicorn/prevent-abbreviations` ESLint rule

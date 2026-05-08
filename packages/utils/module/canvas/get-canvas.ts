@@ -1,14 +1,15 @@
+import { error, ok, type Result } from "../fp/result.js";
+
 /**
- * Gets the canvas element from a shadow root
+ * Gets the canvas element from a shadow root.
  *
  * @param root - The shadow root to search in
- * @returns The found canvas element
- * @throws Error - If canvas element is not found
+ * @returns `ok` with the found canvas or `error("canvas-not-found")`
+ *   when the shadow root contains no `<canvas>` element
  */
-export const getCanvas = (root: ShadowRoot): HTMLCanvasElement => {
+export const getCanvas = (
+  root: ShadowRoot,
+): Result<HTMLCanvasElement, "canvas-not-found"> => {
   const canvas = root.querySelector("canvas");
-  if (!canvas) {
-    throw new Error("Canvas element not found");
-  }
-  return canvas;
+  return canvas ? ok(canvas) : error("canvas-not-found");
 };

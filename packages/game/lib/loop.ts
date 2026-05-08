@@ -93,43 +93,59 @@ const subscribeToGameObservables = (
 };
 
 /**
- * Entry point that initialises the canvas, wires up input observables,
- * and starts the render animation loop.
+ * Builds and starts the game-loop generator, wires the input
+ * observables to it, and returns the running iterator.
+ *
+ * @param canvas - The canvas the initial state is sized against
+ * @returns The running game-loop iterator
  */
-const loop = () => {
-  /**
-   * INITIAL ONE-TIME SETUP
-   * */
-  const { canvas, context, removeCanvasResizeListener } = curtainUp();
+const startGameLoopIterator = (
+  canvas: HTMLCanvasElement,
+): GameStateGenerator => {
   const initialGameState = createInitialState(canvas);
   const gameLoopIter = createGameLoop(initialGameState);
-  // Start the game loop
   gameLoopIter.next();
-
-  /**
-   * OBSERVABLE & SUBSCRIPTION SETUP
-   * */
   const gameObservables = createGameObservables();
   subscribeToGameObservables(
     curriedGameStateGenerator(gameLoopIter),
     gameObservables,
   );
+  return gameLoopIter;
+};
 
-  const renderFrame =
-    (renderContext: CanvasRenderingContext2D) =>
-    (time: number): void => {
-      curriedRadiatingBarsBackgroundAnimation(renderContext)(time);
-      const currentGameState = gameLoopIter.next().value;
-      render(currentGameState, context);
-      requestAnimationFrame(renderFrame(renderContext)); // Schedule next frame
-    };
+/**
+ * Builds the recursive `requestAnimationFrame` callback.
+ *
+ * @param context - The 2D rendering context to draw on
+ * @param gameLoopIter - The running game-loop iterator
+ * @returns A frame callback that schedules the next frame on each call
+ */
+const buildRenderFrame =
+  (
+    context: CanvasRenderingContext2D,
+    gameLoopIter: GameStateGenerator,
+  ): ((time: number) => void) =>
+  (time: number): void => {
+    curriedRadiatingBarsBackgroundAnimation(context)(time);
+    const currentGameState = gameLoopIter.next().value;
+    render(currentGameState, context);
+    requestAnimationFrame(buildRenderFrame(context, gameLoopIter));
+  };
 
-  window.addEventListener("beforeunload", () => {
-    removeCanvasResizeListener();
-  });
-
-  // Start the enigne
-  requestAnimationFrame(renderFrame(context));
+/**
+ * Entry point that initialises the canvas, wires up input observables,
+ * and starts the render animation loop.
+ */
+const loop = (): void => {
+  const stageResult = curtainUp();
+  if (stageResult.type === "error") {
+    console.error(`bruff: setup failed (${stageResult.error})`);
+    return;
+  }
+  const { canvas, context, removeCanvasResizeListener } = stageResult.value;
+  const gameLoopIter = startGameLoopIterator(canvas);
+  window.addEventListener("beforeunload", removeCanvasResizeListener);
+  requestAnimationFrame(buildRenderFrame(context, gameLoopIter));
 };
 
 export default loop;

@@ -1,16 +1,16 @@
+import { error, ok, type Result } from "../fp/result.js";
+
 /**
- * Gets the 2D rendering context from a canvas element
+ * Gets the 2D rendering context from a canvas element.
  *
- * @param canvas - The canvas element to get context from
- * @returns The 2D rendering context
- * @throws Error - If the context cannot be obtained
+ * @param canvas - The canvas element to get the context from
+ * @returns `ok` with the 2D context or
+ *   `error("canvas-context-not-found")` when the browser cannot
+ *   provide one (e.g. another context type is already attached)
  */
 export const getCanvasContext = (
   canvas: HTMLCanvasElement,
-): CanvasRenderingContext2D => {
+): Result<CanvasRenderingContext2D, "canvas-context-not-found"> => {
   const context = canvas.getContext("2d");
-  if (!context) {
-    throw new Error("Canvas context not found");
-  }
-  return context;
+  return context ? ok(context) : error("canvas-context-not-found");
 };

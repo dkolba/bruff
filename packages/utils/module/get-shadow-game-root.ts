@@ -1,14 +1,18 @@
+import { error, ok, type Result } from "./fp/result.js";
+
 /**
- * Gets the game's shadow root element
+ * Gets the game's shadow root via a CSS selector.
  *
- * @param gameRoot - The selector for the game root element
- * @returns The shadow root of the game element
- * @throws Error - If the game root element is not found
+ * @param gameRoot - The selector for the game-root element
+ * @returns `ok` with the shadow root or
+ *   `error("game-root-not-found")` when no element matches the
+ *   selector or the matching element has no attached shadow root
  */
-export const getShadowGameRoot = (gameRoot: string): ShadowRoot => {
+export const getShadowGameRoot = (
+  gameRoot: string,
+): Result<ShadowRoot, "game-root-not-found"> => {
   const gameElement = document.querySelector(gameRoot);
-  if (!gameElement?.shadowRoot) {
-    throw new Error("Game root element not found");
-  }
-  return gameElement.shadowRoot;
+  return gameElement?.shadowRoot
+    ? ok(gameElement.shadowRoot)
+    : error("game-root-not-found");
 };

@@ -1,4 +1,5 @@
 import { beforeEach, expect, test, vi } from "vitest";
+import { error, ok } from "../fp/result.js";
 import { getCanvasContext } from "./get-canvas-context.js";
 
 let canvas: HTMLCanvasElement = document.createElement("canvas");
@@ -7,21 +8,26 @@ beforeEach(() => {
   canvas = document.createElement("canvas");
 });
 
-test("#getCanvasContext returns 2d context when available", () => {
-  const context = getCanvasContext(canvas);
-  expect(context).toBeDefined();
-  expect(context instanceof CanvasRenderingContext2D).toBeTruthy();
+test("#getCanvasContext returns ok with the 2d context when available", () => {
+  const result = getCanvasContext(canvas);
+  expect(result.type).toBe("ok");
+  if (result.type === "ok") {
+    expect(result.value instanceof CanvasRenderingContext2D).toBeTruthy();
+  }
 });
 
-test("#getCanvasContext throws when context is not available", () => {
-  // Mock getContext to return null
-  vi.spyOn(canvas, "getContext").mockReturnValue(null);
+test("#getCanvasContext returns ok with the value returned by getContext", () => {
+  const fakeContext = canvas.getContext("2d");
+  if (fakeContext === null) {
+    throw new TypeError("Browser failed to provide a 2d context");
+  }
+  vi.spyOn(canvas, "getContext").mockReturnValue(fakeContext);
 
-  expect(() => getCanvasContext(canvas)).toThrow("Canvas context not found");
+  expect(getCanvasContext(canvas)).toEqual(ok(fakeContext));
 });
 
-test("#getCanvasContext throws with correct error message", () => {
+test("#getCanvasContext returns error('canvas-context-not-found') when getContext returns null", () => {
   vi.spyOn(canvas, "getContext").mockReturnValue(null);
 
-  expect(() => getCanvasContext(canvas)).toThrow(/Canvas context not found/u);
+  expect(getCanvasContext(canvas)).toEqual(error("canvas-context-not-found"));
 });

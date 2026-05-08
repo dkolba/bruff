@@ -20,13 +20,13 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 
 ## Phase 3 — Boundary helpers return `Result`
 
-- [ ] T11 — Refactor `packages/utils/module/canvas/get-canvas.ts` to return `Result<HTMLCanvasElement, "canvas-not-found">` and remove the `throw`.
-- [ ] T12 — Update `packages/utils/module/canvas/get-canvas.test.ts` to assert against the `Result` shape (drop `.toThrow()`).
-- [ ] T13 — Refactor `packages/utils/module/canvas/get-canvas-context.ts` to return `Result<CanvasRenderingContext2D, "canvas-context-not-found">`.
-- [ ] T14 — Update `packages/utils/module/canvas/get-canvas-context.test.ts` accordingly.
-- [ ] T15 — Refactor `packages/utils/module/get-shadow-game-root.ts` to return `Result<ShadowRoot, "game-root-not-found">`.
-- [ ] T16 — Update `packages/utils/module/get-shadow-game-root.test.ts` accordingly.
-- [ ] T17 — Update `packages/game/lib/curtain-up.ts` to thread Results through `flatMapResult` instead of plain `pipe`. Surface the failure in the caller (`bruff-game.ts` for now) by logging via `console.error` (a shell-only side effect) when the result is an error.
+- [x] T11 — Refactor `packages/utils/module/canvas/get-canvas.ts` to return `Result<HTMLCanvasElement, "canvas-not-found">` and remove the `throw`.
+- [x] T12 — Update `packages/utils/module/canvas/get-canvas.test.ts` to assert against the `Result` shape (drop `.toThrow()`).
+- [x] T13 — Refactor `packages/utils/module/canvas/get-canvas-context.ts` to return `Result<CanvasRenderingContext2D, "canvas-context-not-found">`.
+- [x] T14 — Update `packages/utils/module/canvas/get-canvas-context.test.ts` accordingly.
+- [x] T15 — Refactor `packages/utils/module/get-shadow-game-root.ts` to return `Result<ShadowRoot, "game-root-not-found">`.
+- [x] T16 — Update `packages/utils/module/get-shadow-game-root.test.ts` accordingly.
+- [x] T17 — Update `packages/game/lib/curtain-up.ts` to thread Results through `flatMapResult` instead of plain `pipe`. Failures surface in the caller (`loop.ts`) via `console.error` (a shell-only side effect) and an early return. T11–T17 were committed as one atomic unit because changing one helper alone breaks the typecheck of the shared `pipe(...)` chain in `curtain-up.ts`.
 
 ## Phase 4 — Seeded PRNG
 

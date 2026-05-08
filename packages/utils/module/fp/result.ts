@@ -69,16 +69,21 @@ export const mapResult =
 
 /**
  * Curried monadic bind for {@link Result}. Threads an `ok` value into
- * a fallible continuation; passes any `error` through unchanged. The
- * canonical building block for railway-oriented composition through
- * `pipe()`.
+ * a fallible continuation; passes any upstream `error` through
+ * unchanged. The continuation may introduce its own error variant —
+ * the resulting failure type is the union of the upstream and
+ * continuation reasons, so railway-oriented chains accumulate
+ * possible failure modes through `pipe()` without losing precision.
  *
  * @param next - Function returning a follow-on `Result`
- * @returns A function that maps a `Result<T, E>` to a `Result<U, E>`
+ * @returns A function that maps a `Result<T, UpstreamError>` to a
+ *   `Result<U, UpstreamError | NextError>`
  */
 export const flatMapResult =
-  <T, U, E>(next: (value: T) => Result<U, E>) =>
-  (result: Result<T, E>): Result<U, E> =>
+  <T, U, NextError>(next: (value: T) => Result<U, NextError>) =>
+  <UpstreamError>(
+    result: Result<T, UpstreamError>,
+  ): Result<U, NextError | UpstreamError> =>
     result.type === "ok" ? next(result.value) : result;
 
 /**

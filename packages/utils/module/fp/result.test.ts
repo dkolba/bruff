@@ -118,6 +118,16 @@ describe("flatMapResult", () => {
       error(`downstream-${String(SAMPLE_VALUE)}`),
     );
   });
+
+  it("widens the error type to the union of upstream and continuation reasons", () => {
+    const ZERO = 0;
+    const next = (value: number): Result<number, "downstream"> =>
+      value > ZERO ? ok(value) : error("downstream");
+    const upstream: Result<number, "upstream"> = error("upstream");
+    const composed: Result<number, "downstream" | "upstream"> =
+      flatMapResult(next)(upstream);
+    expect(composed).toEqual(error("upstream"));
+  });
 });
 
 describe("mapError", () => {
