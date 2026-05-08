@@ -1,64 +1,58 @@
-/* eslint-disable unicorn/switch-case-braces */
 import { PLAYER_SIZE, PLAYER_SPEED, ZERO } from "../core/constants.js";
 import { clamp } from "@bruff/utils";
+import type { GameAction } from "../core/actions.ts";
 import type { GameState } from "../core/types.ts";
 
-const getMovementDelta = (
-  key: string | undefined,
-): { dx: number; dy: number } => {
-  let dx = 0;
-  let dy = 0;
+const applyDelta = (state: GameState, dx: number, dy: number): GameState => ({
+  ...state,
+  player: {
+    ...state.player,
+    xPos: clamp(state.player.xPos + dx, ZERO, state.canvas.width - PLAYER_SIZE),
+    yPos: clamp(
+      state.player.yPos + dy,
+      ZERO,
+      state.canvas.height - PLAYER_SIZE,
+    ),
+  },
+  playerMoved: true,
+});
 
-  switch (key) {
-    case "arrowup":
-    case "north":
-    case "w":
-      dy = -PLAYER_SPEED;
-      break;
-    case "arrowdown":
-    case "south":
-    case "s":
-      dy = PLAYER_SPEED;
-      break;
-    case "arrowleft":
-    case "west":
-    case "a":
-      dx = -PLAYER_SPEED;
-      break;
-    case "arrowright":
-    case "east":
-    case "d":
-      dx = PLAYER_SPEED;
-      break;
-    default:
+/**
+ * Pure reducer for player movement. Maps each {@link GameAction}
+ * variant to a new {@link GameState}; the `tick` arm is a no-op
+ * (enemies are advanced in `updateEnemies`). The `default` arm uses
+ * a `never`-typed assignment so the compiler errors when a new
+ * {@link GameAction} variant is added without a matching case
+ * (per A-19).
+ *
+ * @param state - The current game state
+ * @param action - The action to apply
+ * @returns A new game state with the player position updated
+ */
+const updatePlayer = (state: GameState, action: GameAction): GameState => {
+  switch (action.type) {
+    case "move-up": {
+      return applyDelta(state, ZERO, -PLAYER_SPEED);
+    }
+    case "move-down": {
+      return applyDelta(state, ZERO, PLAYER_SPEED);
+    }
+    case "move-left": {
+      return applyDelta(state, -PLAYER_SPEED, ZERO);
+    }
+    case "move-right": {
+      return applyDelta(state, PLAYER_SPEED, ZERO);
+    }
+    case "tick": {
+      return state;
+    }
+    /* c8 ignore start -- unreachable per A-19 exhaustiveness check */
+    default: {
+      const _exhaustive: never = action;
+      return _exhaustive;
+    }
+    /* c8 ignore stop */
   }
-
-  return { dx, dy };
-};
-
-const updatePlayer = (state: GameState): GameState => {
-  const [keyEvent, ...restInput] = state.input;
-  const key = keyEvent?.toLowerCase();
-  const { xPos, yPos } = state.player;
-  const { dx, dy } = getMovementDelta(key);
-
-  const updatedXcoord = clamp(
-    xPos + dx,
-    ZERO,
-    state.canvas.width - PLAYER_SIZE,
-  );
-  const updatedYcoord = clamp(
-    yPos + dy,
-    ZERO,
-    state.canvas.height - PLAYER_SIZE,
-  );
-
-  return {
-    ...state,
-    input: restInput,
-    player: { ...state.player, xPos: updatedXcoord, yPos: updatedYcoord },
-    playerMoved: dx !== ZERO || dy !== ZERO,
-  };
 };
 
 export default updatePlayer;

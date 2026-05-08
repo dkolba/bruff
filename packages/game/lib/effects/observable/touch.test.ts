@@ -1,3 +1,4 @@
+import type * as Utilities from "@bruff/utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { apply, isSupported } from "observable-polyfill/fn";
 import createTouchObservable from "./touch.js";
@@ -7,9 +8,13 @@ if (!isSupported()) {
   apply();
 }
 
-vi.mock("@bruff/utils", () => ({
-  getCardinalDirection: vi.fn(),
-}));
+vi.mock("@bruff/utils", async (importOriginal) => {
+  const actual = await importOriginal<typeof Utilities>();
+  return {
+    ...actual,
+    getCardinalDirection: vi.fn(),
+  };
+});
 
 const ZERO = 0;
 const NEGATIVE_FORTY = -40;
@@ -107,7 +112,7 @@ describe.skipIf(unsupportedBrowsers)("createTouchObservable", () => {
     );
 
     expect(getCardinalDirection).toHaveBeenCalledWith(ZERO, NEGATIVE_FORTY);
-    expect(next).toHaveBeenCalledWith("north");
+    expect(next).toHaveBeenCalledWith({ type: "move-up" });
   });
 });
 

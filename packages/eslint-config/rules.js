@@ -50,7 +50,7 @@ export const overrideRulesEslint = {
   "no-inline-comments": "off",
   "no-ternary": "off",
   "no-undefined": "off",
-  "no-underscore-dangle": ["error", { allow: ["__dirname"] }],
+  "no-underscore-dangle": ["error", { allow: ["__dirname", "_exhaustive"] }],
   "no-unused-vars": [
     "error",
     { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },

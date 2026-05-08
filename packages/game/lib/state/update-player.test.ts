@@ -1,6 +1,7 @@
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
 import { PLAYER_SIZE, PLAYER_SPEED } from "../core/constants.js";
+import type { GameAction } from "../core/actions.ts";
 import type { GameState } from "../core/types.ts";
 import updatePlayer from "./update-player.js";
 
@@ -23,71 +24,76 @@ const createBaseState = (): GameState => ({
   stateVersion: STATE_VERSION,
 });
 
-const MOVEMENT_TEST_CASES = [
+const MOVEMENT_TEST_CASES: ReadonlyArray<{
+  action: GameAction;
+  direction: string;
+  expected: {
+    xPos: (state: GameState) => number;
+    yPos: (state: GameState) => number;
+  };
+}> = [
   {
+    action: { type: "move-up" },
     direction: "up",
     expected: {
-      xPos: (state: GameState) => state.player.xPos,
-      yPos: (state: GameState) => state.player.yPos - PLAYER_SPEED,
+      xPos: (state) => state.player.xPos,
+      yPos: (state) => state.player.yPos - PLAYER_SPEED,
     },
-    input: "arrowup",
   },
   {
+    action: { type: "move-down" },
     direction: "down",
     expected: {
-      xPos: (state: GameState) => state.player.xPos,
-      yPos: (state: GameState) => state.player.yPos + PLAYER_SPEED,
+      xPos: (state) => state.player.xPos,
+      yPos: (state) => state.player.yPos + PLAYER_SPEED,
     },
-    input: "arrowdown",
   },
   {
+    action: { type: "move-left" },
     direction: "left",
     expected: {
-      xPos: (state: GameState) => state.player.xPos - PLAYER_SPEED,
-      yPos: (state: GameState) => state.player.yPos,
+      xPos: (state) => state.player.xPos - PLAYER_SPEED,
+      yPos: (state) => state.player.yPos,
     },
-    input: "arrowleft",
   },
   {
+    action: { type: "move-right" },
     direction: "right",
     expected: {
-      xPos: (state: GameState) => state.player.xPos + PLAYER_SPEED,
-      yPos: (state: GameState) => state.player.yPos,
+      xPos: (state) => state.player.xPos + PLAYER_SPEED,
+      yPos: (state) => state.player.yPos,
     },
-    input: "arrowright",
   },
 ];
 
 describe("updatePlayer", () => {
-  it("should not move the player if there is no input", () => {
+  it("leaves the player unchanged on a tick action", () => {
     const baseState = createBaseState();
-    const updatedState = updatePlayer(baseState);
-    expect(updatedState.player.xPos).toBe(baseState.player.xPos);
-    expect(updatedState.player.yPos).toBe(baseState.player.yPos);
+    const updatedState = updatePlayer(baseState, { type: "tick" });
+    expect(updatedState.player).toEqual(baseState.player);
     expect(updatedState.playerMoved).toBe(false);
   });
 
   it.each(MOVEMENT_TEST_CASES)(
-    "should move the player $direction",
-    ({ expected, input }) => {
+    "moves the player $direction",
+    ({ action, expected }) => {
       const baseState = createBaseState();
-      const state = { ...baseState, input: [input] };
-      const updatedState = updatePlayer(state);
+      const updatedState = updatePlayer(baseState, action);
       expect(updatedState.player.xPos).toBe(expected.xPos(baseState));
       expect(updatedState.player.yPos).toBe(expected.yPos(baseState));
       expect(updatedState.playerMoved).toBe(true);
     },
   );
 
-  it("should clamp the player position to the canvas boundaries", () => {
+  it("clamps the player position to the canvas boundaries", () => {
     const baseState = createBaseState();
-    const state = {
+    const cornered: GameState = {
       ...baseState,
-      input: ["arrowup", "arrowleft"],
       player: { ...baseState.player, xPos: ZERO, yPos: ZERO },
     };
-    const updatedState = updatePlayer(state);
-    expect(updatedState.player.xPos).toBe(ZERO);
-    expect(updatedState.player.yPos).toBe(ZERO);
+    const afterUp = updatePlayer(cornered, { type: "move-up" });
+    const afterLeft = updatePlayer(afterUp, { type: "move-left" });
+    expect(afterLeft.player.xPos).toBe(ZERO);
+    expect(afterLeft.player.yPos).toBe(ZERO);
   });
 });

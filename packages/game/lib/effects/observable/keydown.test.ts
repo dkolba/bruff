@@ -7,7 +7,7 @@ if (!isSupported()) {
 }
 
 describe("createKeyDownObservable", () => {
-  it("should create an observable that emits the key of a keydown event", () => {
+  it("emits a normalised InputAction for a recognised keydown event", () => {
     const keyDown$ = createKeyDownObservable();
     const next = vi.fn();
     keyDown$.subscribe(next);
@@ -15,6 +15,6 @@ describe("createKeyDownObservable", () => {
     const keyboardEvent = new KeyboardEvent("keydown", { key: "ArrowUp" });
     document.dispatchEvent(keyboardEvent);
 
-    expect(next).toHaveBeenCalledWith("ArrowUp");
+    expect(next).toHaveBeenCalledWith({ type: "move-up" });
   });
 });

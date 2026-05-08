@@ -1,5 +1,7 @@
 import { FIVE, ONE } from "../../core/constants.js";
-import { getCardinalDirection } from "@bruff/utils";
+import { getCardinalDirection, isSome } from "@bruff/utils";
+import type { InputAction } from "../../core/actions.ts";
+import { normaliseKey } from "../../input/normalise-input.js";
 import type { Observable } from "observable-polyfill/fn";
 
 // !TODO: Currently not included in coverage
@@ -56,12 +58,15 @@ const createTouchDirectionObservable = (
 };
 
 /**
- * Creates an observable that emits cardinal directions based on touch gestures.
+ * Creates an observable that emits a normalised {@link InputAction}
+ * for each completed touch gesture. The cardinal direction produced
+ * by the gesture is run through `normaliseKey`; gestures that don't
+ * map to a known direction are silently dropped.
  *
- * @returns Observable that emits cardinal direction strings
+ * @returns Observable that emits one `InputAction` per recognised swipe
  */
-const createTouchObservable = (): Observable<string> => {
-  /* eslint-disable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- document.when() is part of the WICG Observable API proposal; TypeScript types do not yet cover this interface */
+const createTouchObservable = (): Observable<InputAction> => {
+  /* eslint-disable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return -- document.when() is part of the WICG Observable API proposal; TypeScript types do not yet cover this interface */
   const touchStart$ = (document as any)
     .when("touchstart")
     .filter((event: Event): event is TouchEvent =>
@@ -82,9 +87,11 @@ const createTouchObservable = (): Observable<string> => {
     createTouchDirectionObservable(startEvent, touchMove$, touchEnd$),
   );
 
-  return direction$.filter(
-    (direction): direction is string => direction !== null,
-  );
+  return direction$
+    .filter((direction): direction is string => direction !== null)
+    .map((direction: string) => normaliseKey(direction))
+    .filter(isSome)
+    .map((option: any) => option.value) as Observable<InputAction>;
   /* eslint-enable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
 };
 

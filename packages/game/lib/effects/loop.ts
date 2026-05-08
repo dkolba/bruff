@@ -1,4 +1,5 @@
 import { apply, isSupported, type Observable } from "observable-polyfill/fn";
+import type { GameAction, InputAction } from "../core/actions.ts";
 import createInitialState from "../state/create-initial-state.js";
 import createKeyDownObservable from "./observable/keydown.js";
 import createTouchObservable from "./observable/touch.js";
@@ -10,7 +11,11 @@ import { updateEnemies } from "../state/update-enemies.js";
 import updatePlayer from "../state/update-player.js";
 
 /** Generator that yields and receives {@link GameState} values to drive the main game loop. */
-type GameStateGenerator = Generator<GameState, GameState, string>;
+type GameStateGenerator = Generator<
+  GameState,
+  GameState,
+  InputAction | undefined
+>;
 
 if (!isSupported()) {
   apply();
@@ -27,8 +32,27 @@ const curriedRadiatingBarsBackgroundAnimation =
     radiatingBarsBackgroundAnimation(context, time);
 
 /**
- * Generator that drives the main game loop.
- * Yields the current state and resumes with the next player input.
+ * Folds an ordered list of {@link GameAction}s through both reducers,
+ * starting from `state`. Per A-18 input actions precede the
+ * tick action assembled in {@link createGameLoop}.
+ */
+const foldActions = (
+  state: GameState,
+  actions: ReadonlyArray<GameAction>,
+): GameState =>
+  actions.reduce<GameState>(
+    (currentState, action) =>
+      updateEnemies(updatePlayer(currentState, action), action),
+    state,
+  );
+
+/**
+ * Generator that drives the main game loop. Yields the current
+ * state and resumes when the shell feeds in an {@link InputAction}
+ * (or `undefined` for the bootstrap step). Each step appends the
+ * received input to the queue, folds the queue plus a synthesized
+ * `tick` through both reducers, and starts the next step with an
+ * empty queue.
  *
  * @param initialState - The starting game state
  */
@@ -36,16 +60,16 @@ const createGameLoop = function* (initialState: GameState): GameStateGenerator {
   let state = initialState;
 
   while (true) {
-    const receivedInput = yield state; // Expose current state, wait for input
-    const updatedInput = receivedInput
-      ? { input: [...state.input, receivedInput] }
-      : { input: [...state.input] };
-    const stateAfterPlayerUpdate = updatePlayer({ ...state, ...updatedInput }); // Compute next state
-
-    // Update enemies only if the player moved
-    state = stateAfterPlayerUpdate.playerMoved
-      ? updateEnemies(stateAfterPlayerUpdate)
-      : stateAfterPlayerUpdate;
+    const receivedInput = yield state;
+    const queuedInputs: ReadonlyArray<InputAction> =
+      receivedInput === undefined
+        ? state.input
+        : [...state.input, receivedInput];
+    const actions: ReadonlyArray<GameAction> = [
+      ...queuedInputs,
+      { type: "tick" },
+    ];
+    state = foldActions({ ...state, input: [] }, actions);
   }
 };
 
@@ -53,11 +77,11 @@ const createGameLoop = function* (initialState: GameState): GameStateGenerator {
  * Curries a game-loop iterator into a single-argument function.
  *
  * @param gameLoop - The running game loop generator
- * @returns A function that feeds one key input into the loop
+ * @returns A function that feeds one input action into the loop
  */
 const curriedGameStateGenerator =
-  (gameLoop: GameStateGenerator) => (key: string) => {
-    gameLoop.next(key);
+  (gameLoop: GameStateGenerator) => (action: InputAction) => {
+    gameLoop.next(action);
   };
 
 /**
@@ -78,17 +102,17 @@ const createGameObservables = () => {
  * @param gameObservables - Object containing observable streams
  */
 const subscribeToGameObservables = (
-  curriedGameLoop: (key: string) => void,
+  curriedGameLoop: (action: InputAction) => void,
   gameObservables: {
-    keyObservable$: Observable<string>;
-    touchObservable$: Observable<string>;
+    keyObservable$: Observable<InputAction>;
+    touchObservable$: Observable<InputAction>;
   },
 ) => {
   const { keyObservable$, touchObservable$ } = gameObservables;
   keyObservable$.subscribe(curriedGameLoop);
   touchObservable$.subscribe(curriedGameLoop);
-  touchObservable$.subscribe((event: string) => {
-    console.info("touch:", event);
+  touchObservable$.subscribe((action: InputAction) => {
+    console.info("touch:", action.type);
   });
 };
 

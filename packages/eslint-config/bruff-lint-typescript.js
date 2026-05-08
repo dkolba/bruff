@@ -168,23 +168,10 @@ const layerImportRestrictions = [
       ],
     },
   },
-  {
-    files: ["**/lib/effects/**/*.ts"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
-            {
-              group: ["**/input/**", "**/render/**"],
-              message:
-                "effects/ may import from core/ and state/ only. See packages-game.md A-4.",
-            },
-          ],
-        },
-      ],
-    },
-  },
+  // effects/ is the composition root (A-6: side effects live in effects/ or
+  // the entry point only). It must wire input/render together with state/,
+  // so it intentionally has no outward import restriction. The peer-only
+  // reading of the layer table is overridden here per Phase 7 (T42).
 ];
 
 const typescriptConfig = tseslint.config(

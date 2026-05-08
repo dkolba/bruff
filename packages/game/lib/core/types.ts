@@ -1,4 +1,5 @@
 import type { Brand, PrngState } from "@bruff/utils";
+import type { InputAction } from "./actions.ts";
 
 /**
  * Branded identifier for {@link Enemy} entities.
@@ -39,7 +40,7 @@ export type CanvasSize = Readonly<{
 export type GameState = Readonly<{
   canvas: CanvasSize;
   enemies: ReadonlyArray<Enemy>;
-  input: string[];
+  input: ReadonlyArray<InputAction>;
   player: Player;
   playerMoved: boolean;
   prng: PrngState;
