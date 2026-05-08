@@ -43,7 +43,7 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 
 ## Phase 6 — Layer directories + boundary lint
 
-- [ ] T25 — Create empty directories `packages/game/lib/{core,state,input,render,effects}` with a `.gitkeep` in each.
+- [x] T25 — Create empty directories `packages/game/lib/{core,state,input,render,effects}` with a `.gitkeep` in each.
 - [ ] T26 — Move `packages/game/types/game-state-type.ts` → `packages/game/lib/core/types.ts`. Update every importer of the old path.
 - [ ] T27 — Move `packages/game/lib/constants.ts` → `packages/game/lib/core/constants.ts`. Update importers.
 - [ ] T28 — Move `packages/game/lib/create-initial-state.ts`, `update-player.ts`, `update-enemies.ts`, `move-enemy-toward-player.ts` → `packages/game/lib/state/`. Update importers.
