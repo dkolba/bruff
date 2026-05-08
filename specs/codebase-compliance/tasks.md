@@ -54,7 +54,7 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 
 ## Phase 7 — Action taxonomy + reducers
 
-- [ ] T33 — Invoke `scaffold-action` skill to add `packages/game/lib/core/actions.ts` with `InputAction`, `GameAction`, `SystemEvent`, `RenderCommand` discriminated unions.
+- [x] T33 — Invoke `scaffold-action` skill to add `packages/game/lib/core/actions.ts` with `InputAction`, `GameAction`, `SystemEvent`, `RenderCommand` discriminated unions. Each variant tags on `type` per A-16. `GameAction` is `InputAction | { type: "tick" }` so reducers process input-derived and simulation events through one switch (T37, T39 use this). `SystemEvent` covers four lifecycle signals (started/paused/resumed/stopped). `RenderCommand` carries `clear` plus `fill-rect` with `color`, `xPos`, `yPos`, `width`, `height` — enough to express the current `render.ts` calls. The skill template's `throw new Error` exhaustiveness example was overridden by A-19 (domain code never throws); reducers will use the `return _exhaustive` form. No tests required: the file is type-only, so V8 coverage records no executable statements and the 100% gate passes.
 - [ ] T34 — Update `GameState.input` in `packages/game/lib/core/types.ts` from `string[]` to `ReadonlyArray<InputAction>`.
 - [ ] T35 — Add new file `packages/game/lib/input/normalise-input.ts` exporting `normaliseKey: (key: string) => Option<InputAction>` (returns `none` for unknown keys).
 - [ ] T36 — Write unit tests for `normaliseKey` in `packages/game/lib/input/normalise-input.test.ts` covering arrow keys, WASD, and unknown input → `none`.
