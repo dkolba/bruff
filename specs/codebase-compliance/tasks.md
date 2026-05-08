@@ -16,7 +16,7 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 
 - [x] T8 — Verify whether `Brand<>` already exists in `@bruff/utils`. If yes, skip T9–T10. If no, continue. **Result**: `grep -rn "Brand" packages/utils/ packages/` returned zero matches across the workspace; no `Brand`, `brand.ts`, or `module/types/` directory exists. T9 and T10 remain in scope.
 - [x] T9 — Add `Brand<Base, Tag>` type and `brand<Tag, Base>(value)` constructor helper to new file `packages/utils/module/types/brand.ts`, plus tests in `brand.test.ts`. The helper is the single sanctioned construction site for branded values (one localized cast under an `eslint-disable @typescript-eslint/consistent-type-assertions` comment with justification).
-- [ ] T10 — Re-export `Brand` and `brand` from `packages/utils/index.ts`.
+- [x] T10 — Re-export `Brand` and `brand` from `packages/utils/index.ts`.
 
 ## Phase 3 — Boundary helpers return `Result`
 
