@@ -1,6 +1,6 @@
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it, vi } from "vitest";
-import type { GameState } from "./core/types.ts";
+import type { GameState } from "../core/types.ts";
 import render from "./render.js";
 
 const THREE = 3;

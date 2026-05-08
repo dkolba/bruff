@@ -5,7 +5,7 @@ import createTouchObservable from "./observable/touch.js";
 import curtainUp from "./curtain-up.js";
 import type { GameState } from "./core/types.ts";
 import { radiatingBarsBackgroundAnimation } from "@bruff/utils";
-import render from "./render.js";
+import render from "./render/render.js";
 import { updateEnemies } from "./state/update-enemies.js";
 import updatePlayer from "./state/update-player.js";
 
