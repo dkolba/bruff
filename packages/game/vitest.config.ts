@@ -20,6 +20,7 @@ export default defineConfig({
       exclude: [
         "**/*spec*{js,ts,jsx,tsx}",
         "lib/effects/bruff-game.ts",
+        "lib/effects/entry.ts",
         "lib/effects/loop.ts",
         "lib/core/constants.ts",
         "lib/effects/observable/merge.ts",
