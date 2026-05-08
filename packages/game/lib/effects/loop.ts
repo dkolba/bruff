@@ -1,13 +1,13 @@
 import { apply, isSupported, type Observable } from "observable-polyfill/fn";
-import createInitialState from "./state/create-initial-state.js";
+import createInitialState from "../state/create-initial-state.js";
 import createKeyDownObservable from "./observable/keydown.js";
 import createTouchObservable from "./observable/touch.js";
 import curtainUp from "./curtain-up.js";
-import type { GameState } from "./core/types.ts";
+import type { GameState } from "../core/types.ts";
 import { radiatingBarsBackgroundAnimation } from "@bruff/utils";
-import render from "./render/render.js";
-import { updateEnemies } from "./state/update-enemies.js";
-import updatePlayer from "./state/update-player.js";
+import render from "../render/render.js";
+import { updateEnemies } from "../state/update-enemies.js";
+import updatePlayer from "../state/update-player.js";
 
 /** Generator that yields and receives {@link GameState} values to drive the main game loop. */
 type GameStateGenerator = Generator<GameState, GameState, string>;

@@ -10,7 +10,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: "./lib/bruff-game.ts",
+      entry: "./lib/effects/bruff-game.ts",
       fileName: "bruff-game",
       formats: ["es"],
       name: "bruff",
