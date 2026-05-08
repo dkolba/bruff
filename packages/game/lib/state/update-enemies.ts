@@ -1,4 +1,4 @@
-import type { GameState } from "./core/types.ts";
+import type { GameState } from "../core/types.ts";
 import { moveEnemyTowardPlayer } from "./move-enemy-toward-player.js";
 
 /**

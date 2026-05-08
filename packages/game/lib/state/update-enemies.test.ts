@@ -1,6 +1,6 @@
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it, vi } from "vitest";
-import type { Enemy, GameState } from "./core/types.ts";
+import type { Enemy, GameState } from "../core/types.ts";
 import { moveEnemyTowardPlayer } from "./move-enemy-toward-player.js";
 import { updateEnemies } from "./update-enemies.js";
 
