@@ -30,9 +30,9 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 
 ## Phase 4 — Seeded PRNG
 
-- [ ] T18 — Invoke `scaffold-prng` skill to generate `packages/utils/module/fp/prng.ts` with `PrngState`, `createPrng`, `nextNumber`, `nextId`.
-- [ ] T19 — Write unit tests in `packages/utils/module/fp/prng.test.ts` covering: same seed → same sequence; sequence length > 1000 has no immediate cycle; `nextId` is unique across 10000 draws.
-- [ ] T20 — Re-export `PrngState`, `createPrng`, `nextNumber`, `nextId` from `packages/utils/index.ts`.
+- [x] T18 — Invoke `scaffold-prng` skill to generate `packages/utils/module/fp/prng.ts` with `PrngState`, `createPrng`, `nextNumber`, `nextId`.
+- [x] T19 — Write unit tests in `packages/utils/module/fp/prng.test.ts` covering: same seed → same sequence; sequence length > 1000 has no immediate cycle; `nextId` is unique across 10000 draws.
+- [x] T20 — Re-export `PrngState`, `createPrng`, `nextNumber`, `nextId` from `packages/utils/index.ts`. T18–T20 committed together: coverage gate requires implementation and tests in the same commit. `PrngState` is a discriminated struct (`{ accumulator, type }`) instead of `Brand<number>` to avoid `@typescript-eslint/no-unsafe-assignment` false positives with unique-symbol branded types. `nextId` returns plain `string`; callers brand at the entity layer.
 
 ## Phase 5 — `GameState` immutability + `stateVersion` + IDs
 

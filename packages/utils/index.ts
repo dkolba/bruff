@@ -17,6 +17,12 @@ export {
 } from "./module/fp/option.js";
 export { pipe } from "./module/fp/pipe.js";
 export {
+  createPrng,
+  nextId,
+  nextNumber,
+  type PrngState,
+} from "./module/fp/prng.js";
+export {
   error,
   type Failure,
   flatMapResult,
