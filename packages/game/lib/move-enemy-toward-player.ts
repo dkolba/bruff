@@ -1,4 +1,4 @@
-import type { CanvasSize, Enemy, Player } from "../types/game-state-type.js";
+import type { CanvasSize, Enemy, Player } from "./core/types.js";
 import { ENEMY_SIZE, ENEMY_SPEED, ZERO } from "./constants.js";
 import { clamp } from "@bruff/utils";
 

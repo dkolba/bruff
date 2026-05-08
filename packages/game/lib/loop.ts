@@ -3,7 +3,7 @@ import createInitialState from "./create-initial-state.js";
 import createKeyDownObservable from "./observable/keydown.js";
 import createTouchObservable from "./observable/touch.js";
 import curtainUp from "./curtain-up.js";
-import type { GameState } from "../types/game-state-type.ts";
+import type { GameState } from "./core/types.ts";
 import { radiatingBarsBackgroundAnimation } from "@bruff/utils";
 import render from "./render.js";
 import { updateEnemies } from "./update-enemies.js";

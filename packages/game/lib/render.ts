@@ -1,4 +1,4 @@
-import type { GameState } from "../types/game-state-type.ts";
+import type { GameState } from "./core/types.ts";
 
 const render = (state: GameState, context: CanvasRenderingContext2D) => {
   // Draw player
