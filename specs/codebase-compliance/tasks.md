@@ -74,7 +74,7 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 ## Phase 9 — Tighten typings
 
 - [x] T46 — Add explicit `: void` return type and a TSDoc block to `packages/game/lib/render/render.ts`. Replace the `for (const enemy of enemies)` loop with `enemies.forEach(...)`. **Path divergence**: T32 relocated `render.ts` to `lib/effects/render.ts` (the file is still effectful — calls Canvas APIs — until the pure projection layer arrives), so all three changes were applied at the new path. The TSDoc block also notes the temporary effectful placement and the eventual move back once `RenderCommand` exists. The `enemies.forEach` line carries an inline `unicorn/no-array-for-each` disable with justification — the rule contradicts both this task and C-17's preference for declarative iteration.
-- [ ] T47 — Replace the `for (const sub of subs)` loop in `packages/game/lib/effects/observable/merge.ts` with `subs.forEach(...)`.
+- [x] T47 — Replace the `for (const sub of subs)` loop in `packages/game/lib/effects/observable/merge.ts` with `subs.forEach(...)`. Same `unicorn/no-array-for-each` situation as T46 — inline disable with justification.
 - [ ] T48 — Add ambient declaration file `packages/game/lib/effects/observable/observable-polyfill.d.ts` augmenting `Document` with `when(eventName: string): Observable<Event>` and any other shape required by the polyfill.
 - [ ] T49 — Remove the `any` casts and the wide `eslint-disable` block from `packages/game/lib/effects/observable/keydown.ts`. Replace with the typed `document.when("keydown")` call enabled by T48.
 - [ ] T50 — Enable `@typescript-eslint/explicit-function-return-type` (warning level acceptable to start) in `@bruff/eslint-config`. Resolve any new warnings by adding return types.
