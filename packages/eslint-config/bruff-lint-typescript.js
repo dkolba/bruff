@@ -94,6 +94,99 @@ const webComponentsConfig = {
   ...rules.webComponents,
 };
 
+const layerImportRestrictions = [
+  {
+    files: ["**/lib/core/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "**/state/**",
+                "**/input/**",
+                "**/render/**",
+                "**/effects/**",
+              ],
+              message:
+                "core/ must have zero imports from outer layers (state, input, render, effects). See packages-game.md A-1.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["**/lib/state/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/input/**", "**/render/**", "**/effects/**"],
+              message:
+                "state/ may import from core/ only. See packages-game.md A-4.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["**/lib/input/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/render/**", "**/effects/**"],
+              message:
+                "input/ may import from core/ and state/ only. See packages-game.md A-4.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["**/lib/render/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/input/**", "**/effects/**"],
+              message:
+                "render/ may import from core/ and state/ only. See packages-game.md A-4.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["**/lib/effects/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/input/**", "**/render/**"],
+              message:
+                "effects/ may import from core/ and state/ only. See packages-game.md A-4.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+];
+
 const typescriptConfig = tseslint.config(
   // General
   // @ts-ignore
@@ -106,6 +199,8 @@ const typescriptConfig = tseslint.config(
   // TSDoc
   tsdocTypescriptConfig,
   webComponentsConfig,
+  // Layer-boundary import restrictions (packages-game.md A-1..A-4)
+  ...layerImportRestrictions,
 );
 
 export default typescriptConfig;
