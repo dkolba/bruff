@@ -1,6 +1,6 @@
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
-import { PLAYER_SIZE, PLAYER_SPEED } from "./constants.js";
+import { PLAYER_SIZE, PLAYER_SPEED } from "./core/constants.js";
 import type { GameState } from "./core/types.ts";
 import updatePlayer from "./update-player.js";
 

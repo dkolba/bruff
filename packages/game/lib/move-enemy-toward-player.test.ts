@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ENEMY_SIZE, ZERO } from "./constants.js";
+import { ENEMY_SIZE, ZERO } from "./core/constants.js";
 import { brand } from "@bruff/utils";
 import { moveEnemyTowardPlayer } from "./move-enemy-toward-player.js";
 

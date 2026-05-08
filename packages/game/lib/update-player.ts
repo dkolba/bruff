@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/switch-case-braces */
-import { PLAYER_SIZE, PLAYER_SPEED, ZERO } from "./constants.js";
+import { PLAYER_SIZE, PLAYER_SPEED, ZERO } from "./core/constants.js";
 import { clamp } from "@bruff/utils";
 import type { GameState } from "./core/types.ts";
 

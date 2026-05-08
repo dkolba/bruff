@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import createInitialState from "./create-initial-state.js";
-import { PLAYER_SIZE } from "./constants.js";
+import { PLAYER_SIZE } from "./core/constants.js";
 
 describe("createInitialState", () => {
   it("should create an initial game state with the given canvas size", () => {

@@ -21,7 +21,7 @@ export default defineConfig({
         "**/*spec*{js,ts,jsx,tsx}",
         "lib/bruff-game.ts",
         "lib/loop.ts",
-        "lib/constants.ts",
+        "lib/core/constants.ts",
         "lib/observable/merge.ts",
       ],
       include: ["lib/**/*.ts"],

@@ -1,6 +1,6 @@
 import { brand, createPrng, nextId } from "@bruff/utils";
 import type { GameState } from "./core/types.ts";
-import { PLAYER_SIZE } from "./constants.js";
+import { PLAYER_SIZE } from "./core/constants.js";
 
 const INITIAL_SEED = 1;
 const STATE_VERSION = 1;

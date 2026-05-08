@@ -45,7 +45,7 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 
 - [x] T25 — Create empty directories `packages/game/lib/{core,state,input,render,effects}` with a `.gitkeep` in each.
 - [x] T26 — Move `packages/game/types/game-state-type.ts` → `packages/game/lib/core/types.ts`. Update every importer of the old path. `packages/game/types/env.d.ts` (the `__APP_VERSION__` ambient declaration) stays in `types/` — out of scope for layer rules. Used `git mv` to preserve history; nine importers updated to `./core/types.{ts,js}`. The `core/.gitkeep` placeholder is removed because `types.ts` now occupies the directory.
-- [ ] T27 — Move `packages/game/lib/constants.ts` → `packages/game/lib/core/constants.ts`. Update importers.
+- [x] T27 — Move `packages/game/lib/constants.ts` → `packages/game/lib/core/constants.ts`. Update importers. Seven source importers updated; `vitest.config.ts` coverage `exclude` list also updated to the new path so coverage thresholds remain enforced.
 - [ ] T28 — Move `packages/game/lib/create-initial-state.ts`, `update-player.ts`, `update-enemies.ts`, `move-enemy-toward-player.ts` → `packages/game/lib/state/`. Update importers.
 - [ ] T29 — Move `packages/game/lib/render.ts` → `packages/game/lib/render/render.ts`. Update importers.
 - [ ] T30 — Move `packages/game/lib/loop.ts`, `curtain-up.ts`, `bruff-game.ts`, `observable/` → `packages/game/lib/effects/` (preserving the `observable/` subdirectory). Update importers.

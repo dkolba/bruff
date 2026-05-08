@@ -1,5 +1,5 @@
 import type { CanvasSize, Enemy, Player } from "./core/types.js";
-import { ENEMY_SIZE, ENEMY_SPEED, ZERO } from "./constants.js";
+import { ENEMY_SIZE, ENEMY_SPEED, ZERO } from "./core/constants.js";
 import { clamp } from "@bruff/utils";
 
 /**

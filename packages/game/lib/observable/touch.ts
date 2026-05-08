@@ -1,4 +1,4 @@
-import { FIVE, ONE } from "../constants.js";
+import { FIVE, ONE } from "../core/constants.js";
 import { getCardinalDirection } from "@bruff/utils";
 import type { Observable } from "observable-polyfill/fn";
 
