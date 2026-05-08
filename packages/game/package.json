@@ -5,10 +5,10 @@
   "files": [
     "dist"
   ],
-  "main": "./lib/effects/bruff-game.ts",
+  "main": "./lib/effects/entry.ts",
   "exports": {
     "types": "./dist/bruff-game.d.ts",
-    "import": "./lib/effects/bruff-game.ts"
+    "import": "./lib/effects/entry.ts"
   },
   "scripts": {
     "build": "pnpm run typecheck && pnpm run build:lib",

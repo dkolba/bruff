@@ -68,7 +68,7 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 ## Phase 8 — Move `BruffGame` boot to effects entry
 
 - [x] T43 — Create `packages/game/lib/effects/entry.ts` that registers `GameElement` directly under the `bruff-game` tag and calls `loop()`. The new file mirrors `bruff-game.ts` minus the empty `BruffGame` subclass; an inline `wc/tag-name-matches-class` disable explains why the convention does not apply here (the generic shell class is intentionally registered under an application-specific tag). The vitest coverage `exclude` list also gains `lib/effects/entry.ts` — same untestable-boot rationale that already excludes `bruff-game.ts`. T43 leaves `bruff-game.ts` in place; T44 deletes it and switches the package entry.
-- [ ] T44 — Delete `packages/game/lib/effects/bruff-game.ts` (the empty `BruffGame` subclass) and update the package entry to point at `effects/entry.ts`.
+- [x] T44 — Delete `packages/game/lib/effects/bruff-game.ts` (the empty `BruffGame` subclass) and update the package entry to point at `effects/entry.ts`. `package.json` (`main`, `exports.import`) and `vite.config.lib.ts` (`build.lib.entry`) all repointed; `vitest.config.ts` exclude list pruned to drop the now-deleted `bruff-game.ts` (entry.ts entry remains). The build still emits `dist/bruff-game.js` because that's the `fileName` setting, so `package.json exports.types` (`./dist/bruff-game.d.ts`) needed no change. Arcade imports `@bruff/game` (the package, not a file path) so it resolves through the new entry transparently.
 - [ ] T45 — Verify `@bruff/arcade` E2E spec still finds `<bruff-game>` and the player still moves on Chromium, Firefox, and WebKit.
 
 ## Phase 9 — Tighten typings
