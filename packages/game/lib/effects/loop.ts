@@ -11,11 +11,7 @@ import { updateEnemies } from "../state/update-enemies.js";
 import updatePlayer from "../state/update-player.js";
 
 /** Generator that yields and receives {@link GameState} values to drive the main game loop. */
-type GameStateGenerator = Generator<
-  GameState,
-  GameState,
-  InputAction | undefined
->;
+type GameStateGenerator = Generator<GameState, GameState, InputAction | undefined>;
 
 if (!isSupported()) {
   apply();
@@ -74,17 +70,6 @@ const createGameLoop = function* (initialState: GameState): GameStateGenerator {
 };
 
 /**
- * Curries a game-loop iterator into a single-argument function.
- *
- * @param gameLoop - The running game loop generator
- * @returns A function that feeds one input action into the loop
- */
-const curriedGameStateGenerator =
-  (gameLoop: GameStateGenerator) => (action: InputAction) => {
-    gameLoop.next(action);
-  };
-
-/**
  * Creates the keyboard and touch input observables.
  *
  * @returns An object containing the key and touch observable streams
@@ -98,19 +83,19 @@ const createGameObservables = () => {
 /**
  * Subscribes to game observables and connects them to the game loop.
  *
- * @param curriedGameLoop - Function that feeds input to the game loop
+ * @param onInput - Callback invoked for each recognised input action
  * @param gameObservables - Object containing observable streams
  */
 const subscribeToGameObservables = (
-  curriedGameLoop: (action: InputAction) => void,
+  onInput: (action: InputAction) => void,
   gameObservables: {
     keyObservable$: Observable<InputAction>;
     touchObservable$: Observable<InputAction>;
   },
-) => {
+): void => {
   const { keyObservable$, touchObservable$ } = gameObservables;
-  keyObservable$.subscribe(curriedGameLoop);
-  touchObservable$.subscribe(curriedGameLoop);
+  keyObservable$.subscribe(onInput);
+  touchObservable$.subscribe(onInput);
   touchObservable$.subscribe((action: InputAction) => {
     console.info("touch:", action.type);
   });
@@ -118,42 +103,40 @@ const subscribeToGameObservables = (
 
 /**
  * Builds and starts the game-loop generator, wires the input
- * observables to it, and returns the running iterator.
+ * observables to it, and returns a getter for the latest state.
+ * The generator only advances (ticks) when player input fires —
+ * the render frame reads state without calling `.next()`.
  *
  * @param canvas - The canvas the initial state is sized against
- * @returns The running game-loop iterator
+ * @returns A getter that returns the most recently computed {@link GameState}
  */
-const startGameLoopIterator = (
-  canvas: HTMLCanvasElement,
-): GameStateGenerator => {
+const startGameLoopIterator = (canvas: HTMLCanvasElement): (() => GameState) => {
   const initialGameState = createInitialState(canvas);
   const gameLoopIter = createGameLoop(initialGameState);
-  gameLoopIter.next();
+  let latestState: GameState = gameLoopIter.next().value;
   const gameObservables = createGameObservables();
-  subscribeToGameObservables(
-    curriedGameStateGenerator(gameLoopIter),
-    gameObservables,
-  );
-  return gameLoopIter;
+  subscribeToGameObservables((action: InputAction) => {
+    latestState = gameLoopIter.next(action).value;
+  }, gameObservables);
+  return () => latestState;
 };
 
 /**
  * Builds the recursive `requestAnimationFrame` callback.
  *
  * @param context - The 2D rendering context to draw on
- * @param gameLoopIter - The running game-loop iterator
+ * @param getState - Getter for the current game state
  * @returns A frame callback that schedules the next frame on each call
  */
 const buildRenderFrame =
   (
     context: CanvasRenderingContext2D,
-    gameLoopIter: GameStateGenerator,
+    getState: () => GameState,
   ): ((time: number) => void) =>
   (time: number): void => {
     curriedRadiatingBarsBackgroundAnimation(context)(time);
-    const currentGameState = gameLoopIter.next().value;
-    render(currentGameState, context);
-    requestAnimationFrame(buildRenderFrame(context, gameLoopIter));
+    render(getState(), context);
+    requestAnimationFrame(buildRenderFrame(context, getState));
   };
 
 /**
@@ -167,9 +150,9 @@ const loop = (): void => {
     return;
   }
   const { canvas, context, removeCanvasResizeListener } = stageResult.value;
-  const gameLoopIter = startGameLoopIterator(canvas);
+  const getState = startGameLoopIterator(canvas);
   window.addEventListener("beforeunload", removeCanvasResizeListener);
-  requestAnimationFrame(buildRenderFrame(context, gameLoopIter));
+  requestAnimationFrame(buildRenderFrame(context, getState));
 };
 
 export default loop;
