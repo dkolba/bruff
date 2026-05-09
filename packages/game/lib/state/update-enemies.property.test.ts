@@ -84,23 +84,16 @@ describe("updateEnemies (property-based)", () => {
       next.enemies.forEach((enemy) => {
         expect(enemy.xPos).toBeGreaterThanOrEqual(ZERO);
         expect(enemy.yPos).toBeGreaterThanOrEqual(ZERO);
-        expect(enemy.xPos).toBeLessThanOrEqual(
-          next.canvas.width - ENEMY_SIZE,
-        );
-        expect(enemy.yPos).toBeLessThanOrEqual(
-          next.canvas.height - ENEMY_SIZE,
-        );
+        expect(enemy.xPos).toBeLessThanOrEqual(next.canvas.width - ENEMY_SIZE);
+        expect(enemy.yPos).toBeLessThanOrEqual(next.canvas.height - ENEMY_SIZE);
       });
     },
   );
 
-  test.prop([gameStateArb])(
-    "tick preserves enemy count exactly",
-    (state) => {
-      const next = updateEnemies(state, tickAction);
-      expect(next.enemies.length).toBe(state.enemies.length);
-    },
-  );
+  test.prop([gameStateArb])("tick preserves enemy count exactly", (state) => {
+    const next = updateEnemies(state, tickAction);
+    expect(next.enemies.length).toBe(state.enemies.length);
+  });
 
   test.prop([gameStateArb, gameActionArb])(
     "is deterministic — same state and action produce equal results",
