@@ -20,13 +20,11 @@ const isKeyboardEvent = (event: Event): event is KeyboardEvent =>
  * @returns Observable that emits one `InputAction` per recognised keydown
  */
 const createKeyDownObservable = (): Observable<InputAction> =>
-  /* eslint-disable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unnecessary-type-assertion -- document.when() is part of the WICG Observable API proposal; TypeScript types do not yet cover this interface */
-  (document as any)
+  document
     .when("keydown")
-    .filter((event: Event): event is KeyboardEvent => isKeyboardEvent(event))
-    .map((keyDownEvent: any) => normaliseKey(keyDownEvent.key))
+    .filter(isKeyboardEvent)
+    .map((event) => normaliseKey(event.key))
     .filter(isSome)
-    .map((option: any) => option.value) as any;
-/* eslint-enable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unnecessary-type-assertion */
+    .map((option) => option.value);
 
 export default createKeyDownObservable;
