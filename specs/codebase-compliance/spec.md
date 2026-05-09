@@ -38,7 +38,7 @@ What changes is **internal** and **observable to developers**:
 - Reducers (`updatePlayer`, `updateEnemies`) follow the
   `(state, action) => state` signature and use a `never`-based
   exhaustiveness guard.
-- The test suite includes property-based tests (`fast-check`) and at
+- The test suite includes property-based tests (`@fast-check/vitest`) and at
   least one deterministic replay snapshot per reducer.
 
 ## Out of scope
@@ -53,7 +53,7 @@ What changes is **internal** and **observable to developers**:
 - Replacing or upgrading the build/test toolchain (Vite, Playwright,
   TypeScript major version).
 - Introducing new external runtime dependencies in `@bruff/game`
-  (forbidden by A-23). `fast-check` is added only as a **devDependency**.
+  (forbidden by A-23). `@fast-check/vitest` is added only as a **devDependency**.
 - Documentation rewrites of `README.md` files unless a structural move
   invalidates the existing text.
 
@@ -94,10 +94,10 @@ All resolved at spec time:
 - `getCanvasContext` called against a canvas whose
   `getContext("2d")` returns `null` (e.g. WebGL context already
   acquired in tests) — must return `{ type: "error", error:
-  "canvas-context-not-found" }`.
+"canvas-context-not-found" }`.
 - `getShadowGameRoot` called before `customElements.define` has
   registered the host element — must return `{ type: "error", error:
-  "game-root-not-found" }`.
+"game-root-not-found" }`.
 - `InputAction` queue contains a key the reducer does not recognise —
   the reducer returns the input state unchanged; the exhaustiveness
   guard fires only for unhandled **discriminated-union variants**,

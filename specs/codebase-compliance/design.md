@@ -18,18 +18,26 @@ references the existing files that will be modified or reused.
 
 ```ts
 // packages/utils/module/fp/result.ts
-export type Ok<T>      = Readonly<{ type: "ok"; value: T }>;
+export type Ok<T> = Readonly<{ type: "ok"; value: T }>;
 export type Failure<E> = Readonly<{ error: E; type: "error" }>;
 export type Result<T, E> = Ok<T> | Failure<E>;
 
-export const ok:    <T>(value: T) => Result<T, never>;
+export const ok: <T>(value: T) => Result<T, never>;
 export const error: <E>(reason: E) => Result<never, E>;
-export const isOk:    <T, E>(r: Result<T, E>) => r is Ok<T>;
+export const isOk: <T, E>(r: Result<T, E>) => r is Ok<T>;
 export const isError: <T, E>(r: Result<T, E>) => r is Failure<E>;
-export const mapResult:       <T, U, E>(f: (t: T) => U)                       => (r: Result<T, E>) => Result<U, E>;
-export const flatMapResult:   <T, U, NextError>(f: (t: T) => Result<U, NextError>) => <UpstreamError>(r: Result<T, UpstreamError>) => Result<U, UpstreamError | NextError>;
-export const mapError:        <T, E, F>(f: (e: E) => F)                       => (r: Result<T, E>) => Result<T, F>;
-export const unwrapOr:        <T, E>(fallback: T)                             => (r: Result<T, E>) => T;
+export const mapResult: <T, U, E>(
+  f: (t: T) => U,
+) => (r: Result<T, E>) => Result<U, E>;
+export const flatMapResult: <T, U, NextError>(
+  f: (t: T) => Result<U, NextError>,
+) => <UpstreamError>(
+  r: Result<T, UpstreamError>,
+) => Result<U, UpstreamError | NextError>;
+export const mapError: <T, E, F>(
+  f: (e: E) => F,
+) => (r: Result<T, E>) => Result<T, F>;
+export const unwrapOr: <T, E>(fallback: T) => (r: Result<T, E>) => T;
 ```
 
 Naming notes: the project's `unicorn/prevent-abbreviations` ESLint rule
@@ -46,11 +54,15 @@ export type Option<T> =
 
 export const some: <T>(value: T) => Option<T>;
 export const none: Option<never>;
-export const isSome: <T>(o: Option<T>) => o is Readonly<{ type: "some"; value: T }>;
+export const isSome: <T>(
+  o: Option<T>,
+) => o is Readonly<{ type: "some"; value: T }>;
 export const isNone: <T>(o: Option<T>) => o is Readonly<{ type: "none" }>;
-export const mapOption:     <T, U>(f: (t: T) => U)         => (o: Option<T>) => Option<U>;
-export const flatMapOption: <T, U>(f: (t: T) => Option<U>) => (o: Option<T>) => Option<U>;
-export const toResult:      <T, E>(error: E)               => (o: Option<T>) => Result<T, E>;
+export const mapOption: <T, U>(f: (t: T) => U) => (o: Option<T>) => Option<U>;
+export const flatMapOption: <T, U>(
+  f: (t: T) => Option<U>,
+) => (o: Option<T>) => Option<U>;
+export const toResult: <T, E>(error: E) => (o: Option<T>) => Result<T, E>;
 ```
 
 All functions are curried so they compose cleanly inside `pipe(...)`
@@ -87,17 +99,19 @@ but their consumers (`packages/game/lib/curtain-up.ts`) move into the
 
 ```ts
 // packages/utils/module/canvas/get-canvas.ts
-export const getCanvas:
-  (root: ShadowRoot) => Result<HTMLCanvasElement, "canvas-not-found">;
+export const getCanvas: (
+  root: ShadowRoot,
+) => Result<HTMLCanvasElement, "canvas-not-found">;
 
 // packages/utils/module/canvas/get-canvas-context.ts
-export const getCanvasContext:
-  (canvas: HTMLCanvasElement) =>
-    Result<CanvasRenderingContext2D, "canvas-context-not-found">;
+export const getCanvasContext: (
+  canvas: HTMLCanvasElement,
+) => Result<CanvasRenderingContext2D, "canvas-context-not-found">;
 
 // packages/utils/module/get-shadow-game-root.ts
-export const getShadowGameRoot:
-  (gameRoot: string) => Result<ShadowRoot, "game-root-not-found">;
+export const getShadowGameRoot: (
+  gameRoot: string,
+) => Result<ShadowRoot, "game-root-not-found">;
 ```
 
 `packages/game/lib/curtain-up.ts` currently composes the three with
@@ -148,7 +162,7 @@ the layer split lands (D4) the file moves to
 ```ts
 import type { Brand, PrngState } from "@bruff/utils";
 
-export type EnemyId  = Brand<string, "EnemyId">;
+export type EnemyId = Brand<string, "EnemyId">;
 export type PlayerId = Brand<string, "PlayerId">;
 
 export type Enemy = Readonly<{
@@ -294,40 +308,58 @@ export type GameAction =
   | InputAction
   | Readonly<{ type: "tick"; deltaMs: number }>;
 
-export type SystemEvent =
-  | Readonly<{ type: "frame-requested"; nowMs: number }>;
+export type SystemEvent = Readonly<{ type: "frame-requested"; nowMs: number }>;
 
-export type RenderCommand =
-  | Readonly<{ type: "draw-rect"; x: number; y: number; w: number; h: number; fill: string }>;
+export type RenderCommand = Readonly<{
+  type: "draw-rect";
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  fill: string;
+}>;
 ```
 
 ```ts
 // packages/game/lib/state/update-player.ts (now a reducer)
-export const updatePlayer =
-  (state: GameState, action: GameAction): GameState => {
-    switch (action.type) {
-      case "move-up":    return /* spread + clamp */;
-      case "move-down":  return /* … */;
-      case "move-left":  return /* … */;
-      case "move-right": return /* … */;
-      case "tick":       return state; // player movement is input-driven
-      default: {
-        const _exhaustive: never = action;
-        return _exhaustive;
-      }
+export const updatePlayer = (
+  state: GameState,
+  action: GameAction,
+): GameState => {
+  switch (action.type) {
+    case "move-up":
+      return /* spread + clamp */;
+    case "move-down":
+      return /* … */;
+    case "move-left":
+      return /* … */;
+    case "move-right":
+      return /* … */;
+    case "tick":
+      return state; // player movement is input-driven
+    default: {
+      const _exhaustive: never = action;
+      return _exhaustive;
     }
-  };
+  }
+};
 ```
 
 `updateEnemies` is a tick-driven reducer:
 
 ```ts
-export const updateEnemies =
-  (state: GameState, action: GameAction): GameState =>
-    action.type === "tick"
-      ? { ...state, enemies: state.enemies.map((e) =>
-          moveEnemyTowardPlayer(e, state.player, state.canvas)) }
-      : state;
+export const updateEnemies = (
+  state: GameState,
+  action: GameAction,
+): GameState =>
+  action.type === "tick"
+    ? {
+        ...state,
+        enemies: state.enemies.map((e) =>
+          moveEnemyTowardPlayer(e, state.player, state.canvas),
+        ),
+      }
+    : state;
 ```
 
 ### Tradeoffs
@@ -390,10 +422,14 @@ outside the module.
 // packages/utils/module/fp/prng.ts
 export type PrngState = Readonly<{ seed: number; counter: number }>;
 
-export const createPrng:    (seed: number) => PrngState;
-export const nextNumber:    (prng: PrngState) => Readonly<{ value: number; prng: PrngState }>;
-export const nextId:        <T extends string>(prng: PrngState, brand: T) =>
-  Readonly<{ value: Brand<string, T>; prng: PrngState }>;
+export const createPrng: (seed: number) => PrngState;
+export const nextNumber: (
+  prng: PrngState,
+) => Readonly<{ value: number; prng: PrngState }>;
+export const nextId: <T extends string>(
+  prng: PrngState,
+  brand: T,
+) => Readonly<{ value: Brand<string, T>; prng: PrngState }>;
 ```
 
 A `mulberry32` or equivalent 32-bit integer hash is the implementation
@@ -500,24 +536,30 @@ Test files live next to source under
 
 For each reducer (`updatePlayer`, `updateEnemies`):
 
-- A property test using `fast-check.assert(fc.property(...))` covering:
-  - Bounds invariant: player stays within `0..canvas.width - size`.
+- A property test using `test.prop(...)` from `@fast-check/vitest`
+  covering:
+  - Bounds invariant: player stays within
+    `0..canvas.width - size`.
   - Determinism invariant: same `(state, action)` returns
     structurally equal `GameState`.
-  - Idempotence on tick when no input is queued: `updatePlayer(s,
-    { type: "tick", deltaMs: 16 }) === s` (referential equality not
-    required; structural equality is).
+  - Idempotence on tick when no input is queued:
+    `updatePlayer(s, { type: "tick", deltaMs: 16 })`
+    is structurally equal to `s`
+    (referential equality not required).
+
 - A replay test seeding the PRNG and applying a hard-coded action
   sequence (e.g. `["move-right" × 3, "tick" × 2]`) then matching a
   stored snapshot.
 
 ### Tradeoffs
 
-- **Chosen**: `fast-check` (industry default, zero compile-time deps).
+- **Chosen**: `@fast-check/vitest` for property-based testing with
+  native Vitest integration and `fast-check` arbitraries.
   Added as `devDependency` only — does not violate A-23.
+
 - **Alternative considered**: write hand-rolled property generators.
-  Rejected — `fast-check` is mature, free, and what the
-  `write-game-tests` skill expects.
+  Rejected — `fast-check` is mature, free, and aligns with the
+  expected testing workflow.
 
 ### Reuse map
 
