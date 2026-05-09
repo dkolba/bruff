@@ -183,7 +183,7 @@ export type Player = Readonly<{
 export type CanvasSize = Readonly<{ width: number; height: number }>;
 
 export type GameState = Readonly<{
-  stateVersion: 1;
+  stateVersion: number;
   prng: PrngState;
   input: ReadonlyArray<InputAction>; // (defined in D5)
   canvas: CanvasSize;
@@ -192,6 +192,12 @@ export type GameState = Readonly<{
   playerMoved: boolean;
 }>;
 ```
+
+> **Reconciliation (post-execution)**: `stateVersion` is typed as
+> `number`, not the literal `1`. `createInitialState` sets it to `1`
+> via the `STATE_VERSION` constant; future migrations bump the value
+> at runtime, so a `number` field is correct and a literal type would
+> have to be widened the moment a migration lands.
 
 ### Tradeoffs
 
@@ -230,17 +236,39 @@ packages/game/lib/
 │   ├── update-enemies.ts        ← refactored to reducer
 │   └── move-enemy-toward-player.ts ← moved
 ├── input/       (may import core/, state/)
-│   ├── normalise-input.ts       ← new
-│   ├── keydown-action.ts        ← from observable/keydown.ts logic
-│   └── touch-action.ts          ← from observable/touch.ts logic
-├── render/      (may import core/, state/)
-│   └── render.ts                ← moved
+│   └── normalise-input.ts       ← new
 └── effects/     (may import core/, state/)
     ├── entry.ts                 ← from bruff-game.ts (define + boot)
     ├── loop.ts                  ← moved
     ├── curtain-up.ts            ← moved
+    ├── render.ts                ← moved (still effectful — see note)
     └── observable/              ← moved (subscriptions are effects)
+        ├── keydown.ts
+        ├── touch.ts
+        └── observable-polyfill.d.ts ← ambient Document.when augmentation
 ```
+
+> **Reconciliation (post-execution)**: two divergences from the
+> original layout above:
+>
+> 1. **No `render/` directory yet.** `render.ts` writes directly to a
+>    Canvas context (`context.fillRect(...)`), so it is an effect by
+>    construction (per A-3). Until a pure
+>    `RenderCommand` projection lands, the file lives at
+>    `lib/effects/render.ts`. The TSDoc on the file flags this as a
+>    temporary placement and the move target is the future `render/`
+>    layer once the projection function exists. The lint rules in D4
+>    are configured for the planned `render/` location so no rewrite
+>    is needed when the file moves.
+> 2. **No separate `input/keydown-action.ts` / `input/touch-action.ts`.**
+>    The polyfilled `Observable` pipeline does its own normalisation
+>    inline — `keydown.ts` already calls `normaliseKey` from
+>    `lib/input/normalise-input.ts` before emitting, and `touch.ts`
+>    follows the same pattern. Splitting out a per-source action file
+>    would be premature abstraction (O-7) since each source has a
+>    single one-line normalisation step. The observables stay in
+>    `effects/observable/` because subscription is itself a side
+>    effect.
 
 ### Boundary enforcement
 
@@ -299,26 +327,52 @@ Effects produce `SystemEvent`.
 ```ts
 // packages/game/lib/core/actions.ts
 export type InputAction =
-  | Readonly<{ type: "move-up" }>
   | Readonly<{ type: "move-down" }>
   | Readonly<{ type: "move-left" }>
-  | Readonly<{ type: "move-right" }>;
+  | Readonly<{ type: "move-right" }>
+  | Readonly<{ type: "move-up" }>;
 
-export type GameAction =
-  | InputAction
-  | Readonly<{ type: "tick"; deltaMs: number }>;
+export type GameAction = InputAction | Readonly<{ type: "tick" }>;
 
-export type SystemEvent = Readonly<{ type: "frame-requested"; nowMs: number }>;
+export type SystemEvent =
+  | Readonly<{ type: "game-paused" }>
+  | Readonly<{ type: "game-resumed" }>
+  | Readonly<{ type: "game-started" }>
+  | Readonly<{ type: "game-stopped" }>;
 
-export type RenderCommand = Readonly<{
-  type: "draw-rect";
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  fill: string;
-}>;
+export type RenderCommand =
+  | Readonly<{ type: "clear" }>
+  | Readonly<{
+      color: string;
+      height: number;
+      type: "fill-rect";
+      width: number;
+      xPos: number;
+      yPos: number;
+    }>;
 ```
+
+> **Reconciliation (post-execution)**: three shape changes vs. the
+> originally-sketched action types:
+>
+> 1. **`tick` carries no `deltaMs`.** Time is not yet threaded into the
+>    pipeline (A-21 is satisfied because the fixed-timestep loop drives
+>    one tick per input event). Adding `deltaMs` was speculation about
+>    a future feature — when a movement system needs continuous time it
+>    can be added then via the `migrate-state` skill.
+> 2. **`SystemEvent` is the lifecycle union, not `frame-requested`.**
+>    Lifecycle (`game-started`, `game-paused`, etc.) is what the shell
+>    actually emits and the effects layer consumes; the original
+>    `frame-requested; nowMs` was a render-driven event that doesn't
+>    exist because the loop currently calls `requestAnimationFrame`
+>    directly.
+> 3. **`RenderCommand` uses `xPos / yPos / height / width / color` and
+>    has a `clear` variant.** Coordinate field names match the existing
+>    `Player` / `Enemy` records (per C-2 — domain vocabulary), and
+>    `clear` is the canonical first command of every frame (per A-26).
+>    The file-level reducer/projection that produces these commands
+>    has not landed yet — the type stands declared per A-15 so the
+>    taxonomy is complete.
 
 ```ts
 // packages/game/lib/state/update-player.ts (now a reducer)
@@ -420,17 +474,34 @@ outside the module.
 
 ```ts
 // packages/utils/module/fp/prng.ts
-export type PrngState = Readonly<{ seed: number; counter: number }>;
+export type PrngState = Readonly<{
+  accumulator: number;
+  type: "prng-state";
+}>;
 
 export const createPrng: (seed: number) => PrngState;
-export const nextNumber: (
-  prng: PrngState,
-) => Readonly<{ value: number; prng: PrngState }>;
-export const nextId: <T extends string>(
-  prng: PrngState,
-  brand: T,
-) => Readonly<{ value: Brand<string, T>; prng: PrngState }>;
+export const nextNumber: (prng: PrngState) => {
+  prng: PrngState;
+  value: number;
+};
+export const nextId: (prng: PrngState) => { prng: PrngState; value: string };
 ```
+
+> **Reconciliation (post-execution)**: two shape changes vs. the
+> originally-sketched PRNG:
+>
+> 1. **`PrngState = { accumulator; type: "prng-state" }`**, not
+>    `{ seed; counter }`. Mulberry32 carries a single 32-bit
+>    accumulator that is itself the next state — a separate
+>    `seed`/`counter` split would re-mix on every step. The `type`
+>    discriminator hardens the shape against accidental construction
+>    of a bare `{ accumulator: number }`.
+> 2. **`nextId` returns a raw `string`**, not a pre-branded value.
+>    Branding happens at the entity layer (`drawId<"EnemyId">(prng)`
+>    in `create-initial-state.ts`) so `@bruff/utils` stays free of
+>    domain-tag knowledge. Keeping `nextId` tag-agnostic also lets the
+>    same helper mint IDs for any future entity type without growing
+>    its signature.
 
 A `mulberry32` or equivalent 32-bit integer hash is the implementation
 target — small, deterministic, well-understood. The choice is captured
@@ -496,7 +567,7 @@ behaviour, no value).
 
 ### Public API changes
 
-- `packages/game/lib/render/render.ts` declares `: void` and gains
+- `packages/game/lib/effects/render.ts` declares `: void` and gains
   a TSDoc block.
 - `packages/game/lib/state/update-enemies.ts` declares
   `: GameState` (already implicit; making explicit is the only change
@@ -506,7 +577,26 @@ behaviour, no value).
   `packages/game/lib/effects/observable/observable-polyfill.d.ts`
   augments `Document` with `when(eventName: string): Observable<Event>`.
   The `any` casts in the source file are removed.
-- `for…of` loops in `render.ts` and `merge.ts` become `.forEach`.
+- `for…of` loops in `render.ts` and `merge.ts` become `.forEach` (with
+  inline `unicorn/no-array-for-each` disables — that rule contradicts
+  C-17).
+- `@typescript-eslint/explicit-function-return-type` enabled at warn
+  level in `@bruff/eslint-config` with `allowHigherOrderFunctions` and
+  `allowTypedFunctionExpressions` so contextually-typed callbacks
+  (e.g. `it("…", () => { … })`) don't trip the rule. All resulting
+  warnings resolved by adding concrete return types across utils,
+  game, game-element, and arcade.
+
+> **Reconciliation (post-execution)**: the ambient declaration file
+> is **script-mode**, not module-mode. A first attempt used
+> `import type { Observable }` + `declare global` + `export {}`, which
+> compiled in `@bruff/game` but failed in `@bruff/arcade` because the
+> module-mode `.d.ts` only augments the global when included in the
+> consumer's tsconfig. Switching to script mode + an inline
+> `import("observable-polyfill/fn").Observable<Event>` type expression,
+> plus a `/// <reference path="./observable-polyfill.d.ts" />` at the
+> top of `keydown.ts`, makes the augmentation portable across
+> packages.
 
 ### Tradeoffs
 
@@ -529,8 +619,19 @@ behaviour, no value).
 ### Layer assignment
 
 Test files live next to source under
-`packages/game/lib/state/*.test.ts`. Replay snapshots live in
-`packages/game/lib/state/__snapshots__/` (Vitest-managed).
+`packages/game/lib/state/*.test.ts` (unit) and
+`packages/game/lib/state/*.property.test.ts` (property-based via
+`@fast-check/vitest`). The replay test lives at
+`packages/game/lib/state/replay.test.ts`.
+
+> **Reconciliation (post-execution)**: the replay test uses a typed
+> object-literal fixture (`expect(final).toEqual(EXPECTED_FINAL_STATE)`)
+> rather than a Vitest-managed `__snapshots__/replay.test.ts.snap`
+> file. The fixture is reviewable in the diff, fully self-contained,
+> and any drift in PRNG, clamp, or chase math fails the test loudly
+> instead of silently regenerating a `.snap`. The behavioural contract
+> (deterministic `GameState` for a fixed seed and action sequence) is
+> identical.
 
 ### Public API surface
 
@@ -543,9 +644,10 @@ For each reducer (`updatePlayer`, `updateEnemies`):
   - Determinism invariant: same `(state, action)` returns
     structurally equal `GameState`.
   - Idempotence on tick when no input is queued:
-    `updatePlayer(s, { type: "tick", deltaMs: 16 })`
-    is structurally equal to `s`
-    (referential equality not required).
+    `updatePlayer(s, { type: "tick" })` returns the original `s` (the
+    reducer's `tick` arm returns the input state by reference, so the
+    property check uses `.toBe(state)` for stronger evidence than
+    structural equality alone).
 
 - A replay test seeding the PRNG and applying a hard-coded action
   sequence (e.g. `["move-right" × 3, "tick" × 2]`) then matching a

@@ -117,3 +117,128 @@ All resolved at spec time:
 - Layer-boundary lint must catch:
   `import … from "../effects/…"` inside any `core/state/input/render`
   file, and any cross-layer cycle.
+
+## Verification
+
+Per behaviour bullet, the test (or static check) that proves it:
+
+### User-visible behaviour
+
+- **`<bruff-game>` Web Component still mounts in `@bruff/arcade`** —
+  `packages/arcade/e2e/bruff-game.spec.ts` (`should find custom game
+element`, runs in light + dark colour scheme).
+- **Player moves with WASD/arrow keys and touch swipes** —
+  - keyboard normalisation: `packages/game/lib/input/normalise-input.test.ts`
+    (covers ArrowUp/Down/Left/Right, WASD, NSEW aliases, plus
+    rejection of unknown keys).
+  - keyboard wiring to the loop: `packages/game/lib/effects/observable/keydown.test.ts`.
+  - touch gesture decoding: `packages/game/lib/effects/observable/touch.test.ts`.
+  - position update from a `move-*` action:
+    `packages/game/lib/state/update-player.test.ts` (one `it.each`
+    case per direction) and
+    `packages/game/lib/state/update-player.property.test.ts` (bounds
+    invariant + determinism + tick idempotence over random states).
+  - smoke check that arrow keys reach the running game:
+    `packages/arcade/e2e/bruff-game.spec.ts` (presses Up/Down/Left/Right).
+- **Red enemy squares chase the player every tick** —
+  - per-enemy chase math:
+    `packages/game/lib/state/move-enemy-toward-player.test.ts`.
+  - reducer dispatches chase only on `tick`:
+    `packages/game/lib/state/update-enemies.test.ts`.
+  - count + bounds invariants over random states:
+    `packages/game/lib/state/update-enemies.property.test.ts`.
+  - determinism of the full pipeline:
+    `packages/game/lib/state/replay.test.ts`.
+- **Frame still renders to the shadow-DOM canvas** —
+  `packages/game/lib/effects/render.test.ts` (asserts `fillRect` calls
+  for player and every enemy).
+- **Playwright E2E suite still passes across all five viewports
+  (Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari)** —
+  `packages/arcade/e2e/bruff-game.spec.ts` projects in
+  `packages/arcade/playwright.config.ts`. AR-2 enforces all five
+  viewports.
+
+### Internal / developer-observable
+
+- **`pnpm run ok` fails on layer-crossing imports, mutation, missing
+  return type, `any` leak, domain `throw`** — enforced by
+  `packages/eslint-config/rules.js` (the
+  `@typescript-eslint/explicit-function-return-type`,
+  `@typescript-eslint/consistent-type-assertions: never`, and the
+  unicorn ruleset) plus
+  `packages/eslint-config/bruff-lint-typescript.js`'s
+  `layerImportRestrictions` block. No dedicated runtime test —
+  these are compile-time / lint-time gates and would fail `pnpm run
+lint` / `pnpm run typecheck`. The `_exhaustive: never` arm in each
+  reducer's `switch` is the type-level proof for missing variants.
+- **Boundary helpers return `Result<T, E>`** —
+  - `packages/utils/module/canvas/get-canvas.test.ts`
+    (`canvas-not-found` on empty shadow root).
+  - `packages/utils/module/canvas/get-canvas-context.test.ts`
+    (`canvas-context-not-found` when `getContext("2d")` returns
+    `null`).
+  - `packages/utils/module/get-shadow-game-root.test.ts`
+    (`game-root-not-found` when the host element is absent).
+  - The shell that consumes the boundary results:
+    `packages/game/lib/effects/curtain-up.test.ts`.
+- **`GameState` is `Readonly<…>` with `stateVersion`, seeded PRNG slot,
+  branded entity IDs, and normalised `InputAction` queue** —
+  - shape + deterministic IDs from PRNG:
+    `packages/game/lib/state/create-initial-state.test.ts`.
+  - PRNG primitives (`createPrng`, `nextNumber`, `nextId`):
+    `packages/utils/module/fp/prng.test.ts`.
+  - branded type guard:
+    `packages/utils/module/types/brand.test.ts`.
+  - normalisation of raw key strings into `InputAction`:
+    `packages/game/lib/input/normalise-input.test.ts`.
+  - immutability is type-level (`Readonly<…>` / `ReadonlyArray<…>` in
+    `packages/game/lib/core/types.ts`) and verified by `tsc`.
+- **Layer directories with enforced inward-only imports** — enforced
+  by `layerImportRestrictions` in
+  `packages/eslint-config/bruff-lint-typescript.js`. No dedicated
+  test; the `verify-layers` skill is the audit tool.
+- **Reducers follow `(state, action) => state` with `never`-based
+  exhaustiveness** —
+  - `updatePlayer`:
+    `packages/game/lib/state/update-player.test.ts` (every variant
+    case asserted) and
+    `packages/game/lib/state/update-player.property.test.ts`.
+  - `updateEnemies`:
+    `packages/game/lib/state/update-enemies.test.ts` and
+    `packages/game/lib/state/update-enemies.property.test.ts`.
+  - The `default: { const _exhaustive: never = action; … }` arm is
+    proved at compile time by `tsc`.
+- **Property-based + replay tests exist per reducer** —
+  - property: `packages/game/lib/state/update-player.property.test.ts`,
+    `packages/game/lib/state/update-enemies.property.test.ts`.
+  - replay snapshot:
+    `packages/game/lib/state/replay.test.ts`.
+
+### Edge cases
+
+- **`Result<…, "canvas-not-found">` on empty shadow** —
+  `packages/utils/module/canvas/get-canvas.test.ts`.
+- **`Result<…, "canvas-context-not-found">` on null context** —
+  `packages/utils/module/canvas/get-canvas-context.test.ts`.
+- **`Result<…, "game-root-not-found">` before host registered** —
+  `packages/utils/module/get-shadow-game-root.test.ts`.
+- **Unknown key dropped at the input boundary** —
+  `packages/game/lib/input/normalise-input.test.ts` (`returns none for
+unknown key …` cases).
+- **New unhandled `GameAction` variant fails `tsc`** — compile-time;
+  the `never` assignment in
+  `packages/game/lib/state/update-player.ts` and
+  `packages/game/lib/state/update-enemies.ts` is the proof.
+- **Replay snapshot drift fails loudly** —
+  `packages/game/lib/state/replay.test.ts` asserts `toEqual` against a
+  stored typed fixture; any drift in PRNG, clamp, or chase math fails
+  the test instead of silently regenerating the fixture.
+- **Mid-tick entity gets a deterministic ID + monotonically increasing
+  `spawnOrder`** — `packages/game/lib/state/create-initial-state.test.ts`
+  (the three seeded enemies have indexed `spawnOrder` values 0, 1, 2,
+  drawn from successive `nextId` calls). No spawner exists yet — when
+  one lands, it must add its own test using the same pattern.
+- **Layer-boundary lint catches outward imports** — enforced by
+  `layerImportRestrictions` in
+  `packages/eslint-config/bruff-lint-typescript.js`; `eslint .` fails
+  the file rather than `tsc`.
