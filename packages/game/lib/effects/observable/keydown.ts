@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference -- Ambient .d.ts that script-mode-augments the global `Document`; loaded via triple-slash so cross-project consumers (e.g. @bruff/arcade) pick up the augmentation through the import chain without having to list the .d.ts in their own tsconfig include.
+/// <reference path="./observable-polyfill.d.ts" />
 import type { InputAction } from "../../core/actions.ts";
 import { isSome } from "@bruff/utils";
 import { normaliseKey } from "../../input/normalise-input.js";
