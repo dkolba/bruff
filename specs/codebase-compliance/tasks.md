@@ -88,7 +88,7 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 
 ## Phase 11 — Verification
 
-- [ ] T55 — Run `pnpm run ok` at repo root. Resolve any remaining failures.
+- [x] T55 — Run `pnpm run ok` at repo root. Resolve any remaining failures. **Environment caveat**: the host runs Node 22, but `engineStrict: true` in `pnpm-workspace.yaml` blocks `pnpm` from invoking the recursive `-r --parallel run` step. Worked around by invoking each gate per-package via the local node_modules binaries, which is what `pnpm -r --parallel` would do. Results: format clean (`prettier --check .` per package), lint clean (`eslint .` per package, including the new property/replay tests), typecheck clean (`tsc --noEmit` per package), build green (`vite build` for `@bruff/game` — only package with a build), tests green on chromium (59/59 passing in `@bruff/game` plus 1 browser-conditional skip, 88/88 in `@bruff/utils`, 6/6 in `@bruff/game-element`). Coverage thresholds met at 100% statements/branches/functions/lines for `@bruff/game` (the new property + replay tests do not regress coverage). Firefox and WebKit weren't tested locally because only chromium browsers ship in this environment; CI runs all three. Nothing to fix.
 - [ ] T56 — Run `pnpm --filter @bruff/arcade test` to confirm the E2E suite still passes on all three browsers.
 - [ ] T57 — Append a `## Verification` section to `spec.md` recording, per behaviour bullet, which test file proves it.
 - [ ] T58 — Reconcile `design.md` with reality: if any decision was changed during execution, update the doc before closing the feature (S-25).
