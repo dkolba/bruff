@@ -11,7 +11,11 @@ import { updateEnemies } from "../state/update-enemies.js";
 import updatePlayer from "../state/update-player.js";
 
 /** Generator that yields and receives {@link GameState} values to drive the main game loop. */
-type GameStateGenerator = Generator<GameState, GameState, InputAction | undefined>;
+type GameStateGenerator = Generator<
+  GameState,
+  GameState,
+  InputAction | undefined
+>;
 
 if (!isSupported()) {
   apply();
@@ -110,7 +114,9 @@ const subscribeToGameObservables = (
  * @param canvas - The canvas the initial state is sized against
  * @returns A getter that returns the most recently computed {@link GameState}
  */
-const startGameLoopIterator = (canvas: HTMLCanvasElement): (() => GameState) => {
+const startGameLoopIterator = (
+  canvas: HTMLCanvasElement,
+): (() => GameState) => {
   const initialGameState = createInitialState(canvas);
   const gameLoopIter = createGameLoop(initialGameState);
   let latestState: GameState = gameLoopIter.next().value;
