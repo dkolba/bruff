@@ -14,7 +14,7 @@ export const moveEnemyTowardPlayer = (
   enemy: Enemy,
   player: Player,
   canvas: CanvasSize,
-) => {
+): Enemy => {
   const dx = player.xPos - enemy.xPos;
   const dy = player.yPos - enemy.yPos;
   const distribution = Math.hypot(dx, dy);

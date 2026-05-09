@@ -7,7 +7,10 @@ const THREE = 3;
 const TEST_SEED = 1;
 const STATE_VERSION = 1;
 
-const setupRenderTest = () => {
+const setupRenderTest = (): {
+  mockContext: CanvasRenderingContext2D;
+  state: GameState;
+} => {
   const canvas = document.createElement("canvas");
   const mockContext = canvas.getContext("2d");
   if (mockContext === null) {

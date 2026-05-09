@@ -28,7 +28,8 @@ if (!isSupported()) {
  * @returns A function that accepts a timestamp and renders one animation frame
  */
 const curriedRadiatingBarsBackgroundAnimation =
-  (context: CanvasRenderingContext2D) => (time: number) =>
+  (context: CanvasRenderingContext2D) =>
+  (time: number): void =>
     radiatingBarsBackgroundAnimation(context, time);
 
 /**
@@ -78,7 +79,10 @@ const createGameLoop = function* (initialState: GameState): GameStateGenerator {
  *
  * @returns An object containing the key and touch observable streams
  */
-const createGameObservables = () => {
+const createGameObservables = (): {
+  keyObservable$: Observable<InputAction>;
+  touchObservable$: Observable<InputAction>;
+} => {
   const keyObservable$ = createKeyDownObservable();
   const touchObservable$ = createTouchObservable();
   return { keyObservable$, touchObservable$ };

@@ -6,5 +6,5 @@
  * @param max - The upper bound
  * @returns The clamped value
  */
-export const clamp = (value: number, min: number, max: number) =>
+export const clamp = (value: number, min: number, max: number): number =>
   Math.max(min, Math.min(max, value));

@@ -51,7 +51,7 @@ test("#createCanvasResizeObserver updates canvas dimensions", () => {
                   height: NEW_HEIGHT,
                   left: 0,
                   right: NEW_WIDTH,
-                  toJSON: () => ({}),
+                  toJSON: (): Record<string, unknown> => ({}),
                   top: 0,
                   width: NEW_WIDTH,
                   x: 0,

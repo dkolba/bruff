@@ -19,14 +19,14 @@ vi.mock("@bruff/utils", async (importOriginal) => {
 const ZERO = 0;
 const NEGATIVE_FORTY = -40;
 
-const isSafariNotChrome = (userAgent: string) =>
+const isSafariNotChrome = (userAgent: string): boolean =>
   userAgent.includes("Safari") && !userAgent.includes("HeadlessChrome");
 
 const unsupportedBrowsers =
   navigator.userAgent.includes("Firefox") ||
   isSafariNotChrome(navigator.userAgent);
 
-const createTouchEventStart = (xPos: number, yPos: number) =>
+const createTouchEventStart = (xPos: number, yPos: number): TouchEvent =>
   new TouchEvent("touchstart", {
     touches: [
       new Touch({
@@ -38,7 +38,7 @@ const createTouchEventStart = (xPos: number, yPos: number) =>
     ],
   });
 
-const createTouchEventMove = (xPos: number, yPos: number) =>
+const createTouchEventMove = (xPos: number, yPos: number): TouchEvent =>
   new TouchEvent("touchmove", {
     touches: [
       new Touch({
@@ -50,7 +50,7 @@ const createTouchEventMove = (xPos: number, yPos: number) =>
     ],
   });
 
-const createTouchEventEnd = (xPos: number, yPos: number) =>
+const createTouchEventEnd = (xPos: number, yPos: number): TouchEvent =>
   new TouchEvent("touchend", {
     changedTouches: [
       new Touch({
@@ -66,7 +66,7 @@ const simulateTouchGesture = (
   start: { xPos: number; yPos: number },
   move: { xPos: number; yPos: number },
   end: { xPos: number; yPos: number },
-) => {
+): void => {
   const startEvent = createTouchEventStart(start.xPos, start.yPos);
   document.dispatchEvent(startEvent);
 
@@ -80,7 +80,7 @@ const simulateTouchGesture = (
 const simulateTouchMoveWithNoTouches = (
   start: { xPos: number; yPos: number },
   end: { xPos: number; yPos: number },
-) => {
+): void => {
   const startEvent = createTouchEventStart(start.xPos, start.yPos);
   document.dispatchEvent(startEvent);
 

@@ -17,7 +17,12 @@ vi.mock("@bruff/utils", async (importOriginal) => {
   };
 });
 
-const createMocks = () => {
+const createMocks = (): {
+  mockCanvas: HTMLCanvasElement;
+  mockContext: CanvasRenderingContext2D;
+  mockRoot: ShadowRoot;
+  removeListener: () => void;
+} => {
   const mockCanvas = document.createElement("canvas");
   const mockContext = mockCanvas.getContext("2d");
   if (mockContext === null) {
@@ -29,7 +34,13 @@ const createMocks = () => {
   return { mockCanvas, mockContext, mockRoot, removeListener };
 };
 
-const setupSuccessMocks = async () => {
+const setupSuccessMocks = async (): Promise<{
+  mockCanvas: HTMLCanvasElement;
+  mockContext: CanvasRenderingContext2D;
+  mockRoot: ShadowRoot;
+  removeListener: () => void;
+  utilities: typeof Utilities;
+}> => {
   const { mockCanvas, mockContext, mockRoot, removeListener } = createMocks();
   const utilities = await import("@bruff/utils");
   vi.mocked(utilities.getShadowGameRoot).mockReturnValue(

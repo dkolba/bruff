@@ -20,7 +20,7 @@ const TEST_PLAYER = {
   yPos: TEST_POS_100,
 };
 
-const testNoMovementAtSamePosition = () => {
+const testNoMovementAtSamePosition = (): void => {
   it("should not move enemy when at same position as player", () => {
     const canvas = { height: TEST_CANVAS_HEIGHT, width: TEST_CANVAS_WIDTH };
     const enemy = {
@@ -37,7 +37,7 @@ const testNoMovementAtSamePosition = () => {
   });
 };
 
-const testMovementTowardPlayer = () => {
+const testMovementTowardPlayer = (): void => {
   it("should move enemy toward player when to the left", () => {
     const canvas = { height: TEST_CANVAS_HEIGHT, width: TEST_CANVAS_WIDTH };
     const enemy = {
@@ -84,7 +84,7 @@ const testMovementTowardPlayer = () => {
   });
 };
 
-const testBoundsClamping = () => {
+const testBoundsClamping = (): void => {
   it("should clamp x position within canvas bounds", () => {
     const canvas = { height: TEST_CANVAS_HEIGHT, width: TEST_CANVAS_WIDTH };
     const enemy = {
@@ -114,7 +114,7 @@ const testBoundsClamping = () => {
   });
 };
 
-const testDistance = () => {
+const testDistance = (): void => {
   it("should move enemy closer to player", () => {
     const canvas = { height: TEST_CANVAS_HEIGHT, width: TEST_CANVAS_WIDTH };
     const enemy = {

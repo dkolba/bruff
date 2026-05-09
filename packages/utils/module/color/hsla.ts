@@ -16,7 +16,7 @@ export const hsla = ({
   hue: number;
   lightness: number;
   saturation: number;
-}) =>
+}): string =>
   `hsla(${Math.round(hue * HUE_DEGREES)}, ${saturation * PERCENTAGE}%, ${
     lightness * PERCENTAGE
   }%, ${alpha})`;

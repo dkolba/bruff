@@ -47,7 +47,7 @@ describe("GameElement", () => {
   });
 });
 
-const mockStencilError = (templateElement: HTMLTemplateElement) => {
+const mockStencilError = (templateElement: HTMLTemplateElement): void => {
   const realCreateElement = document.createElement.bind(document);
   vi.spyOn(document, "createElement").mockImplementation((tagName) => {
     if (tagName === "div") {
@@ -66,7 +66,7 @@ const mockStencilError = (templateElement: HTMLTemplateElement) => {
 describe("GameElement Error Cases", () => {
   it("should throw TypeError if template is missing", () => {
     const originalTemplate = GameElement.template;
-    GameElement.template = () => "<div>No template here</div>";
+    GameElement.template = (): string => "<div>No template here</div>";
     const element = new GameElement();
     expect(() => element.connectedCallback()).toThrow(TypeError);
     expect(() => element.connectedCallback()).toThrow(
@@ -77,7 +77,7 @@ describe("GameElement Error Cases", () => {
 
   it("should throw TypeError if stencil is not a DocumentFragment", () => {
     const originalTemplate = GameElement.template;
-    GameElement.template = () => "<template>Content</template>";
+    GameElement.template = (): string => "<template>Content</template>";
     const element = new GameElement();
     const templateElement = document.createElement("template");
 

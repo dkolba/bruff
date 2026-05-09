@@ -7,7 +7,7 @@ export class GameElement extends HTMLElement {
    * Lifecycle callback when the element is added to the document's DOM.
    * Creates and initializes the shadow DOM if it doesn't exist.
    */
-  connectedCallback() {
+  connectedCallback(): void {
     if (!this.shadowRoot) {
       const wrapper = document.createElement("div");
       wrapper.innerHTML = GameElement.template();
