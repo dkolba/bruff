@@ -83,7 +83,7 @@ Each task ends in green `pnpm run ok` for the affected package(s)
 
 - [x] T51 — Add `@fast-check/vitest` as a `devDependency` of `@bruff/game`. Run `pnpm install`.
 - [x] T52 — Write property test in `packages/game/lib/state/update-player.property.test.ts` covering: player position stays within canvas bounds, determinism (same input → same output), and tick-with-no-input idempotence.
-- [ ] T53 — Write property test in `packages/game/lib/state/update-enemies.property.test.ts` covering: enemy count is invariant under `tick`, every enemy stays inside canvas bounds.
+- [x] T53 — Write property test in `packages/game/lib/state/update-enemies.property.test.ts` covering: enemy count is invariant under `tick`, every enemy stays inside canvas bounds.
 - [ ] T54 — Write replay test in `packages/game/lib/state/replay.test.ts` that seeds the PRNG, applies a fixed action sequence (e.g. `["move-right","move-right","move-right","tick","tick"]`), and asserts a stored snapshot of the resulting `GameState`.
 
 ## Phase 11 — Verification
