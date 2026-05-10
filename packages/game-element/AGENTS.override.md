@@ -1,8 +1,3 @@
----
-paths:
-  - "packages/game-element/**/*.*"
----
-
 # `@bruff/game-element` — Imperative Shell
 
 This package is the **imperative shell** in the Functional Core / Imperative Shell pattern. It provides `GameElement`, the Web Component base class that mounts a full-viewport canvas inside an open shadow DOM.

@@ -1,8 +1,3 @@
----
-paths:
-  - "packages/utils/**/*.*"
----
-
 # `@bruff/utils`
 
 This package contains shared, reusable utility functions.
