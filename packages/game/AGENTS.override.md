@@ -1,11 +1,6 @@
----
-paths:
-  - "packages/game/**/*.*"
----
-
 # `@bruff/game` — Roguelike Game Architecture
 
-This package contains the core game logic. The rules below apply to every file under `packages/game/`. Universal coding rules (FP, Result/Option error handling, naming, etc.) live in `.claude/CLAUDE.md`; the rules here are the package-specific extensions.
+This package contains the core game logic. The rules below apply to every file under `packages/game/`. Universal coding rules (FP, Result/Option error handling, naming, etc.) live in `.AGENTS.md`; the rules here are the package-specific extensions.
 
 - **Language**: TypeScript with TSDoc annotations.
 - **Dependencies**: `@bruff/utils` and `@bruff/game-element` only — no external runtime deps (per A-22).

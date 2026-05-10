@@ -1,8 +1,3 @@
----
-paths:
-  - "packages/arcade/**/*.*"
----
-
 # `@bruff/arcade` — E2E Host & Showcase
 
 This package hosts `<bruff-game>` in a Vite-served page so the game can be exercised by end-to-end tests across browsers and viewports. It is the only place that bundles and runs the full game in a browser context.
