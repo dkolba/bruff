@@ -1,30 +1,60 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { log, onLog } from "./event-bus";
 
-describe("event-bus", () => {
+const EXPECTED_CALL_COUNT = 1;
+const FIRST_CALL_INDEX = 0;
+const CONTEXT_ID = 1;
+
+const getFirstInvocationCallOrder = (spy: ReturnType<typeof vi.fn>): number =>
+  spy.mock.invocationCallOrder[FIRST_CALL_INDEX] ?? Number.NaN;
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
+describe("log", () => {
   it("returns undefined and does not throw when no subscribers exist", () => {
     expect(() => log({ level: "info", message: "noop" })).not.toThrow();
     expect(log({ level: "info", message: "noop-2" })).toBeUndefined();
   });
+});
 
+describe("onLog delivery", () => {
   it("delivers the exact event to a single subscriber", () => {
     const handler = vi.fn();
     const cleanup = onLog(handler);
     const event = {
+      context: { id: CONTEXT_ID },
       level: "warn",
       message: "hello",
       source: "test",
-      context: { id: 1 },
     } as const;
 
     log(event);
 
-    expect(handler).toHaveBeenCalledTimes(1);
+    expect(handler).toHaveBeenCalledTimes(EXPECTED_CALL_COUNT);
     expect(handler).toHaveBeenCalledWith(event);
     cleanup();
   });
 
+  it("ignores non-log events delivered by the browser listener", () => {
+    vi.spyOn(EventTarget.prototype, "addEventListener").mockImplementation(
+      (_type, listener): void => {
+        if (typeof listener === "function") {
+          listener(new Event("not-log"));
+        }
+      },
+    );
+    const handler = vi.fn();
+    const cleanup = onLog(handler);
+
+    expect(handler).not.toHaveBeenCalled();
+    cleanup();
+  });
+});
+
+describe("onLog cleanup", () => {
   it("stops delivery after unsubscribe", () => {
     const handler = vi.fn();
     const cleanup = onLog(handler);
@@ -33,25 +63,7 @@ describe("event-bus", () => {
     cleanup();
     log({ level: "info", message: "two" });
 
-    expect(handler).toHaveBeenCalledTimes(1);
-  });
-
-  it("delivers events in registration order", () => {
-    const first = vi.fn();
-    const second = vi.fn();
-    const cleanupFirst = onLog(first);
-    const cleanupSecond = onLog(second);
-
-    log({ level: "info", message: "x" });
-
-    expect(first).toHaveBeenCalledTimes(1);
-    expect(second).toHaveBeenCalledTimes(1);
-    expect(first.mock.invocationCallOrder[0]).toBeLessThan(
-      second.mock.invocationCallOrder[0],
-    );
-
-    cleanupFirst();
-    cleanupSecond();
+    expect(handler).toHaveBeenCalledTimes(EXPECTED_CALL_COUNT);
   });
 
   it("supports idempotent double-unsubscribe", () => {
@@ -63,5 +75,25 @@ describe("event-bus", () => {
     log({ level: "error", message: "ignored" });
 
     expect(handler).not.toHaveBeenCalled();
+  });
+});
+
+describe("onLog ordering", () => {
+  it("delivers events in registration order", () => {
+    const first = vi.fn();
+    const second = vi.fn();
+    const cleanupFirst = onLog(first);
+    const cleanupSecond = onLog(second);
+
+    log({ level: "info", message: "x" });
+
+    expect(first).toHaveBeenCalledTimes(EXPECTED_CALL_COUNT);
+    expect(second).toHaveBeenCalledTimes(EXPECTED_CALL_COUNT);
+    expect(getFirstInvocationCallOrder(first)).toBeLessThan(
+      getFirstInvocationCallOrder(second),
+    );
+
+    cleanupFirst();
+    cleanupSecond();
   });
 });

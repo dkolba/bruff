@@ -1,6 +1,5 @@
-import type { LogEvent } from "./log-event";
-
 import { isLogCustomEvent } from "./is-log-custom-event";
+import type { LogEvent } from "./log-event";
 
 const LOG_EVENT_NAME = "bruff:log";
 

@@ -29,6 +29,16 @@ const expectSingleCall = (spy: ReturnType<typeof vi.spyOn>): void => {
   expect(spy).toHaveBeenCalledTimes(SINGLE_CALL);
 };
 
+const getConnectedCallbackError = (element: GameElement): unknown => {
+  try {
+    element.connectedCallback();
+  } catch (error: unknown) {
+    return error;
+  }
+
+  return null;
+};
+
 // eslint-disable-next-line init-declarations
 let gameElement: GameElement;
 
@@ -126,10 +136,10 @@ describe("GameElement Error Cases", () => {
     const originalTemplate = GameElement.template;
     GameElement.template = (): string => "<div>No template here</div>";
     const element = new GameElement();
-    expect(() => element.connectedCallback()).toThrow(TypeError);
-    expect(() => element.connectedCallback()).toThrow(
-      "Template element not found",
-    );
+    const error = getConnectedCallbackError(element);
+
+    expect(error).toBeInstanceOf(TypeError);
+    expect(error).toHaveProperty("message", "Template element not found");
     GameElement.template = originalTemplate;
   });
 
@@ -141,10 +151,10 @@ describe("GameElement Error Cases", () => {
 
     mockStencilError(templateElement);
 
-    expect(() => element.connectedCallback()).toThrow(TypeError);
-    expect(() => element.connectedCallback()).toThrow(
-      "Failed to clone template",
-    );
+    const error = getConnectedCallbackError(element);
+
+    expect(error).toBeInstanceOf(TypeError);
+    expect(error).toHaveProperty("message", "Failed to clone template");
 
     vi.restoreAllMocks();
     GameElement.template = originalTemplate;

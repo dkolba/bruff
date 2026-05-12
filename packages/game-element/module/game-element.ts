@@ -19,7 +19,7 @@ const createStencil = (templateMarkup: string): DocumentFragment => {
  */
 // eslint-disable-next-line wc/define-tag-after-class-definition
 export class GameElement extends HTMLElement {
-  #unsubscribe?: () => void;
+  #unsubscribe: (() => void) | undefined;
 
   connectedCallback(): void {
     if (!this.shadowRoot) {

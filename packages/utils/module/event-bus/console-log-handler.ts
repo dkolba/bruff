@@ -1,18 +1,26 @@
 import type { LogEvent } from "./log-event";
 import type { LogLevel } from "./log-level";
 
-const getConsoleMethod = (level: LogLevel): typeof console.debug => {
-  switch (level) {
-    case "debug":
-      return console.debug;
-    case "info":
-      return console.info;
-    case "warn":
-      return console.warn;
-    case "error":
-      return console.error;
-  }
-};
+type ConsoleLogSink = (...messages: ReadonlyArray<unknown>) => void;
+
+const consoleMethods = {
+  debug: (...messages: ReadonlyArray<unknown>): void => {
+    // eslint-disable-next-line no-console -- Debug log events intentionally route to the matching console method.
+    console.debug(...messages);
+  },
+  error: (...messages: ReadonlyArray<unknown>): void => {
+    console.error(...messages);
+  },
+  info: (...messages: ReadonlyArray<unknown>): void => {
+    console.info(...messages);
+  },
+  warn: (...messages: ReadonlyArray<unknown>): void => {
+    console.warn(...messages);
+  },
+} satisfies Readonly<Record<LogLevel, ConsoleLogSink>>;
+
+const getConsoleMethod = (level: LogLevel): ConsoleLogSink =>
+  consoleMethods[level];
 
 const getPrefix = (level: LogLevel): string => `[${level}]`;
 
@@ -28,5 +36,5 @@ export const consoleLogHandler = (event: LogEvent): void => {
     return;
   }
 
-  sink(prefix, event.message, { source: event.source, context: event.context });
+  sink(prefix, event.message, { context: event.context, source: event.source });
 };
