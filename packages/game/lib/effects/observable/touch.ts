@@ -4,7 +4,10 @@ import type { InputAction } from "../../core/actions.ts";
 import { normaliseKey } from "../../input/normalise-input.js";
 import type { Observable } from "observable-polyfill/fn";
 
-// !TODO: Currently not included in coverage
+/** !TODO:
+This file is currently not included in coverage, because Playwright does not 
+provide a clean touch interface
+*/
 
 /**
  * Checks if an event is a touch event.
@@ -66,7 +69,7 @@ const createTouchDirectionObservable = (
  * @returns Observable that emits one `InputAction` per recognised swipe
  */
 const createTouchObservable = (): Observable<InputAction> => {
-  /* eslint-disable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return -- document.when() is part of the WICG Observable API proposal; TypeScript types do not yet cover this interface */
+  /* eslint-disable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return -- !TODO remove type casts - document.when() is part of the WICG Observable API proposal; TypeScript types do not yet cover this interface */
   const touchStart$ = (document as any)
     .when("touchstart")
     .filter((event: Event): event is TouchEvent =>
@@ -92,7 +95,7 @@ const createTouchObservable = (): Observable<InputAction> => {
     .map((direction: string) => normaliseKey(direction))
     .filter(isSome)
     .map((option: any) => option.value) as Observable<InputAction>;
-  /* eslint-enable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access */
+  /* eslint-enable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access -- !TODO remove type casts */
 };
 
 export default createTouchObservable;

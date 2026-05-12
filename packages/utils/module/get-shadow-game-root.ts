@@ -1,7 +1,7 @@
 import { error, ok, type Result } from "./fp/result.js";
 
 /**
- * Gets the game's shadow root via a CSS selector.
+ * Gets the game's shadow root
  *
  * @param gameRoot - The selector for the game-root element
  * @returns `ok` with the shadow root or

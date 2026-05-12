@@ -74,7 +74,7 @@ const createInitialState = (canvas: {
       yPos: 200,
     },
     playerMoved: false,
-    prng: enemy2.prng,
+    prng: enemy2.prng, // !TODO: use dedicated prng
     stateVersion: STATE_VERSION,
   };
 };
