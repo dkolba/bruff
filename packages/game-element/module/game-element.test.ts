@@ -1,6 +1,36 @@
-import { log } from "@bruff/utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { log } from "@bruff/utils";
+
 import { GameElement } from "./game-element.js";
+
+const SINGLE_CALL = 1;
+
+const createGameElement = (): GameElement => {
+  const element = document.createElement("bruff-game");
+  if (!(element instanceof GameElement)) {
+    throw new TypeError("Failed to create GameElement");
+  }
+  return element;
+};
+
+const registerGameElement = (): void => {
+  if (!customElements.get("bruff-game")) {
+    // eslint-disable-next-line wc/tag-name-matches-class
+    customElements.define("bruff-game", GameElement);
+  }
+};
+
+const createConnectedGameElement = (): GameElement => {
+  registerGameElement();
+  const element = createGameElement();
+  document.body.append(element);
+  return element;
+};
+
+const expectSingleCall = (spy: ReturnType<typeof vi.spyOn>): void => {
+  expect(spy).toHaveBeenCalledTimes(SINGLE_CALL);
+};
 
 // eslint-disable-next-line init-declarations
 let gameElement: GameElement;
@@ -8,18 +38,7 @@ let gameElement: GameElement;
 describe("GameElement", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
-
-    if (!customElements.get("bruff-game")) {
-      // eslint-disable-next-line wc/tag-name-matches-class
-      customElements.define("bruff-game", GameElement);
-    }
-
-    const element = document.createElement("bruff-game");
-    if (!(element instanceof GameElement)) {
-      throw new TypeError("Failed to create GameElement");
-    }
-    gameElement = element;
-    document.body.append(gameElement);
+    gameElement = createConnectedGameElement();
   });
 
   afterEach(() => {
@@ -47,32 +66,32 @@ describe("GameElement", () => {
   });
 
   it("forwards log events to the matching console method while connected", () => {
-    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     log({ level: "error", message: "boom" });
 
-    expect(consoleError).toHaveBeenCalledTimes(1);
+    expectSingleCall(consoleErrorSpy);
   });
 
   it("stops forwarding after disconnect", () => {
-    const consoleInfo = vi.spyOn(console, "info").mockImplementation(() => undefined);
+    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(() => {});
 
     log({ level: "info", message: "before" });
-    const beforeDisconnectCalls = consoleInfo.mock.calls.length;
+    const beforeDisconnectCalls = consoleInfoSpy.mock.calls.length;
     gameElement.remove();
     log({ level: "info", message: "after" });
 
-    expect(consoleInfo.mock.calls.length).toBe(beforeDisconnectCalls);
+    expect(consoleInfoSpy.mock.calls.length).toBe(beforeDisconnectCalls);
   });
 
   it("resubscribes after reconnect", () => {
-    const consoleInfo = vi.spyOn(console, "info").mockImplementation(() => undefined);
+    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(() => {});
 
     gameElement.remove();
     document.body.append(gameElement);
     log({ level: "info", message: "again" });
 
-    expect(consoleInfo).toHaveBeenCalledTimes(1);
+    expectSingleCall(consoleInfoSpy);
   });
 
   it("disconnectedCallback is a no-op before first connect", () => {

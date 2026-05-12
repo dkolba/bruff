@@ -1,5 +1,19 @@
 import { consoleLogHandler, onLog } from "@bruff/utils";
 
+const initializeShadowRoot = (element: GameElement): void => {
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = GameElement.template();
+  const template = wrapper.querySelector("template");
+  if (!(template instanceof HTMLTemplateElement)) {
+    throw new TypeError("Template element not found");
+  }
+  const stencil = template.content.cloneNode(true);
+  if (!(stencil instanceof DocumentFragment)) {
+    throw new TypeError("Failed to clone template");
+  }
+  element.attachShadow({ mode: "open" }).append(stencil);
+};
+
 /**
  * A class to represent a game web component
  */
@@ -13,17 +27,7 @@ export class GameElement extends HTMLElement {
    */
   connectedCallback(): void {
     if (!this.shadowRoot) {
-      const wrapper = document.createElement("div");
-      wrapper.innerHTML = GameElement.template();
-      const template = wrapper.querySelector("template");
-      if (!(template instanceof HTMLTemplateElement)) {
-        throw new TypeError("Template element not found");
-      }
-      const stencil = template.content.cloneNode(true);
-      if (!(stencil instanceof DocumentFragment)) {
-        throw new TypeError("Failed to clone template");
-      }
-      this.attachShadow({ mode: "open" }).append(stencil);
+      initializeShadowRoot(this);
     }
 
     if (this.#unsubscribe === undefined) {
@@ -36,11 +40,6 @@ export class GameElement extends HTMLElement {
     this.#unsubscribe = undefined;
   }
 
-  /**
-   * Generates an HTML template string for the game component.
-   *
-   * @returns The template string
-   */
   static template(): string {
     const width = window.innerWidth;
     const height = window.innerHeight;
