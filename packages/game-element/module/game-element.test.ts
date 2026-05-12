@@ -1,10 +1,10 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
 import { log } from "@bruff/utils";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { GameElement } from "./game-element.js";
 
 const SINGLE_CALL = 1;
+const noop = (): void => {};
 
 const createGameElement = (): GameElement => {
   const element = document.createElement("bruff-game");
@@ -35,16 +35,16 @@ const expectSingleCall = (spy: ReturnType<typeof vi.spyOn>): void => {
 // eslint-disable-next-line init-declarations
 let gameElement: GameElement;
 
-describe("GameElement", () => {
-  beforeEach(() => {
-    document.body.innerHTML = "";
-    gameElement = createConnectedGameElement();
-  });
+beforeEach(() => {
+  document.body.innerHTML = "";
+  gameElement = createConnectedGameElement();
+});
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
+describe("GameElement structure", () => {
   it("should be defined as a custom element", () => {
     expect(customElements.get("bruff-game")).toBeDefined();
   });
@@ -64,9 +64,11 @@ describe("GameElement", () => {
     gameElement.connectedCallback();
     expect(gameElement.shadowRoot).toBe(firstShadowRoot);
   });
+});
 
+describe("GameElement log forwarding", () => {
   it("forwards log events to the matching console method while connected", () => {
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(noop);
 
     log({ level: "error", message: "boom" });
 
@@ -74,7 +76,7 @@ describe("GameElement", () => {
   });
 
   it("stops forwarding after disconnect", () => {
-    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(() => {});
+    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(noop);
 
     log({ level: "info", message: "before" });
     const beforeDisconnectCalls = consoleInfoSpy.mock.calls.length;
@@ -85,7 +87,7 @@ describe("GameElement", () => {
   });
 
   it("resubscribes after reconnect", () => {
-    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(() => {});
+    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(noop);
 
     gameElement.remove();
     document.body.append(gameElement);

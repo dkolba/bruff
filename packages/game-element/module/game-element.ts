@@ -1,8 +1,8 @@
 import { consoleLogHandler, onLog } from "@bruff/utils";
 
-const initializeShadowRoot = (element: GameElement): void => {
+const createStencil = (templateMarkup: string): DocumentFragment => {
   const wrapper = document.createElement("div");
-  wrapper.innerHTML = GameElement.template();
+  wrapper.innerHTML = templateMarkup;
   const template = wrapper.querySelector("template");
   if (!(template instanceof HTMLTemplateElement)) {
     throw new TypeError("Template element not found");
@@ -11,7 +11,7 @@ const initializeShadowRoot = (element: GameElement): void => {
   if (!(stencil instanceof DocumentFragment)) {
     throw new TypeError("Failed to clone template");
   }
-  element.attachShadow({ mode: "open" }).append(stencil);
+  return stencil;
 };
 
 /**
@@ -21,13 +21,9 @@ const initializeShadowRoot = (element: GameElement): void => {
 export class GameElement extends HTMLElement {
   #unsubscribe?: () => void;
 
-  /**
-   * Lifecycle callback when the element is added to the document's DOM.
-   * Creates and initializes the shadow DOM if it doesn't exist.
-   */
   connectedCallback(): void {
     if (!this.shadowRoot) {
-      initializeShadowRoot(this);
+      this.attachShadow({ mode: "open" }).append(createStencil(GameElement.template()));
     }
 
     if (this.#unsubscribe === undefined) {
