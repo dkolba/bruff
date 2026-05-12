@@ -14,6 +14,7 @@ Provide a zero-dependency, in-process event bus that any code in the workspace c
 - The console line includes the level, message, and (when supplied) the `source` and `context` fields, so a developer can tell where the log came from at a glance.
 - Multiple subscribers receive the same event; subscriber order matches registration order.
 - `log()` calls before any subscriber is attached do not error and are simply unobserved (matches native `EventTarget` semantics — there is no replay buffer).
+- Repository guidance documents the event-bus boundary: production logging emits through `log()`, `console.*` is isolated to the console sink, and pure layers/skills remain no-log.
 
 ## Out of scope
 
@@ -36,6 +37,8 @@ Provide a zero-dependency, in-process event bus that any code in the workspace c
   A: Yes. Effects and shell-adjacent utilities may emit typed log events instead of calling `console.*` directly. Pure core/state/input/render code should still avoid logging side effects.
 - **Q: Should the initial migration include existing direct `console.*` call sites?**
   A: Yes. `packages/game/lib/effects/entry.ts`, `packages/game/lib/effects/loop.ts`, and `packages/utils/module/canvas/canvas-resize-listener.ts` are part of this feature so all existing app logs flow through the bus before `GameElement` forwards them to the console.
+- **Q: Should AGENTS and local skill guidance mention the new event-bus boundary?**
+  A: Yes. Root/package AGENTS files should state that production logging uses `log()` and that `console.*` is isolated to `consoleLogHandler`. Local skills that guide shell wiring or layer audits should reflect the same boundary while preserving no-logging rules for pure domain work.
 - **Q: What happens if a subscriber throws?**
   A: `EventTarget`'s `dispatchEvent` swallows listener exceptions and reports them via `window.onerror`. This is acceptable browser-native behaviour; we do not wrap or re-throw.
 
@@ -50,6 +53,7 @@ Provide a zero-dependency, in-process event bus that any code in the workspace c
 - A subscriber that calls its own cleanup mid-dispatch — safe under `EventTarget` semantics.
 - `console.debug` is silenced by default in many browsers; emitting `level: "debug"` events is therefore intentionally a near-no-op visually. This is documented but not "fixed".
 - Existing setup failure, custom element registration, touch input, and canvas resize logs keep their observable intent while switching from direct `console.*` calls to `log()`.
+- Documentation for future contributors must not imply that `@bruff/utils` is pure-only or that `GameElement` only mounts a canvas; both now include narrow shell-adjacent logging responsibilities.
 
 ## Verification
 
@@ -68,3 +72,4 @@ Provide a zero-dependency, in-process event bus that any code in the workspace c
 - Edge case: cleanup called twice idempotent → `packages/utils/module/event-bus/event-bus.test.ts` (double-unsubscribe).
 - Existing direct console call migrations → `packages/game/lib/effects/entry.test.ts`, `packages/game/lib/effects/loop.test.ts`, and `packages/utils/module/canvas/canvas-resize-listener.test.ts`.
 - Affected package gates run on 2026-05-12 → `@bruff/utils` format/lint/test/typecheck passed; `@bruff/game` format/lint/test/typecheck/build passed; `@bruff/game-element` format/lint/test/typecheck passed. `@bruff/utils` and `@bruff/game-element` have no package-level build script.
+- Contributor guidance audit → `AGENTS.md`, `packages/game/AGENTS.override.md`, `packages/utils/AGENTS.override.md`, `packages/game-element/AGENTS.override.md`, `.agents/skills/verify-layers/SKILL.md`, and `.agents/skills/roguelike-feature/SKILL.md` updated to describe the event-bus logging boundary.

@@ -1,9 +1,9 @@
 # `@bruff/game-element` — Imperative Shell
 
-This package is the **imperative shell** in the Functional Core / Imperative Shell pattern. It provides `GameElement`, the Web Component base class that mounts a full-viewport canvas inside an open shadow DOM.
+This package is the **imperative shell** in the Functional Core / Imperative Shell pattern. It provides `GameElement`, the Web Component base class that mounts a full-viewport canvas inside an open shadow DOM and forwards workspace log events to the browser console while connected.
 
 - **Language**: TypeScript with TSDoc annotations.
-- **Role**: The only place where shadow-DOM creation, canvas mounting, and Web Component lifecycle code lives. Pure game logic in `@bruff/game` consumes the canvas reference through this boundary and never touches the DOM directly.
+- **Role**: The only place where shadow-DOM creation, canvas mounting, log-bus console forwarding, and Web Component lifecycle code lives. Pure game logic in `@bruff/game` consumes the canvas reference through this boundary and never touches the DOM directly.
 
 ## Package-specific allowances
 
@@ -14,4 +14,5 @@ This package is the **imperative shell** in the Functional Core / Imperative She
 
 - **GE-3 (MUST)** `connectedCallback` is idempotent — calling it more than once must not recreate the shadow root.
 - **GE-4 (MUST)** Tests run in a real browser via Vitest + Playwright provider. Coverage thresholds are 100% for branches, functions, lines, and statements.
-- **GE-5 (MUST)** No game logic, no `GameState`, no actions, no rendering decisions. This package is purely structural — it exposes a canvas, nothing more.
+- **GE-5 (MUST)** No game logic, no `GameState`, no actions, no rendering decisions. This package is structural shell wiring only: it exposes a canvas and owns the lifecycle of the console log forwarding subscription.
+- **GE-6 (MUST)** `GameElement` subscribes to `onLog(consoleLogHandler)` idempotently in `connectedCallback` and unsubscribes in `disconnectedCallback`. Do not add direct `console.*` calls here; console output stays behind `consoleLogHandler` in `@bruff/utils`.

@@ -15,6 +15,7 @@ Identify which layer(s) the feature touches:
 - New input handling → `packages/game/lib/input/`
 - New visual output → `packages/game/lib/render/`
 - Canvas / DOM side effect → `packages/game/lib/effects/`
+- Logging or diagnostics side effect → `packages/game/lib/effects/` or the entry point, using `log()` from `@bruff/utils`
 - Reusable, domain-agnostic helper → `packages/utils/`
 
 ## 2 — Define action types
@@ -39,6 +40,8 @@ Use `InputAction` for normalised input, `GameAction` for simulation events, `Sys
 ## 4 — Wire up in the shell
 
 Add the new action to the root pipeline inside `effects/` or `loop.ts`. The shell dispatches to pure functions; it must contain no business logic itself.
+
+Shell diagnostics must emit through the logging event bus with `log()` from `@bruff/utils`. Do not add direct `console.*` calls.
 
 ## 5 — Gate check
 

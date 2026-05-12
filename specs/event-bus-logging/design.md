@@ -161,6 +161,17 @@ The `!this.#unsubscribe` guard preserves GE-3 (`connectedCallback` idempotent) f
 
 `#unsubscribe` is a `private` (ECMAScript private) field — not exported, not module-level, instance-scoped. That keeps C-19 satisfied (module-level state is forbidden; instance state in the imperative shell is fine — the project's only declared instance state today, but allowed by GE-1).
 
+## Contributor Guidance Updates
+
+| File                                        | Required guidance                                                                                        |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `AGENTS.md`                                 | Production logging uses the event bus; direct `console.*` is limited to the console sink and tests.      |
+| `packages/game/AGENTS.override.md`          | `log()` is allowed only from `effects/` or the entry point; pure layers remain no-log.                   |
+| `packages/utils/AGENTS.override.md`         | `@bruff/utils` includes pure helpers plus shell-adjacent browser/logging services.                       |
+| `packages/game-element/AGENTS.override.md`  | `GameElement` owns the `onLog(consoleLogHandler)` subscription lifecycle while connected.                |
+| `.agents/skills/verify-layers/SKILL.md`     | Layer audits check that pure layers do not import `log()` and production code avoids direct `console.*`. |
+| `.agents/skills/roguelike-feature/SKILL.md` | New shell diagnostics use `log()` from `@bruff/utils`, not direct `console.*` calls.                     |
+
 ## Tradeoffs and alternatives considered
 
 ### Where the bus lives
