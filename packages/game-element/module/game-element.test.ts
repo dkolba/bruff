@@ -1,11 +1,10 @@
-import { log } from "@bruff/utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { log } from "@bruff/utils";
 
 import { GameElement } from "./game-element.js";
 
 const SINGLE_CALL = 1;
-const noop = (): void => void 0;
-
 const createGameElement = (): GameElement => {
   const element = document.createElement("bruff-game");
   if (!(element instanceof GameElement)) {
@@ -68,7 +67,7 @@ describe("GameElement structure", () => {
 
 describe("GameElement log forwarding", () => {
   it("forwards log events to the matching console method while connected", () => {
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(noop);
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 
     log({ level: "error", message: "boom" });
 
@@ -76,7 +75,7 @@ describe("GameElement log forwarding", () => {
   });
 
   it("stops forwarding after disconnect", () => {
-    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(noop);
+    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(vi.fn());
 
     log({ level: "info", message: "before" });
     const beforeDisconnectCalls = consoleInfoSpy.mock.calls.length;
@@ -87,7 +86,7 @@ describe("GameElement log forwarding", () => {
   });
 
   it("resubscribes after reconnect", () => {
-    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(noop);
+    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(vi.fn());
 
     gameElement.remove();
     document.body.append(gameElement);
