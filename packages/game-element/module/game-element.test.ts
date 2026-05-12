@@ -1,10 +1,13 @@
-import { log } from "@bruff/utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { log } from "@bruff/utils";
 
 import { GameElement } from "./game-element.js";
 
 const SINGLE_CALL = 1;
-const noop = (): void => {};
+const noop = (): void => {
+  return;
+};
 
 const createGameElement = (): GameElement => {
   const element = document.createElement("bruff-game");
