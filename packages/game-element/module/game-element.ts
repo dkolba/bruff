@@ -1,8 +1,12 @@
+import { consoleLogHandler, onLog } from "@bruff/utils";
+
 /**
  * A class to represent a game web component
  */
 // eslint-disable-next-line wc/define-tag-after-class-definition
 export class GameElement extends HTMLElement {
+  #unsubscribe?: () => void;
+
   /**
    * Lifecycle callback when the element is added to the document's DOM.
    * Creates and initializes the shadow DOM if it doesn't exist.
@@ -21,6 +25,15 @@ export class GameElement extends HTMLElement {
       }
       this.attachShadow({ mode: "open" }).append(stencil);
     }
+
+    if (this.#unsubscribe === undefined) {
+      this.#unsubscribe = onLog(consoleLogHandler);
+    }
+  }
+
+  disconnectedCallback(): void {
+    this.#unsubscribe?.();
+    this.#unsubscribe = undefined;
   }
 
   /**

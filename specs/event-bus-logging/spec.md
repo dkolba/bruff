@@ -48,3 +48,20 @@ Provide a zero-dependency, in-process event bus that any code in the workspace c
 - An `onLog` cleanup function called twice — idempotent (second call is a no-op).
 - A subscriber that calls its own cleanup mid-dispatch — safe under `EventTarget` semantics.
 - `console.debug` is silenced by default in many browsers; emitting `level: "debug"` events is therefore intentionally a near-no-op visually. This is documented but not "fixed".
+
+
+## Verification
+
+- `log()` no-op with no subscribers → `packages/utils/module/event-bus/event-bus.test.ts` (`returns undefined and does not throw when no subscribers exist`).
+- `level` constrained to debug/info/warn/error → `packages/utils/module/event-bus/log-level.ts`; exercised by `packages/utils/module/event-bus/console-log-handler.test.ts` table-driven level routing test.
+- `onLog(handler)` returns cleanup unsubscribe function → `packages/utils/module/event-bus/event-bus.ts`; validated by unsubscribe and double-unsubscribe tests in `packages/utils/module/event-bus/event-bus.test.ts`.
+- Connected `GameElement` forwards to console by level → `packages/game-element/module/game-element.test.ts` (forwards log events while connected).
+- Removed `GameElement` stops forwarding → `packages/game-element/module/game-element.test.ts` (stops forwarding after disconnect).
+- Console call includes level/message and optional source/context → `packages/utils/module/event-bus/console-log-handler.test.ts` (without metadata + with metadata cases).
+- Multiple subscribers receive same event in registration order → `packages/utils/module/event-bus/event-bus.test.ts` (registration order assertion).
+- Pre-subscription `log()` calls are unobserved and non-throwing → `packages/utils/module/event-bus/event-bus.test.ts` (no subscribers case).
+- Edge case: empty message still dispatched → covered by generic dispatch path in `packages/utils/module/event-bus/event-bus.ts` and single-subscriber test payload equality semantics.
+- Edge case: re-entrant logging supported by EventTarget semantics → not explicitly unit-tested; left to platform behavior noted in design.
+- Edge case: disconnected without prior connect no-op → `packages/game-element/module/game-element.test.ts` (disconnectedCallback no-op).
+- Edge case: connect/disconnect cycles cleanly resubscribe → `packages/game-element/module/game-element.test.ts` (resubscribes after reconnect).
+- Edge case: cleanup called twice idempotent → `packages/utils/module/event-bus/event-bus.test.ts` (double-unsubscribe).
