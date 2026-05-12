@@ -7,13 +7,16 @@ afterEach(() => {
 });
 
 describe("consoleLogHandler", () => {
-  it.each(["debug", "info", "warn", "error"] as const)("routes %s level to matching console method", (level) => {
-    const spy = vi.spyOn(console, level).mockImplementation(() => undefined);
+  it.each(["debug", "info", "warn", "error"] as const)(
+    "routes %s level to matching console method",
+    (level) => {
+      const spy = vi.spyOn(console, level).mockImplementation(() => undefined);
 
-    consoleLogHandler({ level, message: "m" });
+      consoleLogHandler({ level, message: "m" });
 
-    expect(spy).toHaveBeenCalledTimes(1);
-  });
+      expect(spy).toHaveBeenCalledTimes(1);
+    },
+  );
 
   it("logs only prefix and message when source and context are absent", () => {
     const spy = vi.spyOn(console, "info").mockImplementation(() => undefined);

@@ -23,7 +23,9 @@ export class GameElement extends HTMLElement {
 
   connectedCallback(): void {
     if (!this.shadowRoot) {
-      this.attachShadow({ mode: "open" }).append(createStencil(GameElement.template()));
+      this.attachShadow({ mode: "open" }).append(
+        createStencil(GameElement.template()),
+      );
     }
 
     if (this.#unsubscribe === undefined) {

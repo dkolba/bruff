@@ -10,7 +10,9 @@ const eventTarget = new EventTarget();
  * Emits a log event to all active subscribers.
  */
 export const log = (event: LogEvent): void => {
-  eventTarget.dispatchEvent(new CustomEvent<LogEvent>(LOG_EVENT_NAME, { detail: event }));
+  eventTarget.dispatchEvent(
+    new CustomEvent<LogEvent>(LOG_EVENT_NAME, { detail: event }),
+  );
 };
 
 /**

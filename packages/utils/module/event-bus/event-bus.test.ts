@@ -11,7 +11,12 @@ describe("event-bus", () => {
   it("delivers the exact event to a single subscriber", () => {
     const handler = vi.fn();
     const cleanup = onLog(handler);
-    const event = { level: "warn", message: "hello", source: "test", context: { id: 1 } } as const;
+    const event = {
+      level: "warn",
+      message: "hello",
+      source: "test",
+      context: { id: 1 },
+    } as const;
 
     log(event);
 
@@ -41,7 +46,9 @@ describe("event-bus", () => {
 
     expect(first).toHaveBeenCalledTimes(1);
     expect(second).toHaveBeenCalledTimes(1);
-    expect(first.mock.invocationCallOrder[0]).toBeLessThan(second.mock.invocationCallOrder[0]);
+    expect(first.mock.invocationCallOrder[0]).toBeLessThan(
+      second.mock.invocationCallOrder[0],
+    );
 
     cleanupFirst();
     cleanupSecond();

@@ -1,8 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
-import { log } from "@bruff/utils";
-
 import { GameElement } from "./game-element.js";
+import { log } from "@bruff/utils";
 
 const SINGLE_CALL = 1;
 const createGameElement = (): GameElement => {
@@ -67,7 +65,9 @@ describe("GameElement structure", () => {
 
 describe("GameElement log forwarding", () => {
   it("forwards log events to the matching console method while connected", () => {
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(vi.fn());
 
     log({ level: "error", message: "boom" });
 
@@ -75,7 +75,9 @@ describe("GameElement log forwarding", () => {
   });
 
   it("stops forwarding after disconnect", () => {
-    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(vi.fn());
+    const consoleInfoSpy = vi
+      .spyOn(console, "info")
+      .mockImplementation(vi.fn());
 
     log({ level: "info", message: "before" });
     const beforeDisconnectCalls = consoleInfoSpy.mock.calls.length;
@@ -86,7 +88,9 @@ describe("GameElement log forwarding", () => {
   });
 
   it("resubscribes after reconnect", () => {
-    const consoleInfoSpy = vi.spyOn(console, "info").mockImplementation(vi.fn());
+    const consoleInfoSpy = vi
+      .spyOn(console, "info")
+      .mockImplementation(vi.fn());
 
     gameElement.remove();
     document.body.append(gameElement);
@@ -123,7 +127,9 @@ describe("GameElement Error Cases", () => {
     GameElement.template = (): string => "<div>No template here</div>";
     const element = new GameElement();
     expect(() => element.connectedCallback()).toThrow(TypeError);
-    expect(() => element.connectedCallback()).toThrow("Template element not found");
+    expect(() => element.connectedCallback()).toThrow(
+      "Template element not found",
+    );
     GameElement.template = originalTemplate;
   });
 
@@ -136,7 +142,9 @@ describe("GameElement Error Cases", () => {
     mockStencilError(templateElement);
 
     expect(() => element.connectedCallback()).toThrow(TypeError);
-    expect(() => element.connectedCallback()).toThrow("Failed to clone template");
+    expect(() => element.connectedCallback()).toThrow(
+      "Failed to clone template",
+    );
 
     vi.restoreAllMocks();
     GameElement.template = originalTemplate;
