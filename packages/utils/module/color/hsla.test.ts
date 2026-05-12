@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { hsla } from "./hsla.js";
 
-const testRed = () =>
+const testRed = (): void =>
   expect(
     hsla({
       alpha: 1,
@@ -11,7 +11,7 @@ const testRed = () =>
     }),
   ).toBe("hsla(0, 100%, 50%, 1)");
 
-const testCyan = () =>
+const testCyan = (): void =>
   expect(
     hsla({
       alpha: 0.5,

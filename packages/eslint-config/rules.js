@@ -19,6 +19,17 @@ export const overrideRulesTslint = {
     "error",
     { prefer: "type-imports" },
   ],
+  "@typescript-eslint/explicit-function-return-type": [
+    "warn",
+    {
+      allowConciseArrowFunctionExpressionsStartingWithVoid: false,
+      allowExpressions: false,
+      allowFunctionsWithoutTypeParameters: false,
+      allowHigherOrderFunctions: true,
+      allowIIFEs: false,
+      allowTypedFunctionExpressions: true,
+    },
+  ],
   "@typescript-eslint/no-unnecessary-type-assertion": "error",
   "@typescript-eslint/no-unsafe-assignment": "error",
   "@typescript-eslint/no-unsafe-member-access": "error",
@@ -50,7 +61,7 @@ export const overrideRulesEslint = {
   "no-inline-comments": "off",
   "no-ternary": "off",
   "no-undefined": "off",
-  "no-underscore-dangle": ["error", { allow: ["__dirname"] }],
+  "no-underscore-dangle": ["error", { allow: ["__dirname", "_exhaustive"] }],
   "no-unused-vars": [
     "error",
     { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },

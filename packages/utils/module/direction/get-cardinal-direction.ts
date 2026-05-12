@@ -11,7 +11,7 @@ import {
  * @param dy - The vertical component of the direction vector
  * @returns One of: "NORTH", "NORTHEAST", "EAST", "SOUTHEAST", "SOUTH", "SOUTHWEST", "WEST", "NORTHWEST"
  */
-export const getCardinalDirection = (dx: number, dy: number) => {
+export const getCardinalDirection = (dx: number, dy: number): string => {
   const angle = (Math.atan2(dy, dx) * HALF_CIRCLE_DEGREES) / Math.PI;
   const directions = [
     "WEST",

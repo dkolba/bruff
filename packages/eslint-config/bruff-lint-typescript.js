@@ -94,6 +94,86 @@ const webComponentsConfig = {
   ...rules.webComponents,
 };
 
+const layerImportRestrictions = [
+  {
+    files: ["**/lib/core/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "**/state/**",
+                "**/input/**",
+                "**/render/**",
+                "**/effects/**",
+              ],
+              message:
+                "core/ must have zero imports from outer layers (state, input, render, effects). See packages-game.md A-1.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["**/lib/state/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/input/**", "**/render/**", "**/effects/**"],
+              message:
+                "state/ may import from core/ only. See packages-game.md A-4.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["**/lib/input/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/render/**", "**/effects/**"],
+              message:
+                "input/ may import from core/ and state/ only. See packages-game.md A-4.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["**/lib/render/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/input/**", "**/effects/**"],
+              message:
+                "render/ may import from core/ and state/ only. See packages-game.md A-4.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  // effects/ is the composition root (A-6: side effects live in effects/ or
+  // the entry point only). It must wire input/render together with state/,
+  // so it intentionally has no outward import restriction. The peer-only
+  // reading of the layer table is overridden here per Phase 7 (T42).
+];
+
 const typescriptConfig = tseslint.config(
   // General
   // @ts-ignore
@@ -106,6 +186,8 @@ const typescriptConfig = tseslint.config(
   // TSDoc
   tsdocTypescriptConfig,
   webComponentsConfig,
+  // Layer-boundary import restrictions (packages-game.md A-1..A-4)
+  ...layerImportRestrictions,
 );
 
 export default typescriptConfig;
