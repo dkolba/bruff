@@ -1,11 +1,11 @@
 import { apply, isSupported, type Observable } from "observable-polyfill/fn";
 import type { GameAction, InputAction } from "../core/actions.ts";
+import { log, radiatingBarsBackgroundAnimation } from "@bruff/utils";
 import createInitialState from "../state/create-initial-state.js";
 import createKeyDownObservable from "./observable/keydown.js";
 import createTouchObservable from "./observable/touch.js";
 import curtainUp from "./curtain-up.js";
 import type { GameState } from "../core/types.ts";
-import { radiatingBarsBackgroundAnimation } from "@bruff/utils";
 import render from "./render.js";
 import { updateEnemies } from "../state/update-enemies.js";
 import updatePlayer from "../state/update-player.js";
@@ -105,7 +105,12 @@ const subscribeToGameObservables = (
   keyObservable$.subscribe(onInput);
   touchObservable$.subscribe(onInput);
   touchObservable$.subscribe((action: InputAction) => {
-    console.info("touch:", action.type);
+    log({
+      context: { actionType: action.type },
+      level: "info",
+      message: "touch",
+      source: "@bruff/game/effects/loop",
+    });
   });
 };
 
@@ -156,7 +161,12 @@ const buildRenderFrame =
 const loop = (): void => {
   const stageResult = curtainUp();
   if (stageResult.type === "error") {
-    console.error(`bruff: setup failed (${stageResult.error})`);
+    log({
+      context: { error: stageResult.error },
+      level: "error",
+      message: "setup failed",
+      source: "@bruff/game/effects/loop",
+    });
     return;
   }
   const { canvas, context, removeCanvasResizeListener } = stageResult.value;

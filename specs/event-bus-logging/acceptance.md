@@ -101,3 +101,31 @@ The vitest coverage gate (`branches/functions/lines/statements = 100`) passes fo
 [`pnpm run lint`, `pnpm run typecheck`]
 
 No `as` casts, no `any`, no module-level `let`, no exported mutable bindings introduced.
+
+## A14 — Canvas resize logs emit through the log bus
+
+[`packages/utils/module/canvas/canvas-resize-listener.test.ts`]
+
+Given `canvasResizeListener(canvas)` is active,
+When `"elementResized"` is dispatched,
+Then an `info` log event with message `"elementResized"` is observed through `onLog`.
+
+## A15 — Game entry registration emits through the log bus
+
+[`packages/game/lib/effects/entry.test.ts`]
+
+Given `<bruff-game>` is not yet registered,
+When the entry module is imported,
+Then it defines the custom element, starts the loop, and emits an `info` log event through `log()`.
+
+## A16 — Game loop emits setup and touch logs through the log bus
+
+[`packages/game/lib/effects/loop.test.ts`]
+
+Given setup fails,
+When `loop()` runs,
+Then an `error` log event with the setup failure reason is emitted through `log()`.
+
+Given setup succeeds and the touch observable emits an action,
+When the touch action is observed,
+Then an `info` log event with the touch action type is emitted through `log()`.

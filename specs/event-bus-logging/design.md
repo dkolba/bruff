@@ -2,13 +2,16 @@
 
 ## Layer assignment
 
-| Module                                                       | Package              | Layer                                                                                                                                  |
-| ------------------------------------------------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `module/event-bus/log-level.ts`                              | `@bruff/utils`       | Pure data — exports the `LogLevel` discriminated string union.                                                                         |
-| `module/event-bus/log-event.ts`                              | `@bruff/utils`       | Pure data — exports the `LogEvent` `Readonly` record type.                                                                             |
-| `module/event-bus/event-bus.ts`                              | `@bruff/utils`       | Shell-ish service — owns the private `EventTarget` instance and exposes `log()` / `onLog()`. Same tier as `canvas-resize-listener.ts`. |
-| `module/event-bus/console-log-handler.ts`                    | `@bruff/utils`       | Pure mapper — `(event) => void` that picks the right `console` method. Console is a side effect, but the function has no other state. |
-| Extension to `module/game-element.ts`                        | `@bruff/game-element`| Imperative shell — wires `onLog(consoleLogHandler)` into `connectedCallback` / `disconnectedCallback`.                                 |
+| Module                                                  | Package               | Layer                                                                                                                                  |
+| ------------------------------------------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `module/event-bus/log-level.ts`                         | `@bruff/utils`        | Pure data — exports the `LogLevel` discriminated string union.                                                                         |
+| `module/event-bus/log-event.ts`                         | `@bruff/utils`        | Pure data — exports the `LogEvent` `Readonly` record type.                                                                             |
+| `module/event-bus/event-bus.ts`                         | `@bruff/utils`        | Shell-ish service — owns the private `EventTarget` instance and exposes `log()` / `onLog()`. Same tier as `canvas-resize-listener.ts`. |
+| `module/event-bus/console-log-handler.ts`               | `@bruff/utils`        | Pure mapper — `(event) => void` that picks the right `console` method. Console is a side effect, but the function has no other state.  |
+| Extension to `module/game-element.ts`                   | `@bruff/game-element` | Imperative shell — wires `onLog(consoleLogHandler)` into `connectedCallback` / `disconnectedCallback`.                                 |
+| `lib/effects/entry.ts` log migration                    | `@bruff/game`         | Effects entry — emits custom element registration logs through `log()` instead of `console.info`.                                      |
+| `lib/effects/loop.ts` log migration                     | `@bruff/game`         | Effects loop — emits setup failure and touch input logs through `log()` instead of `console.*`.                                        |
+| `module/canvas/canvas-resize-listener.ts` log migration | `@bruff/utils`        | Shell-adjacent canvas utility — emits resize logs through `log()` instead of `console.info`.                                           |
 
 The bus singleton is the only piece of "module-level service state" introduced. C-19 forbids _exported_ module-level mutable bindings; the `EventTarget` instance here is **not exported** — only the `log` / `onLog` functions are. The instance is encapsulated, frozen behind the module boundary, and identical in spirit to a closure-over-private-state factory invoked once at module load.
 
@@ -62,6 +65,15 @@ log({...})  ─────────► dispatchEvent(CustomEvent)
 
 `emit` / `on` are intentionally _not_ exported. The transport is `EventTarget` today and may become `BroadcastChannel` or `Worker.postMessage` later — keeping the surface narrow protects callers from that swap.
 
+Existing effect and shell-adjacent call sites emit structured log events:
+
+| File                                                     | Event                                                                                                  |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `packages/game/lib/effects/entry.ts`                     | `{ level: "info", message: "bruff game v<version> was defined", source: "@bruff/game/effects/entry" }` |
+| `packages/game/lib/effects/loop.ts` setup failure        | `{ level: "error", message: "setup failed", source: "@bruff/game/effects/loop", context: { error } }`  |
+| `packages/game/lib/effects/loop.ts` touch input          | `{ level: "info", message: "touch", source: "@bruff/game/effects/loop", context: { actionType } }`     |
+| `packages/utils/module/canvas/canvas-resize-listener.ts` | `{ level: "info", message: "elementResized", source: "@bruff/utils/canvas" }`                          |
+
 ## Internal implementation sketch
 
 ```ts
@@ -75,7 +87,9 @@ const createLogBus = (): {
   const bus = new EventTarget();
 
   const dispatch = (event: LogEvent): void => {
-    bus.dispatchEvent(new CustomEvent<LogEvent>(LOG_EVENT_NAME, { detail: event }));
+    bus.dispatchEvent(
+      new CustomEvent<LogEvent>(LOG_EVENT_NAME, { detail: event }),
+    );
   };
 
   const subscribe = (handler: (event: LogEvent) => void): (() => void) => {
@@ -103,7 +117,10 @@ Note on the narrowing: `CustomEvent.detail` is typed as the generic parameter of
 export const consoleLogHandler = (event: LogEvent): void => {
   const sink = pickConsoleSink(event.level);
   if (event.context !== undefined || event.source !== undefined) {
-    sink(formatPrefix(event), event.message, { source: event.source, context: event.context });
+    sink(formatPrefix(event), event.message, {
+      source: event.source,
+      context: event.context,
+    });
   } else {
     sink(formatPrefix(event), event.message);
   }
@@ -134,7 +151,9 @@ export class GameElement extends HTMLElement {
     }
   }
 
-  static template(): string { /* unchanged */ }
+  static template(): string {
+    /* unchanged */
+  }
 }
 ```
 
@@ -169,7 +188,9 @@ The `!this.#unsubscribe` guard preserves GE-3 (`connectedCallback` idempotent) f
 
 ## Reuse map
 
-- `packages/utils/module/canvas/canvas-resize-listener.ts` — precedent for shell-ish helpers living in `@bruff/utils`; precedent for `console.*` calls in this layer.
+- `packages/game/lib/effects/entry.ts` — existing custom-element registration log migrated to `log()`.
+- `packages/game/lib/effects/loop.ts` — existing setup failure and touch input logs migrated to `log()`.
+- `packages/utils/module/canvas/canvas-resize-listener.ts` — existing canvas resize log migrated to `log()`.
 - `packages/utils/module/canvas/create-canvas-resize-observer.ts` — precedent for constructing `CustomEvent` and wiring through `EventTarget`-shaped APIs.
 - `packages/utils/module/get-shadow-game-root.ts` — example of TSDoc + arrow-function style to mirror.
 - `packages/game-element/module/game-element.ts` — file we extend; current `connectedCallback` shape and idempotency guard are the model for the new branch.

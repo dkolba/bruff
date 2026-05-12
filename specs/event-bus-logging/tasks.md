@@ -17,3 +17,9 @@
 - [x] T15 — Update `packages/game-element/README.md` with a "Console log forwarding" section noting that `GameElement` subscribes to `@bruff/utils`'s log bus while connected.
 - [x] T16 — Run `pnpm run ok` (or per-package `format` / `lint` / `test` / `typecheck` / `build`) for `@bruff/utils` and `@bruff/game-element`; confirm 100% coverage thresholds still pass.
 - [x] T17 — Review phase: walk `spec.md`'s "User-visible behaviour" / "Edge cases" lists and append a `## Verification` section to `spec.md` mapping each bullet to the test that proves it.
+- [x] T18 — Update `specs/event-bus-logging/spec.md`, `specs/event-bus-logging/design.md`, `specs/event-bus-logging/tasks.md`, and `specs/event-bus-logging/acceptance.md` to include the `GameElement` subscription requirement and the direct-console migration scope for `packages/game/lib/effects/entry.ts`, `packages/game/lib/effects/loop.ts`, and `packages/utils/module/canvas/canvas-resize-listener.ts`.
+- [x] T19 — Add tests proving `packages/utils/module/canvas/canvas-resize-listener.ts` emits resize events through `log()` instead of calling `console.info`.
+- [x] T20 — Add tests proving `packages/game/lib/effects/entry.ts` and `packages/game/lib/effects/loop.ts` emit registration, setup failure, and touch input messages through `log()`.
+- [x] T21 — Replace direct `console.*` calls with `log()` in `packages/game/lib/effects/entry.ts`, `packages/game/lib/effects/loop.ts`, and `packages/utils/module/canvas/canvas-resize-listener.ts`.
+- [x] T22 — Run the affected `@bruff/utils`, `@bruff/game`, and `@bruff/game-element` format, lint, test, typecheck, and build gates.
+- [x] T23 — Review phase: update `specs/event-bus-logging/spec.md` verification notes after the console migration tests pass.
