@@ -1,10 +1,16 @@
+import { log } from "../event-bus/event-bus.js";
+
 /**
  * Logs that the element has been resized
  *
  * @returns void
  */
 const logInfo = (): void => {
-  console.info("elementResized");
+  log({
+    level: "info",
+    message: "elementResized",
+    source: "@bruff/utils/canvas",
+  });
 };
 
 /**

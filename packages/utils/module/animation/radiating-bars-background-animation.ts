@@ -27,7 +27,7 @@ const drawBar = ({
   range: number;
   size: number;
   timestamp: number;
-}) => {
+}): void => {
   context.fillStyle = hsla({
     alpha: ONE,
     hue: (index / range) * HUE_MULTIPLIER + timestamp * ROTATION_SPEED,
@@ -56,7 +56,7 @@ const drawBar = ({
 export const radiatingBarsBackgroundAnimation = (
   context: CanvasRenderingContext2D,
   timestamp: number,
-) => {
+): void => {
   context.save();
   try {
     context.translate(context.canvas.width / TWO, context.canvas.height / TWO);

@@ -19,10 +19,10 @@ export default defineConfig({
     coverage: {
       exclude: [
         "**/*spec*{js,ts,jsx,tsx}",
-        "lib/bruff-game.ts",
-        "lib/loop.ts",
-        "lib/constants.ts",
-        "lib/observable/merge.ts",
+        "lib/effects/entry.ts",
+        "lib/effects/loop.ts",
+        "lib/core/constants.ts",
+        "lib/effects/observable/merge.ts",
       ],
       include: ["lib/**/*.ts"],
       reporter: ["text", "json", "html"],
