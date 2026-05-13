@@ -1,3 +1,14 @@
+## Revisit notes (May 13, 2026)
+
+The original design proposed several foundational refactors that are now already present in the codebase. The revised design keeps only deltas that are still missing:
+
+1. Deterministic **browser-facing control** of the existing loop (`stepFrames`, `dispatchInput`, `freezeForSnapshot`).
+2. A **typed test API surface** exposed to Playwright in test mode.
+3. **Replay fixture externalization** (JSON fixtures + snapshots) building on existing replay determinism tests.
+4. **E2E spec decomposition** from one mixed spec into state assertions, accessibility checks, and one frozen visual checkpoint.
+
+Everything else in this document should be interpreted through this narrower delta scope.
+
 # Design — Canvas Game Testing Strategy
 
 ## Architectural overview

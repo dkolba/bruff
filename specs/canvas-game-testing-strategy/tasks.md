@@ -1,87 +1,94 @@
-# Tasks — Canvas Game Testing Strategy
+# Tasks — Canvas Game Testing Strategy (Revisited)
 
-Each task is independently executable: it must compile, lint, and pass tests on its own. Implementation tasks and their tests are split (per S-16). Tasks reference exact files.
+Each task is independently executable: it must compile, lint, and pass tests on its own. Implementation tasks and tests are intentionally split.
 
 ## Layer 1 — Test-mode flag
 
-- [ ] T1 — Add `__BRUFF_TEST_MODE__` declaration to `packages/game/types/global.d.ts` (create file)
-- [ ] T2 — Add `define: { __BRUFF_TEST_MODE__: ... }` replacement to `packages/arcade/vite.config.ts` (default `false`, `true` when `process.env.VITE_TEST_MODE === "1"`)
-- [ ] T3 — Implement `isTestMode()` in `packages/game/lib/effects/test-mode.ts`
-- [ ] T4 — Add unit tests for `isTestMode` in `packages/game/lib/effects/test-mode.test.ts` (mock `window.location.search` via `vi.stubGlobal`)
+- [ ] T1 — Add `__BRUFF_TEST_MODE__` declaration to `packages/game/types/global.d.ts` (create if missing).
+- [ ] T2 — Add `define: { __BRUFF_TEST_MODE__: ... }` replacement to `packages/arcade/vite.config.ts`.
+- [ ] T3 — Implement `isTestMode()` in `packages/game/lib/effects/test-mode.ts`.
+- [ ] T4 — Add unit tests for `isTestMode` in `packages/game/lib/effects/test-mode.test.ts`.
 
-## Layer 2 — Time-as-input refactor
+## Layer 2 — Time and stepping control
 
-- [ ] T5 — Add `Clock` type, `wallClock`, `manualClock`, `advanceManualClock` constructors to `packages/game/lib/effects/clock.ts`
-- [ ] T6 — Implement `readClock` (the only `performance.now()` reader) in `packages/game/lib/effects/clock.ts`
-- [ ] T7 — Add unit tests for `Clock` constructors and `advanceManualClock` in `packages/game/lib/effects/clock.test.ts`
-- [ ] T8 — Refactor `packages/game/lib/loop.ts` so the inner `renderFrame` receives `time` from `readClock(clock)` instead of the raw RAF argument
-- [ ] T9 — Update `packages/game/lib/loop.ts` call to `radiatingBarsBackgroundAnimation` to take its `time` argument from the injected `Clock`
+- [ ] T5 — Add a `Clock` ADT and `readClock` in `packages/game/lib/effects/clock.ts`.
+- [ ] T6 — Add unit tests for `Clock` in `packages/game/lib/effects/clock.test.ts`.
+- [ ] T7 — Refactor `packages/game/lib/effects/loop.ts` to read time through the clock abstraction.
+- [ ] T8 — Ensure background animation receives clock-derived time, not raw RAF callback time.
 
-## Layer 3 — GameState shape extension
+## Layer 3 — State shape for replay stability
 
-- [ ] T10 — Extend `GameState` in `packages/game/types/game-state-type.ts` with `stateVersion: number`, `seed: number`, `frameIndex: number` (all `Readonly`, including the existing fields)
-- [ ] T11 — Update `packages/game/lib/create-initial-state.ts` to populate `stateVersion: 1`, `seed: 0`, `frameIndex: 0`
-- [ ] T12 — Update `packages/game/lib/create-initial-state.test.ts` to assert the three new fields
-- [ ] T13 — Increment `frameIndex` in `createGameLoop` inside `packages/game/lib/loop.ts` once per yielded state
-- [ ] T14 — Add unit test in `packages/game/lib/loop.test.ts` (create file) covering `frameIndex` monotonic increase across three iterations
+- [ ] T9 — Confirm `GameState` includes stable replay fields (`stateVersion`, deterministic seed/PRNG state, monotonic frame index).
+- [ ] T10 — Add missing fields (if absent) in `packages/game/lib/core/types.ts` and `packages/game/lib/state/create-initial-state.ts`.
+- [ ] T11 — Add/update tests in `packages/game/lib/state/create-initial-state.test.ts` for all replay-critical fields.
+- [ ] T12 — Ensure frame index increments exactly once per logical tick in `packages/game/lib/effects/loop.ts`.
+- [ ] T13 — Add loop tests proving monotonic `frameIndex` growth over multiple ticks.
 
-## Layer 4 — Render stats
+## Layer 4 — Render stats and snapshot freeze points
 
-- [ ] T15 — Add `RenderStats` type to `packages/game/lib/render/render-stats.ts`
-- [ ] T16 — Change `render` in `packages/game/lib/render.ts` to return `RenderStats`
-- [ ] T17 — Update `packages/game/lib/render.test.ts` to assert returned `RenderStats` matches state (player drawn, enemy count)
-- [ ] T18 — Update the `render(currentGameState, context)` call in `packages/game/lib/loop.ts` to capture the latest `RenderStats` in a module-scoped `let` (the only allowed mutable shell binding)
+- [ ] T14 — Add `RenderStats` type (`packages/game/lib/render/render-stats.ts` or equivalent path in current layout).
+- [ ] T15 — Update render pipeline to return latest `RenderStats`.
+- [ ] T16 — Add render tests asserting `RenderStats` consistency with state.
+- [ ] T17 — Store latest render stats in loop shell state for test API reads.
 
 ## Layer 5 — Frame-step driver
 
-- [ ] T19 — Implement `createFrameStepDriver` factory in `packages/game/lib/effects/frame-step-driver.ts`. It accepts the generator and returns `{ stepFrames, getCurrentState, dispatchInput }` closures over a `ManualClock`
-- [ ] T20 — Wire `loop.ts` to choose between `createFrameStepDriver` and the existing RAF tail based on `isTestMode()`
-- [ ] T21 — Add unit tests for `createFrameStepDriver` in `packages/game/lib/effects/frame-step-driver.test.ts` covering: `stepFrames(0)` is a no-op; `stepFrames(3)` advances `frameIndex` by exactly 3; `dispatchInput("arrowup")` followed by `stepFrames(1)` moves the player
+- [ ] T18 — Implement `createFrameStepDriver` in `packages/game/lib/effects/frame-step-driver.ts`.
+- [ ] T19 — Wire loop startup to choose RAF mode vs deterministic frame-step mode via `isTestMode()`.
+- [ ] T20 — Add tests for `stepFrames(0)`, `stepFrames(n)`, and input ordering behavior.
 
-## Layer 6 — Test API
+## Layer 6 — Browser test API
 
-- [ ] T22 — Define `BruffTestApi` type in `packages/game/lib/effects/test-api-types.ts`
-- [ ] T23 — Implement `attachTestApi(driver)` that builds the `BruffTestApi` object and assigns `window.__bruffTestApi` in `packages/game/lib/effects/test-api.ts`
-- [ ] T24 — Implement `freezeForSnapshot()` to set a paused flag and resolve after a single `requestAnimationFrame` paint
-- [ ] T25 — Wire `attachTestApi` from `loop.ts` so it runs only when `isTestMode()` is true
-- [ ] T26 — Add `testApi` getter to `packages/game-element/module/game-element.ts` returning the per-instance driver
-- [ ] T27 — Add unit tests for `attachTestApi` in `packages/game/lib/effects/test-api.test.ts` using `happy-dom` to provide a `window` (or stub `globalThis.window`)
+- [ ] T21 — Define `BruffTestApi` type in `packages/game/lib/effects/test-api-types.ts`.
+- [ ] T22 — Implement `attachTestApi(driver)` in `packages/game/lib/effects/test-api.ts` and assign `window.__bruffTestApi` in test mode.
+- [ ] T23 — Implement `freezeForSnapshot()` semantics: pause simulation and resolve after next paint.
+- [ ] T24 — Wire API attachment from `packages/game/lib/effects/loop.ts` only when test mode is enabled.
+- [ ] T25 — Expose per-instance test API through `packages/game-element/module/game-element.ts`.
+- [ ] T26 — Add unit tests for API attachment, teardown, and production-mode non-exposure.
 
-## Layer 7 — Replay harness
+## Layer 7 — Replay fixtures and snapshots
 
-- [ ] T28 — Add `Result<T, E>` and `ok`/`err` helpers to `packages/utils` if not already present (check first; reuse if it is)
-- [ ] T29 — Define `ReplayFixture` and `ReplayError` types in `packages/game/lib/state/replay-fixture.ts`
-- [ ] T30 — Implement `parseReplayFixture(raw)` returning `Result<ReplayFixture, ReplayError>` in the same file
-- [ ] T31 — Add unit tests for `parseReplayFixture` in `packages/game/lib/state/replay-fixture.test.ts` covering valid fixture, missing field, version mismatch
-- [ ] T32 — Implement `runReplay(fixture)` (pure) in `packages/game/lib/state/run-replay.ts`
-- [ ] T33 — Add unit tests for `runReplay` in `packages/game/lib/state/run-replay.test.ts` asserting determinism (same fixture → equal final state across two calls)
-- [ ] T34 — Create `packages/game/tests/snapshots/move-up-60-frames.json` by running `runReplay` once and committing the output as the golden snapshot
-- [ ] T35 — Add a snapshot test in `packages/game/lib/state/run-replay.snapshot.test.ts` that runs the fixture and asserts the result matches `tests/snapshots/move-up-60-frames.json` via `toMatchFileSnapshot`
+- [ ] T27 — Define `ReplayFixture` and `ReplayError` in `packages/game/lib/state/replay-fixture.ts`.
+- [ ] T28 — Implement `parseReplayFixture(raw)` returning `Result<ReplayFixture, ReplayError>`.
+- [ ] T29 — Add fixture parser tests (valid, missing field, invalid version, out-of-range frame).
+- [ ] T30 — Implement pure `runReplay(fixture)` in `packages/game/lib/state/run-replay.ts`.
+- [ ] T31 — Add determinism tests: same fixture, same final state across repeated runs.
+- [ ] T32 — Add JSON fixture(s) under `packages/game/tests/fixtures/`.
+- [ ] T33 — Add snapshot golden(s) under `packages/game/tests/snapshots/`.
+- [ ] T34 — Add file-snapshot tests validating replay output against committed goldens.
 
-## Layer 8 — Property-based tests
+## Layer 8 — Property-based coverage
 
-- [ ] T36 — Add `fast-check` as a dev dependency in `packages/game/package.json`
-- [ ] T37 — Add property test `runReplay is deterministic for any seed and input sequence` in `packages/game/lib/state/run-replay.property.test.ts`
-- [ ] T38 — Add property test `frameIndex never decreases across stepFrames(n) for any positive n` in `packages/game/lib/effects/frame-step-driver.property.test.ts`
+- [ ] T35 — Add property test: replay determinism across arbitrary seeds and bounded input sequences.
+- [ ] T36 — Add property test: `frameIndex` never decreases across deterministic stepping.
 
-## Layer 9 — Playwright reorganization
+## Layer 9 — Playwright suite reorganization
 
-- [ ] T39 — Add a `gotoTestMode(page)` helper to `packages/arcade/e2e/base-fixtures.ts` that navigates to `/?test=1` and waits for `window.__bruffTestApi`
-- [ ] T40 — Remove `slowMo: 500` from `packages/arcade/playwright.config.ts`
-- [ ] T41 — Create `packages/arcade/e2e/state-assertions.spec.ts` covering: element mounts, `getState()` returns the initial state, `dispatchInput("arrowup") + stepFrames(1)` moves the player by exactly `PLAYER_SPEED`
-- [ ] T42 — Create `packages/arcade/e2e/accessibility.spec.ts` containing only the axe checks (dark + light), removing them from the legacy spec
-- [ ] T43 — Add a static HUD `<div id="hud">` containing the version label to `packages/arcade/index.html` (replaces the empty `<h1>`)
-- [ ] T44 — Create `packages/arcade/e2e/hud-visual.spec.ts` with a single `await expect(page.locator("#hud")).toHaveScreenshot()` per scheme
-- [ ] T45 — Copy `packages/game/tests/snapshots/move-up-60-frames.json` to `packages/arcade/e2e/fixtures/move-up-60-frames.json` and create `packages/arcade/e2e/replay-checkpoint.spec.ts` that loads the fixture, calls `stepFrames(fixture.totalFrames)`, calls `freezeForSnapshot()`, then asserts `await expect(page.locator("bruff-game canvas")).toHaveScreenshot()` (one stable canvas screenshot)
-- [ ] T46 — Delete `packages/arcade/e2e/bruff-game.spec.ts` once T41/T42/T44/T45 cover its assertions
-- [ ] T47 — Update `packages/arcade/README.md` to document the new spec file layout and the `?test=1` flag
+- [ ] T37 — Add `gotoTestMode(page)` helper in `packages/arcade/e2e/base-fixtures.ts`.
+- [ ] T38 — Remove `slowMo: 500` from `packages/arcade/playwright.config.ts`.
+- [ ] T39 — Create `packages/arcade/e2e/state-assertions.spec.ts` with API-driven assertions.
+- [ ] T40 — Create `packages/arcade/e2e/accessibility.spec.ts` for axe checks (dark + light).
+- [ ] T41 — Add static HUD element in `packages/arcade/index.html` for DOM-only visual snapshot.
+- [ ] T42 — Add `packages/arcade/e2e/hud-visual.spec.ts` with HUD screenshot assertions.
+- [ ] T43 — Add `packages/arcade/e2e/replay-checkpoint.spec.ts` with fixture load + `freezeForSnapshot()` + single canvas screenshot.
+- [ ] T44 — Remove/retire assertions in legacy `packages/arcade/e2e/bruff-game.spec.ts` once replacements are in place.
+- [ ] T45 — Update `packages/arcade/README.md` with new E2E file layout and `?test=1` workflow.
 
 ## Layer 10 — Production-bundle safety
 
-- [ ] T48 — Add a build-output check task to `packages/arcade/package.json` (`test:bundle-clean`) that runs after `vite build` and `grep -L "__bruffTestApi" site/assets/*.js` to assert the test API is absent
-- [ ] T49 — Wire `test:bundle-clean` into `pnpm run ok` for the arcade package
+- [ ] T46 — Add a bundle-clean check ensuring production assets do not contain `__bruffTestApi`.
+- [ ] T47 — Wire bundle-clean check into the arcade package quality gate.
 
 ## Layer 11 — Documentation
 
-- [ ] T50 — Add a `Testing strategy` section to `packages/game/README.md` summarising the three test levels and linking to `specs/canvas-game-testing-strategy/spec.md`
-- [ ] T51 — Add a short `Replay fixtures` heading to `packages/game/README.md` describing the JSON shape and where snapshots live
+- [ ] T48 — Update `packages/game/README.md` with testing pyramid (unit, property, replay, E2E).
+- [ ] T49 — Document replay fixture shape and snapshot locations in `packages/game/README.md`.
+- [ ] T50 — Keep `spec.md` and `design.md` synchronized with implementation scope as tasks close.
+
+## Verification gate (must pass before merge)
+
+- [ ] V1 — `pnpm run format`
+- [ ] V2 — `pnpm run lint`
+- [ ] V3 — `pnpm run typecheck`
+- [ ] V4 — `pnpm run test`
+- [ ] V5 — `pnpm run build`
