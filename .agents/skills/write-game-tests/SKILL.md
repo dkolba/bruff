@@ -41,7 +41,7 @@ describe("updatePlayer", () => {
 
 ## Level 2 — Property-Based Tests (required for PRNG, generators, state transitions)
 
-Use Vitest + fast-check (or a homegrown property helper if fast-check is not a dev dependency).
+Use Vitest + @fast-check/vitest.
 
 Properties to test:
 
@@ -51,18 +51,18 @@ Properties to test:
 - **Generators**: output is deterministic given the same seed.
 
 ```ts
-import * as fc from "fast-check";
-import { it, expect } from "vitest";
+import { test, fc } from "@fast-check/vitest";
+import { expect } from "vitest";
 
-it("PRNG produces same sequence for same seed", () => {
-  fc.assert(
-    fc.property(fc.integer(), (seed) => {
-      const seq1 = runPrng(seed, 10);
-      const seq2 = runPrng(seed, 10);
-      expect(seq1).toStrictEqual(seq2);
-    }),
-  );
-});
+test.prop([fc.integer()])(
+  "PRNG produces same sequence for same seed",
+  (seed) => {
+    const seq1 = runPrng(seed, 10);
+    const seq2 = runPrng(seed, 10);
+
+    expect(seq1).toStrictEqual(seq2);
+  },
+);
 ```
 
 ---

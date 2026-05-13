@@ -15,7 +15,7 @@ const TEST_CANVAS_HEIGHT = 600;
 const TEST_TIMESTAMP = 1000;
 const CALL_COUNT_ONE = 1;
 
-const spyOnContext = (context: CanvasRenderingContext2D) => {
+const spyOnContext = (context: CanvasRenderingContext2D): void => {
   vi.spyOn(context, "fillRect");
   vi.spyOn(context, "restore");
   vi.spyOn(context, "rotate");
@@ -38,7 +38,7 @@ const createMockContext = (): CanvasRenderingContext2D => {
   return context;
 };
 
-const testContextStateManagement = () => {
+const testContextStateManagement = (): void => {
   it("should save and restore context state", () => {
     const context = createMockContext();
     radiatingBarsBackgroundAnimation(context, TEST_TIMESTAMP);
@@ -48,7 +48,7 @@ const testContextStateManagement = () => {
   });
 };
 
-const testTransformation = () => {
+const testTransformation = (): void => {
   it("should translate to center of canvas", () => {
     const context = createMockContext();
     radiatingBarsBackgroundAnimation(context, TEST_TIMESTAMP);
@@ -69,7 +69,7 @@ const testTransformation = () => {
   });
 };
 
-const testDrawing = () => {
+const testDrawing = (): void => {
   it("should draw bars with correct size", () => {
     const context = createMockContext();
     radiatingBarsBackgroundAnimation(context, TEST_TIMESTAMP);
@@ -94,7 +94,7 @@ const testDrawing = () => {
   });
 };
 
-const testColorManagement = () => {
+const testColorManagement = (): void => {
   it("should update fill style over time", () => {
     const context = createMockContext();
     radiatingBarsBackgroundAnimation(context, TEST_TIMESTAMP);

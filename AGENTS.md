@@ -65,6 +65,7 @@ These rules ensure maintainability, safety, and developer velocity.
 ##### Architecture Principles
 
 - **Functional Core, Imperative Shell** - All side effects (DOM, Canvas, I/O, logging) live in the shell; the core is pure and has no knowledge of the shell.
+- **Logging Through the Event Bus** - Production code emits logs with `log()` from `@bruff/utils`; direct `console.*` calls belong only in the event-bus console sink and tests.
 - **Command–Query Separation** - A function either returns a value (query) or produces a side effect (command), never both.
 - **Illegal States Unrepresentable** - Encode invariants in the type system (discriminated unions, branded types, refinement via narrowing) so impossible states cannot be expressed.
 - **Data-First Design** - Pass data through transformations; do not wrap data in objects with methods. State is plain records; behaviour is free functions.
@@ -212,7 +213,7 @@ The repo is a pnpm monorepo. Package-specific rules auto-load from `packages/<pa
 | `@bruff/game`          | Roguelike game logic — pure layered architecture (`core/state/input/render/effects`) | `.packages/game/AGENTS.override.md`         |
 | `@bruff/game-element`  | Imperative shell — Web Component base class that mounts the canvas                   | `.packages/game-element/AGENTS.override.md` |
 | `@bruff/arcade`        | E2E host — Vite app + Playwright tests across desktop/mobile browsers                | `.packages/arcade/AGENTS.override.md`       |
-| `@bruff/utils`         | Pure FP helpers (`pipe`, `clamp`, `hsla`, canvas utilities, etc.)                    | `.packages/utils/AGENTS.override.md`        |
+| `@bruff/utils`         | Shared utilities: pure FP helpers plus shell-adjacent browser/logging services       | `.packages/utils/AGENTS.override.md`        |
 | `@bruff/eslint-config` | Shared ESLint flat config                                                            | (none — config-only package)                |
 
 When working in a single package, also read its `README.md` for build/test commands and architectural role.
