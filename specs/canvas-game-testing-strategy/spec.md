@@ -2,6 +2,16 @@
 
 ## Goal
 
+## Revisit notes (May 13, 2026)
+
+After re-auditing the repository, this strategy still stands, but a few assumptions needed adjustment:
+
+- Some architectural groundwork is present (layered folders and deterministic state primitives), but the browser-test harness is still missing.
+- Existing replay coverage is limited to a narrow canonical sequence and does not yet provide fixture-driven snapshots across multiple scenarios.
+- The current Playwright suite still relies on keypress smoke assertions and should migrate toward explicit state assertions.
+
+This revision keeps the original intent, restores missing execution detail in tasks, and treats most capabilities as **to be implemented unless explicitly proven complete**.
+
 Establish a layered, deterministic testing strategy for the bruff roguelike so the always-in-motion HTML5 canvas stops being a source of test flake. Pixel diffs across browsers, viewports, GPUs, and animation phases are unworkable as a primary signal; we replace them with state-based assertions over a controlled simulation, keep visual checks for the small number of regions that are genuinely static, and codify how the three test levels (unit, property-based, replay) relate to the existing Playwright E2E suite.
 
 ## User-visible behaviour
