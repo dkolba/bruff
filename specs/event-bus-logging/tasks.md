@@ -1,19 +1,29 @@
 # Event Bus Logging — Tasks
 
-- [ ] T1 — Add `LogLevel` type in `packages/utils/module/event-bus/log-level.ts`.
-- [ ] T2 — Add `LogEvent` type in `packages/utils/module/event-bus/log-event.ts`.
-- [ ] T3 — Add `isLogCustomEvent` type guard in `packages/utils/module/event-bus/is-log-custom-event.ts`.
-- [ ] T4 — Add unit tests for `isLogCustomEvent` covering match, wrong-name, non-CustomEvent, and malformed-detail cases in `packages/utils/module/event-bus/is-log-custom-event.test.ts`.
-- [ ] T5 — Implement `log` and `onLog` (with private singleton `EventTarget`) in `packages/utils/module/event-bus/event-bus.ts`.
-- [ ] T6 — Add unit tests for `event-bus`: emit-with-no-listeners, single subscriber receives event, unsubscribe stops delivery, multiple subscribers receive in registration order, double-unsubscribe is idempotent — in `packages/utils/module/event-bus/event-bus.test.ts`.
-- [ ] T7 — Implement `consoleLogHandler` in `packages/utils/module/event-bus/console-log-handler.ts` (switch on `LogLevel` → `console.{debug,info,warn,error}`; include `source` / `context` only when present).
-- [ ] T8 — Add unit tests for `consoleLogHandler` covering each `LogLevel`, with-and-without `source`, with-and-without `context` in `packages/utils/module/event-bus/console-log-handler.test.ts`.
-- [ ] T9 — Re-export `log`, `onLog`, `consoleLogHandler`, and the `LogLevel` / `LogEvent` types from `packages/utils/index.ts`.
-- [ ] T10 — Update `packages/utils/README.md` with an "Event bus" section documenting `log`, `onLog`, `consoleLogHandler`, `LogLevel`, `LogEvent`.
-- [ ] T11 — Add `@bruff/utils` workspace dependency to `packages/game-element/package.json`.
-- [ ] T12 — Add `#unsubscribe` field plus `onLog(consoleLogHandler)` subscription in `connectedCallback` in `packages/game-element/module/game-element.ts`, preserving the existing shadow-root idempotency guard.
-- [ ] T13 — Add `disconnectedCallback` to `GameElement` that calls and clears `#unsubscribe`.
-- [ ] T14 — Add unit tests in `packages/game-element/module/game-element.test.ts` covering: connect → log() → console method invoked at correct level; disconnect → log() → no longer reaches that instance; reconnect after disconnect re-subscribes; `disconnectedCallback` called without prior connect is a no-op.
-- [ ] T15 — Update `packages/game-element/README.md` with a "Console log forwarding" section noting that `GameElement` subscribes to `@bruff/utils`'s log bus while connected.
-- [ ] T16 — Run `pnpm run ok` (or per-package `format` / `lint` / `test` / `typecheck` / `build`) for `@bruff/utils` and `@bruff/game-element`; confirm 100% coverage thresholds still pass.
-- [ ] T17 — Review phase: walk `spec.md`'s "User-visible behaviour" / "Edge cases" lists and append a `## Verification` section to `spec.md` mapping each bullet to the test that proves it.
+- [x] T1 — Add `LogLevel` type in `packages/utils/module/event-bus/log-level.ts`.
+- [x] T2 — Add `LogEvent` type in `packages/utils/module/event-bus/log-event.ts`.
+- [x] T3 — Add `isLogCustomEvent` type guard in `packages/utils/module/event-bus/is-log-custom-event.ts`.
+- [x] T4 — Add unit tests for `isLogCustomEvent` covering match, wrong-name, non-CustomEvent, and malformed-detail cases in `packages/utils/module/event-bus/is-log-custom-event.test.ts`.
+- [x] T5 — Implement `log` and `onLog` (with private singleton `EventTarget`) in `packages/utils/module/event-bus/event-bus.ts`.
+- [x] T6 — Add unit tests for `event-bus`: emit-with-no-listeners, single subscriber receives event, unsubscribe stops delivery, multiple subscribers receive in registration order, double-unsubscribe is idempotent — in `packages/utils/module/event-bus/event-bus.test.ts`.
+- [x] T7 — Implement `consoleLogHandler` in `packages/utils/module/event-bus/console-log-handler.ts` (switch on `LogLevel` → `console.{debug,info,warn,error}`; include `source` / `context` only when present).
+- [x] T8 — Add unit tests for `consoleLogHandler` covering each `LogLevel`, with-and-without `source`, with-and-without `context` in `packages/utils/module/event-bus/console-log-handler.test.ts`.
+- [x] T9 — Re-export `log`, `onLog`, `consoleLogHandler`, and the `LogLevel` / `LogEvent` types from `packages/utils/index.ts`.
+- [x] T10 — Update `packages/utils/README.md` with an "Event bus" section documenting `log`, `onLog`, `consoleLogHandler`, `LogLevel`, `LogEvent`.
+- [x] T11 — Add `@bruff/utils` workspace dependency to `packages/game-element/package.json`.
+- [x] T12 — Add `#unsubscribe` field plus `onLog(consoleLogHandler)` subscription in `connectedCallback` in `packages/game-element/module/game-element.ts`, preserving the existing shadow-root idempotency guard.
+- [x] T13 — Add `disconnectedCallback` to `GameElement` that calls and clears `#unsubscribe`.
+- [x] T14 — Add unit tests in `packages/game-element/module/game-element.test.ts` covering: connect → log() → console method invoked at correct level; disconnect → log() → no longer reaches that instance; reconnect after disconnect re-subscribes; `disconnectedCallback` called without prior connect is a no-op.
+- [x] T15 — Update `packages/game-element/README.md` with a "Console log forwarding" section noting that `GameElement` subscribes to `@bruff/utils`'s log bus while connected.
+- [x] T16 — Run `pnpm run ok` (or per-package `format` / `lint` / `test` / `typecheck` / `build`) for `@bruff/utils` and `@bruff/game-element`; confirm 100% coverage thresholds still pass.
+- [x] T17 — Review phase: walk `spec.md`'s "User-visible behaviour" / "Edge cases" lists and append a `## Verification` section to `spec.md` mapping each bullet to the test that proves it.
+- [x] T18 — Update `specs/event-bus-logging/spec.md`, `specs/event-bus-logging/design.md`, `specs/event-bus-logging/tasks.md`, and `specs/event-bus-logging/acceptance.md` to include the `GameElement` subscription requirement and the direct-console migration scope for `packages/game/lib/effects/entry.ts`, `packages/game/lib/effects/loop.ts`, and `packages/utils/module/canvas/canvas-resize-listener.ts`.
+- [x] T19 — Add tests proving `packages/utils/module/canvas/canvas-resize-listener.ts` emits resize events through `log()` instead of calling `console.info`.
+- [x] T20 — Add tests proving `packages/game/lib/effects/entry.ts` and `packages/game/lib/effects/loop.ts` emit registration, setup failure, and touch input messages through `log()`.
+- [x] T21 — Replace direct `console.*` calls with `log()` in `packages/game/lib/effects/entry.ts`, `packages/game/lib/effects/loop.ts`, and `packages/utils/module/canvas/canvas-resize-listener.ts`.
+- [x] T22 — Run the affected `@bruff/utils`, `@bruff/game`, and `@bruff/game-element` format, lint, test, typecheck, and build gates.
+- [x] T23 — Review phase: update `specs/event-bus-logging/spec.md` verification notes after the console migration tests pass.
+- [x] T24 — Audit `AGENTS.md`, `packages/*/AGENTS.override.md`, and `.agents/skills/*/SKILL.md` for stale logging, console, shell, and layer guidance.
+- [x] T25 — Update `AGENTS.md`, `packages/game/AGENTS.override.md`, `packages/utils/AGENTS.override.md`, and `packages/game-element/AGENTS.override.md` with the event-bus logging boundary.
+- [x] T26 — Update `.agents/skills/verify-layers/SKILL.md` and `.agents/skills/roguelike-feature/SKILL.md` so future game work routes shell diagnostics through `log()`.
+- [x] T27 — Review phase: update `specs/event-bus-logging/spec.md` and `specs/event-bus-logging/design.md` to record the contributor-guidance audit.

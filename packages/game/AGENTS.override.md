@@ -9,25 +9,27 @@ This package contains the core game logic. The rules below apply to every file u
 
 Code must live in the correct layer. Dependencies flow strictly inward — later layers may depend on earlier ones but inner layers must never import outer layers, and no circular dependencies are allowed.
 
-| Layer   | Location                     | May import from   |
-| ------- | ---------------------------- | ----------------- |
-| Core    | `packages/game/lib/core/`    | Nothing           |
-| State   | `packages/game/lib/state/`   | `core/` only      |
-| Input   | `packages/game/lib/input/`   | `core/`, `state/` |
-| Render  | `packages/game/lib/render/`  | `core/`, `state/` |
-| Effects | `packages/game/lib/effects/` | `core/`, `state/` |
+`@bruff/utils` imports are allowed where they provide shared pure helpers or shell services. The `log()` event-bus helper is shell-only: use it from `effects/` or the entry point, never from `core/`, `state/`, `input/`, or `render/`.
+
+| Layer   | Location                     | May import from                                    |
+| ------- | ---------------------------- | -------------------------------------------------- |
+| Core    | `packages/game/lib/core/`    | Nothing except shared `@bruff/utils` types/helpers |
+| State   | `packages/game/lib/state/`   | `core/`, shared `@bruff/utils` helpers             |
+| Input   | `packages/game/lib/input/`   | `core/`, `state/`, shared `@bruff/utils` helpers   |
+| Render  | `packages/game/lib/render/`  | `core/`, `state/`, shared `@bruff/utils` helpers   |
+| Effects | `packages/game/lib/effects/` | Shell wiring over inner layers and `@bruff/utils`  |
 
 ### Dependency Rules
 
 - **A-1 (MUST)** `core/` must have zero imports.
 - **A-2 (MUST)** No circular dependencies.
-- **A-3 (MUST)** Side effects (Canvas, DOM, I/O) live only in `effects/`.
+- **A-3 (MUST)** Side effects (Canvas, DOM, I/O, logging emission) live only in `effects/` or the entry point.
 - **A-4 (MUST)** Dependencies flow inward toward `core/` only.
 
 ## Pure Core / Impure Shell
 
 - **A-5 (MUST)** All game logic (`core/`, `state/`, `input/`, `render/`) is pure: no DOM access, no `fetch`, no `Math.random()`, no `Date.now()`.
-- **A-6 (MUST)** All side effects (Canvas draws, event listeners, timers) live in `effects/` or the entry point only.
+- **A-6 (MUST)** All side effects (Canvas draws, event listeners, timers, logging emission) live in `effects/` or the entry point only. Emit production logs through `log()` from `@bruff/utils`; do not call `console.*` directly in `packages/game`.
 
 ## State & Immutability
 

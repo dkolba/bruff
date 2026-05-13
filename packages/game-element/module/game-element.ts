@@ -1,33 +1,43 @@
+import { consoleLogHandler, onLog } from "@bruff/utils";
+
+const createStencil = (templateMarkup: string): DocumentFragment => {
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = templateMarkup;
+  const template = wrapper.querySelector("template");
+  if (!(template instanceof HTMLTemplateElement)) {
+    throw new TypeError("Template element not found");
+  }
+  const stencil = template.content.cloneNode(true);
+  if (!(stencil instanceof DocumentFragment)) {
+    throw new TypeError("Failed to clone template");
+  }
+  return stencil;
+};
+
 /**
  * A class to represent a game web component
  */
 // eslint-disable-next-line wc/define-tag-after-class-definition
 export class GameElement extends HTMLElement {
-  /**
-   * Lifecycle callback when the element is added to the document's DOM.
-   * Creates and initializes the shadow DOM if it doesn't exist.
-   */
+  #unsubscribe: (() => void) | undefined;
+
   connectedCallback(): void {
     if (!this.shadowRoot) {
-      const wrapper = document.createElement("div");
-      wrapper.innerHTML = GameElement.template();
-      const template = wrapper.querySelector("template");
-      if (!(template instanceof HTMLTemplateElement)) {
-        throw new TypeError("Template element not found");
-      }
-      const stencil = template.content.cloneNode(true);
-      if (!(stencil instanceof DocumentFragment)) {
-        throw new TypeError("Failed to clone template");
-      }
-      this.attachShadow({ mode: "open" }).append(stencil);
+      this.attachShadow({ mode: "open" }).append(
+        createStencil(GameElement.template()),
+      );
+    }
+
+    if (this.#unsubscribe === undefined) {
+      this.#unsubscribe = onLog(consoleLogHandler);
     }
   }
 
-  /**
-   * Generates an HTML template string for the game component.
-   *
-   * @returns The template string
-   */
+  disconnectedCallback(): void {
+    this.#unsubscribe?.();
+    this.#unsubscribe = undefined;
+  }
+
   static template(): string {
     const width = window.innerWidth;
     const height = window.innerHeight;

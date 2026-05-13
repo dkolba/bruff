@@ -142,6 +142,10 @@ importers:
         version: 4.1.4(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.0.10)
 
   packages/game-element:
+    dependencies:
+      '@bruff/utils':
+        specifier: workspace:0.0.0
+        version: link:../utils
     devDependencies:
       '@bruff/eslint-config':
         specifier: workspace:0.0.0

@@ -89,3 +89,13 @@ pnpm run test                    # Chromium, Firefox, WebKit with coverage
 pnpm run test:chromium           # Single browser
 pnpm run test:watch              # Watch mode
 ```
+
+## Event bus
+
+`@bruff/utils` provides a process-local log event bus:
+
+- `log(event)` emits a log event with `level`, `message`, and optional `source`/`context`.
+- `onLog(handler)` subscribes to log events and returns an unsubscribe function.
+- `consoleLogHandler(event)` forwards a log event to the matching `console` method.
+- `LogLevel` is one of `"debug" | "info" | "warn" | "error"`.
+- `LogEvent` is the readonly payload type emitted and consumed by the log bus.

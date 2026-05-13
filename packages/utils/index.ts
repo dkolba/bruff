@@ -1,3 +1,7 @@
+export { consoleLogHandler } from "./module/event-bus/console-log-handler.js";
+export { log, onLog } from "./module/event-bus/event-bus.js";
+export type { LogEvent } from "./module/event-bus/log-event.js";
+export type { LogLevel } from "./module/event-bus/log-level.js";
 export { canvasResizeListener } from "./module/canvas/canvas-resize-listener.js";
 export { createCanvasResizeObserver } from "./module/canvas/create-canvas-resize-observer.js";
 export { getCanvas } from "./module/canvas/get-canvas.js";

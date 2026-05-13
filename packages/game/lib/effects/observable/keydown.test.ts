@@ -17,4 +17,14 @@ describe("createKeyDownObservable", () => {
 
     expect(next).toHaveBeenCalledWith({ type: "move-up" });
   });
+
+  it("ignores non-keyboard keydown events", () => {
+    const keyDown$ = createKeyDownObservable();
+    const next = vi.fn();
+    keyDown$.subscribe(next);
+
+    document.dispatchEvent(new Event("keydown"));
+
+    expect(next).not.toHaveBeenCalled();
+  });
 });

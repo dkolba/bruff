@@ -79,3 +79,7 @@ pnpm run test:watch  # Watch mode
 ```
 
 Coverage thresholds are set at **100%** for branches, functions, lines, and statements.
+
+## Console log forwarding
+
+`GameElement` subscribes to `@bruff/utils` log events while connected. It forwards each event to the matching browser `console` method and unsubscribes in `disconnectedCallback`.
