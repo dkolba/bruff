@@ -1,0 +1,88 @@
+import type * as Utilities from "@bruff/utils";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { error, log, ok } from "@bruff/utils";
+import createTouchObservable from "./observable/touch.js";
+import curtainUp from "./curtain-up.js";
+import type { InputAction } from "../core/actions.ts";
+import loop from "./loop.js";
+import type { Observable } from "observable-polyfill/fn";
+
+vi.mock("@bruff/utils", async (importOriginal) => {
+  const original = await importOriginal<typeof Utilities>();
+  return {
+    ...original,
+    log: vi.fn(),
+    radiatingBarsBackgroundAnimation: vi.fn(),
+  };
+});
+
+vi.mock("./curtain-up.js", () => ({
+  default: vi.fn(),
+}));
+
+vi.mock("./observable/touch.js", () => ({
+  default: vi.fn(),
+}));
+
+vi.mock("./render.js", () => ({
+  default: vi.fn(),
+}));
+
+const createActionObservable = (eventName: string): Observable<InputAction> =>
+  document.when(eventName).map((): InputAction => ({ type: "move-up" }));
+
+const createPreparedCanvas = (): {
+  canvas: HTMLCanvasElement;
+  context: CanvasRenderingContext2D;
+} => {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  if (context === null) {
+    throw new TypeError("Could not create canvas context");
+  }
+  return { canvas, context };
+};
+
+beforeEach(() => {
+  vi.stubGlobal("requestAnimationFrame", vi.fn());
+});
+
+afterEach(() => {
+  vi.clearAllMocks();
+  vi.unstubAllGlobals();
+});
+
+describe("loop logging", () => {
+  it("emits setup failures through the event bus", () => {
+    vi.mocked(curtainUp).mockReturnValue(error("canvas-not-found"));
+
+    loop();
+
+    expect(log).toHaveBeenCalledWith({
+      context: { error: "canvas-not-found" },
+      level: "error",
+      message: "setup failed",
+      source: "@bruff/game/effects/loop",
+    });
+  });
+
+  it("emits touch input through the event bus", () => {
+    const { canvas, context } = createPreparedCanvas();
+    vi.mocked(curtainUp).mockReturnValue(
+      ok({ canvas, context, removeCanvasResizeListener: vi.fn() }),
+    );
+    vi.mocked(createTouchObservable).mockReturnValue(
+      createActionObservable("bruff-test-touch-action"),
+    );
+
+    loop();
+    document.dispatchEvent(new Event("bruff-test-touch-action"));
+
+    expect(log).toHaveBeenCalledWith({
+      context: { actionType: "move-up" },
+      level: "info",
+      message: "touch",
+      source: "@bruff/game/effects/loop",
+    });
+  });
+});
