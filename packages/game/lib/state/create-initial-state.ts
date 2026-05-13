@@ -10,6 +10,7 @@ import type { GameState } from "../core/types.ts";
 
 const INITIAL_SEED = 1;
 const STATE_VERSION = 1;
+const INITIAL_FRAME_INDEX = 0;
 
 const drawId = <Tag extends string>(
   prng: PrngState,
@@ -29,6 +30,7 @@ const drawId = <Tag extends string>(
  * @param canvas - Object containing the canvas dimensions
  * @returns The initial game state
  */
+// eslint-disable-next-line max-lines-per-function -- initial state construction is kept inline for deterministic readability.
 const createInitialState = (canvas: {
   height: number;
   width: number;
@@ -66,6 +68,7 @@ const createInitialState = (canvas: {
         yPos: 300,
       },
     ],
+    frameIndex: INITIAL_FRAME_INDEX,
     input: [],
     player: {
       id: player.id,
@@ -75,6 +78,7 @@ const createInitialState = (canvas: {
     },
     playerMoved: false,
     prng: enemy2.prng, // !TODO: use dedicated prng
+    seed: INITIAL_SEED,
     stateVersion: STATE_VERSION,
   };
 };

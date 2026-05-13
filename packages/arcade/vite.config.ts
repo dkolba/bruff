@@ -11,6 +11,7 @@ export default defineConfig({
   build: { sourcemap: true },
   define: {
     __APP_VERSION__: JSON.stringify(version),
+    __BRUFF_TEST_MODE__: JSON.stringify(process.env.VITE_TEST_MODE === "1"),
   },
   plugins: [
     istanbulPlugin({

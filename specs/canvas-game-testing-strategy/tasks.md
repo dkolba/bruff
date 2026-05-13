@@ -4,24 +4,24 @@ Each task is independently executable: it must compile, lint, and pass tests on 
 
 ## Layer 1 — Test-mode flag
 
-- [ ] T1 — Add `__BRUFF_TEST_MODE__` declaration to `packages/game/types/global.d.ts` (create if missing).
-- [ ] T2 — Add `define: { __BRUFF_TEST_MODE__: ... }` replacement to `packages/arcade/vite.config.ts`.
-- [ ] T3 — Implement `isTestMode()` in `packages/game/lib/effects/test-mode.ts`.
-- [ ] T4 — Add unit tests for `isTestMode` in `packages/game/lib/effects/test-mode.test.ts`.
+- [x] T1 — Add `__BRUFF_TEST_MODE__` declaration to `packages/game/types/global.d.ts` (create if missing).
+- [x] T2 — Add `define: { __BRUFF_TEST_MODE__: ... }` replacement to `packages/arcade/vite.config.ts`.
+- [x] T3 — Implement `isTestMode()` in `packages/game/lib/effects/test-mode.ts`.
+- [x] T4 — Add unit tests for `isTestMode` in `packages/game/lib/effects/test-mode.test.ts`.
 
 ## Layer 2 — Time and stepping control
 
-- [ ] T5 — Add a `Clock` ADT and `readClock` in `packages/game/lib/effects/clock.ts`.
-- [ ] T6 — Add unit tests for `Clock` in `packages/game/lib/effects/clock.test.ts`.
-- [ ] T7 — Refactor `packages/game/lib/effects/loop.ts` to read time through the clock abstraction.
-- [ ] T8 — Ensure background animation receives clock-derived time, not raw RAF callback time.
+- [x] T5 — Add a `Clock` ADT and `readClock` in `packages/game/lib/effects/clock.ts`.
+- [x] T6 — Add unit tests for `Clock` in `packages/game/lib/effects/clock.test.ts`.
+- [x] T7 — Refactor `packages/game/lib/effects/loop.ts` to read time through the clock abstraction.
+- [x] T8 — Ensure background animation receives clock-derived time, not raw RAF callback time.
 
 ## Layer 3 — State shape for replay stability
 
-- [ ] T9 — Confirm `GameState` includes stable replay fields (`stateVersion`, deterministic seed/PRNG state, monotonic frame index).
-- [ ] T10 — Add missing fields (if absent) in `packages/game/lib/core/types.ts` and `packages/game/lib/state/create-initial-state.ts`.
-- [ ] T11 — Add/update tests in `packages/game/lib/state/create-initial-state.test.ts` for all replay-critical fields.
-- [ ] T12 — Ensure frame index increments exactly once per logical tick in `packages/game/lib/effects/loop.ts`.
+- [x] T9 — Confirm `GameState` includes stable replay fields (`stateVersion`, deterministic seed/PRNG state, monotonic frame index).
+- [x] T10 — Add missing fields (if absent) in `packages/game/lib/core/types.ts` and `packages/game/lib/state/create-initial-state.ts`.
+- [x] T11 — Add/update tests in `packages/game/lib/state/create-initial-state.test.ts` for all replay-critical fields.
+- [x] T12 — Ensure frame index increments exactly once per logical tick in `packages/game/lib/effects/loop.ts`.
 - [ ] T13 — Add loop tests proving monotonic `frameIndex` growth over multiple ticks.
 
 ## Layer 4 — Render stats and snapshot freeze points

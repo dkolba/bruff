@@ -14,9 +14,11 @@ describe("createInitialState", () => {
         { size: ENEMY_SIZE, spawnOrder: 1, xPos: 300, yPos: 100 },
         { size: ENEMY_SIZE, spawnOrder: 2, xPos: 100, yPos: 300 },
       ],
+      frameIndex: 0,
       input: [],
       player: { size: PLAYER_SIZE, xPos: 200, yPos: 200 },
       playerMoved: false,
+      seed: 1,
       stateVersion: 1,
     });
     expect(typeof state.player.id).toBe("string");
