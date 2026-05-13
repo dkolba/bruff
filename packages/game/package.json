@@ -5,10 +5,10 @@
   "files": [
     "dist"
   ],
-  "main": "./lib/bruff-game.ts",
+  "main": "./lib/effects/entry.ts",
   "exports": {
     "types": "./dist/bruff-game.d.ts",
-    "import": "./lib/bruff-game.ts"
+    "import": "./lib/effects/entry.ts"
   },
   "scripts": {
     "build": "pnpm run typecheck && pnpm run build:lib",
@@ -27,6 +27,7 @@
     "@bruff/eslint-config": "workspace:0.0.0",
     "@bruff/game-element": "workspace:0.0.0",
     "@bruff/utils": "workspace:0.0.0",
+    "@fast-check/vitest": "0.4.1",
     "@vitest/browser": "4.1.4",
     "@vitest/browser-playwright": "4.1.4",
     "@vitest/coverage-v8": "4.1.4",

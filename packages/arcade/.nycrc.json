@@ -6,7 +6,7 @@
   "report-dir": "arcade/coverage",
   "extension": [".ts"],
   "include": ["game/lib/**/*.ts", "arcade/app.ts"],
-  "exclude": ["game/lib/observable/touch.ts"],
+  "exclude": ["game/lib/effects/observable/touch.ts"],
   "branches": 80,
   "lines": 80,
   "functions": 80,

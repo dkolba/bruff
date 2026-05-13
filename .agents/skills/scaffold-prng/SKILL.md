@@ -97,31 +97,28 @@ return [{ id /* … */ }, { ...state, prng: nextPrng }];
 ## Property-Based Tests (required)
 
 ```ts
-import * as fc from "fast-check";
-import { it, expect } from "vitest";
+import { test, fc } from "@fast-check/vitest";
+import { expect } from "vitest";
 import { seedPrng, nextPrng } from "@bruff/utils";
 
-it("produces identical sequences for the same seed", () => {
-  fc.assert(
-    fc.property(fc.integer(), (seed) => {
-      const run = (s: number) => {
-        const [v1, p1] = nextPrng(seedPrng(s));
-        const [v2] = nextPrng(p1);
-        return [v1, v2];
-      };
-      expect(run(seed)).toStrictEqual(run(seed));
-    }),
-  );
-});
+test.prop([fc.integer()])(
+  "produces identical sequences for the same seed",
+  (seed) => {
+    const run = (s: number) => {
+      const [v1, p1] = nextPrng(seedPrng(s));
+      const [v2] = nextPrng(p1);
+      return [v1, v2];
+    };
 
-it("produces values in [0, 1)", () => {
-  fc.assert(
-    fc.property(fc.integer(), (seed) => {
-      const [v] = nextPrng(seedPrng(seed));
-      expect(v).toBeGreaterThanOrEqual(0);
-      expect(v).toBeLessThan(1);
-    }),
-  );
+    expect(run(seed)).toStrictEqual(run(seed));
+  },
+);
+
+test.prop([fc.integer()])("produces values in [0, 1)", (seed) => {
+  const [v] = nextPrng(seedPrng(seed));
+
+  expect(v).toBeGreaterThanOrEqual(0);
+  expect(v).toBeLessThan(1);
 });
 ```
 

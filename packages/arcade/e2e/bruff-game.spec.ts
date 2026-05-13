@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }: { page: Page }) => {
   await page.goto("/");
 });
 
-const runbruffGameTests = () => {
+const runbruffGameTests = (): void => {
   test("should find custom game element", async ({ page }) => {
     const customElementCountdown = page.locator("bruff-game").first();
 

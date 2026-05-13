@@ -15,10 +15,12 @@ state/      — imports core/ only
 input/      — imports core/ + state/ only
 render/     — imports core/ + state/ only
 assets/     — imports core/ + state/ only
-effects/    — imports core/ + state/ only
+effects/    — shell wiring over core/state/input/render plus allowed workspace utilities
 ```
 
 No circular dependencies. No upward dependencies (e.g. `core/` must never import from `state/`).
+
+`@bruff/utils` imports are allowed from any layer for shared pure helpers and types. `log()` from `@bruff/utils` is shell-only: it may be imported by `effects/` or the entry point, but not by `core/`, `state/`, `input/`, or `render/`. Production code should not call `console.*` directly; console forwarding is handled by the logging event bus sink.
 
 ## How to Run
 
@@ -48,6 +50,8 @@ For each violation found, report:
 
 - [ ] No file in `core/` imports from any project path
 - [ ] No file in `state/` imports from `input/`, `render/`, `assets/`, or `effects/`
+- [ ] No file in `core/`, `state/`, `input/`, or `render/` imports `log` from `@bruff/utils`
+- [ ] No production file calls `console.*` outside the event-bus console sink
 - [ ] No circular imports anywhere
 - [ ] All `@bruff/utils` imports are allowed from any layer
 - [ ] All external package imports are only in the shell (`effects/`, entry point)

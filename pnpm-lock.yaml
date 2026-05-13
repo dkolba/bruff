@@ -95,6 +95,9 @@ importers:
       '@bruff/utils':
         specifier: workspace:0.0.0
         version: link:../utils
+      '@fast-check/vitest':
+        specifier: 0.4.1
+        version: 0.4.1(vitest@4.1.4)
       '@vitest/browser':
         specifier: 4.1.4
         version: 4.1.4(vite@8.0.10)(vitest@4.1.4)
@@ -139,6 +142,10 @@ importers:
         version: 4.1.4(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.0.10)
 
   packages/game-element:
+    dependencies:
+      '@bruff/utils':
+        specifier: workspace:0.0.0
+        version: link:../utils
     devDependencies:
       '@bruff/eslint-config':
         specifier: workspace:0.0.0
@@ -399,6 +406,11 @@ packages:
   '@eslint/plugin-kit@0.7.1':
     resolution: {integrity: sha512-rZAP3aVgB9ds9KOeUSL+zZ21hPmo8dh6fnIFwRQj5EAZl9gzR7wxYbYXYysAM8CTqGmUGyp2S4kUdV17MnGuWQ==, tarball: https://registry.npmjs.org/@eslint/plugin-kit/-/plugin-kit-0.7.1.tgz}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@fast-check/vitest@0.4.1':
+    resolution: {integrity: sha512-OX6TecB+ZzRfPc49jcPChcV1cf5aDu77CdDU8liecWVam7eD7mPvJNP50b9bBSTxVoGN5wzxrX9PIcCnqgC8bg==, tarball: https://registry.npmjs.org/@fast-check/vitest/-/vitest-0.4.1.tgz}
+    peerDependencies:
+      vitest: ^4.1.0
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==, tarball: https://registry.npmjs.org/@humanfs/core/-/core-0.19.2.tgz}
@@ -1201,6 +1213,10 @@ packages:
   extendable-error@0.1.7:
     resolution: {integrity: sha512-UOiS2in6/Q0FK0R0q6UY9vYpQ21mr/Qn1KOnte7vsACuNJf514WvCCUHSRCPcgjPT2bAhNIJdlE6bVap1GKmeg==, tarball: https://registry.npmjs.org/extendable-error/-/extendable-error-0.1.7.tgz}
 
+  fast-check@4.7.0:
+    resolution: {integrity: sha512-NsZRtqvSSoCP0HbNjUD+r1JH8zqZalyp6gLY9e7OYs7NK9b6AHOs2baBFeBG7bVNsuoukh89x2Yg3rPsul8ziQ==, tarball: https://registry.npmjs.org/fast-check/-/fast-check-4.7.0.tgz}
+    engines: {node: '>=12.17.0'}
+
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==, tarball: https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz}
 
@@ -1861,6 +1877,9 @@ packages:
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==, tarball: https://registry.npmjs.org/punycode/-/punycode-2.3.1.tgz}
     engines: {node: '>=6'}
+
+  pure-rand@8.4.0:
+    resolution: {integrity: sha512-IoM8YF/jY0hiugFo/wOWqfmarlE6J0wc6fDK1PhftMk7MGhVZl88sZimmqBBFomLOCSmcCCpsfj7wXASCpvK9A==, tarball: https://registry.npmjs.org/pure-rand/-/pure-rand-8.4.0.tgz}
 
   quansync@0.2.11:
     resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==, tarball: https://registry.npmjs.org/quansync/-/quansync-0.2.11.tgz}
@@ -2613,6 +2632,11 @@ snapshots:
     dependencies:
       '@eslint/core': 1.2.1
       levn: 0.4.1
+
+  '@fast-check/vitest@0.4.1(vitest@4.1.4)':
+    dependencies:
+      fast-check: 4.7.0
+      vitest: 4.1.4(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.0.10)
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -3485,6 +3509,10 @@ snapshots:
 
   extendable-error@0.1.7: {}
 
+  fast-check@4.7.0:
+    dependencies:
+      pure-rand: 8.4.0
+
   fast-deep-equal@3.1.3: {}
 
   fast-glob@3.3.3:
@@ -4089,6 +4117,8 @@ snapshots:
       fromentries: 1.3.2
 
   punycode@2.3.1: {}
+
+  pure-rand@8.4.0: {}
 
   quansync@0.2.11: {}
 
