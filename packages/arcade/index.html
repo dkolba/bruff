@@ -21,11 +21,25 @@
         right: 50px;
         font-size: 0.625rem;
       }
+      #bruff-hud {
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        padding: 4px 8px;
+        color: CanvasText;
+        background: Canvas;
+        border: 1px solid CanvasText;
+        font:
+          600 0.75rem system-ui,
+          sans-serif;
+        z-index: 1;
+      }
     </style>
   </head>
   <body>
     <main>
       <h1 aria-label="bruff Game"></h1>
+      <div id="bruff-hud" aria-label="bruff status">bruff</div>
       <bruff-game></bruff-game>
     </main>
     <script type="module" src="/app.ts"></script>

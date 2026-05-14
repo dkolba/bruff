@@ -57,7 +57,7 @@ describe("render", () => {
   it("should render the player and enemies", () => {
     const { mockContext, state } = setupRenderTest();
 
-    render(state, mockContext);
+    const stats = render(state, mockContext);
 
     // Player rendering
     expect(mockContext.fillRect).toHaveBeenCalledWith(
@@ -80,5 +80,10 @@ describe("render", () => {
     // Check fillStyle changes
     const fillStyleCalls = vi.mocked(mockContext.fillRect).mock.calls.length;
     expect(fillStyleCalls).toBe(THREE); // 1 for player, 2 for enemies
+    expect(stats).toStrictEqual({
+      enemiesDrawn: state.enemies.length,
+      frameIndex: state.frameIndex,
+      playerDrawn: true,
+    });
   });
 });

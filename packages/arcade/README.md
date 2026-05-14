@@ -20,6 +20,15 @@ pnpm run test:e2e   # Run Playwright E2E tests only
 
 Tests run headless across Chromium, Firefox, and WebKit on desktop, plus Pixel 5 (Chrome) and iPhone 12 (Safari) mobile viewports. Each test run collects Istanbul coverage from the browser and writes it to `.nyc_output/`.
 
+The suite is split by responsibility:
+
+- `state-assertions.spec.ts` drives `window.__bruffTestApi` and asserts on `GameState`.
+- `accessibility.spec.ts` runs axe checks in dark and light schemes.
+- `hud-visual.spec.ts` captures the static DOM HUD region.
+- `replay-checkpoint.spec.ts` loads a replay fixture, freezes the canvas, and captures one stable screenshot.
+
+Use `?test=1` to opt into deterministic browser control. Playwright also starts Vite with `VITE_TEST_MODE=1`, which enables the build-time test-mode gate. Outside that mode, the browser test API is not exposed.
+
 Coverage thresholds (branches, lines, functions, statements) are set at 80% and enforced via `.nycrc.json`.
 
 ## Building
@@ -28,7 +37,7 @@ Coverage thresholds (branches, lines, functions, statements) are set at 80% and 
 pnpm run build:site   # Production build to site/
 ```
 
-Source maps are enabled in the production build. The Vite build instruments the game library and app entry point with Istanbul for coverage collection.
+Source maps are enabled in the production build. The production build also runs `check:bundle-clean`, which fails if emitted assets contain `__bruffTestApi`.
 
 ## Workspace dependencies
 

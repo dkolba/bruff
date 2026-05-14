@@ -25,6 +25,12 @@ describe("clock", () => {
     expect(readClock(clock)).toBe(MANUAL_CLOCK_END);
   });
 
+  it("leaves wall clock values unchanged when advancing", (): void => {
+    const clock = wallClock();
+
+    expect(advanceManualClock(clock, MANUAL_CLOCK_DELTA)).toStrictEqual(clock);
+  });
+
   it("reads from performance for wall clock", (): void => {
     const nowSpy = vi.spyOn(performance, "now").mockReturnValue(WALL_CLOCK_NOW);
 

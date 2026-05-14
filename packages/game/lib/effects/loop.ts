@@ -1,84 +1,23 @@
-/* eslint-disable sort-imports -- session override requested by user */
+/* eslint-disable sort-imports -- Imports are grouped by runtime boundary. */
 import { apply, isSupported, type Observable } from "observable-polyfill/fn";
-import type { GameAction, InputAction } from "../core/actions.ts";
-import { log, radiatingBarsBackgroundAnimation } from "@bruff/utils";
-import type { GameState } from "../core/types.ts";
-import { updateEnemies } from "../state/update-enemies.js";
-import * as clock from "./clock.js";
+import type { InputAction } from "../core/actions.ts";
+import { log } from "@bruff/utils";
+import {
+  createManualFrameStepDriver,
+  createWallClockFrameStepDriver,
+  type FrameStepDriver,
+} from "./frame-step-driver.js";
 import createInitialState from "../state/create-initial-state.js";
 import createKeyDownObservable from "./observable/keydown.js";
 import createTouchObservable from "./observable/touch.js";
 import curtainUp from "./curtain-up.js";
-import render from "./render.js";
-import updatePlayer from "../state/update-player.js";
-type GameStateGenerator = Generator<
-  GameState,
-  GameState,
-  InputAction | undefined
->;
+import isTestMode from "./test-mode.js";
 
 if (!isSupported()) {
   apply();
 }
 
-/**
- * Curries {@link radiatingBarsBackgroundAnimation} over a fixed canvas context.
- *
- * @param context - The 2D rendering context to draw on
- * @returns A function that accepts a timestamp and renders one animation frame
- */
-const curriedRadiatingBarsBackgroundAnimation =
-  (context: CanvasRenderingContext2D) =>
-  (time: number): void =>
-    radiatingBarsBackgroundAnimation(context, time);
-
-/**
- * Folds an ordered list of {@link GameAction}s through both reducers,
- * starting from `state`. Per A-18 input actions precede the
- * tick action assembled in {@link createGameLoop}.
- */
-const foldActions = (
-  state: GameState,
-  actions: ReadonlyArray<GameAction>,
-): GameState =>
-  actions.reduce<GameState>(
-    (currentState, action) =>
-      updateEnemies(updatePlayer(currentState, action), action),
-    state,
-  );
-
-/**
- * Generator that drives the main game loop. Yields the current
- * state and resumes when the shell feeds in an {@link InputAction}
- * (or `undefined` for the bootstrap step). Each step appends the
- * received input to the queue, folds the queue plus a synthesized
- * `tick` through both reducers, and starts the next step with an
- * empty queue.
- *
- * @param initialState - The starting game state
- */
-const FRAME_INDEX_INCREMENT = 1;
-
-const createGameLoop = function* (initialState: GameState): GameStateGenerator {
-  let state = initialState;
-
-  while (true) {
-    const receivedInput = yield state;
-    const queuedInputs: ReadonlyArray<InputAction> =
-      receivedInput === undefined
-        ? state.input
-        : [...state.input, receivedInput];
-    const actions: ReadonlyArray<GameAction> = [
-      ...queuedInputs,
-      { type: "tick" },
-    ];
-    const nextState = foldActions({ ...state, input: [] }, actions);
-    state = {
-      ...nextState,
-      frameIndex: state.frameIndex + FRAME_INDEX_INCREMENT,
-    };
-  }
-};
+const ONE_FRAME = 1;
 
 const createGameObservables = (): {
   keyObservable$: Observable<InputAction>;
@@ -109,48 +48,76 @@ const subscribeToGameObservables = (
   });
 };
 
-const startGameLoopIterator = (
-  canvas: HTMLCanvasElement,
-): (() => GameState) => {
-  const initialGameState = createInitialState(canvas);
-  const gameLoopIter = createGameLoop(initialGameState);
-  let latestState: GameState = gameLoopIter.next().value;
-  const gameObservables = createGameObservables();
-  subscribeToGameObservables((action: InputAction) => {
-    latestState = gameLoopIter.next(action).value;
-  }, gameObservables);
-  return () => latestState;
+const readSeedAttribute = (): number | undefined => {
+  const gameElement = document.querySelector<HTMLElement>("bruff-game");
+  // eslint-disable-next-line dot-notation -- TS4111 requires indexed access for DOMStringMap keys.
+  const seedAttribute = gameElement?.dataset["seed"];
+  if (seedAttribute === undefined) {
+    return undefined;
+  }
+
+  const seed = Number.parseInt(seedAttribute, 10);
+  return Number.isFinite(seed) ? seed : undefined;
 };
 
-const buildRenderFrame = (
+const createGameDriver = (
+  canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
-  getState: () => GameState,
-): (() => void) => {
-  const gameClock = clock.wallClock();
+): FrameStepDriver => {
+  const initialGameState = createInitialState(canvas, readSeedAttribute());
+  const driver = isTestMode()
+    ? createManualFrameStepDriver(context, initialGameState)
+    : createWallClockFrameStepDriver(context, initialGameState);
+  const gameObservables = createGameObservables();
+  subscribeToGameObservables((action: InputAction) => {
+    driver.dispatchInput(action);
+  }, gameObservables);
+  return driver;
+};
 
-  return (): void => {
-    const frameTime = clock.readClock(gameClock);
-    curriedRadiatingBarsBackgroundAnimation(context)(frameTime);
-    render(getState(), context);
-    requestAnimationFrame(buildRenderFrame(context, getState));
+const buildRenderFrame =
+  (driver: FrameStepDriver): (() => void) =>
+  (): void => {
+    driver.stepFrames(ONE_FRAME);
+    requestAnimationFrame(buildRenderFrame(driver));
   };
+
+const attachTestApiInTestMode = async (
+  driver: FrameStepDriver,
+): Promise<void> => {
+  const testApiModule = await import("./test-api.js");
+  testApiModule.attachTestApi(driver);
+};
+
+const handleStageError = (error: unknown): void => {
+  log({
+    context: { error },
+    level: "error",
+    message: "setup failed",
+    source: "@bruff/game/effects/loop",
+  });
+};
+
+const startDriver = (driver: FrameStepDriver): void => {
+  if (__BRUFF_TEST_MODE__ && isTestMode()) {
+    // eslint-disable-next-line no-void -- Fire-and-forget dynamic import keeps test API out of production bundles.
+    void attachTestApiInTestMode(driver);
+    return;
+  }
+
+  requestAnimationFrame(buildRenderFrame(driver));
 };
 
 const loop = (): void => {
   const stageResult = curtainUp();
   if (stageResult.type === "error") {
-    log({
-      context: { error: stageResult.error },
-      level: "error",
-      message: "setup failed",
-      source: "@bruff/game/effects/loop",
-    });
+    handleStageError(stageResult.error);
     return;
   }
   const { canvas, context, removeCanvasResizeListener } = stageResult.value;
-  const getState = startGameLoopIterator(canvas);
+  const driver = createGameDriver(canvas, context);
   window.addEventListener("beforeunload", removeCanvasResizeListener);
-  requestAnimationFrame(buildRenderFrame(context, getState));
+  startDriver(driver);
 };
 
 export default loop;

@@ -1,8 +1,15 @@
 // @ts-nocheck
+import { test as baseTest, type Page } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
 import * as crypto from "crypto";
-import { test as baseTest } from "@playwright/test";
+
+declare global {
+  interface Window {
+    __coverage__?: unknown;
+    collectIstanbulCoverage: (coverageJSON: string) => void;
+  }
+}
 
 const istanbulCLIOutput = path.join(process.cwd(), ".nyc_output");
 
@@ -13,9 +20,9 @@ export function generateUUID(): string {
 export const test = baseTest.extend({
   context: async ({ context }, use) => {
     await context.addInitScript(() =>
-      window.addEventListener("beforeunload", () =>
-        (window as any).collectIstanbulCoverage(
-          JSON.stringify((window as any).__coverage__),
+      globalThis.addEventListener("beforeunload", () =>
+        globalThis.collectIstanbulCoverage(
+          JSON.stringify(globalThis.__coverage__),
         ),
       ),
     );
@@ -36,12 +43,17 @@ export const test = baseTest.extend({
     await use(context);
     for (const page of context.pages()) {
       await page.evaluate(() =>
-        (window as any).collectIstanbulCoverage(
-          JSON.stringify((window as any).__coverage__),
+        globalThis.collectIstanbulCoverage(
+          JSON.stringify(globalThis.__coverage__),
         ),
       );
     }
   },
 });
+
+export async function gotoTestMode(page: Page): Promise<void> {
+  await page.goto("/?test=1");
+  await page.waitForFunction(() => window.__bruffTestApi !== undefined);
+}
 
 export const expect = test.expect;

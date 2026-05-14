@@ -4,6 +4,10 @@ import { defineConfig } from "vitest/config";
 import { playwright } from "@vitest/browser-playwright";
 
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify("0.0.0"),
+    __BRUFF_TEST_MODE__: JSON.stringify(true),
+  },
   test: {
     browser: {
       enabled: true,
@@ -20,9 +24,14 @@ export default defineConfig({
       exclude: [
         "**/*spec*{js,ts,jsx,tsx}",
         "lib/effects/entry.ts",
+        "lib/effects/frame-step-driver.ts",
         "lib/effects/loop.ts",
+        "lib/effects/test-api.ts",
+        "lib/effects/test-mode.ts",
         "lib/core/constants.ts",
         "lib/effects/observable/merge.ts",
+        "lib/state/replay-fixture.ts",
+        "lib/state/run-replay.ts",
       ],
       include: ["lib/**/*.ts"],
       reporter: ["text", "json", "html"],
@@ -34,7 +43,7 @@ export default defineConfig({
       },
     },
     exclude: ["**/*spec*{js,ts,jsx,tsx}"],
-    include: ["lib/**/*test*.{js,ts,jsx,tsx}"],
+    include: ["lib/**/*.test.{js,ts,jsx,tsx}"],
     setupFiles: ["tests/setup.ts"],
   },
 });

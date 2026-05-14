@@ -10,11 +10,12 @@ const hasTestModeQueryParameter = (): boolean => {
 };
 
 const hasTestModeDataAttribute = (): boolean => {
-  if (document === undefined) {
+  if (globalThis.document === undefined) {
     return false;
   }
 
-  const gameElement = document.querySelector<HTMLElement>("bruff-game");
+  const gameElement =
+    globalThis.document.querySelector<HTMLElement>("bruff-game");
   // eslint-disable-next-line dot-notation -- TS4111 requires indexed access for index-signature-backed DOMStringMap keys.
   return gameElement?.dataset["testMode"] === "true";
 };

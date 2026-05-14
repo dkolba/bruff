@@ -21,15 +21,14 @@ Rules:
 
 ```ts
 import { describe, expect, it } from "vitest";
+import type { GameState } from "../core/types.ts";
 import updatePlayer from "./update-player.js";
-import type { GameState } from "../types/game-state-type.ts";
 
 describe("updatePlayer", () => {
   it("moves north when input is arrowup", () => {
     const state: GameState = /* … */;
-    expect(updatePlayer({ ...state, input: ["arrowup"] })).toStrictEqual({
+    expect(updatePlayer(state, { type: "move-up" })).toStrictEqual({
       ...state,
-      input: [],
       player: { ...state.player, yPos: state.player.yPos - PLAYER_SPEED },
       playerMoved: true,
     });
@@ -39,7 +38,7 @@ describe("updatePlayer", () => {
 
 ---
 
-## Level 2 — Property-Based Tests (required for PRNG, generators, state transitions)
+## Level 2 — Property-Based Tests (required for PRNG, replay runners, and state transitions)
 
 Use Vitest + @fast-check/vitest.
 
@@ -47,8 +46,8 @@ Properties to test:
 
 - **PRNG**: same seed → same sequence of values.
 - **Reducers**: applying inverse actions returns to original state (where applicable).
-- **State transitions**: `stateVersion` monotonically increases.
-- **Generators**: output is deterministic given the same seed.
+- **State transitions**: `frameIndex` never decreases across deterministic stepping.
+- **Replay runners**: output is deterministic given the same seed and fixture.
 
 ```ts
 import { test, fc } from "@fast-check/vitest";
@@ -73,21 +72,27 @@ Capture a full deterministic run and assert the final state (or a hash of it) ma
 
 Pattern:
 
-1. Fix a seed in `Config`.
-2. Feed a scripted sequence of `InputAction` values into the game loop.
-3. Assert the resulting `GameState` matches a stored snapshot.
-4. Stored snapshots live in `packages/game/tests/snapshots/`.
+1. Fix a `seed` in a replay fixture.
+2. Feed scripted frame/input pairs through `runReplay(fixture)`.
+3. Assert the resulting `GameState` matches a committed JSON snapshot.
+4. Fixtures live in `packages/game/tests/fixtures/`; snapshots live in `packages/game/tests/snapshots/`.
 
 ```ts
 import { expect, it } from "vitest";
-import { runDeterministicGame } from "../tests/helpers/run-deterministic-game.js";
+import fixtureJson from "../../tests/fixtures/canonical-replay.json";
+import snapshotJson from "../../tests/snapshots/canonical-replay.json";
+import { parseReplayFixture } from "./replay-fixture.js";
+import { runReplay } from "./run-replay.js";
 
 it("produces deterministic output for fixed seed and input sequence", () => {
-  const finalState = runDeterministicGame({
-    seed: 42,
-    inputs: ["arrowup", "arrowright", "arrowdown"],
+  const fixture = parseReplayFixture(fixtureJson);
+  expect(fixture.type).toBe("ok");
+  if (fixture.type === "error") return;
+
+  expect(runReplay(fixture.value)).toStrictEqual({
+    type: "ok",
+    value: snapshotJson,
   });
-  expect(finalState).toMatchSnapshot();
 });
 ```
 
@@ -96,7 +101,7 @@ it("produces deterministic output for fixed seed and input sequence", () => {
 ## Checklist
 
 - [ ] Every new pure function has a Level 1 unit test.
-- [ ] Every PRNG consumer or generator function has a Level 2 property test.
+- [ ] Every PRNG consumer, replay runner, or deterministic step path has a Level 2 property test.
 - [ ] Any new full-run integration path has a Level 3 replay snapshot.
 - [ ] No DOM or Canvas access inside any test.
-- [ ] No `Math.random()` or `Date.now()` inside any test (seed everything).
+- [ ] No `Math.random()`, `Date.now()`, or raw `performance.now()` inside any test (seed and clock everything).

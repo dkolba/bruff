@@ -1,6 +1,6 @@
 ---
 name: migrate-state
-description: Safely evolve GameState shape — bump stateVersion, write a pure migration function, update snapshot baselines
+description: Safely evolve GameState shape — bump stateVersion, write a pure migration function, update replay fixtures and snapshot baselines
 ---
 
 # Migrate State
@@ -17,7 +17,7 @@ Every structural change to `GameState` requires:
 
 1. A `stateVersion` increment
 2. A pure migration function
-3. Updated snapshot baselines
+3. Updated replay fixtures and snapshot baselines
 
 **Never** change field types or names without bumping `stateVersion`.
 
@@ -32,6 +32,9 @@ Every structural change to `GameState` requires:
 ```ts
 export type GameState = Readonly<{
   stateVersion: number;
+  seed: number;
+  prng: PrngState;
+  frameIndex: number;
   /* … */
 }>;
 ```
@@ -40,7 +43,7 @@ export type GameState = Readonly<{
 
 ### 2. Increment `stateVersion`
 
-In `packages/game/types/game-state-type.ts`, bump the version constant and update
+In `packages/game/lib/core/types.ts`, bump the version constant or literal and update
 all places that construct a literal `GameState` (tests, `createInitialState`, factories).
 
 ```ts
@@ -52,7 +55,7 @@ export const CURRENT_STATE_VERSION = 2; // was 1
 In `packages/game/lib/state/migrations.ts`:
 
 ```ts
-import type { GameState } from "../../types/game-state-type.ts";
+import type { GameState } from "../core/types.ts";
 
 /** V1 shape — keep as a local type, do not export */
 type GameStateV1 = Omit<GameState, "newField"> & { stateVersion: 1 };
@@ -72,20 +75,18 @@ Rules for migration functions:
 
 ### 4. Update snapshot / replay test baselines
 
-After the migration, existing `toMatchSnapshot()` calls will fail because the state
-shape changed. Update them:
+After the migration, replay fixture and snapshot tests will fail because the state shape changed. Update committed JSON baselines:
 
 ```bash
-pnpm run test --update-snapshots
+pnpm --filter @bruff/game run test
 ```
 
 Review the diff before committing — the snapshot changes should exactly match the
 new fields you added.
 
-### 5. Update the deterministic replay test
+### 5. Update deterministic replay fixtures
 
-If you have a replay test that feeds scripted inputs and asserts a final state, re-run
-it with `--update-snapshots` and verify the new snapshot is correct.
+Replay fixtures live in `packages/game/tests/fixtures/*.json`; final-state snapshots live in `packages/game/tests/snapshots/*.json`. If the fixture format changes, update `ReplayFixture`, `ReplayError`, `parseReplayFixture`, and `runReplay` tests together.
 
 ---
 
@@ -94,12 +95,14 @@ it with `--update-snapshots` and verify the new snapshot is correct.
 If multiple migrations exist, compose them in order:
 
 ```ts
-export const migrateToLatest = (raw: unknown): GameState => {
+export const migrateToLatest = (
+  raw: unknown,
+): Result<GameState, MigrationError> => {
   // version guard
-  if (!isGameStateV1(raw)) throw new Error("Unrecognised state shape");
+  if (!isGameStateV1(raw)) return error({ type: "unrecognised-state-shape" });
   const v2 = migrateV1toV2(raw);
   // const v3 = migrateV2toV3(v2);
-  return v2;
+  return ok(v2);
 };
 ```
 
@@ -109,7 +112,9 @@ export const migrateToLatest = (raw: unknown): GameState => {
 
 - [ ] `stateVersion` incremented in `GameState` type and `CURRENT_STATE_VERSION`
 - [ ] `createInitialState` produces new `stateVersion`
+- [ ] `seed`, `prng`, and `frameIndex` remain present and deterministic
 - [ ] Migration function written and unit tested
-- [ ] Snapshot baselines updated (`pnpm run test -u`)
-- [ ] Replay tests re-validated
+- [ ] Replay fixture parser and runner still return typed `Result` values
+- [ ] JSON fixtures and final-state snapshots updated
+- [ ] Replay, property, and browser-control tests re-validated
 - [ ] No silent field renames without a migration

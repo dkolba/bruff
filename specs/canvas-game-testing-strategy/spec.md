@@ -61,3 +61,11 @@ Establish a layered, deterministic testing strategy for the bruff roguelike so t
 - **Headless WebKit timing differences.** Removing `slowMo` and RAF means timing jitter is no longer a factor; tests await `stepFrames` returning, not `waitForTimeout`.
 - **Touch input observable in test mode.** Touch handling stays wired but is bypassed by `dispatchInput`. Tests do not need to synthesize `TouchEvent`s.
 - **Axe runs against a moving canvas.** Axe tests already only inspect the DOM tree; the canvas's contents do not affect them. We keep them as-is.
+
+## Verification
+
+- Test mode is gated by `__BRUFF_TEST_MODE__`, `?test=1`, and `data-test-mode="true"` and is covered by `packages/game/lib/effects/test-mode.test.ts`.
+- Deterministic stepping, monotonic `frameIndex`, manual clock behavior, render stats, API attachment, and replay fixtures are covered by the new game package unit/property/replay tests.
+- Playwright now uses state-first E2E specs, dark/light axe checks, a static HUD screenshot path, and a frozen replay checkpoint path.
+- Production bundle safety is covered by `packages/arcade/scripts/check-bundle-clean.mjs`, wired through `pnpm --filter @bruff/arcade run build:site`.
+- Final verification command run: `CI=true pnpm run ok`.

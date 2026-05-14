@@ -33,19 +33,19 @@ Every new module lives in the **effects** layer or the application shell — dom
 
 ## Layer assignment for new modules
 
-| Module                                         | Path                                                        | Layer               | Rationale                                                                                            |
-| ---------------------------------------------- | ----------------------------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------- |
-| `testMode.ts` (flag accessor)                  | `packages/game/lib/effects/test-mode.ts`                    | effects             | Reads the build-time `__BRUFF_TEST_MODE__` define; impure by definition.                             |
-| `clock.ts` (Clock ADT + WallClock/ManualClock) | `packages/game/lib/effects/clock.ts`                        | effects             | Only the shell may read wall-clock time (A-21).                                                      |
-| `frameStepDriver.ts`                           | `packages/game/lib/effects/frame-step-driver.ts`            | effects             | Replaces the RAF tail of `loop.ts` when test mode is on.                                             |
-| `testApi.ts`                                   | `packages/game/lib/effects/test-api.ts`                     | effects             | Constructs the `__bruffTestApi` object and attaches it to `window`.                                  |
-| `renderStats.ts` (counter type)                | `packages/game/lib/render/render-stats.ts`                  | render              | Plain data type produced by the pure render function; no side effects.                               |
-| `replayFixture.ts` (type + validator)          | `packages/game/lib/state/replay-fixture.ts`                 | state               | Pure data shape and a `Result<ReplayFixture, ReplayError>` parser.                                   |
-| `runReplay.ts`                                 | `packages/game/lib/state/run-replay.ts`                     | state               | Pure function: `(fixture) => GameState`. Used by Vitest snapshot tests with no shell.                |
-| `gameElementTestApi.ts`                        | `packages/game-element/module/game-element-test-api.ts`     | game-element shell  | Element-instance getter wiring; lives in the Web Component package.                                  |
-| Replay snapshots                               | `packages/game/tests/snapshots/*.json`                      | test data           | Golden state files committed to the repo.                                                            |
-| Playwright state-based spec                    | `packages/arcade/e2e/state-assertions.spec.ts`              | arcade              | Replaces most of the current `bruff-game.spec.ts` body.                                              |
-| Playwright replay-checkpoint spec              | `packages/arcade/e2e/replay-checkpoint.spec.ts`             | arcade              | Loads a replay fixture, freezes, screenshots one stable frame.                                       |
+| Module                                         | Path                                                    | Layer              | Rationale                                                                             |
+| ---------------------------------------------- | ------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------- |
+| `testMode.ts` (flag accessor)                  | `packages/game/lib/effects/test-mode.ts`                | effects            | Reads the build-time `__BRUFF_TEST_MODE__` define; impure by definition.              |
+| `clock.ts` (Clock ADT + WallClock/ManualClock) | `packages/game/lib/effects/clock.ts`                    | effects            | Only the shell may read wall-clock time (A-21).                                       |
+| `frameStepDriver.ts`                           | `packages/game/lib/effects/frame-step-driver.ts`        | effects            | Replaces the RAF tail of `loop.ts` when test mode is on.                              |
+| `testApi.ts`                                   | `packages/game/lib/effects/test-api.ts`                 | effects            | Constructs the `__bruffTestApi` object and attaches it to `window`.                   |
+| `renderStats.ts` (counter type)                | `packages/game/lib/render/render-stats.ts`              | render             | Plain data type produced by the pure render function; no side effects.                |
+| `replayFixture.ts` (type + validator)          | `packages/game/lib/state/replay-fixture.ts`             | state              | Pure data shape and a `Result<ReplayFixture, ReplayError>` parser.                    |
+| `runReplay.ts`                                 | `packages/game/lib/state/run-replay.ts`                 | state              | Pure function: `(fixture) => GameState`. Used by Vitest snapshot tests with no shell. |
+| `gameElementTestApi.ts`                        | `packages/game-element/module/game-element-test-api.ts` | game-element shell | Element-instance getter wiring; lives in the Web Component package.                   |
+| Replay snapshots                               | `packages/game/tests/snapshots/*.json`                  | test data          | Golden state files committed to the repo.                                             |
+| Playwright state-based spec                    | `packages/arcade/e2e/state-assertions.spec.ts`          | arcade             | Replaces most of the current `bruff-game.spec.ts` body.                               |
+| Playwright replay-checkpoint spec              | `packages/arcade/e2e/replay-checkpoint.spec.ts`         | arcade             | Loads a replay fixture, freezes, screenshots one stable frame.                        |
 
 ## Public API surface
 
@@ -68,13 +68,15 @@ export const isTestMode = (): boolean =>
 
 ```ts
 export type Clock = Readonly<
-  | { type: "wall" }
-  | { type: "manual"; readonly nowMs: number }
+  { type: "wall" } | { type: "manual"; readonly nowMs: number }
 >;
 
 export const wallClock = (): Clock => ({ type: "wall" });
 
-export const manualClock = (nowMs: number): Clock => ({ type: "manual", nowMs });
+export const manualClock = (nowMs: number): Clock => ({
+  type: "manual",
+  nowMs,
+});
 
 export const advanceManualClock = (clock: Clock, deltaMs: number): Clock =>
   clock.type === "manual"
@@ -135,8 +137,12 @@ export type ReplayError =
   | { type: "stateVersionMismatch"; expected: number; got: number }
   | { type: "frameOutOfRange"; frame: number; total: number };
 
-export const parseReplayFixture: (raw: unknown) => Result<ReplayFixture, ReplayError>;
-export const runReplay: (fixture: ReplayFixture) => Result<GameState, ReplayError>;
+export const parseReplayFixture: (
+  raw: unknown,
+) => Result<ReplayFixture, ReplayError>;
+export const runReplay: (
+  fixture: ReplayFixture,
+) => Result<GameState, ReplayError>;
 ```
 
 `runReplay` is pure and DOM-free, so Vitest can execute it without a browser provider.
@@ -145,9 +151,9 @@ export const runReplay: (fixture: ReplayFixture) => Result<GameState, ReplayErro
 
 ```ts
 export type GameState = Readonly<{
-  stateVersion: number;       // NEW — starts at 1
-  seed: number;               // NEW — used by future PRNG; default 0
-  frameIndex: number;         // NEW — monotonic tick counter
+  stateVersion: number; // NEW — starts at 1
+  seed: number; // NEW — used by future PRNG; default 0
+  frameIndex: number; // NEW — monotonic tick counter
   input: ReadonlyArray<string>;
   canvas: CanvasSize;
   player: Player;
@@ -238,3 +244,9 @@ In production mode the path is identical except the `dispatchInput` step is driv
 - The observable-polyfill input path.
 - The radiating-bars background animation (it just receives its `time` argument from `readClock` instead of directly from RAF).
 - Vitest config or Playwright project list.
+
+## Implementation Notes
+
+- The frame-step driver owns latest render stats and is shared by production RAF and test-mode stepping.
+- `window.__bruffTestApi` is imported dynamically behind the compile-time `__BRUFF_TEST_MODE__` gate so production bundles remain clean.
+- Arcade Istanbul coverage excludes deterministic test-harness shell modules that are covered by package-level browser tests; E2E coverage remains focused on user-facing gameplay paths.

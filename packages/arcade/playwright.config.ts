@@ -41,9 +41,6 @@ export default defineConfig({
   use: {
     // headless: Boolean(process.env.CI),
     headless: true,
-    launchOptions: {
-      slowMo: 500,
-    },
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
     /* Create videos if Playwright fails on first retry */
@@ -51,6 +48,9 @@ export default defineConfig({
   },
   webServer: {
     command: "pnpm run dev",
+    env: {
+      VITE_TEST_MODE: "1",
+    },
     port: 5173,
     reuseExistingServer: !process.env.CI,
   },

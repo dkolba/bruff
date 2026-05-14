@@ -208,13 +208,13 @@ TypeScript:
 
 The repo is a pnpm monorepo. Package-specific rules auto-load from `packages/<package-name>` when you edit files inside the matching package.
 
-| Package                | Role                                                                                 | Package-specific rule                       |
-| ---------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------- |
-| `@bruff/game`          | Roguelike game logic — pure layered architecture (`core/state/input/render/effects`) | `.packages/game/AGENTS.override.md`         |
-| `@bruff/game-element`  | Imperative shell — Web Component base class that mounts the canvas                   | `.packages/game-element/AGENTS.override.md` |
-| `@bruff/arcade`        | E2E host — Vite app + Playwright tests across desktop/mobile browsers                | `.packages/arcade/AGENTS.override.md`       |
-| `@bruff/utils`         | Shared utilities: pure FP helpers plus shell-adjacent browser/logging services       | `.packages/utils/AGENTS.override.md`        |
-| `@bruff/eslint-config` | Shared ESLint flat config                                                            | (none — config-only package)                |
+| Package                | Role                                                                                 | Package-specific rule                      |
+| ---------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------ |
+| `@bruff/game`          | Roguelike game logic — pure layered architecture (`core/state/input/render/effects`) | `packages/game/AGENTS.override.md`         |
+| `@bruff/game-element`  | Imperative shell — Web Component base class that mounts the canvas                   | `packages/game-element/AGENTS.override.md` |
+| `@bruff/arcade`        | E2E host — Vite app + Playwright tests across desktop/mobile browsers                | `packages/arcade/AGENTS.override.md`       |
+| `@bruff/utils`         | Shared utilities: pure FP helpers plus shell-adjacent browser/logging services       | `packages/utils/AGENTS.override.md`        |
+| `@bruff/eslint-config` | Shared ESLint flat config                                                            | (none — config-only package)               |
 
 When working in a single package, also read its `README.md` for build/test commands and architectural role.
 
@@ -230,3 +230,4 @@ Testing rules complement the `write-tests` skill (which covers file conventions 
   - **T**imely — written alongside (or before, per C-1) the code under test, never bolted on later.
 - **T-2 (SHOULD)** Test bodies use **Given–When–Then** structure (or `// arrange`, `// act`, `// assert` comments) so a reader sees the setup, action, and expectation at a glance.
 - **T-3 (MUST)** **Black-box testing** — assert against observable behaviour through the public API only. Never reach into private implementation, internal state shape, or call counts. A behaviour-preserving refactor must not require touching tests.
+- **T-4 (MUST)** Canvas gameplay E2E tests are state-first. Use the deterministic `?test=1` browser API (`window.__bruffTestApi`) for simulation assertions; reserve screenshots for static DOM regions or frames frozen via `freezeForSnapshot()`.

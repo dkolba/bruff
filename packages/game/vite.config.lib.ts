@@ -7,6 +7,7 @@ import { version } from "./package.json";
 export default defineConfig({
   define: {
     __APP_VERSION__: JSON.stringify(version),
+    __BRUFF_TEST_MODE__: JSON.stringify(false),
   },
   build: {
     lib: {
@@ -20,7 +21,7 @@ export default defineConfig({
   },
   plugins: [
     dts({
-      exclude: [],
+      exclude: ["lib/**/*.test.ts"],
       include: ["lib/**/*.ts", "types/**/*.ts"],
     }),
     istanbulPlugin({
