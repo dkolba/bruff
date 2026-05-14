@@ -1,0 +1,44 @@
+{
+  "canvas": {
+    "height": 600,
+    "width": 800
+  },
+  "enemies": [
+    {
+      "id": "3568710290-2410661980",
+      "size": 20,
+      "spawnOrder": 0,
+      "xPos": 50,
+      "yPos": 50
+    },
+    {
+      "id": "231416673-2613675437",
+      "size": 20,
+      "spawnOrder": 1,
+      "xPos": 300,
+      "yPos": 100
+    },
+    {
+      "id": "2234025770-2756763197",
+      "size": 20,
+      "spawnOrder": 2,
+      "xPos": 100,
+      "yPos": 300
+    }
+  ],
+  "frameIndex": 0,
+  "input": [],
+  "player": {
+    "id": "439668526-3938904095",
+    "size": 20,
+    "xPos": 200,
+    "yPos": 200
+  },
+  "playerMoved": false,
+  "prng": {
+    "accumulator": 2756763197,
+    "type": "prng-state"
+  },
+  "seed": 1,
+  "stateVersion": 1
+}

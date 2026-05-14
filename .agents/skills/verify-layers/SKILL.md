@@ -14,7 +14,6 @@ core/       — zero imports (fully dependency-free)
 state/      — imports core/ only
 input/      — imports core/ + state/ only
 render/     — imports core/ + state/ only
-assets/     — imports core/ + state/ only
 effects/    — shell wiring over core/state/input/render plus allowed workspace utilities
 ```
 
@@ -30,8 +29,8 @@ Search `packages/game/lib/` (and sub-directories) for import violations:
 # Check that core files import nothing from the project
 grep -rn "from \"\.\." packages/game/lib/core/
 
-# Check state files import only from core
-grep -rn "from \"\.\." packages/game/lib/state/ | grep -v "/core/"
+# Check inner layers for upward imports
+rg 'from "\\.\\.' packages/game/lib/state packages/game/lib/render packages/game/lib/input
 
 # Check for circular dependencies using madge (if available)
 npx madge --circular packages/game/lib/
@@ -49,8 +48,10 @@ For each violation found, report:
 ## Checklist
 
 - [ ] No file in `core/` imports from any project path
-- [ ] No file in `state/` imports from `input/`, `render/`, `assets/`, or `effects/`
+- [ ] No file in `state/` imports from `input/`, `render/`, or `effects/`
 - [ ] No file in `core/`, `state/`, `input/`, or `render/` imports `log` from `@bruff/utils`
+- [ ] `effects/clock.ts` is the only production file that reads `performance.now()`
+- [ ] `window.__bruffTestApi` is attached only behind the `__BRUFF_TEST_MODE__` / `isTestMode()` gate
 - [ ] No production file calls `console.*` outside the event-bus console sink
 - [ ] No circular imports anywhere
 - [ ] All `@bruff/utils` imports are allowed from any layer

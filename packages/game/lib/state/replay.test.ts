@@ -53,6 +53,7 @@ const EXPECTED_FINAL_STATE: GameState = {
       yPos: 298.687_642_570_150_4,
     },
   ],
+  frameIndex: 0,
   input: [],
   player: {
     id: brand<"PlayerId">("439668526-3938904095"),
@@ -62,6 +63,7 @@ const EXPECTED_FINAL_STATE: GameState = {
   },
   playerMoved: true,
   prng: { accumulator: 2_756_763_197, type: "prng-state" },
+  seed: 1,
   stateVersion: STATE_VERSION,
 };
 

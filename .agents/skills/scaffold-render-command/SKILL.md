@@ -24,16 +24,16 @@ Every render concern is split across two functions — never combined:
 
 ### 1. Add the variant to `RenderCommand`
 
-In `packages/game/types/render-command-type.ts` (create if absent):
+In `packages/game/lib/core/actions.ts`:
 
 ```ts
 export type RenderCommand =
   | {
-      readonly type: "FILL_RECT";
-      readonly x: number;
-      readonly y: number;
-      readonly w: number;
-      readonly h: number;
+      readonly type: "fill-rect";
+      readonly xPos: number;
+      readonly yPos: number;
+      readonly width: number;
+      readonly height: number;
       readonly color: string;
     }
   | { readonly type: "YOUR_COMMAND"; readonly /* payload fields */ };
@@ -44,8 +44,8 @@ export type RenderCommand =
 In `packages/game/lib/render/<your-command>.ts`:
 
 ```ts
-import type { GameState } from "../../types/game-state-type.ts";
-import type { RenderCommand } from "../../types/render-command-type.ts";
+import type { RenderCommand } from "../core/actions.ts";
+import type { GameState } from "../core/types.ts";
 
 const projectYourThing = (state: GameState): ReadonlyArray<RenderCommand> =>
   state.entities.map((e) => ({
@@ -60,7 +60,7 @@ Compose it into the root projection function that builds the full `RenderCommand
 
 ### 3. Implement the executor (impure)
 
-In `packages/game/lib/effects/canvas-executor.ts`, add a `case` to the executor switch:
+In the Canvas executor (`packages/game/lib/effects/render.ts` today, or a future dedicated executor), add a `case` to the executor switch:
 
 ```ts
 case "YOUR_COMMAND": {
@@ -74,7 +74,7 @@ End the switch with an exhaustiveness guard:
 ```ts
 default: {
   const _exhaustive: never = command;
-  throw new Error(`Unhandled RenderCommand: ${JSON.stringify(_exhaustive)}`);
+  return _exhaustive;
 }
 ```
 
@@ -103,3 +103,4 @@ No `CanvasRenderingContext2D` mock needed — the projection is pure.
 - Writing to `ctx.fillStyle` / `ctx.drawImage` / etc. inside `render/`
 - Reading from the DOM or Canvas inside the projection
 - Returning `void` from the projection — it must return `ReadonlyArray<RenderCommand>`
+- Forgetting `RenderStats` when the visible output changes. The effects renderer reports latest stats for `window.__bruffTestApi.getRenderStats()`.

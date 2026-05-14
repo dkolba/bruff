@@ -21,7 +21,7 @@ type RenderCommand = /* draw instructions produced by the projection function */
 ## Steps
 
 1. **Identify the category** — ask which of the four types the new action belongs to.
-2. **Add the variant** — append a new branch to the correct discriminated union in `packages/game/types/`.
+2. **Add the variant** — append a new branch to the correct discriminated union in `packages/game/lib/core/actions.ts`.
 3. **Handle it exhaustively** — add a `case` to every `switch` that covers that union; the compiler will error on missing cases (`never` check at the end).
 4. **Write a unit test** — pure function test in the co-located `*.test.ts` file that exercises the new branch.
 
@@ -35,8 +35,8 @@ type RenderCommand = /* draw instructions produced by the projection function */
 ## Template
 
 ```ts
-// packages/game/types/actions.ts  (add to the correct union)
-| { readonly type: "YOUR_ACTION"; readonly payload: Readonly<{ /* … */ }> }
+// packages/game/lib/core/actions.ts  (add to the correct union)
+| { readonly type: "your-action"; readonly payload: Readonly<{ /* … */ }> }
 ```
 
 Exhaustiveness guard (add to every switch that covers this union):
@@ -44,6 +44,6 @@ Exhaustiveness guard (add to every switch that covers this union):
 ```ts
 default: {
   const _exhaustive: never = action;
-  throw new Error(`Unhandled action: ${JSON.stringify(_exhaustive)}`);
+  return _exhaustive;
 }
 ```

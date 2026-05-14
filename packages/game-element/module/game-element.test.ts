@@ -71,6 +71,16 @@ describe("GameElement structure", () => {
     gameElement.connectedCallback();
     expect(gameElement.shadowRoot).toBe(firstShadowRoot);
   });
+
+  it("stores and clears a per-instance test API", () => {
+    const testApi = { getState: vi.fn() };
+
+    gameElement.setTestApi(testApi);
+    expect(gameElement.testApi).toBe(testApi);
+
+    gameElement.setTestApi(undefined);
+    expect(gameElement.testApi).toBeUndefined();
+  });
 });
 
 describe("GameElement log forwarding", () => {

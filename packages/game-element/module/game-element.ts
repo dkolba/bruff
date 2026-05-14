@@ -1,5 +1,8 @@
 import { consoleLogHandler, onLog } from "@bruff/utils";
 
+/** Browser test API stored by the game package in test mode. */
+export type GameElementTestApi = unknown;
+
 const createStencil = (templateMarkup: string): DocumentFragment => {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = templateMarkup;
@@ -19,7 +22,17 @@ const createStencil = (templateMarkup: string): DocumentFragment => {
  */
 // eslint-disable-next-line wc/define-tag-after-class-definition
 export class GameElement extends HTMLElement {
+  #testApi: GameElementTestApi | undefined;
+
   #unsubscribe: (() => void) | undefined;
+
+  get testApi(): GameElementTestApi | undefined {
+    return this.#testApi;
+  }
+
+  setTestApi(testApi: GameElementTestApi | undefined): void {
+    this.#testApi = testApi;
+  }
 
   connectedCallback(): void {
     if (!this.shadowRoot) {

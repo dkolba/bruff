@@ -51,6 +51,7 @@ const gameStateArb: fc.Arbitrary<GameState> = fc
               yPos,
             }),
           ),
+          frameIndex: 0,
           input: [],
           player: {
             id: brand<"PlayerId">("test-player"),
@@ -60,6 +61,7 @@ const gameStateArb: fc.Arbitrary<GameState> = fc
           },
           playerMoved: false,
           prng: createPrng(TEST_SEED),
+          seed: TEST_SEED,
           stateVersion: STATE_VERSION,
         }),
       ),

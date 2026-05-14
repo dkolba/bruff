@@ -1,12 +1,6 @@
 # @bruff/game
 
-A TypeScript game library that implements a 2D top-down game as a self-registering Web Component. A player character (blue square) is controlled via keyboard or touch input and is pursued by enemies (red squares) across an animated canvas background.
-
-Importing the package registers `<bruff-game>` globally and starts the game loop automatically.
-
-```html
-<bruff-game></bruff-game>
-```
+A TypeScript game package that registers `<bruff-game>` and runs a deterministic 2D canvas roguelike loop. The shell owns browser effects; state transitions are pure functions over immutable `GameState`.
 
 ```ts
 import "@bruff/game";
@@ -14,55 +8,53 @@ import "@bruff/game";
 
 ## Architecture
 
-The package is structured in functional layers with no shared mutable state.
+Code is split by layer:
 
-```
-lib/
-├── bruff-game.ts              # Web Component entry — registers <bruff-game>
-├── loop.ts                    # Game loop (requestAnimationFrame + generator state machine)
-├── curtain-up.ts              # Canvas initialisation from shadow DOM
-├── create-initial-state.ts    # Initial GameState factory
-├── update-player.ts           # Player movement and input dequeue
-├── update-enemies.ts          # Enemy position updates
-├── move-enemy-toward-player.ts # Enemy pathfinding (unit vector toward player)
-├── render.ts                  # Canvas draw calls
-├── constants.ts               # Shared constants (speeds, sizes)
-└── observable/
-    ├── keydown.ts             # Keyboard input stream (WICG Observable)
-    ├── touch.ts               # Touch input stream
-    └── merge.ts               # Merges multiple observables
-types/
-└── game-state-type.ts         # GameState and related types
-```
+- `lib/core/` — immutable domain types and action unions.
+- `lib/state/` — pure reducers, initial state, replay fixtures, and replay runners.
+- `lib/input/` — raw input normalization into `InputAction`.
+- `lib/render/` — pure render-adjacent data such as `RenderStats`.
+- `lib/effects/` — DOM, Canvas, time, logging, RAF, and test API wiring.
 
-### Game loop
-
-`loop.ts` drives everything via `requestAnimationFrame`. Each frame it:
-
-1. Drains the input queue collected from merged keyboard/touch observables
-2. Calls `updatePlayer` → `updateEnemies` to produce a new `GameState`
-3. Calls `render` to draw the new state to the canvas
-
-The loop is implemented as a generator (`function*`) that yields the current state and receives the next input string — decoupling state transitions from the render cycle.
-
-### State
-
-`GameState` is an immutable record spread on every update:
+`GameState` carries replay-critical fields:
 
 ```ts
-type GameState = {
-  canvas: { width: number; height: number };
-  player: { x: number; y: number; size: number };
-  enemies: { x: number; y: number; size: number }[];
-  inputQueue: string[];
-  playerMoved: boolean;
-};
+type GameState = Readonly<{
+  stateVersion: number;
+  seed: number;
+  frameIndex: number;
+  // canvas, player, enemies, input, playerMoved, prng
+}>;
 ```
 
-Enemies only recalculate when `playerMoved` is `true`.
+`frameIndex` increments once per logical tick. Render-only frames with no queued input redraw the canvas without advancing enemies or `frameIndex`. `seed` and `prng` make entity identity and future random choices reproducible.
 
-### Input
+## Testing Pyramid
 
-Keyboard and touch events are consumed as WICG Observable streams, merged into a single input source and fed into the loop on each frame.
+- Unit tests live beside pure modules as `*.test.ts`.
+- Property tests use `@fast-check/vitest` for reducer and replay invariants.
+- Replay tests load JSON fixtures from `tests/fixtures/` and compare final state with committed JSON snapshots in `tests/snapshots/`.
+- Browser E2E tests live in `@bruff/arcade` and drive the loop through `window.__bruffTestApi` in `?test=1` mode.
 
-Coverage thresholds are set at **100%** for branches, functions, lines, and statements. The game loop (`loop.ts`), Web Component entry (`bruff-game.ts`), constants, and observable merge utility are excluded from the coverage requirement and are exercised by the E2E suite in `@bruff/arcade` instead.
+Replay fixture shape:
+
+```json
+{
+  "stateVersion": 1,
+  "seed": 1,
+  "initialCanvas": { "height": 600, "width": 800 },
+  "frames": [{ "frame": 1, "input": "move-right" }],
+  "totalFrames": 1
+}
+```
+
+`frames` are applied before the matching replay frame. Replay frames with no input are render-only and do not increment `frameIndex`. Fixture inputs use normalized action names: `move-up`, `move-down`, `move-left`, and `move-right`.
+
+## Commands
+
+```sh
+pnpm run test
+pnpm run lint
+pnpm run typecheck
+pnpm run build
+```

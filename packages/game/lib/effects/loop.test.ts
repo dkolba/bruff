@@ -1,9 +1,12 @@
+/* eslint-disable max-lines-per-function, sort-imports -- Loop shell tests keep mocked setup close to assertions. */
 import type * as Utilities from "@bruff/utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { error, log, ok } from "@bruff/utils";
 import createTouchObservable from "./observable/touch.js";
 import curtainUp from "./curtain-up.js";
 import type { InputAction } from "../core/actions.ts";
+import { attachTestApi } from "./test-api.js";
+import isTestMode from "./test-mode.js";
 import loop from "./loop.js";
 import type { Observable } from "observable-polyfill/fn";
 
@@ -28,6 +31,14 @@ vi.mock("./render.js", () => ({
   default: vi.fn(),
 }));
 
+vi.mock("./test-api.js", () => ({
+  attachTestApi: vi.fn(() => vi.fn()),
+}));
+
+vi.mock("./test-mode.js", () => ({
+  default: vi.fn(() => false),
+}));
+
 const createActionObservable = (eventName: string): Observable<InputAction> =>
   document.when(eventName).map((): InputAction => ({ type: "move-up" }));
 
@@ -45,6 +56,7 @@ const createPreparedCanvas = (): {
 
 beforeEach(() => {
   vi.stubGlobal("requestAnimationFrame", vi.fn());
+  vi.mocked(isTestMode).mockReturnValue(false);
 });
 
 afterEach(() => {
@@ -84,5 +96,23 @@ describe("loop logging", () => {
       message: "touch",
       source: "@bruff/game/effects/loop",
     });
+  });
+
+  it("attaches the test API without starting RAF in test mode", async () => {
+    const { canvas, context } = createPreparedCanvas();
+    vi.mocked(isTestMode).mockReturnValue(true);
+    vi.mocked(curtainUp).mockReturnValue(
+      ok({ canvas, context, removeCanvasResizeListener: vi.fn() }),
+    );
+    vi.mocked(createTouchObservable).mockReturnValue(
+      createActionObservable("bruff-test-touch-action"),
+    );
+
+    loop();
+
+    await vi.waitFor(() => {
+      expect(attachTestApi).toHaveBeenCalledOnce();
+    });
+    expect(requestAnimationFrame).not.toHaveBeenCalled();
   });
 });
