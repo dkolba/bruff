@@ -42,6 +42,7 @@ customElements.define("my-game", GameElement);
 When the element is connected to the DOM, `connectedCallback` creates an open shadow root (if one doesn't already exist) and appends a template containing:
 
 - A `<canvas id="gamecanvas">` sized to `window.innerWidth × window.innerHeight`
+- A `<div id="bruff-hud">` status HUD owned and styled by the component
 - Scoped CSS that sets `display: block` on the canvas to eliminate the default inline baseline gap
 
 `connectedCallback` is idempotent — calling it multiple times will not recreate the shadow root.
