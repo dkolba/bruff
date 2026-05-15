@@ -16,30 +16,6 @@ const isTestApiHostElement = (
 
 const cloneGameState = (state: GameState): GameState => structuredClone(state);
 
-const attachElementTestApi = (testApi?: BruffTestApi): void => {
-  const gameElement = document.querySelector("bruff-game");
-  if (isTestApiHostElement(gameElement)) {
-    gameElement.setTestApi(testApi);
-  }
-};
-
-const createBruffTestApi = (driver: FrameStepDriver): BruffTestApi => ({
-  dispatchInput: (input: string): void => {
-    const normalisedInput = normaliseKey(input);
-    if (normalisedInput.type === "some") {
-      driver.dispatchInput(normalisedInput.value);
-    }
-  },
-  freezeForSnapshot: (): Promise<void> => driver.freezeForSnapshot(),
-  getRenderStats: () => structuredClone(driver.getRenderStats()),
-  getState: (): GameState => cloneGameState(driver.getState()),
-  loadState: (state: GameState): void => {
-    driver.loadState(cloneGameState(state));
-  },
-  stepFrames: (frameCount: number): GameState =>
-    cloneGameState(driver.stepFrames(frameCount)),
-});
-
 /**
  * Attaches the browser test API to both window and the game element.
  *
@@ -47,14 +23,40 @@ const createBruffTestApi = (driver: FrameStepDriver): BruffTestApi => ({
  * @returns A teardown function that removes the API again
  */
 export const attachTestApi = (driver: FrameStepDriver): (() => void) => {
-  const testApi = createBruffTestApi(driver);
+  const dispatchInput = (input: string): void => {
+    const normalisedInput = normaliseKey(input);
+    if (normalisedInput.type === "some") {
+      driver.dispatchInput(normalisedInput.value);
+    }
+  };
+
+  const loadState = (state: GameState): void => {
+    driver.loadState(cloneGameState(state));
+  };
+
+  const testApi: BruffTestApi = {
+    dispatchInput,
+    freezeForSnapshot: (): Promise<void> => driver.freezeForSnapshot(),
+    getRenderStats: () => structuredClone(driver.getRenderStats()),
+    getState: (): GameState => cloneGameState(driver.getState()),
+    loadState,
+    stepFrames: (frameCount: number): GameState =>
+      cloneGameState(driver.stepFrames(frameCount)),
+  };
+
+  const gameElement = document.querySelector("bruff-game");
   window.__bruffTestApi = testApi;
-  attachElementTestApi(testApi);
+  if (isTestApiHostElement(gameElement)) {
+    gameElement.setTestApi(testApi);
+  }
 
   return (): void => {
+    const currentGameElement = document.querySelector("bruff-game");
     if (window.__bruffTestApi === testApi) {
       delete window.__bruffTestApi;
     }
-    attachElementTestApi();
+    if (isTestApiHostElement(currentGameElement)) {
+      currentGameElement.setTestApi(undefined);
+    }
   };
 };

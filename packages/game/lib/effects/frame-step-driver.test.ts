@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function, sort-imports -- Tests keep each driver scenario self-contained. */
 import { brand, createPrng } from "@bruff/utils";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type { GameState } from "../core/types.ts";
 import { createFrameStepDriver } from "./frame-step-driver.js";
 import { manualClock } from "./clock.js";
@@ -12,6 +12,7 @@ const ONE_FRAME = 1;
 const INITIAL_TIME_MS = 100;
 const TWO_FRAMES = 2;
 const THREE_FRAMES = 3;
+const LOADED_PLAYER_X_POS = 320;
 
 const createState = (): GameState => ({
   canvas: { height: 600, width: 800 },
@@ -38,6 +39,10 @@ const createContext = (): CanvasRenderingContext2D => {
   }
   return context;
 };
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe("createFrameStepDriver", () => {
   it("does not advance state for zero frames", () => {
@@ -156,5 +161,81 @@ describe("createFrameStepDriver", () => {
       TWO_FRAMES,
       expect.any(Number),
     );
+  });
+
+  it("uses the default background renderer when no override is provided", () => {
+    const initialState = createState();
+    const driver = createFrameStepDriver({
+      clock: manualClock(INITIAL_TIME_MS),
+      context: createContext(),
+      initialState,
+      renderGame: vi.fn((state: GameState) => ({
+        enemiesDrawn: state.enemies.length,
+        frameIndex: state.frameIndex,
+        playerDrawn: true,
+      })),
+    });
+
+    expect(driver.renderFrame()).toStrictEqual({
+      enemiesDrawn: ZERO,
+      frameIndex: initialState.frameIndex,
+      playerDrawn: true,
+    });
+  });
+
+  it("renders the current frame before freezing for a snapshot", async () => {
+    const renderBackground = vi.fn();
+    const renderGame = vi.fn((state: GameState) => ({
+      enemiesDrawn: state.enemies.length,
+      frameIndex: state.frameIndex,
+      playerDrawn: true,
+    }));
+    const requestAnimationFrameSpy = vi
+      .spyOn(globalThis, "requestAnimationFrame")
+      .mockImplementation((callback: FrameRequestCallback): number => {
+        callback(INITIAL_TIME_MS);
+        return ONE_FRAME;
+      });
+    const driver = createFrameStepDriver({
+      clock: manualClock(INITIAL_TIME_MS),
+      context: createContext(),
+      initialState: createState(),
+      renderBackground,
+      renderGame,
+    });
+
+    await driver.freezeForSnapshot();
+
+    expect(renderBackground).toHaveBeenCalledWith(INITIAL_TIME_MS);
+    expect(renderGame).toHaveBeenCalledTimes(ONE_FRAME);
+    expect(requestAnimationFrameSpy).toHaveBeenCalledTimes(ONE_FRAME);
+  });
+
+  it("loads state and clears queued input", () => {
+    const initialState = createState();
+    const loadedState: GameState = {
+      ...initialState,
+      player: {
+        ...initialState.player,
+        xPos: LOADED_PLAYER_X_POS,
+      },
+    };
+    const driver = createFrameStepDriver({
+      clock: manualClock(INITIAL_TIME_MS),
+      context: createContext(),
+      initialState,
+      renderBackground: vi.fn(),
+      renderGame: vi.fn((state: GameState) => ({
+        enemiesDrawn: state.enemies.length,
+        frameIndex: state.frameIndex,
+        playerDrawn: true,
+      })),
+    });
+
+    driver.dispatchInput({ type: "move-right" });
+    driver.loadState(loadedState);
+
+    expect(driver.getState()).toStrictEqual(loadedState);
+    expect(driver.stepFrames(ONE_FRAME)).toStrictEqual(loadedState);
   });
 });
