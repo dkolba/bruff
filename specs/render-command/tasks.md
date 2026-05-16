@@ -5,7 +5,7 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T1 — Add `projectRenderCommands(state)` stub in `packages/game/lib/render/project-render-commands.ts`.
 - [x] T2 — Add unit tests for `projectRenderCommands` in `packages/game/lib/render/project-render-commands.test.ts` covering player command, zero enemies, multiple enemies in array order, and deterministic output for the same state.
 - [x] T3 — Implement `projectRenderCommands` in `packages/game/lib/render/project-render-commands.ts` using the existing `RenderCommand` union from `packages/game/lib/core/actions.ts`.
-- [ ] T4 — Add `renderStatsForState(state)` stub in `packages/game/lib/render/render-stats.ts`.
+- [x] T4 — Add `renderStatsForState(state)` stub in `packages/game/lib/render/render-stats.ts`.
 - [ ] T5 — Add unit tests for `renderStatsForState` in `packages/game/lib/render/render-stats.test.ts` covering initial frame, zero enemies, nonzero enemies, and `playerDrawn: true`.
 - [ ] T6 — Implement `renderStatsForState` in `packages/game/lib/render/render-stats.ts`.
 - [ ] T7 — Add `executeRenderCommand` and `executeRenderCommands` stubs in `packages/game/lib/effects/execute-render-command.ts`.
