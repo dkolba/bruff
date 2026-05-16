@@ -131,6 +131,7 @@ Import direction remains valid: `effects/` imports `render/` and `core/`; `rende
 - Pure unit tests for `projectRenderCommands` live in `packages/game/lib/render/project-render-commands.test.ts`; they use literal `GameState` values and never touch DOM or Canvas.
 - Pure unit tests for `renderStatsForState` live in `packages/game/lib/render/render-stats.test.ts`.
 - Browser-provider tests for `executeRenderCommand(s)` live in `packages/game/lib/effects/execute-render-command.test.ts`; they spy on a real `CanvasRenderingContext2D`.
+- The executor keeps an exhaustive `default` branch for future `RenderCommand` variants and excludes only that unreachable guard from V8 coverage so the 100% coverage gate remains meaningful.
 - Existing `packages/game/lib/effects/render.test.ts` is updated to verify the adapter still draws the current player/enemy rectangles and returns the same stats.
 - Existing arcade E2E tests cover the browser-facing test API and frozen checkpoint after the refactor.
 
