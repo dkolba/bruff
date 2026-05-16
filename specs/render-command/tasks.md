@@ -3,8 +3,8 @@
 Each task is ordered and file-scoped. Follow TDD inside each implementation step: add the stub, add the failing behaviour test, then implement the smallest code that turns the gate green. If the package coverage gate prevents committing a red test alone, keep the test-before-code order in the diff and commit the paired green change.
 
 - [x] T1 — Add `projectRenderCommands(state)` stub in `packages/game/lib/render/project-render-commands.ts`.
-- [ ] T2 — Add unit tests for `projectRenderCommands` in `packages/game/lib/render/project-render-commands.test.ts` covering player command, zero enemies, multiple enemies in array order, and deterministic output for the same state.
-- [ ] T3 — Implement `projectRenderCommands` in `packages/game/lib/render/project-render-commands.ts` using the existing `RenderCommand` union from `packages/game/lib/core/actions.ts`.
+- [x] T2 — Add unit tests for `projectRenderCommands` in `packages/game/lib/render/project-render-commands.test.ts` covering player command, zero enemies, multiple enemies in array order, and deterministic output for the same state.
+- [x] T3 — Implement `projectRenderCommands` in `packages/game/lib/render/project-render-commands.ts` using the existing `RenderCommand` union from `packages/game/lib/core/actions.ts`.
 - [ ] T4 — Add `renderStatsForState(state)` stub in `packages/game/lib/render/render-stats.ts`.
 - [ ] T5 — Add unit tests for `renderStatsForState` in `packages/game/lib/render/render-stats.test.ts` covering initial frame, zero enemies, nonzero enemies, and `playerDrawn: true`.
 - [ ] T6 — Implement `renderStatsForState` in `packages/game/lib/render/render-stats.ts`.
