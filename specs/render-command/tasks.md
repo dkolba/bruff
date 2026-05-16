@@ -8,7 +8,7 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T4 — Add `renderStatsForState(state)` stub in `packages/game/lib/render/render-stats.ts`.
 - [x] T5 — Add unit tests for `renderStatsForState` in `packages/game/lib/render/render-stats.test.ts` covering initial frame, zero enemies, nonzero enemies, and `playerDrawn: true`.
 - [x] T6 — Implement `renderStatsForState` in `packages/game/lib/render/render-stats.ts`.
-- [ ] T7 — Add `executeRenderCommand` and `executeRenderCommands` stubs in `packages/game/lib/effects/execute-render-command.ts`.
+- [x] T7 — Add `executeRenderCommand` and `executeRenderCommands` stubs in `packages/game/lib/effects/execute-render-command.ts`.
 - [ ] T8 — Add browser-provider tests for `executeRenderCommand` and `executeRenderCommands` in `packages/game/lib/effects/execute-render-command.test.ts` covering `clear`, `fill-rect`, and command order.
 - [ ] T9 — Implement `executeRenderCommand` and `executeRenderCommands` in `packages/game/lib/effects/execute-render-command.ts`.
 - [ ] T10 — Refactor `packages/game/lib/effects/render.ts` to call `projectRenderCommands`, `executeRenderCommands`, and `renderStatsForState` while preserving its public signature.
