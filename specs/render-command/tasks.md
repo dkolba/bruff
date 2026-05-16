@@ -15,5 +15,5 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T11 — Update `packages/game/lib/effects/render.test.ts` to assert the adapter still draws the player and enemies and returns the same `RenderStats`.
 - [x] T12 — Run `CI=true pnpm --filter @bruff/game run format`, `CI=true pnpm --filter @bruff/game run lint`, `CI=true pnpm --filter @bruff/game run typecheck`, and `CI=true pnpm --filter @bruff/game run test`; fix failures in the files touched by T1-T11.
 - [x] T13 — Run `CI=true pnpm --filter @bruff/arcade run test` to verify state-first E2E render stats and the frozen replay checkpoint still pass for available local browser projects.
-- [ ] T14 — Review `specs/render-command/spec.md` and append a `## Verification` section mapping each user-visible behaviour and edge case to the test or gate that proves it.
+- [x] T14 — Review `specs/render-command/spec.md` and append a `## Verification` section mapping each user-visible behaviour and edge case to the test or gate that proves it.
 - [ ] T15 — Review `specs/render-command/design.md` and update any drift found while implementing T1-T13.

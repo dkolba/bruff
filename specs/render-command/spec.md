@@ -45,3 +45,16 @@ Introduce an active `RenderCommand` rendering pipeline for the canvas game. The 
 - Adding a new `RenderCommand` variant later fails typecheck until the executor's exhaustive switch handles it.
 - `render()` remains an effects-layer adapter and must not be imported by `core/`, `state/`, `input/`, or `render/` pure modules.
 - Existing E2E render-stat assertions remain stable in test mode after the refactor.
+
+## Verification
+
+- The blue player square and red enemy squares are projected by `packages/game/lib/render/project-render-commands.test.ts` and executed through `packages/game/lib/effects/render.test.ts`.
+- Enemy draw order is verified by `project-render-commands.test.ts` and `render.test.ts`, both asserting player-first then enemies in array order.
+- The animated background remains outside `RenderCommand` and continues to be covered by `packages/arcade/e2e/replay-checkpoint.spec.ts`.
+- `RenderStats` shape and values are covered by `packages/game/lib/render/render-stats.test.ts`, `packages/game/lib/effects/render.test.ts`, and `packages/arcade/e2e/state-assertions.spec.ts`.
+- `freezeForSnapshot()` stability is covered by `packages/arcade/e2e/replay-checkpoint.spec.ts`.
+- State-first Playwright test API behaviour is covered by `packages/arcade/e2e/state-assertions.spec.ts`.
+- Zero-enemy projection and stats are covered by `project-render-commands.test.ts` and `render-stats.test.ts`.
+- Same-state deterministic projection is covered by `project-render-commands.test.ts`.
+- `clear`, `fill-rect`, command order, and executor exhaustiveness are covered by `packages/game/lib/effects/execute-render-command.test.ts` plus `CI=true pnpm --filter @bruff/game run typecheck`.
+- Package gates run for this work: `CI=true pnpm --filter @bruff/game run format`, `lint`, `typecheck`, `test`; `CI=true pnpm --filter @bruff/arcade run test`; and root `npm run ok`.
