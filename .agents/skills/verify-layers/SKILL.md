@@ -50,6 +50,8 @@ For each violation found, report:
 - [ ] No file in `core/` imports from any project path
 - [ ] No file in `state/` imports from `input/`, `render/`, or `effects/`
 - [ ] No file in `core/`, `state/`, `input/`, or `render/` imports `log` from `@bruff/utils`
+- [ ] `render/project-render-commands.ts` projects `GameState` to `RenderCommand` values without DOM or Canvas access
+- [ ] Foreground Canvas command execution is centralized in `effects/execute-render-command.ts`
 - [ ] `effects/clock.ts` is the only production file that reads `performance.now()`
 - [ ] `window.__bruffTestApi` is attached only behind the `__BRUFF_TEST_MODE__` / `isTestMode()` gate
 - [ ] No production file calls `console.*` outside the event-bus console sink

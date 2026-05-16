@@ -1,5 +1,5 @@
-import type { GameState } from "../core/types.ts";
-import type { RenderStats } from "../render/render-stats.ts";
+import type { GameState } from "../../core/types.ts";
+import type { RenderStats } from "../../render/render-stats.ts";
 
 /**
  * Browser-facing control surface exposed only in test mode.

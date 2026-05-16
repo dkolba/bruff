@@ -85,7 +85,7 @@ const buildRenderFrame =
 const attachTestApiInTestMode = async (
   driver: FrameStepDriver,
 ): Promise<void> => {
-  const testApiModule = await import("./test-api.js");
+  const testApiModule = await import("./test-api/attach-test-api.js");
   testApiModule.attachTestApi(driver);
 };
 

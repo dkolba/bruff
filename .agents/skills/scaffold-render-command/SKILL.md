@@ -41,7 +41,7 @@ export type RenderCommand =
 
 ### 2. Implement the projection (pure)
 
-In `packages/game/lib/render/<your-command>.ts`:
+In `packages/game/lib/render/project-render-commands.ts`, compose the new command into the root foreground projection. Extract a helper only when it is reused or materially improves readability.
 
 ```ts
 import type { RenderCommand } from "../core/actions.ts";
@@ -56,15 +56,15 @@ const projectYourThing = (state: GameState): ReadonlyArray<RenderCommand> =>
 export default projectYourThing;
 ```
 
-Compose it into the root projection function that builds the full `RenderCommand[]` for a frame.
+The root projection returns the ordered `ReadonlyArray<RenderCommand>` for the current foreground frame. It does not emit the animated background; the background remains shell-rendered before foreground commands.
 
 ### 3. Implement the executor (impure)
 
-In the Canvas executor (`packages/game/lib/effects/render.ts` today, or a future dedicated executor), add a `case` to the executor switch:
+In `packages/game/lib/effects/execute-render-command.ts`, add a `case` to the executor switch:
 
 ```ts
 case "YOUR_COMMAND": {
-  ctx./* Canvas draw calls here */;
+  context./* Canvas draw calls here */;
   break;
 }
 ```
@@ -78,7 +78,7 @@ default: {
 }
 ```
 
-### 4. Write a unit test for the projection (no Canvas)
+### 4. Write tests
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -94,7 +94,7 @@ describe("projectYourThing", () => {
 });
 ```
 
-No `CanvasRenderingContext2D` mock needed — the projection is pure.
+No `CanvasRenderingContext2D` mock is needed for projection tests — the projection is pure. Add or update browser-provider tests in `packages/game/lib/effects/execute-render-command.test.ts` for the Canvas executor branch. If the command changes player/enemy observability, update `renderStatsForState` and its tests.
 
 ---
 

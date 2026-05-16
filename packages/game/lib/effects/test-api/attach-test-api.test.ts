@@ -1,11 +1,11 @@
 /* eslint-disable no-underscore-dangle, sort-imports, unicorn/prefer-global-this -- Tests assert the intentional window.__bruffTestApi surface. */
 import { brand, createPrng } from "@bruff/utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { FrameStepDriver } from "./frame-step-driver.ts";
-import type { GameState } from "../core/types.ts";
-import type { RenderStats } from "../render/render-stats.ts";
+import type { FrameStepDriver } from "../frame-step-driver.ts";
+import type { GameState } from "../../core/types.ts";
+import type { RenderStats } from "../../render/render-stats.ts";
 import type { BruffTestApi } from "./test-api-types.ts";
-import { attachTestApi } from "./test-api.js";
+import { attachTestApi } from "./attach-test-api.js";
 
 const TEST_SEED = 1;
 const STATE_VERSION = 1;

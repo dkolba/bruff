@@ -5,7 +5,7 @@ import { error, log, ok } from "@bruff/utils";
 import createTouchObservable from "./observable/touch.js";
 import curtainUp from "./curtain-up.js";
 import type { InputAction } from "../core/actions.ts";
-import { attachTestApi } from "./test-api.js";
+import { attachTestApi } from "./test-api/attach-test-api.js";
 import isTestMode from "./test-mode.js";
 import loop from "./loop.js";
 import type { Observable } from "observable-polyfill/fn";
@@ -31,7 +31,7 @@ vi.mock("./render.js", () => ({
   default: vi.fn(),
 }));
 
-vi.mock("./test-api.js", () => ({
+vi.mock("./test-api/attach-test-api.js", () => ({
   attachTestApi: vi.fn(() => vi.fn()),
 }));
 
