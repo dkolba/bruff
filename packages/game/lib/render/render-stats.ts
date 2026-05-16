@@ -23,11 +23,8 @@ export const initialRenderStats = (): RenderStats => ({
  *
  * @param state - The rendered state snapshot
  */
-/* eslint-disable capitalized-comments -- V8 coverage directives are case-sensitive. */
-/* v8 ignore start -- T4 adds the stub before T5 introduces coverage. */
 export const renderStatsForState = (state: GameState): RenderStats => ({
-  ...initialRenderStats(),
+  enemiesDrawn: state.enemies.length,
   frameIndex: state.frameIndex,
+  playerDrawn: true,
 });
-/* v8 ignore stop */
-/* eslint-enable capitalized-comments */
