@@ -35,8 +35,9 @@ Code must live in the correct layer. Dependencies flow strictly inward — later
 
 - **A-7 (MUST)** Single immutable global `GameState` object — no hidden or local state.
 - **A-8 (MUST)** `GameState` includes a `stateVersion: number` for replay compatibility.
-- **A-9 (MUST)** All state transitions are pure functions: `(state, action) => state`.
+- **A-9 (MUST)** All state transitions are pure functions: `(state, action) => state` or `(state, inputs) => state` for full-frame stepping.
 - **A-10 (MUST)** Zero mutation anywhere — no mutable variables, no array `.push()`, no object property assignment. Use spread for updates: `{ ...state, key: value }` and `[...arr, item]` are the canonical idioms.
+- **A-10a (MUST)** `GameState` carries replay-critical `stateVersion`, `seed`, `prng`, and monotonic `frameIndex` fields. `frameIndex` increments exactly once per logical tick in the shared deterministic step path.
 
 ## Entity Identity
 
@@ -65,8 +66,8 @@ All events that flow through the game loop must obey the following rules:
 ## Determinism
 
 - **A-20 (MUST)** All randomness must use a seeded PRNG stored in `GameState`. Never call `Math.random()` directly. Zero external entropy sources.
-- **A-21 (MUST)** Time is a controlled input fed into the root pipeline — never read from `Date.now()` or `performance.now()` inside core or state logic.
-- **A-22 (MUST)** Fixed-timestep simulation — tick rate is configurable via `Config`, never tied to render FPS.
+- **A-21 (MUST)** Time is a controlled input fed into the shell through the `Clock` ADT. Never read from `Date.now()` or `performance.now()` inside core, state, input, or render logic; `readClock()` in `effects/clock.ts` is the wall-clock boundary.
+- **A-22 (MUST)** Fixed-timestep simulation — deterministic stepping goes through `createFrameStepDriver` / `advanceGameState`, never directly through `requestAnimationFrame`.
 
 ## Zero External Runtime Dependencies
 
@@ -78,10 +79,13 @@ All events that flow through the game loop must obey the following rules:
 - **A-25 (MUST)** Rendering is a pure projection of `GameState`. The render layer takes a state snapshot and produces a Canvas frame; it holds no internal state, no caches, no memoised scene graph, no incremental mutation.
 - **A-26 (MUST)** Each frame is drawn from scratch — clear-and-redraw. The previous frame's pixels are not load-bearing; every visible pixel is recomputed from current `GameState` every tick.
 - **A-27 (MUST)** Output is a deterministic function of state. Same `GameState` → same Canvas output, byte-for-byte. Time-driven animations are not an exception: their phase is part of state, fed in via the controlled time input (per A-21).
+- **A-28 (MUST)** Render code reports `RenderStats` for test observability. The latest stats are owned by the effects-layer frame driver and exposed only through the test API.
 
 ## Testing rules specific to this package
 
 - **GT-1 (MUST)** Domain tests are **mock-free**. Pure functions in `core/`, `state/`, `input/`, `render/` are tested with literal inputs and outputs. Mocking a pure function is a code smell — pass the real value.
 - **GT-2 (MUST)** Domain tests are **DOM-free**. Tests for `core/`, `state/`, `input/`, and `render/` must not touch `document`, `window`, `customElements`, or any browser API — they assert on data only. Tests that legitimately need a Web Component or Canvas live alongside `effects/` or in `@bruff/game-element` / `@bruff/arcade` and use the browser provider deliberately.
+- **GT-3 (MUST)** Replay tests use `packages/game/tests/fixtures/*.json` plus committed final-state snapshots in `packages/game/tests/snapshots/*.json`. Fixture parsing returns `Result`, never throws.
+- **GT-4 (MUST)** Browser-control hooks (`isTestMode`, `attachTestApi`, `freezeForSnapshot`, manual clocks) stay in `effects/` and are gated by `__BRUFF_TEST_MODE__`.
 
 For the unit / property-based / replay testing strategy, invoke the `write-game-tests` skill.

@@ -15,6 +15,7 @@ Identify which layer(s) the feature touches:
 - New input handling → `packages/game/lib/input/`
 - New visual output → `packages/game/lib/render/`
 - Canvas / DOM side effect → `packages/game/lib/effects/`
+- Deterministic browser control, clocks, RAF/test stepping → `packages/game/lib/effects/`
 - Logging or diagnostics side effect → `packages/game/lib/effects/` or the entry point, using `log()` from `@bruff/utils`
 - Reusable, domain-agnostic helper → `packages/utils/`
 
@@ -39,7 +40,9 @@ Use `InputAction` for normalised input, `GameAction` for simulation events, `Sys
 
 ## 4 — Wire up in the shell
 
-Add the new action to the root pipeline inside `effects/` or `loop.ts`. The shell dispatches to pure functions; it must contain no business logic itself.
+Add the new action to the pure step path (`packages/game/lib/state/advance-game-state.ts`) or the relevant reducer. The shell (`effects/loop.ts` and `effects/frame-step-driver.ts`) dispatches inputs and renders; it must contain no business logic itself.
+
+If the feature affects browser tests, expose it through the existing `window.__bruffTestApi` surface only when `__BRUFF_TEST_MODE__` and `?test=1` / `data-test-mode="true"` are active.
 
 Shell diagnostics must emit through the logging event bus with `log()` from `@bruff/utils`. Do not add direct `console.*` calls.
 

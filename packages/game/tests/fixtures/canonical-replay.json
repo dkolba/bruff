@@ -1,0 +1,10 @@
+{
+  "stateVersion": 1,
+  "seed": 1,
+  "initialCanvas": {
+    "height": 600,
+    "width": 800
+  },
+  "frames": [],
+  "totalFrames": 0
+}

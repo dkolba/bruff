@@ -17,7 +17,7 @@ Use when introducing a new game entity (e.g. `Enemy`, `Item`, `Projectile`).
 
 ## Steps
 
-1. **Declare the branded ID type** in `packages/game/types/`:
+1. **Declare the branded ID type** in `packages/game/lib/core/types.ts`:
 
    ```ts
    import type { Brand } from "@bruff/utils";
@@ -36,21 +36,30 @@ Use when introducing a new game entity (e.g. `Enemy`, `Item`, `Projectile`).
    }>;
    ```
 
-3. **Add a factory function** (pure, no side effects) that accepts PRNG state and returns `[Entity, NextPrngState]`:
+3. **Add a factory function** (pure, no side effects) that accepts PRNG state and returns the entity plus next PRNG state:
 
-   ```ts
-   const createEnemy = (
-     prng: PrngState,
-     spawnOrder: number,
-     xPos: number,
-     yPos: number,
-   ): [Enemy, PrngState] => {
-     const [id, nextPrng] = generateId<"EnemyId">(prng);
-     return [{ id, spawnOrder, xPos, yPos, size: ENEMY_SIZE }, nextPrng];
-   };
-   ```
+```ts
+const createEnemy = (
+  prng: PrngState,
+  spawnOrder: number,
+  xPos: number,
+  yPos: number,
+): { enemy: Enemy; prng: PrngState } => {
+  const step = nextId(prng);
+  return {
+    enemy: {
+      id: brand<"EnemyId">(step.value),
+      spawnOrder,
+      xPos,
+      yPos,
+      size: ENEMY_SIZE,
+    },
+    prng: step.prng,
+  };
+};
+```
 
-4. **Add the entity collection to `GameState`** in `packages/game/types/game-state-type.ts` as `ReadonlyArray<Enemy>`.
+4. **Add the entity collection to `GameState`** in `packages/game/lib/core/types.ts` as `ReadonlyArray<Enemy>`.
 
 5. **Write unit tests** in a co-located `*.test.ts` covering:
    - ID is branded (compile-time, no runtime check needed).

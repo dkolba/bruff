@@ -44,8 +44,7 @@ Pick string keys by default; switch to number keys only if profiling shows a hot
 ## Collision Map Example
 
 ```ts
-import type { GameState } from "../../types/game-state-type.ts";
-import type { Enemy } from "../../types/entity-types.ts";
+import type { Enemy, GameState } from "../core/types.ts";
 
 type CollisionMap = ReadonlyMap<string, Enemy>;
 
@@ -81,16 +80,13 @@ type ChunkedGrid = ReadonlyMap<ChunkKey, Chunk>;
 const chunkKey = (x: number, y: number): ChunkKey =>
   `${Math.floor(x / CHUNK_SIZE)},${Math.floor(y / CHUNK_SIZE)}`;
 
-const buildChunkedGrid = (state: GameState): ChunkedGrid => {
-  const chunks = new Map<ChunkKey, Map<string, Entity>>();
-  for (const entity of state.entities) {
-    const ck = chunkKey(entity.xPos, entity.yPos);
-    const chunk = chunks.get(ck) ?? new Map();
+const buildChunkedGrid = (state: GameState): ChunkedGrid =>
+  state.entities.reduce<Map<ChunkKey, Chunk>>((chunks, entity) => {
+    const key = chunkKey(entity.xPos, entity.yPos);
+    const chunk = new Map(chunks.get(key) ?? []);
     chunk.set(`${entity.xPos},${entity.yPos}`, entity);
-    chunks.set(ck, chunk);
-  }
-  return chunks as ChunkedGrid;
-};
+    return new Map(chunks).set(key, chunk);
+  }, new Map());
 ```
 
 ---
@@ -149,3 +145,4 @@ describe("buildCollisionMap", () => {
 - Storing spatial indices in `GameState` (they are derived, not canonical)
 - Mutating an existing Map (always construct fresh from state)
 - Accessing `GameState` inside query functions — pass the pre-built map instead
+- Storing derived spatial data in replay fixtures or snapshots; derive it from `GameState` during each deterministic tick.

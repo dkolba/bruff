@@ -43,6 +43,8 @@ export type GameState = Readonly<{
   input: ReadonlyArray<InputAction>;
   player: Player;
   playerMoved: boolean;
+  frameIndex: number;
   prng: PrngState;
+  seed: number;
   stateVersion: number;
 }>;

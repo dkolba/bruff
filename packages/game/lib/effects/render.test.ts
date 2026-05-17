@@ -36,6 +36,7 @@ const setupRenderTest = (): {
         yPos: 100,
       },
     ],
+    frameIndex: 0,
     input: [],
     player: {
       id: brand<"PlayerId">("test-player"),
@@ -45,6 +46,7 @@ const setupRenderTest = (): {
     },
     playerMoved: false,
     prng: createPrng(TEST_SEED),
+    seed: TEST_SEED,
     stateVersion: STATE_VERSION,
   };
 
@@ -55,7 +57,7 @@ describe("render", () => {
   it("should render the player and enemies", () => {
     const { mockContext, state } = setupRenderTest();
 
-    render(state, mockContext);
+    const stats = render(state, mockContext);
 
     // Player rendering
     expect(mockContext.fillRect).toHaveBeenCalledWith(
@@ -78,5 +80,10 @@ describe("render", () => {
     // Check fillStyle changes
     const fillStyleCalls = vi.mocked(mockContext.fillRect).mock.calls.length;
     expect(fillStyleCalls).toBe(THREE); // 1 for player, 2 for enemies
+    expect(stats).toStrictEqual({
+      enemiesDrawn: state.enemies.length,
+      frameIndex: state.frameIndex,
+      playerDrawn: true,
+    });
   });
 });

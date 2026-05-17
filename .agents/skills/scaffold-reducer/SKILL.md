@@ -20,7 +20,7 @@ const myReducer = (state: GameState, action: MyAction): GameState => {
       return { ...state /* … */ };
     default: {
       const _exhaustive: never = action;
-      throw new Error(`Unhandled action: ${JSON.stringify(_exhaustive)}`);
+      return _exhaustive;
     }
   }
 };
@@ -31,24 +31,23 @@ const myReducer = (state: GameState, action: MyAction): GameState => {
 - **No mutation** — always return a new object via spread or structural sharing.
 - **No side effects** — no logging, no DOM, no network, no randomness (pass PRNG seed through state if needed).
 - **No classes, no `this`**.
-- Co-locate the file in `packages/game/lib/` as `<verb>-<noun>.ts` (e.g. `update-player.ts`, `update-enemies.ts`).
+- Co-locate the file in `packages/game/lib/state/` as `<verb>-<noun>.ts` (e.g. `update-player.ts`, `update-enemies.ts`).
 - Export as a named or default function — follow the existing file's convention.
 
 ## Steps
 
-1. Create `packages/game/lib/<verb>-<noun>.ts` with the reducer body.
-2. Create `packages/game/lib/<verb>-<noun>.test.ts` with:
+1. Create `packages/game/lib/state/<verb>-<noun>.ts` with the reducer body.
+2. Create `packages/game/lib/state/<verb>-<noun>.test.ts` with:
    - At least one test per `case` branch.
-   - One test for the `default` (unreachable) branch using `as never` in the test only.
-3. Import `GameState` from `../types/game-state-type.ts` using `import type`.
-4. Wire the reducer into the game loop in `packages/game/lib/loop.ts` if applicable.
+3. Import `GameState` from `../core/types.ts` using `import type`.
+4. Wire the reducer into `packages/game/lib/state/advance-game-state.ts` if it participates in the main tick.
 
 ## Composing into the pipeline
 
-The root pipeline in `loop.ts` chains reducers via the generator:
+The root deterministic step in `advance-game-state.ts` chains reducers:
 
 ```
-input normalisation → updatePlayer → updateEnemies → … → render
+input normalisation → updatePlayer → updateEnemies → … → frameIndex increment
 ```
 
-Add new reducers to that chain inside `createGameLoop`.
+Add new reducers to that chain inside `advanceGameState`.

@@ -11,56 +11,46 @@ Use when adding randomness to the game, or when setting up the PRNG for the firs
 
 ---
 
-## Recommended Algorithm: Mulberry32
+## Current API
 
-Simple, fast, excellent distribution, 32-bit seed. Implement in `packages/utils/src/prng.ts` (or `packages/game/lib/core/prng.ts` if not reused elsewhere).
+The in-house PRNG lives in `packages/utils/module/fp/prng.ts` and is exported from `@bruff/utils`.
 
 ```ts
-import type { Brand } from "@bruff/utils";
-
-/** Opaque PRNG state — treat as an immutable seed token. */
-export type PrngState = Brand<number, "PrngState">;
-
-/** Seed a new PRNG from a plain number. */
-export const seedPrng = (seed: number): PrngState => seed as PrngState; // safe: Brand is a compile-time marker only
-
-/**
- * Advance the PRNG by one step.
- * Returns [0, 1) float + the next state. Never mutates.
- */
-export const nextPrng = (prng: PrngState): [number, PrngState] => {
-  let t = (prng as number) + 0x6d2b79f5;
-  t = Math.imul(t ^ (t >>> 15), t | 1);
-  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-  const value = ((t ^ (t >>> 14)) >>> 0) / 4_294_967_296;
-  return [value, t as PrngState];
-};
+export const createPrng = (seed: number): PrngState => ({
+  accumulator: seed,
+  type: "prng-state",
+});
+export const nextId = (prng: PrngState): { prng: PrngState; value: string };
 ```
 
 ---
 
 ## Add PRNG to GameState
 
-In `packages/game/types/game-state-type.ts`:
+In `packages/game/lib/core/types.ts`:
 
 ```ts
 import type { PrngState } from "@bruff/utils"; // or local import
 
 export type GameState = Readonly<{
   stateVersion: number;
+  seed: number;
   prng: PrngState;
+  frameIndex: number;
   /* … other fields … */
 }>;
 ```
 
-In `createInitialState`, seed from `Config.seed`:
+In `createInitialState`, accept or derive a deterministic seed:
 
 ```ts
-import { seedPrng } from "@bruff/utils";
+import { createPrng } from "@bruff/utils";
 
-const createInitialState = (config: Config): GameState => ({
+const createInitialState = (canvas: CanvasSize, seed = 1): GameState => ({
   stateVersion: 1,
-  prng: seedPrng(config.seed),
+  seed,
+  prng: createPrng(seed),
+  frameIndex: 0,
   /* … */
 });
 ```
@@ -69,27 +59,22 @@ const createInitialState = (config: Config): GameState => ({
 
 ## Generating Branded IDs
 
-Build `generateId` on top of `nextPrng`:
+Build entity IDs on top of `nextId`:
 
 ```ts
-export const generateId = <Tag extends string>(
+const drawId = <Tag extends string>(
   prng: PrngState,
-): [Brand<string, Tag>, PrngState] => {
-  const [a, p1] = nextPrng(prng);
-  const [b, p2] = nextPrng(p1);
-  const id = `${(a * 0xffffffff) >>> 0}-${(b * 0xffffffff) >>> 0}` as Brand<
-    string,
-    Tag
-  >;
-  return [id, p2];
+): { id: Brand<string, Tag>; prng: PrngState } => {
+  const step = nextId(prng);
+  return { id: brand<Tag>(step.value), prng: step.prng };
 };
 ```
 
 Usage in an entity factory:
 
 ```ts
-const [id, nextPrng] = generateId<"EnemyId">(state.prng);
-return [{ id /* … */ }, { ...state, prng: nextPrng }];
+const step = drawId<"EnemyId">(state.prng);
+return { ...state, prng: step.prng /* use step.id */ };
 ```
 
 ---
@@ -99,15 +84,15 @@ return [{ id /* … */ }, { ...state, prng: nextPrng }];
 ```ts
 import { test, fc } from "@fast-check/vitest";
 import { expect } from "vitest";
-import { seedPrng, nextPrng } from "@bruff/utils";
+import { createPrng, nextNumber } from "@bruff/utils";
 
 test.prop([fc.integer()])(
   "produces identical sequences for the same seed",
   (seed) => {
     const run = (s: number) => {
-      const [v1, p1] = nextPrng(seedPrng(s));
-      const [v2] = nextPrng(p1);
-      return [v1, v2];
+      const first = nextNumber(createPrng(s));
+      const second = nextNumber(first.prng);
+      return [first.value, second.value];
     };
 
     expect(run(seed)).toStrictEqual(run(seed));
@@ -115,10 +100,10 @@ test.prop([fc.integer()])(
 );
 
 test.prop([fc.integer()])("produces values in [0, 1)", (seed) => {
-  const [v] = nextPrng(seedPrng(seed));
+  const { value } = nextNumber(createPrng(seed));
 
-  expect(v).toBeGreaterThanOrEqual(0);
-  expect(v).toBeLessThan(1);
+  expect(value).toBeGreaterThanOrEqual(0);
+  expect(value).toBeLessThan(1);
 });
 ```
 

@@ -3,12 +3,20 @@
   "version": "0.0.0",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "main": "./lib/effects/entry.ts",
+  "types": "./types/entry.d.ts",
   "exports": {
-    "types": "./dist/bruff-game.d.ts",
-    "import": "./lib/effects/entry.ts"
+    ".": {
+      "types": "./types/entry.d.ts",
+      "import": "./lib/effects/entry.ts"
+    },
+    "./test-api": {
+      "types": "./lib/effects/test-api-types.ts",
+      "import": "./lib/effects/test-api-types.ts"
+    }
   },
   "scripts": {
     "build": "pnpm run typecheck && pnpm run build:lib",
