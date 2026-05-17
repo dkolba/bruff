@@ -5,5 +5,5 @@
     "composite": true,
     "types": []
   },
-  "include": ["app.ts", "types/**/*.ts", "e2e/**/*.ts"]
+  "include": ["app.ts", "dev-tools-router.ts", "types/**/*.ts", "e2e/**/*.ts"]
 }

@@ -1,0 +1,43 @@
+# Sigil Tool — Tasks
+
+- [x] T1 — Add `packages/sigil/package.json` using `packages/game-element/package.json` as the script and browser-test template.
+- [x] T2 — Add `packages/sigil/tsconfig.json`, `packages/sigil/eslint.config.js`, and `packages/sigil/vitest.config.ts` using `packages/game-element` as the structural template.
+- [x] T3 — Add placeholder registration test for `<tool-sigil>` in `packages/sigil/module/tool-sigil.test.ts`.
+- [x] T4 — Implement placeholder `ToolSigil` and registration in `packages/sigil/module/tool-sigil.ts`, `packages/sigil/module/register-tool-sigil.ts`, and `packages/sigil/index.ts`.
+- [x] T5 — Add `packages/sigil/README.md` and `packages/sigil/AGENTS.override.md` documenting package role, commands, side-effect boundaries, and font limits.
+- [x] T6 — Update root `AGENTS.md` workspace map with `@bruff/sigil`.
+- [x] T7 — Add `@bruff/sigil` workspace dependency to `packages/arcade/package.json`.
+- [x] T8 — Add Playwright E2E coverage for dev `/tools`, `/`, and unknown-path fallback mounting the expected custom element in `packages/arcade/e2e/tools-route.spec.ts`.
+- [x] T9 — Implement dev-only route helpers in `packages/arcade/dev-tools-router.ts`.
+- [x] T10 — Wire production game mounting plus `import.meta.env.DEV` dynamic router loading in `packages/arcade/app.ts` and add a stable mount node in `packages/arcade/index.html`.
+- [x] T11 — Update `packages/arcade/README.md` to document `/tools` as a development-only route.
+- [x] T12 — Add `opentype.js` dependency and `@types/opentype.js` devDependency to `packages/sigil/package.json` and refresh `pnpm-lock.yaml`.
+- [x] T13 — Add `SigilGlyphBounds`, `SigilGlyph`, `SigilGlyphDraft`, `SigilGlyphMap`, and `SigilExtractionError` types in `packages/sigil/module/glyph-json.ts`.
+- [x] T14 — Add tests for `codePointKey` covering BMP, supplementary-plane, whitespace, and duplicate-input scenarios in `packages/sigil/module/code-point-key.test.ts`.
+- [x] T15 — Implement `codePointKey` in `packages/sigil/module/code-point-key.ts`.
+- [x] T16 — Add tests for glyph-name validation covering ASCII names, emoji names, symbol names, mixed Unicode names, empty names, control characters, and duplicate names in `packages/sigil/module/glyph-name.test.ts`.
+- [x] T17 — Implement `isValidGlyphName` and `createSigilGlyphMap` in `packages/sigil/module/glyph-name.ts`.
+- [x] T18 — Add tests for `extractSigilGlyphs` covering successful extraction, duplicate dedupe, missing glyph reporting, empty input, default names, bounds, `advanceWidth`, `unitsPerEm`, and SVG path output in `packages/sigil/module/extract-glyphs.test.ts`.
+- [x] T19 — Implement `extractSigilGlyphs` in `packages/sigil/module/extract-glyphs.ts`.
+- [x] T20 — Add tests for font file loading covering valid parse, invalid font, and WOFF2 rejection in `packages/sigil/module/font-file.test.ts`.
+- [x] T21 — Implement `loadSigilFontFile` in `packages/sigil/module/font-file.ts`.
+- [x] T22 — Add browser component tests for file input state, character input state, editable glyph-name fields, disabled download state, and visible error state in `packages/sigil/module/tool-sigil.test.ts`.
+- [x] T23 — Expand `ToolSigil` UI in `packages/sigil/module/tool-sigil.ts` with font upload, character input, editable glyph-name rows, uploaded-font preview, extraction summary, missing-glyph report, name-validation report, and download control.
+- [x] T24 — Add browser component tests for JSON Blob creation with edited names, deterministic `sigil.json` filename, and object URL revocation in `packages/sigil/module/tool-sigil.test.ts`.
+- [x] T25 — Implement JSON download creation and cleanup in `packages/sigil/module/tool-sigil.ts`.
+- [x] T26 — Add accessibility E2E coverage for dev `/tools` in `packages/arcade/e2e/accessibility.spec.ts` or `packages/arcade/e2e/tools-accessibility.spec.ts`.
+- [x] T27 — Extend `packages/arcade/scripts/check-bundle-clean.mjs` to reject production assets containing `tool-sigil`, `@bruff/sigil`, `opentype`, or `dev-tools-router`.
+- [x] T28 — Run `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run test`, and `pnpm --filter @bruff/sigil run typecheck`.
+- [x] T29 — Run `pnpm --filter @bruff/arcade run format`, `pnpm --filter @bruff/arcade run lint`, `pnpm --filter @bruff/arcade run typecheck`, `pnpm --filter @bruff/arcade run test:e2e`, and `pnpm --filter @bruff/arcade run build`.
+- [x] T30 — Review `specs/sigil-tool/spec.md`, `specs/sigil-tool/design.md`, `specs/sigil-tool/constraints.md`, and `specs/sigil-tool/acceptance.md`; update verification notes with the exact tests and command results.
+- [x] T31 — Add extraction tests in `packages/sigil/module/extract-glyphs.test.ts` for mixed valid and missing input preserving valid drafts while reporting missing glyph errors.
+- [x] T32 — Implement `SigilExtractionReport` in `packages/sigil/module/glyph-json.ts` and return report values from `packages/sigil/module/extract-glyphs.ts`.
+- [x] T33 — Add browser component tests in `packages/sigil/module/tool-sigil.test.ts` for mixed valid and missing input keeping valid glyph rows downloadable while showing missing-glyph errors.
+- [x] T34 — Update `packages/sigil/module/tool-sigil.ts` to render valid drafts, errors, and download state from `SigilExtractionReport`.
+- [x] T35 — Add browser component tests in `packages/sigil/module/tool-sigil.test.ts` for uploaded-font preview styling on rendered glyph rows.
+- [x] T36 — Implement uploaded-font preview family creation, application, and cleanup in `packages/sigil/module/tool-sigil.ts`.
+- [x] T37 — Add browser component tests in `packages/sigil/module/tool-sigil.test.ts` for stale font-load completions being ignored after a newer font selection.
+- [x] T38 — Implement selection-token guarding for asynchronous font parse and preview-font load completion in `packages/sigil/module/tool-sigil.ts`.
+- [x] T39 — Add browser component tests in `packages/sigil/module/tool-sigil.test.ts` for glyph-name inputs preserving focus and typed value across multi-character editing.
+- [x] T40 — Refactor glyph-name input handling in `packages/sigil/module/tool-sigil.ts` so validation and download-state updates do not recreate the focused input row.
+- [x] T41 — Run `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run test`, and `pnpm --filter @bruff/sigil run typecheck`; update `specs/sigil-tool/acceptance.md` verification notes with the command results.

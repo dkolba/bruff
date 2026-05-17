@@ -8,7 +8,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const packagesCwd = resolve(__dirname, "..");
 
 export default defineConfig({
-  build: { sourcemap: true },
+  build: {
+    rollupOptions: {
+      output: { sourcemapExcludeSources: true },
+    },
+    sourcemap: true,
+  },
   define: {
     __APP_VERSION__: JSON.stringify(version),
     __BRUFF_TEST_MODE__: JSON.stringify(process.env.VITE_TEST_MODE === "1"),
