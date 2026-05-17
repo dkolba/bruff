@@ -1,0 +1,55 @@
+name: Screenshots
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+env:
+  NODE_VERSION: "24"
+
+jobs:
+  e2e:
+    name: 🎭 Re-Generate Test Screenshots
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v${{ vars.PLAYWRIGHT_VERSION }}
+    strategy:
+      fail-fast: false
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v6.0.2
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm ci
+
+      - name: 🗑️ Delete existing Linux screenshots
+        run: find packages/arcade/e2e -name "*-linux.png" -type f -delete
+
+      - name: 👩‍🔬 Regenerate test screenshots 🎭
+        run: HOME=/root pnpm --filter @bruff/arcade run test:e2e --grep @snapshot --update-snapshots=all
+
+      - name: 🆙 Upload test screenshots
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-screenshots
+          path: packages/arcade/e2e/**/*-linux.png
+          if-no-files-found: error
+          retention-days: 30
