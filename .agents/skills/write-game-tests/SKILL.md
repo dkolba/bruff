@@ -122,5 +122,6 @@ it("produces deterministic output for fixed seed and input sequence", () => {
 - [ ] Render executor tests cover every `RenderCommand` branch and command ordering.
 - [ ] Frame-driver tests cover both render-only frames and input-driven logical ticks.
 - [ ] Test API tests prove `getState()` / `getRenderStats()` return clones, `dispatchInput()` normalises raw input, and attachment is gated by `__BRUFF_TEST_MODE__`.
+- [ ] Arcade visual checks use `await expect(locator).toHaveScreenshot("name.png")` with an `@snapshot` test title tag; never leave raw `locator.screenshot()` captures unasserted.
 - [ ] No DOM or Canvas access inside pure `core/`, `state/`, `input/`, or `render/` tests; effects tests may use browser APIs deliberately.
 - [ ] No `Math.random()`, `Date.now()`, or raw `performance.now()` inside any test (seed and clock everything).
