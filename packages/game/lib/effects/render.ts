@@ -1,4 +1,5 @@
 import type { GameState } from "../core/types.ts";
+import type { RenderStats } from "../render/render-stats.ts";
 
 /**
  * Draws one frame from the given {@link GameState} onto the supplied
@@ -10,8 +11,12 @@ import type { GameState } from "../core/types.ts";
  * @param state - The state snapshot to draw
  * @param context - The 2D context to draw onto
  */
-const render = (state: GameState, context: CanvasRenderingContext2D): void => {
-  const { player, enemies } = state;
+const render = (
+  state: GameState,
+  context: CanvasRenderingContext2D,
+): RenderStats => {
+  const { enemies, frameIndex, player } = state;
+  const { length: enemyCount } = enemies;
   context.fillStyle = "blue";
   context.fillRect(player.xPos, player.yPos, player.size, player.size);
 
@@ -20,6 +25,12 @@ const render = (state: GameState, context: CanvasRenderingContext2D): void => {
   enemies.forEach((enemy) => {
     context.fillRect(enemy.xPos, enemy.yPos, enemy.size, enemy.size);
   });
+
+  return {
+    enemiesDrawn: enemyCount,
+    frameIndex,
+    playerDrawn: true,
+  };
 };
 
 export default render;

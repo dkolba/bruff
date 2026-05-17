@@ -12,6 +12,7 @@ const STATE_VERSION = 1;
 const createBaseState = (): GameState => ({
   canvas: { height: 600, width: 800 },
   enemies: [],
+  frameIndex: 0,
   input: [],
   player: {
     id: brand<"PlayerId">("test-player"),
@@ -21,6 +22,7 @@ const createBaseState = (): GameState => ({
   },
   playerMoved: false,
   prng: createPrng(TEST_SEED),
+  seed: TEST_SEED,
   stateVersion: STATE_VERSION,
 });
 

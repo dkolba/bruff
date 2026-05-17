@@ -10,6 +10,7 @@ import type { GameState } from "../core/types.ts";
 
 const INITIAL_SEED = 1;
 const STATE_VERSION = 1;
+const INITIAL_FRAME_INDEX = 0;
 
 const drawId = <Tag extends string>(
   prng: PrngState,
@@ -27,13 +28,18 @@ const drawId = <Tag extends string>(
  * A-12 is preserved.
  *
  * @param canvas - Object containing the canvas dimensions
+ * @param seed - Deterministic seed for entity identity and replay stability
  * @returns The initial game state
  */
-const createInitialState = (canvas: {
-  height: number;
-  width: number;
-}): GameState => {
-  const player = drawId<"PlayerId">(createPrng(INITIAL_SEED));
+// eslint-disable-next-line max-lines-per-function -- initial state construction is kept inline for deterministic readability.
+const createInitialState = (
+  canvas: {
+    height: number;
+    width: number;
+  },
+  seed: number = INITIAL_SEED,
+): GameState => {
+  const player = drawId<"PlayerId">(createPrng(seed));
   const enemy0 = drawId<"EnemyId">(player.prng);
   const enemy1 = drawId<"EnemyId">(enemy0.prng);
   const enemy2 = drawId<"EnemyId">(enemy1.prng);
@@ -66,6 +72,7 @@ const createInitialState = (canvas: {
         yPos: 300,
       },
     ],
+    frameIndex: INITIAL_FRAME_INDEX,
     input: [],
     player: {
       id: player.id,
@@ -75,6 +82,7 @@ const createInitialState = (canvas: {
     },
     playerMoved: false,
     prng: enemy2.prng, // !TODO: use dedicated prng
+    seed,
     stateVersion: STATE_VERSION,
   };
 };

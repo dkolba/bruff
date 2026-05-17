@@ -71,6 +71,24 @@ describe("GameElement structure", () => {
     gameElement.connectedCallback();
     expect(gameElement.shadowRoot).toBe(firstShadowRoot);
   });
+
+  it("owns the HUD inside the shadow root", () => {
+    const hud = gameElement.shadowRoot?.querySelector("#bruff-hud");
+
+    expect(hud).toBeInstanceOf(HTMLDivElement);
+    expect(hud?.textContent).toBe("bruff");
+    expect(hud?.getAttribute("aria-label")).toBe("bruff status");
+  });
+
+  it("stores and clears a per-instance test API", () => {
+    const testApi = { getState: vi.fn() };
+
+    gameElement.setTestApi(testApi);
+    expect(gameElement.testApi).toBe(testApi);
+
+    gameElement.setTestApi(undefined);
+    expect(gameElement.testApi).toBeUndefined();
+  });
 });
 
 describe("GameElement log forwarding", () => {

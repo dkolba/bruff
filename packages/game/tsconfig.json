@@ -7,6 +7,12 @@
       "@/*": ["lib/*"]
     }
   },
-  "include": ["lib/**/*.ts", "types/**/*.ts", "lib/**/*.test.ts"],
+  "include": [
+    "lib/**/*.ts",
+    "types/**/*.ts",
+    "lib/**/*.test.ts",
+    "tests/fixtures/**/*.json",
+    "tests/snapshots/**/*.json"
+  ],
   "exclude": ["node_modules", "eslint.config.js"]
 }

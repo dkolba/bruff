@@ -4,6 +4,10 @@ import { defineConfig } from "vitest/config";
 import { playwright } from "@vitest/browser-playwright";
 
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify("0.0.0"),
+    __BRUFF_TEST_MODE__: JSON.stringify(true),
+  },
   test: {
     browser: {
       enabled: true,
@@ -34,7 +38,7 @@ export default defineConfig({
       },
     },
     exclude: ["**/*spec*{js,ts,jsx,tsx}"],
-    include: ["lib/**/*test*.{js,ts,jsx,tsx}"],
+    include: ["lib/**/*.test.{js,ts,jsx,tsx}"],
     setupFiles: ["tests/setup.ts"],
   },
 });

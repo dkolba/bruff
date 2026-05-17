@@ -1,0 +1,56 @@
+import { brand, createPrng } from "@bruff/utils";
+import { describe, expect, it } from "vitest";
+import { advanceGameState } from "./advance-game-state.js";
+import type { GameState } from "../core/types.ts";
+
+const TEST_SEED = 1;
+const STATE_VERSION = 1;
+const ZERO = 0;
+const ONE = 1;
+const PLAYER_START_X = 200;
+const PLAYER_START_Y = 200;
+
+const createState = (): GameState => ({
+  canvas: { height: 600, width: 800 },
+  enemies: [
+    {
+      id: brand<"EnemyId">("test-enemy"),
+      size: 20,
+      spawnOrder: ZERO,
+      xPos: 50,
+      yPos: 50,
+    },
+  ],
+  frameIndex: ZERO,
+  input: [],
+  player: {
+    id: brand<"PlayerId">("test-player"),
+    size: 20,
+    xPos: PLAYER_START_X,
+    yPos: PLAYER_START_Y,
+  },
+  playerMoved: false,
+  prng: createPrng(TEST_SEED),
+  seed: TEST_SEED,
+  stateVersion: STATE_VERSION,
+});
+
+describe("advanceGameState", () => {
+  it("does not advance a logical tick without input", () => {
+    const state = createState();
+
+    expect(advanceGameState(state, [])).toStrictEqual(state);
+  });
+
+  it("advances exactly one logical tick after queued input", () => {
+    const state = createState();
+
+    const nextState = advanceGameState(state, [{ type: "move-right" }]);
+
+    expect(nextState.frameIndex).toBe(ONE);
+    expect(nextState.player.xPos).toBeGreaterThan(state.player.xPos);
+    expect(nextState.enemies[ZERO]?.xPos).toBeGreaterThan(
+      state.enemies[ZERO]?.xPos ?? ZERO,
+    );
+  });
+});

@@ -1,5 +1,8 @@
 import { consoleLogHandler, onLog } from "@bruff/utils";
 
+/** Browser test API stored by the game package in test mode. */
+export type GameElementTestApi = unknown;
+
 const createStencil = (templateMarkup: string): DocumentFragment => {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = templateMarkup;
@@ -19,7 +22,17 @@ const createStencil = (templateMarkup: string): DocumentFragment => {
  */
 // eslint-disable-next-line wc/define-tag-after-class-definition
 export class GameElement extends HTMLElement {
+  #testApi: GameElementTestApi | undefined;
+
   #unsubscribe: (() => void) | undefined;
+
+  get testApi(): GameElementTestApi | undefined {
+    return this.#testApi;
+  }
+
+  setTestApi(testApi: GameElementTestApi | undefined): void {
+    this.#testApi = testApi;
+  }
 
   connectedCallback(): void {
     if (!this.shadowRoot) {
@@ -44,12 +57,33 @@ export class GameElement extends HTMLElement {
 
     return `<template >
           <style>
+          :host {
+            display: block;
+            height: 100%;
+            width: 100%;
+          }
+
           canvas {
             display: block;   /* this is IMPORTANT! */
             height: 100%;
             width: 100%;
             }
+
+          #bruff-hud {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            padding: 4px 8px;
+            color: CanvasText;
+            background: Canvas;
+            border: 1px solid CanvasText;
+            font:
+              600 0.75rem system-ui,
+              sans-serif;
+            z-index: 1;
+          }
           </style>
+          <div id="bruff-hud" aria-label="bruff status">bruff</div>
           <canvas id="gamecanvas" width="${width}" height="${height}"></canvas>
         </template>`;
   }
