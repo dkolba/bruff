@@ -16,3 +16,5 @@ permissions:
 jobs:
   validate:
     uses: ./.github/workflows/validate.yml
+  screenshots:
+    uses: ./.github/workflows/screenshots.yml
