@@ -13,6 +13,7 @@
     "lint": "eslint",
     "typecheck": "tsc",
     "test:e2e": "playwright test",
+    "test:e2e:update-snapshots": "pnpm run test:e2e --grep @snapshot --update-snapshots=all",
     "test": "pnpm run coverage:e2e:prune && pnpm run test:e2e && pnpm run coverage:e2e:report"
   },
   "devDependencies": {

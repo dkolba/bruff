@@ -13,8 +13,9 @@ description: Common patterns and best-practices for writing tests (unit tests & 
 - **T-6 (SHOULD)** Test the entire structure in one assertion if possible
 - **T-7 (MUST)** Canvas-game E2E tests assert `GameState` through `window.__bruffTestApi` in `?test=1` mode by default. Use `gotoTestMode(page)` from `packages/arcade/e2e/base-fixtures.ts` and drive gameplay with `dispatchInput()` plus `stepFrames()`.
 - **T-8 (MUST)** Treat rendered frames and logical ticks separately. `stepFrames(n)` may render and advance manual clock time; it increments `frameIndex` and moves enemies only when queued input creates a logical tick.
-- **T-9 (MUST)** Screenshot assertions are narrow: static DOM regions, or canvas after a deterministic replay checkpoint followed by `freezeForSnapshot()`. Do not use full-canvas gameplay pixel diffs as a correctness signal.
+- **T-9 (MUST)** Screenshot assertions are narrow and self-validating: static DOM regions, or canvas after a deterministic replay checkpoint followed by `freezeForSnapshot()`. Use `await expect(locator).toHaveScreenshot("name.png")`; do not call `locator.screenshot()` unless the test also makes an explicit assertion on the returned bytes. Update Arcade E2E screenshot baselines with `pnpm run --filter @bruff/arcade test:e2e:update-snapshots`.
 - **T-10 (MUST)** Replay tests use JSON fixtures in `packages/game/tests/fixtures/` and committed final-state snapshots in `packages/game/tests/snapshots/`; fixture parsing returns typed `Result` values, never throws.
+- **T-11 (MUST)** Do not leave dangling locators in tests. Every locator created in a test must be used in an assertion such as `toBeVisible()`, `toHaveText()`, `toHaveScreenshot()`, or an equivalent explicit expectation.
 
   ```ts
   expect(result).toBe([value]); // Good

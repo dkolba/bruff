@@ -26,7 +26,7 @@ export default defineConfig({
         "lib/effects/entry.ts",
         "lib/effects/loop.ts",
         "lib/core/constants.ts",
-        "lib/effects/observable/merge.ts",
+        "lib/effects/observable/*",
       ],
       include: ["lib/**/*.ts"],
       reporter: ["text", "json", "html"],

@@ -76,16 +76,16 @@ All events that flow through the game loop must obey the following rules:
 
 ## Rendering
 
-- **A-25 (MUST)** Rendering is a pure projection of `GameState`. The render layer takes a state snapshot and produces a Canvas frame; it holds no internal state, no caches, no memoised scene graph, no incremental mutation.
-- **A-26 (MUST)** Each frame is drawn from scratch — clear-and-redraw. The previous frame's pixels are not load-bearing; every visible pixel is recomputed from current `GameState` every tick.
-- **A-27 (MUST)** Output is a deterministic function of state. Same `GameState` → same Canvas output, byte-for-byte. Time-driven animations are not an exception: their phase is part of state, fed in via the controlled time input (per A-21).
-- **A-28 (MUST)** Render code reports `RenderStats` for test observability. The latest stats are owned by the effects-layer frame driver and exposed only through the test API.
+- **A-25 (MUST)** Foreground entity rendering is a pure projection of `GameState` to `ReadonlyArray<RenderCommand>` in `packages/game/lib/render/project-render-commands.ts`. The render layer holds no internal state, no caches, no memoised scene graph, and no Canvas references.
+- **A-26 (MUST)** Canvas execution of `RenderCommand` values lives only in `packages/game/lib/effects/execute-render-command.ts`. Other effects modules may orchestrate rendering, but they should not duplicate foreground entity draw calls.
+- **A-27 (MUST)** Same `GameState` → same foreground `RenderCommand` sequence and same `RenderStats`. The animated background is shell-rendered before foreground commands and may depend on controlled `Clock` time through `effects/frame-step-driver.ts`.
+- **A-28 (MUST)** Render code reports `RenderStats` through `renderStatsForState(state)` for test observability. The latest stats are owned by the effects-layer frame driver and exposed only through the test API.
 
 ## Testing rules specific to this package
 
 - **GT-1 (MUST)** Domain tests are **mock-free**. Pure functions in `core/`, `state/`, `input/`, `render/` are tested with literal inputs and outputs. Mocking a pure function is a code smell — pass the real value.
-- **GT-2 (MUST)** Domain tests are **DOM-free**. Tests for `core/`, `state/`, `input/`, and `render/` must not touch `document`, `window`, `customElements`, or any browser API — they assert on data only. Tests that legitimately need a Web Component or Canvas live alongside `effects/` or in `@bruff/game-element` / `@bruff/arcade` and use the browser provider deliberately.
+- **GT-2 (MUST)** Domain tests are **DOM-free**. Tests for `core/`, `state/`, `input/`, and `render/` must not touch `document`, `window`, `customElements`, or any browser API — render tests assert on `RenderCommand` and `RenderStats` data only. Tests that legitimately need a Web Component or Canvas live alongside `effects/` or in `@bruff/game-element` / `@bruff/arcade` and use the browser provider deliberately.
 - **GT-3 (MUST)** Replay tests use `packages/game/tests/fixtures/*.json` plus committed final-state snapshots in `packages/game/tests/snapshots/*.json`. Fixture parsing returns `Result`, never throws.
-- **GT-4 (MUST)** Browser-control hooks (`isTestMode`, `attachTestApi`, `freezeForSnapshot`, manual clocks) stay in `effects/` and are gated by `__BRUFF_TEST_MODE__`.
+- **GT-4 (MUST)** Browser-control hooks (`isTestMode`, `attachTestApi`, `freezeForSnapshot`, manual clocks) stay in `effects/` and are gated by `__BRUFF_TEST_MODE__`. Test API runtime code belongs under `effects/test-api/`.
 
 For the unit / property-based / replay testing strategy, invoke the `write-game-tests` skill.

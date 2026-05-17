@@ -6,6 +6,8 @@ import render from "./render.js";
 const THREE = 3;
 const TEST_SEED = 1;
 const STATE_VERSION = 1;
+const ZERO = 0;
+const ONE = 1;
 
 const setupRenderTest = (): {
   mockContext: CanvasRenderingContext2D;
@@ -59,27 +61,28 @@ describe("render", () => {
 
     const stats = render(state, mockContext);
 
-    // Player rendering
-    expect(mockContext.fillRect).toHaveBeenCalledWith(
-      state.player.xPos,
-      state.player.yPos,
-      state.player.size,
-      state.player.size,
-    );
-
-    // Enemies rendering
-    for (const enemy of state.enemies) {
-      expect(mockContext.fillRect).toHaveBeenCalledWith(
-        enemy.xPos,
-        enemy.yPos,
-        enemy.size,
-        enemy.size,
-      );
-    }
-
-    // Check fillStyle changes
+    expect(vi.mocked(mockContext.fillRect).mock.calls).toStrictEqual([
+      [
+        state.player.xPos,
+        state.player.yPos,
+        state.player.size,
+        state.player.size,
+      ],
+      [
+        state.enemies[ZERO]?.xPos,
+        state.enemies[ZERO]?.yPos,
+        state.enemies[ZERO]?.size,
+        state.enemies[ZERO]?.size,
+      ],
+      [
+        state.enemies[ONE]?.xPos,
+        state.enemies[ONE]?.yPos,
+        state.enemies[ONE]?.size,
+        state.enemies[ONE]?.size,
+      ],
+    ]);
     const fillStyleCalls = vi.mocked(mockContext.fillRect).mock.calls.length;
-    expect(fillStyleCalls).toBe(THREE); // 1 for player, 2 for enemies
+    expect(fillStyleCalls).toBe(THREE);
     expect(stats).toStrictEqual({
       enemiesDrawn: state.enemies.length,
       frameIndex: state.frameIndex,

@@ -39,8 +39,8 @@ Each task is independently executable: it must compile, lint, and pass tests on 
 
 ## Layer 6 — Browser test API
 
-- [x] T21 — Define `BruffTestApi` type in `packages/game/lib/effects/test-api-types.ts`.
-- [x] T22 — Implement `attachTestApi(driver)` in `packages/game/lib/effects/test-api.ts` and assign `window.__bruffTestApi` in test mode.
+- [x] T21 — Define `BruffTestApi` type in `packages/game/lib/effects/test-api/test-api-types.ts`.
+- [x] T22 — Implement `attachTestApi(driver)` in `packages/game/lib/effects/test-api/attach-test-api.ts` and assign `window.__bruffTestApi` in test mode.
 - [x] T23 — Implement `freezeForSnapshot()` semantics: pause simulation and resolve after next paint.
 - [x] T24 — Wire API attachment from `packages/game/lib/effects/loop.ts` only when test mode is enabled.
 - [x] T25 — Expose per-instance test API through `packages/game-element/module/game-element.ts`.

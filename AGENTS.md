@@ -65,6 +65,7 @@ These rules ensure maintainability, safety, and developer velocity.
 ##### Architecture Principles
 
 - **Functional Core, Imperative Shell** - All side effects (DOM, Canvas, I/O, logging) live in the shell; the core is pure and has no knowledge of the shell.
+- **Render Commands at the Boundary** - Game rendering is described in the pure `render/` layer as `RenderCommand` values. Canvas execution of those commands lives only in the `effects/` shell.
 - **Logging Through the Event Bus** - Production code emits logs with `log()` from `@bruff/utils`; direct `console.*` calls belong only in the event-bus console sink and tests.
 - **Command–Query Separation** - A function either returns a value (query) or produces a side effect (command), never both.
 - **Illegal States Unrepresentable** - Encode invariants in the type system (discriminated unions, branded types, refinement via narrowing) so impossible states cannot be expressed.
@@ -74,7 +75,7 @@ These rules ensure maintainability, safety, and developer velocity.
 - **Functions as First-Class Values** - Functions are passed, returned, and composed like any other value. Curried factories (`(config) => (input) => output`) are preferred over closures over module state.
 - **Higher-Order Functions** - Functions that take or return functions are the canonical extension mechanism. Reach for `pipe`, `compose`, currying, and factory functions before reaching for new types or classes.
 - **Algebraic Data Types (ADTs)** - Sum types (discriminated unions) for choices, product types (records) for combinations. Every domain type is one or the other; classes are forbidden (C-3).
-- **Wrap Effects in Explicit Functions** - Every side-effecting call (HTTP, Canvas draw, timer, DOM access) lives in a named single-purpose function in the shell. Never inline `fetch()`, `requestAnimationFrame`, or `document.querySelector` into business logic.
+- **Wrap Effects in Explicit Functions** - Every side-effecting call (HTTP, Canvas draw, timer, DOM access) lives in a named single-purpose function in the shell. Never inline `fetch()`, `requestAnimationFrame`, or `document.querySelector` into business logic; Canvas entity drawing goes through the `RenderCommand` executor.
 - **Transform Before Update** - Shell effects produce raw data → pure transformations turn it into typed actions → reducers apply actions to state. Never pipe shell results directly into a state mutation.
 - **Composition over inheritance** - Use dependency injection
 - **Interfaces over singletons** - Enable testing and flexibility
@@ -230,4 +231,4 @@ Testing rules complement the `write-tests` skill (which covers file conventions 
   - **T**imely — written alongside (or before, per C-1) the code under test, never bolted on later.
 - **T-2 (SHOULD)** Test bodies use **Given–When–Then** structure (or `// arrange`, `// act`, `// assert` comments) so a reader sees the setup, action, and expectation at a glance.
 - **T-3 (MUST)** **Black-box testing** — assert against observable behaviour through the public API only. Never reach into private implementation, internal state shape, or call counts. A behaviour-preserving refactor must not require touching tests.
-- **T-4 (MUST)** Canvas gameplay E2E tests are state-first. Use the deterministic `?test=1` browser API (`window.__bruffTestApi`) for simulation assertions; reserve screenshots for static DOM regions or frames frozen via `freezeForSnapshot()`.
+- **T-4 (MUST)** Canvas gameplay E2E tests are state-first. Use the deterministic `?test=1` browser API (`window.__bruffTestApi`) for simulation assertions; cover foreground draw plans with pure `RenderCommand` projection tests and effects executor tests, reserving screenshots for static DOM regions or frames frozen via `freezeForSnapshot()`.

@@ -10,9 +10,8 @@
     "game/lib/effects/clock.ts",
     "game/lib/effects/frame-step-driver.ts",
     "game/lib/effects/loop.ts",
-    "game/lib/effects/observable/keydown.ts",
-    "game/lib/effects/observable/touch.ts",
-    "game/lib/effects/test-api.ts",
+    "game/lib/effects/observable/*",
+    "game/lib/effects/test-api/**/*.ts",
     "game/lib/effects/test-mode.ts"
   ],
   "branches": 80,

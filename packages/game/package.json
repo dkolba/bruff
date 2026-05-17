@@ -14,8 +14,8 @@
       "import": "./lib/effects/entry.ts"
     },
     "./test-api": {
-      "types": "./lib/effects/test-api-types.ts",
-      "import": "./lib/effects/test-api-types.ts"
+      "types": "./lib/effects/test-api/test-api-types.ts",
+      "import": "./lib/effects/test-api/test-api-types.ts"
     }
   },
   "scripts": {

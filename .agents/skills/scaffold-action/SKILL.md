@@ -15,7 +15,7 @@ All actions are strongly-typed discriminated unions. The four top-level categori
 type InputAction  = /* keyboard / mouse / touch / gamepad events, normalised */
 type GameAction   = /* simulation-driven state transitions */
 type SystemEvent  = /* lifecycle events: tick, init, pause, resume */
-type RenderCommand = /* draw instructions produced by the projection function */
+type RenderCommand = /* draw instructions produced by projectRenderCommands(state) */
 ```
 
 ## Steps
@@ -47,3 +47,5 @@ default: {
   return _exhaustive;
 }
 ```
+
+For `RenderCommand` variants, also update `packages/game/lib/render/project-render-commands.ts`, `packages/game/lib/effects/execute-render-command.ts`, and their co-located tests.

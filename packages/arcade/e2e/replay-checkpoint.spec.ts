@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers, no-underscore-dangle, unicorn/prefer-global-this -- E2E replay setup uses fixed fixture frame constants and the browser test API. */
-import { expect, type Page } from "@playwright/test";
-import { gotoTestMode, test } from "./base-fixtures.js";
+import { expect, gotoTestMode, test } from "./base-fixtures.js";
 import canonicalFixture from "../../game/tests/fixtures/canonical-replay.json" with { type: "json" };
+import type { Page } from "@playwright/test";
 
 type ReplayCheckpointFixture = Readonly<{
   frames: ReadonlyArray<
@@ -18,7 +18,7 @@ type ReplayCheckpointFixture = Readonly<{
   totalFrames: number;
 }>;
 
-test("freezes a replay checkpoint for a stable canvas screenshot", async ({
+test("freezes a replay checkpoint for a stable canvas screenshot @snapshot", async ({
   page,
 }: {
   page: Page;
@@ -60,8 +60,8 @@ test("freezes a replay checkpoint for a stable canvas screenshot", async ({
 
   expect(frozen).toBe(true);
 
-  const gameElement = page.locator("bruff-game");
+  const canvas = page.locator("bruff-game").locator("canvas");
 
-  await expect(gameElement).toBeVisible();
-  await gameElement.screenshot();
+  await expect(canvas).toBeVisible();
+  await expect(canvas).toHaveScreenshot("replay-checkpoint-canvas.png");
 });

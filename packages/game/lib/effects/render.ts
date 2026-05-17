@@ -1,12 +1,14 @@
+import { executeRenderCommands } from "./execute-render-command.js";
 import type { GameState } from "../core/types.ts";
+import { projectRenderCommands } from "../render/project-render-commands.js";
 import type { RenderStats } from "../render/render-stats.ts";
+import { renderStatsForState } from "../render/render-stats.js";
 
 /**
  * Draws one frame from the given {@link GameState} onto the supplied
- * 2D context. The function is deliberately effectful (it calls
- * `fillRect` on the live context) and so lives in the `effects/`
- * shell rather than in the pure `render/` layer until the
- * `RenderCommand`-producing projection arrives in a later phase.
+ * 2D context. The function is deliberately effectful: it executes
+ * render commands against the live Canvas context and therefore stays
+ * in the `effects/` shell.
  *
  * @param state - The state snapshot to draw
  * @param context - The 2D context to draw onto
@@ -15,22 +17,8 @@ const render = (
   state: GameState,
   context: CanvasRenderingContext2D,
 ): RenderStats => {
-  const { enemies, frameIndex, player } = state;
-  const { length: enemyCount } = enemies;
-  context.fillStyle = "blue";
-  context.fillRect(player.xPos, player.yPos, player.size, player.size);
-
-  context.fillStyle = "red";
-  // eslint-disable-next-line unicorn/no-array-for-each -- Declarative iteration is preferred per C-17; T46 explicitly mandates `.forEach`.
-  enemies.forEach((enemy) => {
-    context.fillRect(enemy.xPos, enemy.yPos, enemy.size, enemy.size);
-  });
-
-  return {
-    enemiesDrawn: enemyCount,
-    frameIndex,
-    playerDrawn: true,
-  };
+  executeRenderCommands(context, projectRenderCommands(state));
+  return renderStatsForState(state);
 };
 
 export default render;
