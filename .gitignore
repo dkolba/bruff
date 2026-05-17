@@ -10,3 +10,4 @@ playwright-report
 packages/game/site
 tsconfig.tsbuildinfo
 SCRATCHPAD.md
+.vitest-attachments

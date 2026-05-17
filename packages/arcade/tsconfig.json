@@ -5,11 +5,5 @@
     "composite": true,
     "types": []
   },
-  "include": [
-    "app.ts",
-    "types/**/*.ts",
-    "e2e/**/*.ts",
-    "../game/lib/**/*.ts",
-    "../game/types/**/*.ts"
-  ]
+  "include": ["app.ts", "types/**/*.ts", "e2e/**/*.ts"]
 }

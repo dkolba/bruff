@@ -5,6 +5,7 @@
   "scripts": {
     "coverage:e2e:prune": "rimraf .nyc_instrumented .nyc_output",
     "coverage:e2e:report": "nyc report --cwd=.. --nycrc-path=packages/arcade/.nycrc.json",
+    "build": "pnpm run build:site && pnpm run check:bundle-clean",
     "build:site": "vite build --outDir site && pnpm run check:bundle-clean",
     "check:bundle-clean": "node scripts/check-bundle-clean.mjs",
     "dev": "vite",
