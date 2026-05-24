@@ -40,14 +40,12 @@
     "@vitest/browser-playwright": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "eslint": "catalog:",
-    "eslint-plugin-jsdoc": "catalog:",
     "eslint-plugin-tsdoc": "catalog:",
     "observable-polyfill": "catalog:",
     "playwright": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-dts": "catalog:",
     "vite-plugin-istanbul": "catalog:",
     "vitest": "catalog:"
   }
