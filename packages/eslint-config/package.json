@@ -9,13 +9,13 @@
     "test": "pnpm run lint"
   },
   "dependencies": {
-    "@eslint/js": "10.0.1",
-    "eslint-plugin-tsdoc": "0.5.2",
-    "eslint-plugin-unicorn": "64.0.0",
-    "eslint-plugin-wc": "3.1.0",
-    "globals": "17.5.0",
-    "prettier": "3.8.3",
-    "typescript-eslint": "8.59.3"
+    "@eslint/js": "catalog:",
+    "eslint-plugin-tsdoc": "catalog:",
+    "eslint-plugin-unicorn": "catalog:",
+    "eslint-plugin-wc": "catalog:",
+    "globals": "catalog:",
+    "prettier": "catalog:",
+    "typescript-eslint": "catalog:"
   },
   "peerDependencies": {
     "eslint": ">=9"
