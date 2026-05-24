@@ -33,8 +33,8 @@
     "typecheck": "pnpm -r --parallel run typecheck"
   },
   "devDependencies": {
-    "@changesets/cli": "2.31.0",
-    "prettier": "3.8.3"
+    "@changesets/cli": "catalog:",
+    "prettier": "catalog:"
   },
   "engines": {
     "node": ">=24"
