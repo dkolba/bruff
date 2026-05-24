@@ -11,21 +11,42 @@
       "console": "integratedTerminal",
       "skipFiles": ["<node_internals>/**"],
       "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
+        "VITE_COVERAGE": "false"
+      }
+    },
+    {
+      "name": "Arcade: Full Debug",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/packages/arcade",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["run", "dev"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "env": {
+        "NODE_ENV": "development",
+        "VITE_COVERAGE": "false"
+      },
+      "serverReadyAction": {
+        "action": "startDebugging",
+        "name": "Arcade: Chrome",
+        "pattern": "Local:\\s+(http://127\\.0\\.0\\.1:5173/)"
       }
     },
     {
       "name": "Arcade: Chrome",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:5173",
-      "webRoot": "${workspaceFolder}/packages/arcade/src"
-    }
-  ],
-  "compounds": [
-    {
-      "name": "Arcade: Full Debug",
-      "configurations": ["Arcade: Vite Dev Server", "Arcade: Chrome"]
+      "url": "http://127.0.0.1:5173",
+      "webRoot": "${workspaceFolder}/packages/arcade",
+      "pathMapping": {
+        "/": "${workspaceFolder}/packages/arcade",
+        "/@fs/Users/duncan/repos/bruff/": "${workspaceFolder}/"
+      },
+      "sourceMapPathOverrides": {
+        "/@fs/*": "/*"
+      }
     }
   ]
 }
