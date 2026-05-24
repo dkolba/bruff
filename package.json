@@ -27,7 +27,7 @@
     "format": "pnpm run format:ai && pnpm -r --parallel run format",
     "format:ai": "prettier -w .agents AGENTS.md",
     "lint": "pnpm -r --parallel run lint",
-    "ok": "pnpm run format && pnpm run lint && pnpm run test && pnpm run typecheck && pnpm run build",
+    "ok": "node scripts/ok.js",
     "start": "pnpm --filter @bruff/arcade run dev",
     "test": "pnpm -r --parallel run test",
     "typecheck": "pnpm -r --parallel run typecheck"
