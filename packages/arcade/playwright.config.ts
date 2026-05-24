@@ -49,6 +49,7 @@ export default defineConfig({
   webServer: {
     command: "pnpm run dev",
     env: {
+      VITE_COVERAGE: "true",
       VITE_TEST_MODE: "1",
     },
     port: 5173,
