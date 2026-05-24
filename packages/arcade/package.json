@@ -20,6 +20,7 @@
     "@axe-core/playwright": "catalog:",
     "@bruff/eslint-config": "workspace:0.0.0",
     "@bruff/game": "workspace:0.0.0",
+    "@bruff/sigil": "workspace:0.0.0",
     "@playwright/test": "catalog:",
     "eslint": "catalog:",
     "eslint-plugin-playwright": "catalog:",

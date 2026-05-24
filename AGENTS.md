@@ -214,6 +214,7 @@ The repo is a pnpm monorepo. Package-specific rules auto-load from `packages/<pa
 | `@bruff/game`          | Roguelike game logic — pure layered architecture (`core/state/input/render/effects`) | `packages/game/AGENTS.override.md`         |
 | `@bruff/game-element`  | Imperative shell — Web Component base class that mounts the canvas                   | `packages/game-element/AGENTS.override.md` |
 | `@bruff/arcade`        | E2E host — Vite app + Playwright tests across desktop/mobile browsers                | `packages/arcade/AGENTS.override.md`       |
+| `@bruff/sigil`         | Development-only font glyph JSON extraction tool                                     | `packages/sigil/AGENTS.override.md`        |
 | `@bruff/utils`         | Shared utilities: pure FP helpers plus shell-adjacent browser/logging services       | `packages/utils/AGENTS.override.md`        |
 | `@bruff/eslint-config` | Shared ESLint flat config                                                            | (none — config-only package)               |
 

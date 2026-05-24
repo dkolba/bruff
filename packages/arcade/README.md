@@ -1,6 +1,6 @@
 # @bruff/arcade
 
-The web application that hosts and end-to-end tests the `@bruff/game` package. It renders the `<bruff-game>` Web Component in a minimal full-screen page, runs Playwright E2E tests across desktop and mobile browsers, and reports Istanbul code coverage.
+The web application that hosts and end-to-end tests the `@bruff/game` package. It renders the `<bruff-game>` Web Component in a minimal full-screen page, exposes development-only tools at `/tools`, runs Playwright E2E tests across desktop and mobile browsers, and reports Istanbul code coverage.
 
 ## Development
 
@@ -10,6 +10,10 @@ pnpm run lint       # Lint with ESLint
 pnpm run typecheck  # Type-check with TypeScript
 pnpm run format     # Format with Prettier
 ```
+
+The dev server exposes `/tools` for local tooling such as `<tool-sigil>`.
+Production builds mount only `<bruff-game>`; the tools route and `@bruff/sigil`
+are loaded through the development-only router.
 
 ## Testing
 
@@ -23,7 +27,7 @@ Tests run headless across Chromium, Firefox, and WebKit on desktop, plus Pixel 5
 The suite is split by responsibility:
 
 - `state-assertions.spec.ts` drives `window.__bruffTestApi` and asserts on `GameState`.
-- `accessibility.spec.ts` runs axe checks in dark and light schemes.
+- `accessibility.spec.ts` runs axe checks for the root game route and `/tools` in dark and light schemes.
 - `hud-visual.spec.ts` captures the static DOM HUD region.
 - `replay-checkpoint.spec.ts` loads a replay fixture, freezes the canvas, and captures one stable screenshot.
 
@@ -37,11 +41,12 @@ Coverage thresholds (branches, lines, functions, statements) are set at 80% and 
 pnpm run build:site   # Production build to site/
 ```
 
-Source maps are enabled in the production build. The production build also runs `check:bundle-clean`, which fails if emitted assets contain `__bruffTestApi`.
+Source maps are enabled in the production build with source contents excluded. The production build also runs `check:bundle-clean`, which fails if emitted assets contain `__bruffTestApi`, `tool-sigil`, `@bruff/sigil`, `opentype`, or `dev-tools-router`.
 
 ## Workspace dependencies
 
 | Package                | Role                                                          |
 | ---------------------- | ------------------------------------------------------------- |
 | `@bruff/game`          | Core game library — provides the `<bruff-game>` Web Component |
+| `@bruff/sigil`         | Development-only glyph JSON extraction tool for `/tools`      |
 | `@bruff/eslint-config` | Shared ESLint configuration                                   |

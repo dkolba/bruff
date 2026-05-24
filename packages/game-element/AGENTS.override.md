@@ -8,7 +8,7 @@ This package is the **imperative shell** in the Functional Core / Imperative She
 ## Package-specific allowances
 
 - **GE-1** The `this` keyword is permitted here (per C-18's carve-out) — Web Component lifecycle methods (`connectedCallback`, `disconnectedCallback`, etc.) require it. It remains forbidden everywhere else.
-- **GE-2** DOM access (`document`, `window`, `customElements`, `ShadowRoot`, `HTMLElement`) is allowed. This is the only package besides `@bruff/arcade` where it is.
+- **GE-2** DOM access (`document`, `window`, `customElements`, `ShadowRoot`, `HTMLElement`) is allowed. Other DOM-capable shell packages, such as `@bruff/arcade` and `@bruff/sigil`, document their own narrower allowances.
 
 ## Package-specific obligations
 

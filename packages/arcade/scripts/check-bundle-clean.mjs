@@ -3,7 +3,13 @@ import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 
 const siteDirectory = fileURLToPath(new URL("../site", import.meta.url));
-const forbiddenNeedle = "__bruffTestApi";
+const forbiddenNeedles = [
+  "__bruffTestApi",
+  "tool-sigil",
+  "@bruff/sigil",
+  "opentype",
+  "dev-tools-router",
+];
 
 const listFiles = async (directory) => {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -17,18 +23,27 @@ const listFiles = async (directory) => {
 };
 
 const files = await listFiles(siteDirectory);
-const contaminatedFiles = (
+const contaminations = (
   await Promise.all(
     files.map(async (filePath) => {
       const contents = await readFile(filePath, "utf8");
-      return contents.includes(forbiddenNeedle) ? filePath : undefined;
+      return forbiddenNeedles
+        .filter((forbiddenNeedle) => contents.includes(forbiddenNeedle))
+        .map((forbiddenNeedle) => ({ filePath, forbiddenNeedle }));
     }),
   )
-).filter((filePath) => filePath !== undefined);
+).flat();
 
-if (contaminatedFiles.length > 0) {
+if (contaminations.length > 0) {
   process.stderr.write(
-    `Production bundle contains ${forbiddenNeedle} in ${contaminatedFiles.join(", ")}\n`,
+    [
+      "Production bundle contains forbidden development strings:",
+      ...contaminations.map(
+        ({ filePath, forbiddenNeedle }) =>
+          `- ${forbiddenNeedle} in ${filePath}`,
+      ),
+      "",
+    ].join("\n"),
   );
   process.exitCode = 1;
 }
