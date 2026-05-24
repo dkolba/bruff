@@ -21,12 +21,12 @@ catalog:
   "@vitest/browser": 4.1.4
   "@vitest/browser-playwright": 4.1.4
   "@vitest/coverage-v8": 4.1.4
-  eslint: 10.2.1
-  eslint-plugin-playwright: 2.10.2
+  eslint: 10.4.0
+  eslint-plugin-playwright: 2.10.4
   eslint-plugin-tsdoc: 0.5.2
   eslint-plugin-unicorn: 64.0.0
   eslint-plugin-wc: 3.1.0
-  globals: 17.5.0
+  globals: 17.6.0
   nyc: 18.0.0
   observable-polyfill: 0.0.29
   playwright: 1.59.1
