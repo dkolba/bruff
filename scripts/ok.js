@@ -13,8 +13,8 @@ const commands = [
 function runCommand({ name, command, args }) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
-      shell: true,
       env: process.env,
+      stdio: ["ignore", "pipe", "pipe"],
     });
 
     let stdout = "";
