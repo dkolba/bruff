@@ -34,6 +34,14 @@
 - Given one font is selected and then another font is selected before the first load finishes, then only the second selection may update the visible filename, preview font, errors, extracted glyph rows, and downloadable JSON.
 - Given a glyph-name input is focused, when the user types a multi-character name such as `star`, then focus remains in that input and the full typed value is preserved without requiring repeated clicks.
 
+## Component composition acceptance
+
+- Given `<tool-sigil>` is refactored into state, render, binding, preview-resource, and download helpers, then the public tag name and shadow DOM controls remain unchanged.
+- Given a font file is uploaded, cleared, or replaced after the refactor, then the visible filename, parsed font state, extraction results, errors, preview font resources, and download eligibility match the previous behaviour.
+- Given character input changes after the refactor, then glyph extraction, missing-glyph errors, editable glyph names, invalid-name validation, empty output handling, and `sigil.json` downloads match the previous behaviour.
+- Given a preview-font load or parse completion from an older file selection resolves or rejects after a newer selection, then it does not overwrite or clear the newer preview, errors, extracted glyph rows, or downloadable JSON.
+- Given the component disconnects after the refactor, then browser font resources and object URLs are still released at their existing boundaries.
+
 ## Download acceptance
 
 - Given a font is loaded and at least one glyph is extracted, then activating the download action creates a `Blob` with `application/json` content and a filename of `sigil.json`.
@@ -55,3 +63,11 @@
 - 2026-05-18 — `npm run ok` passed after the final review updates: workspace format, lint, tests, typecheck, and build all completed successfully.
 - 2026-05-18 — Review follow-up tasks T31-T40 are implemented and verified: partial extraction preserves valid drafts, previews use the uploaded font, stale font parse/preview completions are ignored, and glyph-name input focus is preserved while typing multi-character names.
 - Production source maps remain emitted, but source contents are excluded so dev-only route source text is not embedded in production assets.
+
+## Component composition verification checklist
+
+- `pnpm --filter @bruff/sigil run format`
+- `pnpm --filter @bruff/sigil run lint`
+- `pnpm --filter @bruff/sigil run typecheck`
+- `pnpm --filter @bruff/sigil run test`
+- `pnpm run build`

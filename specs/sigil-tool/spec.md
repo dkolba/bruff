@@ -4,6 +4,8 @@
 
 Create a development-only frontend tool for extracting selected glyphs from an uploaded font into a compact JSON asset. The tool is exposed as a new `<tool-sigil>` web component from a new workspace package at `packages/sigil`, and `@bruff/arcade` routes `/tools` to that component only while running in dev mode. Production builds must not include the dev-tools router, the `<tool-sigil>` registration, `@bruff/sigil`, or `opentype.js`.
 
+The `<tool-sigil>` web component must remain a small plain Web Component coordinator instead of accumulating state, rendering, validation, preview-font, and browser-command methods in one class.
+
 ## User-visible behaviour
 
 - Navigating to `/tools` in the arcade dev server displays the sigil tool instead of `<bruff-game>`.
@@ -27,17 +29,25 @@ Create a development-only frontend tool for extracting selected glyphs from an u
 - Glyph previews use the uploaded font, not browser fallback fonts.
 - Editing a glyph-name field keeps focus in that field while the user types multi-character names.
 - Invalid or unsupported font files report a visible error state without throwing uncaught exceptions.
+- Refactoring the component internals must keep the same public tag name and shadow DOM controls.
+- Uploading, clearing, and replacing font files must keep the same behaviour after component composition refactors.
+- Character input, glyph extraction, missing-glyph errors, editable glyph names, invalid-name handling, empty glyph output handling, and `sigil.json` downloads must keep the same behaviour after component composition refactors.
+- Uploaded font previews must continue using a browser `FontFace` and must continue releasing preview resources when replaced or disconnected.
 
 ## Out of scope
 
 - Shipping extracted glyph JSON with the game.
 - Adding a Node CLI extractor.
+- Adding Lit, React, Vue, or another rendering framework.
+- Adding child custom elements or slot-based composition.
 - Preserving ligatures, complex script shaping, kerning pairs, or glyph substitutions. The first version extracts one glyph per Unicode code point.
 - Supporting WOFF2 decompression in the browser.
 - Supporting color glyph layers, emoji palettes, COLR/CPAL rendering, or SVG-in-font color output.
 - Editing, subsetting, or saving a new font file.
 - Adding authenticated or persistent storage for uploaded fonts or extracted JSON.
 - Exposing the sigil tool in production, even behind a hidden route.
+- Changing the exported JSON shape during component composition refactors.
+- Changing the arcade dev route that hosts the tool during component composition refactors.
 
 ## Open questions (resolved)
 
@@ -71,6 +81,9 @@ Create a development-only frontend tool for extracting selected glyphs from an u
 - **Q: How is the dev-only bundle boundary enforced?**  
   A: `@bruff/arcade` must keep the game bootstrap as the production path and load the sigil route through a dev-only dynamic import guarded by `import.meta.env.DEV`. No static import from production-reachable arcade code may reference the dev router or `@bruff/sigil`.
 
+- **Q: Should the component composition refactor add another framework or child custom elements?**
+  A: No. The refactor uses the minimal single-element approach requested by the user: reducer-style state helpers, renderer/binding modules, and composed browser-resource helpers behind the existing `<tool-sigil>` element.
+
 ## Edge cases
 
 - No font selected: preview and download remain unavailable.
@@ -85,6 +98,8 @@ Create a development-only frontend tool for extracting selected glyphs from an u
 - Unsupported font file: parsing returns a typed error displayed in the component.
 - WOFF2 file: explicitly rejected with a typed unsupported-format error.
 - Rapid font reselection: stale parse or preview completions from older selections must not overwrite the latest selected font, errors, previews, or extracted glyphs.
+- Stale preview-font rejection: a rejected preview-font load from an older selection must not clear a newer preview.
+- Clearing the file input: clears parsed font state, extraction results, errors, and preview font resources.
 - Very large character input: extraction is bounded by the number of distinct code points and should keep the UI responsive for typical icon-font use.
 - Glyph with no contours: included only if it is a valid mapped glyph, with empty path data and zero bounds.
 - Browser without `Path2D`: JSON extraction still works; only optional canvas preview paths are skipped.

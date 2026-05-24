@@ -43,7 +43,18 @@
 - Glyph previews must render with the latest uploaded font face.
 - Glyph-name input events must not recreate the focused input element or otherwise drop focus while the user is typing.
 - Stale asynchronous font parse or preview-font load completions must not overwrite the current selected font state.
+- Stale preview-font rejections must not clear a newer preview.
+- Clearing the file input must clear parsed font state, extraction results, errors, and preview font resources.
 - The component must remain usable in desktop and mobile Playwright viewports.
+
+## Component composition constraints
+
+- Keep `<tool-sigil>` as a plain custom element with no Lit, React, Vue, or other rendering framework.
+- Do not introduce child custom elements or slot-based composition for the minimal component decomposition.
+- `ToolSigil` should coordinate handlers and lifecycle while state transitions, selectors, rendering, bindings, preview resources, and download commands live in focused modules.
+- Pure state and view-model helpers must avoid DOM access.
+- Browser APIs must stay in renderer, binding, download, and preview resource modules.
+- Component composition must not change the exported glyph JSON shape, WOFF2 support policy, public tag name, shadow DOM controls, or arcade dev route.
 
 ## Testing constraints
 

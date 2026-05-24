@@ -41,3 +41,7 @@
 - [x] T39 — Add browser component tests in `packages/sigil/module/tool-sigil.test.ts` for glyph-name inputs preserving focus and typed value across multi-character editing.
 - [x] T40 — Refactor glyph-name input handling in `packages/sigil/module/tool-sigil.ts` so validation and download-state updates do not recreate the focused input row.
 - [x] T41 — Run `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run test`, and `pnpm --filter @bruff/sigil run typecheck`; update `specs/sigil-tool/acceptance.md` verification notes with the command results.
+- [x] T42 — Add reducer and selector tests in `packages/sigil/module/tool-sigil-state.test.ts`.
+- [x] T43 — Implement reducer and selector helpers in `packages/sigil/module/tool-sigil-state.ts`.
+- [x] T44 — Add and wire render, binding, and preview resource modules through `packages/sigil/module/tool-sigil.ts`.
+- [x] T45 — Verify `@bruff/sigil` checks and record verification in `specs/sigil-tool/acceptance.md`.
