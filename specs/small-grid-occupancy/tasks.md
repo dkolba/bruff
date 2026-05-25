@@ -26,7 +26,7 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T22 — Update replay fixtures and replay tests in `packages/game/tests/fixtures/canonical-replay.json`, `packages/game/lib/state/run-replay.test.ts`, `packages/game/lib/state/run-replay.property.test.ts`, and `packages/game/lib/state/replay.test.ts`.
 - [x] T23 — Update the canonical replay snapshot in `packages/game/tests/snapshots/canonical-replay.json`.
 - [x] T24 — Update render projection tests in `packages/game/lib/render/project-render-commands.test.ts` for cell-to-pixel rectangle mapping.
-- [ ] T25 — Refactor `packages/game/lib/render/project-render-commands.ts` to derive foreground rectangles from `state.board`, `state.canvas`, and actor cells.
+- [x] T25 — Refactor `packages/game/lib/render/project-render-commands.ts` to derive foreground rectangles from `state.board`, `state.canvas`, and actor cells.
 - [ ] T26 — Update render and effects tests in `packages/game/lib/render/render-stats.test.ts`, `packages/game/lib/effects/render.test.ts`, `packages/game/lib/effects/frame-step-driver.test.ts`, and `packages/game/lib/effects/test-api/attach-test-api.test.ts` for grid-shaped `GameState` literals.
 - [ ] T27 — Update `packages/game/README.md` to describe grid movement, board state, and version 2 replay semantics.
 - [ ] T28 — Run `CI=true pnpm --filter @bruff/game run format`, `CI=true pnpm --filter @bruff/game run lint`, `CI=true pnpm --filter @bruff/game run typecheck`, and `CI=true pnpm --filter @bruff/game run test`; fix failures in the files touched by T1-T27.
