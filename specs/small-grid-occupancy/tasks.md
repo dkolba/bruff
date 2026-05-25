@@ -2,7 +2,7 @@
 
 Each task is ordered and file-scoped. Follow TDD inside each implementation step: add the stub, add the failing behaviour test, then implement the smallest code that turns the gate green. If the package coverage gate prevents committing a red test alone, keep the test-before-code order in the diff and commit the paired green change.
 
-- [ ] T1 — Add `BOARD_COLUMNS`, `BOARD_ROWS`, and `CURRENT_STATE_VERSION` constants in `packages/game/lib/core/constants.ts`.
+- [x] T1 — Add `BOARD_COLUMNS`, `BOARD_ROWS`, and `CURRENT_STATE_VERSION` constants in `packages/game/lib/core/constants.ts`.
 - [ ] T2 — Add grid state types in `packages/game/lib/core/types.ts` by introducing `Board` and `GridCell`, adding `board` to `GameState`, and replacing actor pixel fields with `cell`.
 - [ ] T3 — Add `grid.ts` stubs in `packages/game/lib/state/grid.ts` for `cellForAction`, `cellsEqual`, and `isCellInsideBoard`.
 - [ ] T4 — Add unit tests for grid helpers in `packages/game/lib/state/grid.test.ts`.
