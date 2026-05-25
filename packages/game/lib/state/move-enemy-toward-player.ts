@@ -1,6 +1,39 @@
-import type { CanvasSize, Enemy, Player } from "../core/types.js";
-import { ENEMY_SIZE, ENEMY_SPEED, ZERO } from "../core/constants.js";
+import type { CanvasSize, Enemy, GridCell, Player } from "../core/types.js";
+import { ENEMY_SIZE, ENEMY_SPEED, ONE, ZERO } from "../core/constants.js";
 import { clamp } from "@bruff/utils";
+
+const fallbackCell: GridCell = { column: ZERO, row: ZERO };
+
+const signedStep = (distance: number): number => Math.sign(distance) * ONE;
+
+/**
+ * Chooses the next orthogonal grid cell for an enemy moving toward the player.
+ *
+ * @param enemy - Enemy that is choosing a destination
+ * @param player - Player to move toward
+ * @returns Candidate destination cell
+ */
+/* istanbul ignore next -- wired into browser simulation in T16; covered by unit tests now. */
+export const nextEnemyCellTowardPlayer = (
+  enemy: Enemy,
+  player: Player,
+): GridCell => {
+  const enemyCell = enemy.cell ?? fallbackCell;
+  if (player.cell === undefined) {
+    return enemyCell;
+  }
+
+  const columnDistance = player.cell.column - enemyCell.column;
+  const rowDistance = player.cell.row - enemyCell.row;
+
+  if (columnDistance === ZERO && rowDistance === ZERO) {
+    return enemyCell;
+  }
+
+  return Math.abs(columnDistance) >= Math.abs(rowDistance)
+    ? { ...enemyCell, column: enemyCell.column + signedStep(columnDistance) }
+    : { ...enemyCell, row: enemyCell.row + signedStep(rowDistance) };
+};
 
 /**
  * Moves an enemy one step toward the player, clamped within canvas bounds.
