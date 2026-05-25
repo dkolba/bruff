@@ -1,6 +1,12 @@
+/* eslint-disable sort-imports -- Render stats tests group fixture dependencies before render target imports. */
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
 import type { Enemy, GameState } from "../core/types.ts";
+import {
+  BOARD_COLUMNS,
+  BOARD_ROWS,
+  CURRENT_STATE_VERSION,
+} from "../core/constants.js";
 import { renderStatsForState } from "./render-stats.js";
 
 const ZERO = 0;
@@ -12,10 +18,10 @@ const ENEMY_POS = 50;
 const PLAYER_SIZE = 20;
 const PLAYER_POS = 200;
 const TEST_SEED = 1;
-const STATE_VERSION = 1;
 const FRAME_INDEX = 7;
 
 const createEnemy = (id: string, spawnOrder: number): Enemy => ({
+  cell: { column: spawnOrder, row: spawnOrder },
   id: brand<"EnemyId">(id),
   size: ENEMY_SIZE,
   spawnOrder,
@@ -27,11 +33,13 @@ const createState = (
   enemies: ReadonlyArray<Enemy>,
   frameIndex: number,
 ): GameState => ({
+  board: { columns: BOARD_COLUMNS, rows: BOARD_ROWS },
   canvas: { height: CANVAS_HEIGHT, width: CANVAS_WIDTH },
   enemies,
   frameIndex,
   input: [],
   player: {
+    cell: { column: ONE, row: ONE },
     id: brand<"PlayerId">("test-player"),
     size: PLAYER_SIZE,
     xPos: PLAYER_POS,
@@ -40,7 +48,7 @@ const createState = (
   playerMoved: false,
   prng: createPrng(TEST_SEED),
   seed: TEST_SEED,
-  stateVersion: STATE_VERSION,
+  stateVersion: CURRENT_STATE_VERSION,
 });
 
 describe("renderStatsForState", () => {
