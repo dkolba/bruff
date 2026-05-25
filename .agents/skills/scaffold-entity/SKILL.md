@@ -13,7 +13,7 @@ Use when introducing a new game entity (e.g. `Enemy`, `Item`, `Projectile`).
 - Every entity has a branded ID: `Brand<string, "EntityNameId">` — never a plain `string`.
 - IDs are deterministically generated via the seeded PRNG stored in state — never `Math.random()`, never `crypto.randomUUID()`.
 - IDs are **never reused** within a run; spawn order is tracked for deterministic tie-breaking.
-- Board actors use `GridCell` for gameplay position. Existing `xPos` / `yPos` fields are legacy compatibility data and should not be copied into new entity scaffolds unless a migration explicitly requires them.
+- Board actors use `GridCell` for gameplay position. Do not add actor `xPos` / `yPos`; pixel coordinates belong only to render commands and raw browser input events.
 - Composition over nesting: share sub-shapes via type aliases, not inheritance.
 
 ## Steps

@@ -45,7 +45,7 @@ Replay fixture shape:
 
 ```json
 {
-  "stateVersion": 2,
+  "stateVersion": 3,
   "seed": 1,
   "initialCanvas": { "height": 600, "width": 800 },
   "frames": [{ "frame": 1, "input": "move-right" }],
@@ -53,7 +53,7 @@ Replay fixture shape:
 }
 ```
 
-`frames` are applied before the matching replay frame. Replay frames with no input are render-only and do not increment `frameIndex`. Fixture inputs use normalized action names: `move-up`, `move-down`, `move-left`, and `move-right`. Version 2 fixtures replay against grid movement semantics; persisted version 1 `GameState` values migrate through `migrateV1toV2`.
+`frames` are applied before the matching replay frame. Replay frames with no input are render-only and do not increment `frameIndex`. Fixture inputs use normalized action names: `move-up`, `move-down`, `move-left`, and `move-right`. Version 3 fixtures replay against grid-only actor state; old replay versions are rejected rather than migrated at runtime.
 
 ## Commands
 

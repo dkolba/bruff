@@ -42,7 +42,7 @@ Code must live in the correct layer. Dependencies flow strictly inward — later
 ## Board, Movement & Occupancy
 
 - **A-10b (MUST)** Gameplay positions are discrete `GridCell` values on `GameState.board`. New state logic must use `cell`, `grid.ts`, and `occupancy.ts` for movement and blockers, not actor `xPos` / `yPos`.
-- **A-10c (MUST)** Actor `xPos`, `yPos`, and `size` fields are transitional compatibility data for version 1 state and legacy render fallbacks. Do not make new gameplay rules depend on them.
+- **A-10c (MUST)** `Player` and `Enemy` do not carry actor `xPos` / `yPos`. Pixel coordinates belong only to render commands and raw browser input events.
 - **A-10d (MUST)** Render projection derives foreground rectangles from `board`, `canvas`, and actor cells in `project-render-commands.ts`. Canvas pixel dimensions must not feed back into tactical movement.
 - **A-10e (MUST)** Enemy grid movement resolves only after an accepted player move, in ascending `spawnOrder`, and must preserve the invariant that player and enemies do not end a valid transition on the same cell.
 
