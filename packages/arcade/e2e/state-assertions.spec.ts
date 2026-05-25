@@ -294,7 +294,6 @@ test("resolves version 2 grid enemy movement through the browser test API", asyn
     const loadScenario = (
       enemies: typeof initialState.enemies,
       playerCell: { column: number; row: number },
-      playerMoved: boolean,
     ): ReadonlyArray<{ column: number; row: number } | undefined> => {
       testApi.loadState({
         ...initialState,
@@ -306,7 +305,7 @@ test("resolves version 2 grid enemy movement through the browser test API", asyn
           xPos: playerCell.column,
           yPos: playerCell.row,
         },
-        playerMoved,
+        playerMoved: false,
         stateVersion: 2,
       });
       testApi.dispatchInput("ArrowUp");
@@ -321,8 +320,7 @@ test("resolves version 2 grid enemy movement through the browser test API", asyn
           spawnOrder: 0,
         },
       ],
-      { column: 4, row: 0 },
-      true,
+      { column: 4, row: 1 },
     );
 
     const playerBlocked = loadScenario(
@@ -333,8 +331,7 @@ test("resolves version 2 grid enemy movement through the browser test API", asyn
           spawnOrder: 0,
         },
       ],
-      { column: 4, row: 0 },
-      true,
+      { column: 4, row: 1 },
     );
 
     const enemyBlocked = loadScenario(
@@ -350,8 +347,7 @@ test("resolves version 2 grid enemy movement through the browser test API", asyn
           spawnOrder: 1,
         },
       ],
-      { column: 4, row: 0 },
-      true,
+      { column: 4, row: 1 },
     );
 
     const reservedBlocked = loadScenario(
@@ -367,8 +363,7 @@ test("resolves version 2 grid enemy movement through the browser test API", asyn
           spawnOrder: 1,
         },
       ],
-      { column: 2, row: 0 },
-      true,
+      { column: 2, row: 1 },
     );
 
     const noAcceptedPlayerMove = loadScenario(
@@ -380,7 +375,6 @@ test("resolves version 2 grid enemy movement through the browser test API", asyn
         },
       ],
       { column: 4, row: 0 },
-      false,
     );
 
     const enemyWithoutCell = loadScenario(
@@ -393,8 +387,7 @@ test("resolves version 2 grid enemy movement through the browser test API", asyn
           yPos: enemy0.yPos,
         },
       ],
-      { column: 4, row: 0 },
-      true,
+      { column: 4, row: 1 },
     );
 
     return {

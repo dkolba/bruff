@@ -19,7 +19,7 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T15 — Add enemy occupancy resolution tests in `packages/game/lib/state/update-enemies.test.ts` for player blocks, enemy blocks, same-destination priority, and `spawnOrder` order.
 - [x] T16 — Refactor `packages/game/lib/state/update-enemies.ts` to resolve sequential grid movement only after accepted player movement.
 - [x] T17 — Update enemy movement property tests in `packages/game/lib/state/update-enemies.property.test.ts` to assert board bounds, stable enemy count, and unique occupied cells.
-- [ ] T18 — Update `packages/game/lib/state/advance-game-state.test.ts` for blocked-input enemy advancement and frame-index expectations.
+- [x] T18 — Update `packages/game/lib/state/advance-game-state.test.ts` for blocked-input enemy advancement and frame-index expectations.
 - [ ] T19 — Add version 1 migration tests in `packages/game/lib/state/migrations.test.ts`.
 - [ ] T20 — Implement `migrateV1toV2` in `packages/game/lib/state/migrations.ts`.
 - [ ] T21 — Update replay version parsing in `packages/game/lib/state/replay-fixture.ts` and `packages/game/lib/state/replay-fixture.test.ts` for `CURRENT_STATE_VERSION`.
