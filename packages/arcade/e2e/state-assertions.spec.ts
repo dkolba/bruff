@@ -5,6 +5,7 @@ import { gotoTestMode, test } from "./base-fixtures.js";
 const ZERO = 0;
 const ONE = 1;
 const THREE = 3;
+const LEGACY_MOVE_X_POS = 205;
 const PLAYER_Y_POS = 200;
 const POST_MOVE_X_POS = 195;
 
@@ -139,4 +140,133 @@ test("keeps an enemy still when a WASD input moves the player onto it", async ({
     xPos: POST_MOVE_X_POS,
     yPos: PLAYER_Y_POS,
   });
+});
+
+test("blocks grid movement at the board edge", async ({
+  page,
+}: {
+  page: Page;
+}) => {
+  await gotoTestMode(page);
+
+  const state = await page.evaluate(() => {
+    const testApi = window.__bruffTestApi;
+    const initialState = testApi?.getState();
+    if (testApi === undefined || initialState === undefined) {
+      return null;
+    }
+
+    testApi.loadState({
+      ...initialState,
+      enemies: [],
+      player: {
+        ...initialState.player,
+        cell: { column: 0, row: 0 },
+        xPos: 0,
+        yPos: 0,
+      },
+    });
+    testApi.dispatchInput("ArrowLeft");
+    const nextState = testApi.stepFrames(1);
+    return {
+      frameIndex: nextState.frameIndex,
+      player: nextState.player,
+      playerMoved: nextState.playerMoved,
+    };
+  });
+
+  expect(state?.frameIndex).toBe(ONE);
+  expect(state?.player.cell).toStrictEqual({ column: ZERO, row: ZERO });
+  expect(state?.player.xPos).toBe(ZERO);
+  expect(state?.player.yPos).toBe(ZERO);
+  expect(state?.playerMoved).toBe(false);
+});
+
+test("blocks grid movement into an enemy-occupied cell", async ({
+  page,
+}: {
+  page: Page;
+}) => {
+  await gotoTestMode(page);
+
+  const state = await page.evaluate(() => {
+    const testApi = window.__bruffTestApi;
+    const initialState = testApi?.getState();
+    const [enemy] = initialState?.enemies ?? [];
+    if (
+      testApi === undefined ||
+      initialState === undefined ||
+      enemy === undefined
+    ) {
+      return null;
+    }
+
+    testApi.loadState({
+      ...initialState,
+      enemies: [
+        {
+          ...enemy,
+          cell: { column: 4, row: 3 },
+          xPos: 205,
+          yPos: 200,
+        },
+      ],
+      player: {
+        ...initialState.player,
+        cell: { column: 3, row: 3 },
+        xPos: 200,
+        yPos: 200,
+      },
+    });
+    testApi.dispatchInput("ArrowRight");
+    const nextState = testApi.stepFrames(1);
+    return {
+      player: nextState.player,
+      playerMoved: nextState.playerMoved,
+    };
+  });
+
+  expect(state?.player.cell).toStrictEqual({ column: THREE, row: THREE });
+  expect(state?.player.xPos).toBe(200);
+  expect(state?.player.yPos).toBe(PLAYER_Y_POS);
+  expect(state?.playerMoved).toBe(false);
+});
+
+test("keeps legacy pixel movement working for loaded states without grid data", async ({
+  page,
+}: {
+  page: Page;
+}) => {
+  await gotoTestMode(page);
+
+  const state = await page.evaluate(() => {
+    const testApi = window.__bruffTestApi;
+    const initialState = testApi?.getState();
+    if (testApi === undefined || initialState === undefined) {
+      return null;
+    }
+
+    const legacyState = {
+      canvas: initialState.canvas,
+      enemies: [],
+      frameIndex: initialState.frameIndex,
+      input: initialState.input,
+      player: {
+        id: initialState.player.id,
+        size: initialState.player.size,
+        xPos: initialState.player.xPos,
+        yPos: initialState.player.yPos,
+      },
+      playerMoved: initialState.playerMoved,
+      prng: initialState.prng,
+      seed: initialState.seed,
+      stateVersion: initialState.stateVersion,
+    };
+    testApi.loadState(legacyState);
+    testApi.dispatchInput("ArrowRight");
+    return testApi.stepFrames(1).player;
+  });
+
+  expect(state?.xPos).toBe(LEGACY_MOVE_X_POS);
+  expect(state?.yPos).toBe(PLAYER_Y_POS);
 });

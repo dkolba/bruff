@@ -1,20 +1,32 @@
+/* eslint-disable max-lines-per-function, sort-imports -- Movement cases stay grouped for readability. */
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
-import { PLAYER_SIZE, PLAYER_SPEED } from "../core/constants.js";
+import {
+  BOARD_COLUMNS,
+  BOARD_ROWS,
+  ENEMY_SIZE,
+  ONE,
+  PLAYER_SIZE,
+  PLAYER_SPEED,
+  TWO,
+  ZERO,
+} from "../core/constants.js";
 import type { GameAction } from "../core/actions.ts";
-import type { GameState } from "../core/types.ts";
+import type { GameState, GridCell } from "../core/types.ts";
 import updatePlayer from "./update-player.js";
 
-const ZERO = 0;
 const TEST_SEED = 1;
 const STATE_VERSION = 1;
+const TEST_PLAYER_CELL: GridCell = { column: TWO, row: TWO };
 
 const createBaseState = (): GameState => ({
+  board: { columns: BOARD_COLUMNS, rows: BOARD_ROWS },
   canvas: { height: 600, width: 800 },
   enemies: [],
   frameIndex: 0,
   input: [],
   player: {
+    cell: TEST_PLAYER_CELL,
     id: brand<"PlayerId">("test-player"),
     size: PLAYER_SIZE,
     xPos: 200,
@@ -30,6 +42,7 @@ const MOVEMENT_TEST_CASES: ReadonlyArray<{
   action: GameAction;
   direction: string;
   expected: {
+    cell: GridCell;
     xPos: (state: GameState) => number;
     yPos: (state: GameState) => number;
   };
@@ -38,6 +51,10 @@ const MOVEMENT_TEST_CASES: ReadonlyArray<{
     action: { type: "move-up" },
     direction: "up",
     expected: {
+      cell: {
+        column: TEST_PLAYER_CELL.column,
+        row: TEST_PLAYER_CELL.row - ONE,
+      },
       xPos: (state) => state.player.xPos,
       yPos: (state) => state.player.yPos - PLAYER_SPEED,
     },
@@ -46,6 +63,10 @@ const MOVEMENT_TEST_CASES: ReadonlyArray<{
     action: { type: "move-down" },
     direction: "down",
     expected: {
+      cell: {
+        column: TEST_PLAYER_CELL.column,
+        row: TEST_PLAYER_CELL.row + ONE,
+      },
       xPos: (state) => state.player.xPos,
       yPos: (state) => state.player.yPos + PLAYER_SPEED,
     },
@@ -54,6 +75,10 @@ const MOVEMENT_TEST_CASES: ReadonlyArray<{
     action: { type: "move-left" },
     direction: "left",
     expected: {
+      cell: {
+        column: TEST_PLAYER_CELL.column - ONE,
+        row: TEST_PLAYER_CELL.row,
+      },
       xPos: (state) => state.player.xPos - PLAYER_SPEED,
       yPos: (state) => state.player.yPos,
     },
@@ -62,6 +87,10 @@ const MOVEMENT_TEST_CASES: ReadonlyArray<{
     action: { type: "move-right" },
     direction: "right",
     expected: {
+      cell: {
+        column: TEST_PLAYER_CELL.column + ONE,
+        row: TEST_PLAYER_CELL.row,
+      },
       xPos: (state) => state.player.xPos + PLAYER_SPEED,
       yPos: (state) => state.player.yPos,
     },
@@ -81,6 +110,7 @@ describe("updatePlayer", () => {
     ({ action, expected }) => {
       const baseState = createBaseState();
       const updatedState = updatePlayer(baseState, action);
+      expect(updatedState.player.cell).toStrictEqual(expected.cell);
       expect(updatedState.player.xPos).toBe(expected.xPos(baseState));
       expect(updatedState.player.yPos).toBe(expected.yPos(baseState));
       expect(updatedState.playerMoved).toBe(true);
@@ -91,11 +121,42 @@ describe("updatePlayer", () => {
     const baseState = createBaseState();
     const cornered: GameState = {
       ...baseState,
-      player: { ...baseState.player, xPos: ZERO, yPos: ZERO },
+      player: {
+        ...baseState.player,
+        cell: { column: ZERO, row: ZERO },
+        xPos: ZERO,
+        yPos: ZERO,
+      },
     };
     const afterUp = updatePlayer(cornered, { type: "move-up" });
     const afterLeft = updatePlayer(afterUp, { type: "move-left" });
+    expect(afterLeft.player.cell).toStrictEqual({ column: ZERO, row: ZERO });
     expect(afterLeft.player.xPos).toBe(ZERO);
     expect(afterLeft.player.yPos).toBe(ZERO);
+  });
+
+  it("blocks movement into an enemy-occupied cell", () => {
+    const baseState = createBaseState();
+    const blockedState: GameState = {
+      ...baseState,
+      enemies: [
+        {
+          cell: {
+            column: TEST_PLAYER_CELL.column + ONE,
+            row: TEST_PLAYER_CELL.row,
+          },
+          id: brand<"EnemyId">("blocking-enemy"),
+          size: ENEMY_SIZE,
+          spawnOrder: ZERO,
+          xPos: ZERO,
+          yPos: ZERO,
+        },
+      ],
+    };
+
+    const updatedState = updatePlayer(blockedState, { type: "move-right" });
+
+    expect(updatedState.player).toStrictEqual(blockedState.player);
+    expect(updatedState.playerMoved).toBe(false);
   });
 });

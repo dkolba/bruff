@@ -69,7 +69,7 @@ const EXPECTED_FINAL_STATE: GameState = {
   frameIndex: 0,
   input: [],
   player: {
-    cell: { column: TWO + ONE, row: TWO + ONE },
+    cell: { column: FIVE + ONE, row: TWO + ONE },
     id: brand<"PlayerId">("439668526-3938904095"),
     size: PLAYER_SIZE,
     xPos: 215,
