@@ -1,6 +1,7 @@
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
+  CURRENT_STATE_VERSION,
   ENEMY_SIZE,
   FIVE,
   ONE,
@@ -55,7 +56,7 @@ describe("createInitialState", () => {
       player: EXPECTED_PLAYER,
       playerMoved: false,
       seed: 1,
-      stateVersion: 1,
+      stateVersion: CURRENT_STATE_VERSION,
     });
     expect(typeof state.player.id).toBe("string");
     expect(state.prng).toBeDefined();

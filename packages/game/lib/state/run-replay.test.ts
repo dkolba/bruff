@@ -14,6 +14,7 @@ describe("runReplay", () => {
   it("does not advance frameIndex for replay frames without input", () => {
     const fixture = parseReplayFixture({
       ...canonicalFixture,
+      frames: [],
       totalFrames: ONE_FRAME,
     });
     expect(fixture.type).toBe("ok");

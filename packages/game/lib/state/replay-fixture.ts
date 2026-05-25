@@ -1,7 +1,7 @@
 /* eslint-disable max-statements -- Replay parsing validates a flat JSON contract step by step. */
 import { error, ok, type Result } from "@bruff/utils";
+import { CURRENT_STATE_VERSION } from "../core/constants.js";
 
-const CURRENT_STATE_VERSION = 1;
 const FIRST_FRAME = 1;
 const ZERO_FRAMES = 0;
 

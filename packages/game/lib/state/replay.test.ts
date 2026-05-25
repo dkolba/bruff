@@ -2,38 +2,33 @@
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
+  CURRENT_STATE_VERSION,
   ENEMY_SIZE,
-  FIVE,
   ONE,
   PLAYER_SIZE,
   TWO,
 } from "../core/constants.js";
 import { brand } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
-import type { GameAction } from "../core/actions.ts";
+import type { InputAction } from "../core/actions.ts";
 import type { GameState } from "../core/types.ts";
+import { advanceGameState } from "./advance-game-state.js";
 import createInitialState from "./create-initial-state.js";
-import { updateEnemies } from "./update-enemies.js";
-import updatePlayer from "./update-player.js";
 
-const STATE_VERSION = 1;
 const CANVAS = { height: 600, width: 800 };
 
-const REPLAY_ACTIONS: ReadonlyArray<GameAction> = [
-  { type: "move-right" },
-  { type: "move-right" },
-  { type: "move-right" },
-  { type: "tick" },
-  { type: "tick" },
+const REPLAY_INPUT_FRAMES: ReadonlyArray<ReadonlyArray<InputAction>> = [
+  [{ type: "move-left" }],
+  [{ type: "move-left" }],
+  [{ type: "move-up" }],
 ];
 
-const foldActions = (
+const foldInputFrames = (
   state: GameState,
-  actions: ReadonlyArray<GameAction>,
+  inputFrames: ReadonlyArray<ReadonlyArray<InputAction>>,
 ): GameState =>
-  actions.reduce<GameState>(
-    (currentState, action) =>
-      updateEnemies(updatePlayer(currentState, action), action),
+  inputFrames.reduce<GameState>(
+    (currentState, inputs) => advanceGameState(currentState, inputs),
     state,
   );
 
@@ -42,49 +37,49 @@ const EXPECTED_FINAL_STATE: GameState = {
   canvas: { height: 600, width: 800 },
   enemies: [
     {
-      cell: { column: ONE, row: ONE },
+      cell: { column: ONE, row: TWO },
       id: brand<"EnemyId">("3568710290-2410661980"),
       size: ENEMY_SIZE,
       spawnOrder: 0,
-      xPos: 51.479_880_146_791_885,
-      yPos: 51.345_345_587_992_625,
+      xPos: 50,
+      yPos: 50,
     },
     {
-      cell: { column: FIVE, row: ONE },
+      cell: { column: TWO + ONE, row: ONE },
       id: brand<"EnemyId">("231416673-2613675437"),
       size: ENEMY_SIZE,
       spawnOrder: 1,
-      xPos: 298.704_703_159_808_9,
-      yPos: 101.523_878_635_518_91,
+      xPos: 300,
+      yPos: 100,
     },
     {
-      cell: { column: ONE, row: FIVE },
+      cell: { column: ONE, row: TWO + TWO },
       id: brand<"EnemyId">("2234025770-2756763197"),
       size: ENEMY_SIZE,
       spawnOrder: 2,
-      xPos: 101.509_211_044_327,
-      yPos: 298.687_642_570_150_4,
+      xPos: 100,
+      yPos: 300,
     },
   ],
-  frameIndex: 0,
+  frameIndex: TWO + ONE,
   input: [],
   player: {
-    cell: { column: FIVE + ONE, row: TWO + ONE },
+    cell: { column: ONE, row: TWO + ONE },
     id: brand<"PlayerId">("439668526-3938904095"),
     size: PLAYER_SIZE,
-    xPos: 215,
+    xPos: 190,
     yPos: 200,
   },
-  playerMoved: true,
+  playerMoved: false,
   prng: { accumulator: 2_756_763_197, type: "prng-state" },
   seed: 1,
-  stateVersion: STATE_VERSION,
+  stateVersion: CURRENT_STATE_VERSION,
 };
 
 describe("replay determinism", () => {
   it("produces the stored snapshot for the canonical action sequence", () => {
     const initial = createInitialState(CANVAS);
-    const final = foldActions(initial, REPLAY_ACTIONS);
+    const final = foldInputFrames(initial, REPLAY_INPUT_FRAMES);
     expect(final).toEqual(EXPECTED_FINAL_STATE);
   });
 });

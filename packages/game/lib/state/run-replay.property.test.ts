@@ -1,5 +1,6 @@
 import { describe, expect } from "vitest";
 import { fc, test } from "@fast-check/vitest";
+import { CURRENT_STATE_VERSION } from "../core/constants.js";
 import type { ReplayFixture } from "./replay-fixture.ts";
 import { runReplay } from "./run-replay.js";
 
@@ -7,7 +8,6 @@ const MAX_FRAMES = 20;
 const MIN_SEED = 1;
 const MAX_SEED = 10_000;
 const FIRST_FRAME = 1;
-const STATE_VERSION = 1;
 
 const countInputFrames = (fixture: ReplayFixture): number =>
   new Set(fixture.frames.map((frame) => frame.frame)).size;
@@ -32,7 +32,7 @@ const fixtureArb: fc.Arbitrary<ReplayFixture> = fc
       })),
       initialCanvas: { height: 600, width: 800 },
       seed,
-      stateVersion: STATE_VERSION,
+      stateVersion: CURRENT_STATE_VERSION,
       totalFrames: inputs.length,
     }),
   );

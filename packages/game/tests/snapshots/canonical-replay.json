@@ -11,7 +11,7 @@
     {
       "cell": {
         "column": 1,
-        "row": 1
+        "row": 2
       },
       "id": "3568710290-2410661980",
       "size": 20,
@@ -21,7 +21,7 @@
     },
     {
       "cell": {
-        "column": 5,
+        "column": 3,
         "row": 1
       },
       "id": "231416673-2613675437",
@@ -33,7 +33,7 @@
     {
       "cell": {
         "column": 1,
-        "row": 5
+        "row": 4
       },
       "id": "2234025770-2756763197",
       "size": 20,
@@ -42,16 +42,16 @@
       "yPos": 300
     }
   ],
-  "frameIndex": 0,
+  "frameIndex": 3,
   "input": [],
   "player": {
     "cell": {
-      "column": 3,
+      "column": 1,
       "row": 3
     },
     "id": "439668526-3938904095",
     "size": 20,
-    "xPos": 200,
+    "xPos": 190,
     "yPos": 200
   },
   "playerMoved": false,
@@ -60,5 +60,5 @@
     "type": "prng-state"
   },
   "seed": 1,
-  "stateVersion": 1
+  "stateVersion": 2
 }

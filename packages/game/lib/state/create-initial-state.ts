@@ -1,6 +1,7 @@
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
+  CURRENT_STATE_VERSION,
   ENEMY_SIZE,
   FIVE,
   ONE,
@@ -17,7 +18,6 @@ import {
 import type { GameState } from "../core/types.ts";
 
 const INITIAL_SEED = 1;
-const STATE_VERSION = 1;
 const INITIAL_FRAME_INDEX = 0;
 
 const drawId = <Tag extends string>(
@@ -99,7 +99,7 @@ const createInitialState = (
     playerMoved: false,
     prng: enemy2.prng, // !TODO: use dedicated prng
     seed,
-    stateVersion: STATE_VERSION,
+    stateVersion: CURRENT_STATE_VERSION,
   };
 };
 

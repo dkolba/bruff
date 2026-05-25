@@ -22,7 +22,7 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T18 — Update `packages/game/lib/state/advance-game-state.test.ts` for blocked-input enemy advancement and frame-index expectations.
 - [x] T19 — Add version 1 migration tests in `packages/game/lib/state/migrations.test.ts`.
 - [x] T20 — Implement `migrateV1toV2` in `packages/game/lib/state/migrations.ts`.
-- [ ] T21 — Update replay version parsing in `packages/game/lib/state/replay-fixture.ts` and `packages/game/lib/state/replay-fixture.test.ts` for `CURRENT_STATE_VERSION`.
+- [x] T21 — Update replay version parsing in `packages/game/lib/state/replay-fixture.ts` and `packages/game/lib/state/replay-fixture.test.ts` for `CURRENT_STATE_VERSION`.
 - [ ] T22 — Update replay fixtures and replay tests in `packages/game/tests/fixtures/canonical-replay.json`, `packages/game/lib/state/run-replay.test.ts`, `packages/game/lib/state/run-replay.property.test.ts`, and `packages/game/lib/state/replay.test.ts`.
 - [ ] T23 — Update the canonical replay snapshot in `packages/game/tests/snapshots/canonical-replay.json`.
 - [ ] T24 — Update render projection tests in `packages/game/lib/render/project-render-commands.test.ts` for cell-to-pixel rectangle mapping.
