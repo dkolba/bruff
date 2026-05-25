@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "composite": true
+  },
+  "include": ["index.ts", "index.test.ts", "vitest.config.ts"],
+  "exclude": ["node_modules", "eslint.config.js"]
+}

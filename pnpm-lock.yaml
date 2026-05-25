@@ -250,6 +250,39 @@ importers:
         specifier: 'catalog:'
         version: 4.1.4(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.0.14)
 
+  packages/glyph:
+    devDependencies:
+      '@bruff/eslint-config':
+        specifier: workspace:0.0.0
+        version: link:../eslint-config
+      '@vitest/browser':
+        specifier: 'catalog:'
+        version: 4.1.4(vite@8.0.14)(vitest@4.1.4)
+      '@vitest/browser-playwright':
+        specifier: 'catalog:'
+        version: 4.1.4(playwright@1.60.0)(vite@8.0.14)(vitest@4.1.4)
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
+      eslint:
+        specifier: 'catalog:'
+        version: 10.4.0
+      playwright:
+        specifier: 'catalog:'
+        version: 1.60.0
+      prettier:
+        specifier: 'catalog:'
+        version: 3.8.3
+      rimraf:
+        specifier: 'catalog:'
+        version: 6.1.3
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.4(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.0.14)
+
   packages/sigil:
     dependencies:
       '@bruff/utils':
