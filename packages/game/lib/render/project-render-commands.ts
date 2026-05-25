@@ -28,38 +28,20 @@ const cellRenderCommand = (
 };
 
 const playerRenderCommand = (state: GameState): RenderCommand =>
-  state.board === undefined || state.player.cell === undefined
-    ? {
-        color: PLAYER_COLOR,
-        height: state.player.size,
-        type: "fill-rect",
-        width: state.player.size,
-        xPos: state.player.xPos,
-        yPos: state.player.yPos,
-      }
-    : cellRenderCommand(state.player.cell, {
-        board: state.board,
-        canvas: state.canvas,
-        color: PLAYER_COLOR,
-      });
+  cellRenderCommand(state.player.cell, {
+    board: state.board,
+    canvas: state.canvas,
+    color: PLAYER_COLOR,
+  });
 
 const enemyRenderCommand =
   (state: GameState) =>
   (enemy: GameState["enemies"][number]): RenderCommand =>
-    state.board === undefined || enemy.cell === undefined
-      ? {
-          color: ENEMY_COLOR,
-          height: enemy.size,
-          type: "fill-rect",
-          width: enemy.size,
-          xPos: enemy.xPos,
-          yPos: enemy.yPos,
-        }
-      : cellRenderCommand(enemy.cell, {
-          board: state.board,
-          canvas: state.canvas,
-          color: ENEMY_COLOR,
-        });
+    cellRenderCommand(enemy.cell, {
+      board: state.board,
+      canvas: state.canvas,
+      color: ENEMY_COLOR,
+    });
 
 /**
  * Projects a state snapshot into ordered foreground render commands.

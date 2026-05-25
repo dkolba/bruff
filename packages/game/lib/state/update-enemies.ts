@@ -2,10 +2,7 @@
 import type { GameAction } from "../core/actions.ts";
 import type { Board, Enemy, GameState, GridCell } from "../core/types.ts";
 import { CURRENT_STATE_VERSION } from "../core/constants.js";
-import {
-  moveEnemyTowardPlayer,
-  nextEnemyCellTowardPlayer,
-} from "./move-enemy-toward-player.js";
+import { nextEnemyCellTowardPlayer } from "./move-enemy-toward-player.js";
 import { cellsEqual, isCellInsideBoard } from "./grid.js";
 import { isCellOccupiedByEnemy } from "./occupancy.js";
 
@@ -55,10 +52,6 @@ const resolveEnemyDestination = (
   reservedCells: ReadonlyArray<GridCell>,
   context: EnemyResolutionContext,
 ): Enemy => {
-  if (enemy.cell === undefined) {
-    return enemy;
-  }
-
   const destination = nextEnemyCellTowardPlayer(enemy, context.state.player);
 
   if (
@@ -78,8 +71,7 @@ const resolveEnemyDestination = (
 const reserveEnemyCell = (
   enemy: Enemy,
   reservedCells: ReadonlyArray<GridCell>,
-): ReadonlyArray<GridCell> =>
-  enemy.cell === undefined ? reservedCells : [...reservedCells, enemy.cell];
+): ReadonlyArray<GridCell> => [...reservedCells, enemy.cell];
 
 const resolveEnemyByPriority =
   (state: GameState, board: Board, playerCell: GridCell) =>
@@ -122,22 +114,12 @@ const resolveGridEnemies = (
 };
 
 const canResolveGridEnemies = (state: GameState): boolean =>
-  state.stateVersion >= CURRENT_STATE_VERSION &&
-  state.board !== undefined &&
-  state.player.cell !== undefined;
+  state.stateVersion >= CURRENT_STATE_VERSION;
 
 const updateEnemiesOnTick = (state: GameState): ReadonlyArray<Enemy> => {
-  const { board, canvas, enemies, player, playerMoved } = state;
+  const { board, enemies, player, playerMoved } = state;
 
-  if (
-    !canResolveGridEnemies(state) ||
-    board === undefined ||
-    player.cell === undefined
-  ) {
-    return enemies.map((enemy) => moveEnemyTowardPlayer(enemy, player, canvas));
-  }
-
-  if (!playerMoved) {
+  if (!canResolveGridEnemies(state) || !playerMoved) {
     return enemies;
   }
 

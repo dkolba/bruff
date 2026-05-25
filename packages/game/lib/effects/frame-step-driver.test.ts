@@ -138,8 +138,12 @@ describe("createFrameStepDriver", () => {
 
     const nextState = driver.stepFrames(ONE_FRAME);
 
-    expect(nextState.player.xPos).toBeGreaterThan(initialState.player.xPos);
-    expect(nextState.player.yPos).toBeGreaterThan(initialState.player.yPos);
+    expect(nextState.player.cell.column).toBeGreaterThan(
+      initialState.player.cell.column,
+    );
+    expect(nextState.player.cell.row).toBeGreaterThan(
+      initialState.player.cell.row,
+    );
     expect(nextState.frameIndex).toBe(ONE_FRAME);
   });
 

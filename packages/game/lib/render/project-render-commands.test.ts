@@ -1,4 +1,4 @@
-/* eslint-disable sort-imports -- Render projection tests group fixture utilities before render target imports. */
+/* eslint-disable max-lines-per-function, sort-imports -- Render projection scenarios keep compact state fixtures inline. */
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
 import type { Enemy, GameState, GridCell } from "../core/types.ts";
@@ -22,13 +22,10 @@ const GRID_CANVAS_WIDTH = 700;
 const GRID_CELL_HEIGHT = 50;
 const GRID_CELL_WIDTH = 100;
 const PLAYER_SIZE = 20;
-const PLAYER_X_POS = 200;
-const PLAYER_Y_POS = 200;
 const TEST_SEED = 1;
-const STATE_VERSION = 1;
 
 type EnemyInput = Readonly<{
-  cell?: GridCell;
+  cell: GridCell;
   id: string;
   spawnOrder: number;
   xPos: number;
@@ -44,35 +41,32 @@ type FillRectCommand = Readonly<{
   yPos: number;
 }>;
 
-const createEnemy = (enemyInput: EnemyInput): Enemy => {
-  const enemy = {
-    id: brand<"EnemyId">(enemyInput.id),
-    size: ENEMY_SIZE,
-    spawnOrder: enemyInput.spawnOrder,
-    xPos: enemyInput.xPos,
-    yPos: enemyInput.yPos,
-  };
-
-  return enemyInput.cell === undefined
-    ? enemy
-    : { ...enemy, cell: enemyInput.cell };
-};
+const createEnemy = (enemyInput: EnemyInput): Enemy => ({
+  cell: enemyInput.cell,
+  id: brand<"EnemyId">(enemyInput.id),
+  size: ENEMY_SIZE,
+  spawnOrder: enemyInput.spawnOrder,
+  xPos: enemyInput.xPos,
+  yPos: enemyInput.yPos,
+});
 
 const createState = (enemies: ReadonlyArray<Enemy>): GameState => ({
+  board: { columns: BOARD_COLUMNS, rows: BOARD_ROWS },
   canvas: { height: 600, width: 800 },
   enemies,
   frameIndex: 0,
   input: [],
   player: {
+    cell: { column: THREE, row: TWO },
     id: brand<"PlayerId">("test-player"),
     size: PLAYER_SIZE,
-    xPos: PLAYER_X_POS,
-    yPos: PLAYER_Y_POS,
+    xPos: THREE,
+    yPos: TWO,
   },
   playerMoved: false,
   prng: createPrng(TEST_SEED),
   seed: TEST_SEED,
-  stateVersion: STATE_VERSION,
+  stateVersion: CURRENT_STATE_VERSION,
 });
 
 const createGridState = (): GameState => ({
@@ -93,8 +87,8 @@ const createGridState = (): GameState => ({
     cell: { column: THREE, row: TWO },
     id: brand<"PlayerId">("test-player"),
     size: PLAYER_SIZE,
-    xPos: PLAYER_X_POS,
-    yPos: PLAYER_Y_POS,
+    xPos: THREE,
+    yPos: TWO,
   },
   playerMoved: false,
   prng: createPrng(TEST_SEED),
@@ -104,21 +98,23 @@ const createGridState = (): GameState => ({
 
 const playerCommandForState = (state: GameState): FillRectCommand => ({
   color: "blue",
-  height: state.player.size,
+  height: state.canvas.height / state.board.rows,
   type: "fill-rect",
-  width: state.player.size,
-  xPos: state.player.xPos,
-  yPos: state.player.yPos,
+  width: state.canvas.width / state.board.columns,
+  xPos: state.player.cell.column * (state.canvas.width / state.board.columns),
+  yPos: state.player.cell.row * (state.canvas.height / state.board.rows),
 });
 
-const enemyCommandForEnemy = (enemy: Enemy): FillRectCommand => ({
-  color: "red",
-  height: enemy.size,
-  type: "fill-rect",
-  width: enemy.size,
-  xPos: enemy.xPos,
-  yPos: enemy.yPos,
-});
+const enemyCommandForEnemy =
+  (state: GameState) =>
+  (enemy: Enemy): FillRectCommand => ({
+    color: "red",
+    height: state.canvas.height / state.board.rows,
+    type: "fill-rect",
+    width: state.canvas.width / state.board.columns,
+    xPos: enemy.cell.column * (state.canvas.width / state.board.columns),
+    yPos: enemy.cell.row * (state.canvas.height / state.board.rows),
+  });
 
 describe("projectRenderCommands", () => {
   it("emits one blue fill-rect command for the player", () => {
@@ -142,12 +138,14 @@ describe("projectRenderCommands enemy commands", () => {
   it("emits red enemy commands in array order after the player", () => {
     const state = createState([
       createEnemy({
+        cell: { column: ONE, row: ONE },
         id: "test-enemy-0",
         spawnOrder: ZERO,
         xPos: FIFTY,
         yPos: FIFTY,
       }),
       createEnemy({
+        cell: { column: TWO, row: TWO },
         id: "test-enemy-1",
         spawnOrder: ONE,
         xPos: ONE_HUNDRED,
@@ -159,20 +157,26 @@ describe("projectRenderCommands enemy commands", () => {
 
     expect(projectRenderCommands(state)).toStrictEqual([
       playerCommandForState(state),
-      firstEnemy === undefined ? undefined : enemyCommandForEnemy(firstEnemy),
-      secondEnemy === undefined ? undefined : enemyCommandForEnemy(secondEnemy),
+      firstEnemy === undefined
+        ? undefined
+        : enemyCommandForEnemy(state)(firstEnemy),
+      secondEnemy === undefined
+        ? undefined
+        : enemyCommandForEnemy(state)(secondEnemy),
     ]);
   });
 
   it("returns deterministic commands for the same state", () => {
     const state = createState([
       createEnemy({
+        cell: { column: ONE, row: ONE },
         id: "test-enemy-0",
         spawnOrder: ZERO,
         xPos: FIFTY,
         yPos: FIFTY,
       }),
       createEnemy({
+        cell: { column: TWO, row: TWO },
         id: "test-enemy-1",
         spawnOrder: ONE,
         xPos: ONE_HUNDRED,

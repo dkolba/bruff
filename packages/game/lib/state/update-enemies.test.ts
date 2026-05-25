@@ -15,7 +15,6 @@ const TWO = 2;
 const THREE = 3;
 const FOUR = 4;
 const FIVE = 5;
-const FIFTY_ONE = 51;
 const TEST_SEED = 1;
 const BOARD = { columns: 7, rows: 7 };
 
@@ -58,31 +57,6 @@ const createGridState = (
   stateVersion: CURRENT_STATE_VERSION,
 });
 
-const createLegacyState = (): GameState => ({
-  canvas: { height: 600, width: 800 },
-  enemies: [
-    {
-      id: brand<"EnemyId">("test-enemy-0"),
-      size: ENEMY_SIZE,
-      spawnOrder: ZERO,
-      xPos: 50,
-      yPos: 50,
-    },
-  ],
-  frameIndex: ZERO,
-  input: [],
-  player: {
-    id: brand<"PlayerId">("test-player"),
-    size: PLAYER_SIZE,
-    xPos: 200,
-    yPos: 50,
-  },
-  playerMoved: false,
-  prng: createPrng(TEST_SEED),
-  seed: TEST_SEED,
-  stateVersion: 1,
-});
-
 describe("updateEnemies", () => {
   it("moves an enemy one grid cell on a tick after accepted player movement", () => {
     const state = createGridState({ column: FOUR, row: ONE }, [
@@ -107,25 +81,6 @@ describe("updateEnemies", () => {
         },
       ]),
       playerMoved: false,
-    };
-
-    const updatedState = updateEnemies(state, { type: "tick" });
-
-    expect(updatedState.enemies).toStrictEqual(state.enemies);
-  });
-
-  it("leaves version 2 enemies without grid cells unchanged", () => {
-    const state = {
-      ...createGridState({ column: FOUR, row: ONE }, []),
-      enemies: [
-        {
-          id: brand<"EnemyId">("test-enemy-0"),
-          size: ENEMY_SIZE,
-          spawnOrder: ZERO,
-          xPos: 50,
-          yPos: 50,
-        },
-      ],
     };
 
     const updatedState = updateEnemies(state, { type: "tick" });
@@ -198,14 +153,6 @@ describe("updateEnemies", () => {
       column: TWO,
       row: TWO,
     });
-  });
-
-  it("preserves pixel enemy movement for legacy states without grid data", () => {
-    const state = createLegacyState();
-
-    const updatedState = updateEnemies(state, { type: "tick" });
-
-    expect(updatedState.enemies[ZERO]?.xPos).toBe(FIFTY_ONE);
   });
 
   it.each([

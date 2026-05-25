@@ -5,19 +5,17 @@ import { gotoTestMode, test } from "./base-fixtures.js";
 const ZERO = 0;
 const ONE = 1;
 const THREE = 3;
-const LEGACY_MOVE_X_POS = 205;
-const PLAYER_Y_POS = 200;
-const POST_MOVE_X_POS = 195;
 
-type PositionSnapshot = Readonly<{
-  xPos: number;
-  yPos: number;
+type CellSnapshot = Readonly<{
+  column: number;
+  row: number;
 }>;
 
 type CoincidentEnemyScenarioState = Readonly<{
-  enemy: PositionSnapshot | null;
+  enemy: CellSnapshot | null;
   frameIndex: number;
-  player: PositionSnapshot;
+  player: CellSnapshot;
+  playerMoved: boolean;
 }>;
 
 const loadCoincidentEnemyScenario = (
@@ -37,8 +35,8 @@ const loadCoincidentEnemyScenario = (
 
     testApi.loadState({
       ...initialState,
-      enemies: [{ ...enemy, xPos: 195, yPos: 200 }],
-      player: { ...initialState.player, xPos: 200, yPos: 200 },
+      enemies: [{ ...enemy, cell: { column: 2, row: 3 } }],
+      player: { ...initialState.player, cell: { column: 3, row: 3 } },
     });
     testApi.dispatchInput("a");
     const nextState = testApi.stepFrames(1);
@@ -47,9 +45,13 @@ const loadCoincidentEnemyScenario = (
       enemy:
         nextEnemy === undefined
           ? null
-          : { xPos: nextEnemy.xPos, yPos: nextEnemy.yPos },
+          : { column: nextEnemy.cell.column, row: nextEnemy.cell.row },
       frameIndex: nextState.frameIndex,
-      player: { xPos: nextState.player.xPos, yPos: nextState.player.yPos },
+      player: {
+        column: nextState.player.cell.column,
+        row: nextState.player.cell.row,
+      },
+      playerMoved: nextState.playerMoved,
     };
   });
 
@@ -72,8 +74,8 @@ test("steps deterministic state through the browser test API", async ({
   });
 
   expect(nextState?.frameIndex).toBe(ONE);
-  expect(nextState?.player.xPos).toBeGreaterThan(
-    initialState?.player.xPos ?? ZERO,
+  expect(nextState?.player.cell.column).toBeGreaterThan(
+    initialState?.player.cell.column ?? ZERO,
   );
 });
 
@@ -118,13 +120,12 @@ test("applies queued movement inputs in FIFO order", async ({
   const { queuedInputCount, state } = result;
   expect(queuedInputCount).toBe(5);
   expect(state?.frameIndex).toBe(ONE);
-  expect(state?.player.xPos).toBe(200);
-  expect(state?.player.yPos).toBe(200);
+  expect(state?.player.cell).toStrictEqual({ column: THREE, row: THREE });
   expect(state?.enemies.length).toBe(THREE);
   expect(state?.playerMoved).toBe(true);
 });
 
-test("keeps an enemy still when a WASD input moves the player onto it", async ({
+test("blocks a WASD input into an enemy-occupied cell", async ({
   page,
 }: {
   page: Page;
@@ -134,12 +135,9 @@ test("keeps an enemy still when a WASD input moves the player onto it", async ({
   const state = await loadCoincidentEnemyScenario(page);
 
   expect(state?.frameIndex).toBe(ONE);
-  expect(state?.player.xPos).toBe(POST_MOVE_X_POS);
-  expect(state?.player.yPos).toBe(PLAYER_Y_POS);
-  expect(state?.enemy).toStrictEqual({
-    xPos: POST_MOVE_X_POS,
-    yPos: PLAYER_Y_POS,
-  });
+  expect(state?.player).toStrictEqual({ column: THREE, row: THREE });
+  expect(state?.enemy).toStrictEqual({ column: 2, row: THREE });
+  expect(state?.playerMoved).toBe(false);
 });
 
 test("blocks grid movement at the board edge", async ({
@@ -177,8 +175,6 @@ test("blocks grid movement at the board edge", async ({
 
   expect(state?.frameIndex).toBe(ONE);
   expect(state?.player.cell).toStrictEqual({ column: ZERO, row: ZERO });
-  expect(state?.player.xPos).toBe(ZERO);
-  expect(state?.player.yPos).toBe(ZERO);
   expect(state?.playerMoved).toBe(false);
 });
 
@@ -227,51 +223,10 @@ test("blocks grid movement into an enemy-occupied cell", async ({
   });
 
   expect(state?.player.cell).toStrictEqual({ column: THREE, row: THREE });
-  expect(state?.player.xPos).toBe(200);
-  expect(state?.player.yPos).toBe(PLAYER_Y_POS);
   expect(state?.playerMoved).toBe(false);
 });
 
-test("keeps legacy pixel movement working for loaded states without grid data", async ({
-  page,
-}: {
-  page: Page;
-}) => {
-  await gotoTestMode(page);
-
-  const state = await page.evaluate(() => {
-    const testApi = window.__bruffTestApi;
-    const initialState = testApi?.getState();
-    if (testApi === undefined || initialState === undefined) {
-      return null;
-    }
-
-    const legacyState = {
-      canvas: initialState.canvas,
-      enemies: [],
-      frameIndex: initialState.frameIndex,
-      input: initialState.input,
-      player: {
-        id: initialState.player.id,
-        size: initialState.player.size,
-        xPos: initialState.player.xPos,
-        yPos: initialState.player.yPos,
-      },
-      playerMoved: initialState.playerMoved,
-      prng: initialState.prng,
-      seed: initialState.seed,
-      stateVersion: initialState.stateVersion,
-    };
-    testApi.loadState(legacyState);
-    testApi.dispatchInput("ArrowRight");
-    return testApi.stepFrames(1).player;
-  });
-
-  expect(state?.xPos).toBe(LEGACY_MOVE_X_POS);
-  expect(state?.yPos).toBe(PLAYER_Y_POS);
-});
-
-test("resolves version 2 grid enemy movement through the browser test API", async ({
+test("resolves version 3 grid enemy movement through the browser test API", async ({
   page,
 }: {
   page: Page;
@@ -306,10 +261,13 @@ test("resolves version 2 grid enemy movement through the browser test API", asyn
           yPos: playerCell.row,
         },
         playerMoved: false,
-        stateVersion: 2,
+        stateVersion: 3,
       });
       testApi.dispatchInput("ArrowUp");
-      return testApi.stepFrames(1).enemies.map((enemy) => enemy.cell);
+      return testApi.stepFrames(1).enemies.map((enemy) => ({
+        column: enemy.cell.column,
+        row: enemy.cell.row,
+      }));
     };
 
     const accepted = loadScenario(
@@ -377,23 +335,9 @@ test("resolves version 2 grid enemy movement through the browser test API", asyn
       { column: 4, row: 0 },
     );
 
-    const enemyWithoutCell = loadScenario(
-      [
-        {
-          id: enemy0.id,
-          size: enemy0.size,
-          spawnOrder: 0,
-          xPos: enemy0.xPos,
-          yPos: enemy0.yPos,
-        },
-      ],
-      { column: 4, row: 1 },
-    );
-
     return {
       accepted,
       enemyBlocked,
-      enemyWithoutCell,
       noAcceptedPlayerMove,
       playerBlocked,
       reservedBlocked,
@@ -413,5 +357,4 @@ test("resolves version 2 grid enemy movement through the browser test API", asyn
   expect(snapshots?.noAcceptedPlayerMove).toStrictEqual([
     { column: 2, row: 0 },
   ]);
-  expect(snapshots?.enemyWithoutCell).toStrictEqual([undefined]);
 });

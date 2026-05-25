@@ -51,7 +51,7 @@
     },
     "id": "439668526-3938904095",
     "size": 20,
-    "xPos": 190,
+    "xPos": 200,
     "yPos": 200
   },
   "playerMoved": false,
@@ -60,5 +60,5 @@
     "type": "prng-state"
   },
   "seed": 1,
-  "stateVersion": 2
+  "stateVersion": 3
 }

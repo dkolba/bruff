@@ -11,10 +11,7 @@ import { cellsEqual } from "./grid.js";
 export const isCellOccupiedByEnemy = (
   cell: GridCell,
   enemies: ReadonlyArray<Enemy>,
-): boolean =>
-  enemies.some((enemy) =>
-    enemy.cell === undefined ? false : cellsEqual(enemy.cell, cell),
-  );
+): boolean => enemies.some((enemy) => cellsEqual(enemy.cell, cell));
 
 /**
  * Checks whether the player or an enemy occupies a cell.
@@ -27,7 +24,5 @@ export const isCellOccupiedByActor = (
   cell: GridCell,
   state: GameState,
 ): boolean =>
-  (state.player.cell === undefined
-    ? false
-    : cellsEqual(state.player.cell, cell)) ||
+  cellsEqual(state.player.cell, cell) ||
   isCellOccupiedByEnemy(cell, state.enemies);

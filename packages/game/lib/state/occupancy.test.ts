@@ -50,18 +50,6 @@ describe("isCellOccupiedByEnemy", () => {
     expect(isCellOccupiedByEnemy(ENEMY_CELL, createState().enemies)).toBe(true);
   });
 
-  it("returns false for an enemy without a grid cell", () => {
-    const legacyEnemy: Enemy = {
-      id: brand<"EnemyId">("legacy-enemy"),
-      size: ENEMY_SIZE,
-      spawnOrder: ZERO,
-      xPos: ZERO,
-      yPos: ZERO,
-    };
-
-    expect(isCellOccupiedByEnemy(ENEMY_CELL, [legacyEnemy])).toBe(false);
-  });
-
   it("returns false when no enemy occupies the cell", () => {
     expect(isCellOccupiedByEnemy(EMPTY_CELL, createState().enemies)).toBe(
       false,
@@ -72,21 +60,6 @@ describe("isCellOccupiedByEnemy", () => {
 describe("isCellOccupiedByActor", () => {
   it("returns true when the player occupies the cell", () => {
     expect(isCellOccupiedByActor(PLAYER_CELL, createState())).toBe(true);
-  });
-
-  it("falls back to enemy occupancy when the player has no grid cell", () => {
-    const state = createState();
-    const legacyState: GameState = {
-      ...state,
-      player: {
-        id: state.player.id,
-        size: PLAYER_SIZE,
-        xPos: ZERO,
-        yPos: ZERO,
-      },
-    };
-
-    expect(isCellOccupiedByActor(ENEMY_CELL, legacyState)).toBe(true);
   });
 
   it("returns true when an enemy occupies the cell", () => {

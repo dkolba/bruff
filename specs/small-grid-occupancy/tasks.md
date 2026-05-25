@@ -33,12 +33,9 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T29 — Review `specs/small-grid-occupancy/spec.md` and append a `## Verification` section mapping each accepted behaviour to tests or gates.
 - [x] T30 — Review `specs/small-grid-occupancy/design.md` and update any drift found during implementation.
 - [x] T31 — Update `specs/small-grid-occupancy/spec.md`, `specs/small-grid-occupancy/design.md`, and `specs/small-grid-occupancy/tasks.md` for the grid-only cleanup phase.
-- [ ] T32 — Refactor `packages/game/lib/core/types.ts`, `packages/game/lib/core/constants.ts`, and `packages/game/lib/state/create-initial-state.ts` so `board` and actor `cell` are required, `CURRENT_STATE_VERSION` is `3`, and actors no longer carry `xPos` / `yPos`.
-- [ ] T33 — Refactor `packages/game/lib/state/update-player.ts`, `packages/game/lib/state/update-enemies.ts`, and `packages/game/lib/state/move-enemy-toward-player.ts` to remove pixel movement fallbacks.
-- [ ] T34 — Delete `packages/game/lib/state/migrations.ts` and `packages/game/lib/state/migrations.test.ts`.
-- [ ] T35 — Update state-layer tests in `packages/game/lib/state/*.test.ts` and `packages/game/lib/state/*.property.test.ts` to construct grid-only actors and assert cells.
-- [ ] T36 — Update render/effects tests in `packages/game/lib/render/*.test.ts` and `packages/game/lib/effects/*.test.ts` to construct grid-only state while preserving pixel `RenderCommand` assertions.
-- [ ] T37 — Update replay fixtures and snapshots in `packages/game/tests/fixtures/canonical-replay.json` and `packages/game/tests/snapshots/canonical-replay.json` to version 3 cell-only state.
-- [ ] T38 — Update browser E2E state assertions in `packages/arcade/e2e/state-assertions.spec.ts` and `packages/arcade/e2e/replay-checkpoint.spec.ts` to assert cells and remove legacy loaded-state scenarios.
-- [ ] T39 — Review `packages/game/README.md`, `packages/game/AGENTS.override.md`, and local skills for stale compatibility-window guidance.
-- [ ] T40 — Run full `pnpm run ok`, reconcile `specs/small-grid-occupancy/spec.md` verification and `specs/small-grid-occupancy/design.md` drift, and fix any remaining failures.
+- [x] T32 — Require `board` and actor `cell`, bump `CURRENT_STATE_VERSION` to `3`, remove pixel movement fallbacks, and update affected `packages/game` tests to assert cells while retaining transitional actor `xPos` / `yPos` fields.
+- [ ] T33 — Remove actor `xPos` / `yPos` fields from `Player` and `Enemy`, delete `packages/game/lib/state/migrations.ts` and `packages/game/lib/state/migrations.test.ts`, then update remaining package tests, replay fixtures, replay snapshots, and browser E2E assertions to use grid-only actors.
+- [ ] T34 — Update browser E2E state assertions in `packages/arcade/e2e/state-assertions.spec.ts` and `packages/arcade/e2e/replay-checkpoint.spec.ts` to remove any remaining legacy loaded-state scenarios.
+- [ ] T35 — Search for actor-state `xPos` / `yPos` references and confirm only render commands, input event coordinates, historical specs, or non-actor pixel concepts remain.
+- [ ] T36 — Review `packages/game/README.md`, `packages/game/AGENTS.override.md`, and local skills for stale compatibility-window guidance.
+- [ ] T37 — Run full `pnpm run ok`, reconcile `specs/small-grid-occupancy/spec.md` verification and `specs/small-grid-occupancy/design.md` drift, and fix any remaining failures.

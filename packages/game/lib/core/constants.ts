@@ -14,7 +14,7 @@ export const BOARD_COLUMNS = 7;
 /** Number of rows in the tactical board */
 export const BOARD_ROWS = 7;
 /** Current replay-compatible state version */
-export const CURRENT_STATE_VERSION = 2;
+export const CURRENT_STATE_VERSION = 3;
 
 /** Diameter of the player entity in pixels */
 export const PLAYER_SIZE = 20;

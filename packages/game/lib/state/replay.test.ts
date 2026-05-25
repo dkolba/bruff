@@ -67,7 +67,7 @@ const EXPECTED_FINAL_STATE: GameState = {
     cell: { column: ONE, row: TWO + ONE },
     id: brand<"PlayerId">("439668526-3938904095"),
     size: PLAYER_SIZE,
-    xPos: 190,
+    xPos: 200,
     yPos: 200,
   },
   playerMoved: false,

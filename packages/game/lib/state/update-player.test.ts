@@ -4,10 +4,10 @@ import { describe, expect, it } from "vitest";
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
+  CURRENT_STATE_VERSION,
   ENEMY_SIZE,
   ONE,
   PLAYER_SIZE,
-  PLAYER_SPEED,
   TWO,
   ZERO,
 } from "../core/constants.js";
@@ -16,7 +16,6 @@ import type { GameState, GridCell } from "../core/types.ts";
 import updatePlayer from "./update-player.js";
 
 const TEST_SEED = 1;
-const STATE_VERSION = 1;
 const TEST_PLAYER_CELL: GridCell = { column: TWO, row: TWO };
 
 const createBaseState = (): GameState => ({
@@ -35,7 +34,7 @@ const createBaseState = (): GameState => ({
   playerMoved: false,
   prng: createPrng(TEST_SEED),
   seed: TEST_SEED,
-  stateVersion: STATE_VERSION,
+  stateVersion: CURRENT_STATE_VERSION,
 });
 
 const MOVEMENT_TEST_CASES: ReadonlyArray<{
@@ -43,8 +42,6 @@ const MOVEMENT_TEST_CASES: ReadonlyArray<{
   direction: string;
   expected: {
     cell: GridCell;
-    xPos: (state: GameState) => number;
-    yPos: (state: GameState) => number;
   };
 }> = [
   {
@@ -55,8 +52,6 @@ const MOVEMENT_TEST_CASES: ReadonlyArray<{
         column: TEST_PLAYER_CELL.column,
         row: TEST_PLAYER_CELL.row - ONE,
       },
-      xPos: (state) => state.player.xPos,
-      yPos: (state) => state.player.yPos - PLAYER_SPEED,
     },
   },
   {
@@ -67,8 +62,6 @@ const MOVEMENT_TEST_CASES: ReadonlyArray<{
         column: TEST_PLAYER_CELL.column,
         row: TEST_PLAYER_CELL.row + ONE,
       },
-      xPos: (state) => state.player.xPos,
-      yPos: (state) => state.player.yPos + PLAYER_SPEED,
     },
   },
   {
@@ -79,8 +72,6 @@ const MOVEMENT_TEST_CASES: ReadonlyArray<{
         column: TEST_PLAYER_CELL.column - ONE,
         row: TEST_PLAYER_CELL.row,
       },
-      xPos: (state) => state.player.xPos - PLAYER_SPEED,
-      yPos: (state) => state.player.yPos,
     },
   },
   {
@@ -91,8 +82,6 @@ const MOVEMENT_TEST_CASES: ReadonlyArray<{
         column: TEST_PLAYER_CELL.column + ONE,
         row: TEST_PLAYER_CELL.row,
       },
-      xPos: (state) => state.player.xPos + PLAYER_SPEED,
-      yPos: (state) => state.player.yPos,
     },
   },
 ];
@@ -111,8 +100,8 @@ describe("updatePlayer", () => {
       const baseState = createBaseState();
       const updatedState = updatePlayer(baseState, action);
       expect(updatedState.player.cell).toStrictEqual(expected.cell);
-      expect(updatedState.player.xPos).toBe(expected.xPos(baseState));
-      expect(updatedState.player.yPos).toBe(expected.yPos(baseState));
+      expect(updatedState.player.xPos).toBe(baseState.player.xPos);
+      expect(updatedState.player.yPos).toBe(baseState.player.yPos);
       expect(updatedState.playerMoved).toBe(true);
     },
   );

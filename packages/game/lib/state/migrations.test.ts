@@ -17,9 +17,11 @@ const VERSION_ONE = 1;
 const CANVAS_SIZE = 700;
 
 const createVersionOneState = (): GameState => ({
+  board: { columns: BOARD_COLUMNS, rows: BOARD_ROWS },
   canvas: { height: CANVAS_SIZE, width: CANVAS_SIZE },
   enemies: [
     {
+      cell: { column: 1, row: 1 },
       id: brand<"EnemyId">("test-enemy-0"),
       size: ENEMY_SIZE,
       spawnOrder: ZERO,
@@ -27,6 +29,7 @@ const createVersionOneState = (): GameState => ({
       yPos: 100,
     },
     {
+      cell: { column: 6, row: 6 },
       id: brand<"EnemyId">("test-enemy-1"),
       size: ENEMY_SIZE,
       spawnOrder: 1,
@@ -37,6 +40,7 @@ const createVersionOneState = (): GameState => ({
   frameIndex: 4,
   input: [],
   player: {
+    cell: { column: 3, row: 2 },
     id: brand<"PlayerId">("test-player"),
     size: PLAYER_SIZE,
     xPos: 350,
@@ -84,6 +88,7 @@ describe("migrateV1toV2", () => {
       ...createVersionOneState(),
       enemies: [
         {
+          cell: { column: ZERO, row: 6 },
           id: brand<"EnemyId">("test-enemy-0"),
           size: ENEMY_SIZE,
           spawnOrder: ZERO,

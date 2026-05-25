@@ -27,7 +27,7 @@ export type Board = Readonly<{
 
 /** A single enemy unit on the game board. */
 export type Enemy = Readonly<{
-  cell?: GridCell;
+  cell: GridCell;
   id: EnemyId;
   size: number;
   spawnOrder: number;
@@ -37,7 +37,7 @@ export type Enemy = Readonly<{
 
 /** The player-controlled entity. */
 export type Player = Readonly<{
-  cell?: GridCell;
+  cell: GridCell;
   id: PlayerId;
   size: number;
   xPos: number;
@@ -52,7 +52,7 @@ export type CanvasSize = Readonly<{
 
 /** Complete immutable snapshot of all game data for one tick. */
 export type GameState = Readonly<{
-  board?: Board;
+  board: Board;
   canvas: CanvasSize;
   enemies: ReadonlyArray<Enemy>;
   input: ReadonlyArray<InputAction>;
