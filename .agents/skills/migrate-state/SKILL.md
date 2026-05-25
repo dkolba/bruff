@@ -39,7 +39,8 @@ export type GameState = Readonly<{
 }>;
 ```
 
-`createInitialState` must set `stateVersion: 1` (or the current version).
+`createInitialState` must set `stateVersion: CURRENT_STATE_VERSION` from
+`packages/game/lib/core/constants.ts`.
 
 ### 2. Increment `stateVersion`
 
