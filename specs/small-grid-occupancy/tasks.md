@@ -6,7 +6,7 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T2 — Add grid state types in `packages/game/lib/core/types.ts` by introducing `Board` and `GridCell`, adding `board` to `GameState`, and replacing actor pixel fields with `cell`.
 - [x] T3 — Add `grid.ts` stubs in `packages/game/lib/state/grid.ts` for `cellForAction`, `cellsEqual`, and `isCellInsideBoard`.
 - [x] T4 — Add unit tests for grid helpers in `packages/game/lib/state/grid.test.ts`.
-- [ ] T5 — Implement grid helpers in `packages/game/lib/state/grid.ts`.
+- [x] T5 — Implement grid helpers in `packages/game/lib/state/grid.ts`.
 - [ ] T6 — Add `occupancy.ts` stubs in `packages/game/lib/state/occupancy.ts` for enemy and actor occupancy queries.
 - [ ] T7 — Add unit tests for occupancy queries in `packages/game/lib/state/occupancy.test.ts`.
 - [ ] T8 — Implement occupancy queries in `packages/game/lib/state/occupancy.ts`.
