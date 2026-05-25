@@ -38,4 +38,4 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T34 — Update browser E2E state assertions in `packages/arcade/e2e/state-assertions.spec.ts` and `packages/arcade/e2e/replay-checkpoint.spec.ts` to remove any remaining legacy loaded-state scenarios.
 - [x] T35 — Search for actor-state `xPos` / `yPos` references and confirm only render commands, input event coordinates, historical specs, or non-actor pixel concepts remain.
 - [x] T36 — Review `packages/game/README.md`, `packages/game/AGENTS.override.md`, and local skills for stale compatibility-window guidance.
-- [ ] T37 — Run full `pnpm run ok`, reconcile `specs/small-grid-occupancy/spec.md` verification and `specs/small-grid-occupancy/design.md` drift, and fix any remaining failures.
+- [x] T37 — Run full `pnpm run ok`, reconcile `specs/small-grid-occupancy/spec.md` verification and `specs/small-grid-occupancy/design.md` drift, and fix any remaining failures.
