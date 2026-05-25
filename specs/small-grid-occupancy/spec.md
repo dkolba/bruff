@@ -83,3 +83,16 @@ Modify `@bruff/game` so movement happens on a small, discrete tactical grid inst
 - Use pure state modules for board topology, actor occupancy, and movement legality.
 - Preserve the existing input action vocabulary (`move-up`, `move-down`, `move-left`, `move-right`) unless design uncovers a compatibility issue.
 - Keep broughlike depth focused on occupancy and turn pressure for this feature; additional tactical verbs should come later as separate specs.
+
+## Verification
+
+- Player one-cell movement and board/enemy blocking are covered by `packages/game/lib/state/update-player.test.ts` and `packages/game/lib/state/update-player.property.test.ts`.
+- Enemy orthogonal destination priority is covered by `packages/game/lib/state/move-enemy-toward-player.test.ts`.
+- Enemy player blocks, enemy blocks, same-destination priority, and `spawnOrder` ordering are covered by `packages/game/lib/state/update-enemies.test.ts`.
+- Enemy count, board bounds, and unique occupied cells are covered by `packages/game/lib/state/update-enemies.property.test.ts`.
+- Blocked-only player input not advancing enemies and frame-index behavior are covered by `packages/game/lib/state/advance-game-state.test.ts`.
+- Version 1 to version 2 state migration is covered by `packages/game/lib/state/migrations.test.ts`.
+- Version 2 replay parsing, blocked player movement, blocked enemy movement, and deterministic final state are covered by `packages/game/lib/state/replay-fixture.test.ts`, `packages/game/lib/state/run-replay.test.ts`, `packages/game/lib/state/run-replay.property.test.ts`, `packages/game/lib/state/replay.test.ts`, and the canonical replay fixture/snapshot JSON files.
+- Grid-cell render projection is covered by `packages/game/lib/render/project-render-commands.test.ts`; canvas execution remains covered by `packages/game/lib/effects/render.test.ts`.
+- Browser-level state and replay behavior is covered by `packages/arcade/e2e/state-assertions.spec.ts` and `packages/arcade/e2e/replay-checkpoint.spec.ts`.
+- Final gates: `CI=true pnpm --filter @bruff/game run format`, `CI=true pnpm --filter @bruff/game run lint`, `CI=true pnpm --filter @bruff/game run typecheck`, `CI=true pnpm --filter @bruff/game run test`, and full `pnpm run ok`.
