@@ -2,7 +2,7 @@
 
 ## Goal
 
-Modify `@bruff/game` so movement happens on a small, discrete tactical grid instead of continuous canvas pixels. The player and enemies occupy whole grid cells, move one orthogonal cell per logical turn, remain inside the grid, and cannot move into a cell already occupied by another actor. This creates a broughlike foundation where every move changes the position puzzle and actors are tactical blockers instead of overlapping sprites.
+Modify `@bruff/game` so movement happens on a small, discrete tactical grid instead of continuous canvas pixels. The player and enemies occupy whole grid cells, move one orthogonal cell per logical turn, remain inside the grid, and cannot move into a cell already occupied by another actor. Actor gameplay state is grid-only: `GameState.board` and every actor `cell` are required, and `Player` / `Enemy` no longer carry legacy `xPos` / `yPos` fields.
 
 ## User-Visible Behaviour
 
@@ -17,6 +17,7 @@ Modify `@bruff/game` so movement happens on a small, discrete tactical grid inst
 - Multiple enemies never end a turn in the same cell.
 - The render output shows the player and enemies snapped to the grid rather than drifting across fractional or arbitrary pixel positions.
 - Replay fixtures and deterministic test stepping continue to produce the same final state for the same seed and input sequence.
+- Test-loaded states must use the current grid-only state shape; old/gridless loaded states are rejected by TypeScript rather than handled by runtime fallbacks.
 
 ## Broughlike Constraints
 
@@ -37,6 +38,8 @@ Modify `@bruff/game` so movement happens on a small, discrete tactical grid inst
 - New input bindings or changes to keyboard/touch normalisation.
 - Browser-only collision logic; movement legality must be pure game state logic.
 - Screenshot-based gameplay assertions.
+- Compatibility with version 1 pixel-position `GameState` values.
+- Runtime migration from old/gridless loaded states.
 
 ## Resolved Questions
 
@@ -46,8 +49,9 @@ Modify `@bruff/game` so movement happens on a small, discrete tactical grid inst
 - **What determines enemy turn order?** Existing `spawnOrder` determines enemy movement priority.
 - **Do enemies move after blocked player input?** No. Enemies move only after accepted player movement, preserving the no-free-wait constraint without letting wall bumps advance danger.
 - **Does a no-input frame advance the simulation?** No. It remains render-only as described by the current package README.
-- **Is the grid stored in domain state or inferred only during render?** The game must treat grid position as the gameplay source of truth. Pixel positions are render projection details or derived presentation data.
-- **Does this require a replay state version bump?** Yes. The state shape and replay semantics change enough to require a `stateVersion` migration plan during design.
+- **Is the grid stored in domain state or inferred only during render?** The game must treat grid position as the gameplay source of truth. Pixel positions exist only in render commands and input event coordinates, not actor state.
+- **Does this require a replay state version bump?** Yes. Removing compatibility fields changes the serialized state shape, so the current state version advances to the next version and old fixtures are not accepted.
+- **Are old/gridless loaded states still supported through the browser test API?** No. `loadState` is a typed current-state hook and callers must provide board and actor cells.
 
 ## Edge Cases
 
@@ -62,7 +66,8 @@ Modify `@bruff/game` so movement happens on a small, discrete tactical grid inst
 - Two enemies may not swap cells in the same enemy turn.
 - An enemy may not move into a cell vacated earlier in the same enemy turn if doing so would create ambiguous simultaneous movement; enemy movement is resolved sequentially by `spawnOrder`.
 - The render projection remains deterministic for a given `GameState`.
-- Replay fixtures with movement inputs remain deterministic after migration to grid semantics.
+- Replay fixtures with movement inputs remain deterministic under grid-only semantics.
+- Replay fixtures and final-state snapshots assert actor cells rather than actor pixel coordinates.
 
 ## Acceptance Criteria
 
@@ -79,9 +84,9 @@ Modify `@bruff/game` so movement happens on a small, discrete tactical grid inst
 
 ## Notes For Design
 
-- Use the `roguelike-feature` workflow to assign state, render, and migration responsibilities before implementation.
+- Use the `roguelike-feature` workflow to assign state and render responsibilities before implementation.
 - Use pure state modules for board topology, actor occupancy, and movement legality.
-- Preserve the existing input action vocabulary (`move-up`, `move-down`, `move-left`, `move-right`) unless design uncovers a compatibility issue.
+- Preserve the existing input action vocabulary (`move-up`, `move-down`, `move-left`, `move-right`) unless design uncovers a current-state issue.
 - Keep broughlike depth focused on occupancy and turn pressure for this feature; additional tactical verbs should come later as separate specs.
 
 ## Verification
@@ -91,8 +96,8 @@ Modify `@bruff/game` so movement happens on a small, discrete tactical grid inst
 - Enemy player blocks, enemy blocks, same-destination priority, and `spawnOrder` ordering are covered by `packages/game/lib/state/update-enemies.test.ts`.
 - Enemy count, board bounds, and unique occupied cells are covered by `packages/game/lib/state/update-enemies.property.test.ts`.
 - Blocked-only player input not advancing enemies and frame-index behavior are covered by `packages/game/lib/state/advance-game-state.test.ts`.
-- Version 1 to version 2 state migration is covered by `packages/game/lib/state/migrations.test.ts`.
-- Version 2 replay parsing, blocked player movement, blocked enemy movement, and deterministic final state are covered by `packages/game/lib/state/replay-fixture.test.ts`, `packages/game/lib/state/run-replay.test.ts`, `packages/game/lib/state/run-replay.property.test.ts`, `packages/game/lib/state/replay.test.ts`, and the canonical replay fixture/snapshot JSON files.
+- Runtime version 1 migration has been removed; old replay versions are rejected by `packages/game/lib/state/replay-fixture.test.ts`.
+- Version 3 replay parsing, blocked player movement, blocked enemy movement, and deterministic final state are covered by `packages/game/lib/state/replay-fixture.test.ts`, `packages/game/lib/state/run-replay.test.ts`, `packages/game/lib/state/run-replay.property.test.ts`, `packages/game/lib/state/replay.test.ts`, and the canonical replay fixture/snapshot JSON files.
 - Grid-cell render projection is covered by `packages/game/lib/render/project-render-commands.test.ts`; canvas execution remains covered by `packages/game/lib/effects/render.test.ts`.
 - Browser-level state and replay behavior is covered by `packages/arcade/e2e/state-assertions.spec.ts` and `packages/arcade/e2e/replay-checkpoint.spec.ts`.
 - Final gates: `CI=true pnpm --filter @bruff/game run format`, `CI=true pnpm --filter @bruff/game run lint`, `CI=true pnpm --filter @bruff/game run typecheck`, `CI=true pnpm --filter @bruff/game run test`, and full `pnpm run ok`.

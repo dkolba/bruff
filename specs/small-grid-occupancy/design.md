@@ -11,8 +11,7 @@
 | `packages/game/lib/state/update-player.ts`              | state   | Apply accepted one-cell player movement and blocked movement rules.       |
 | `packages/game/lib/state/move-enemy-toward-player.ts`   | state   | Pick a deterministic one-cell greedy enemy destination.                   |
 | `packages/game/lib/state/update-enemies.ts`             | state   | Resolve sequential enemy movement by `spawnOrder` and reserved cells.     |
-| `packages/game/lib/state/create-initial-state.ts`       | state   | Create non-overlapping initial grid state at version 2.                   |
-| `packages/game/lib/state/migrations.ts`                 | state   | Migrate persisted version 1 state into version 2 grid state.              |
+| `packages/game/lib/state/create-initial-state.ts`       | state   | Create non-overlapping initial grid state at version 3.                   |
 | `packages/game/lib/state/replay-fixture.ts`             | state   | Accept the bumped replay state version for fixtures.                      |
 | `packages/game/lib/state/run-replay.ts`                 | state   | Continue replaying normalized movement inputs through `advanceGameState`. |
 | `packages/game/lib/render/project-render-commands.ts`   | render  | Convert grid cells into pixel rectangles for player and enemies.          |
@@ -28,7 +27,7 @@ No input or DOM module changes are required. Existing `InputAction` variants rem
 // packages/game/lib/core/constants.ts
 export const BOARD_COLUMNS = 7;
 export const BOARD_ROWS = 7;
-export const CURRENT_STATE_VERSION = 2;
+export const CURRENT_STATE_VERSION = 3;
 ```
 
 ```ts
@@ -44,24 +43,20 @@ export type Board = Readonly<{
 }>;
 
 export type Enemy = Readonly<{
-  cell?: GridCell;
+  cell: GridCell;
   id: EnemyId;
   size: number;
   spawnOrder: number;
-  xPos: number;
-  yPos: number;
 }>;
 
 export type Player = Readonly<{
-  cell?: GridCell;
+  cell: GridCell;
   id: PlayerId;
   size: number;
-  xPos: number;
-  yPos: number;
 }>;
 
 export type GameState = Readonly<{
-  board?: Board;
+  board: Board;
   canvas: CanvasSize;
   enemies: ReadonlyArray<Enemy>;
   input: ReadonlyArray<InputAction>;
@@ -74,9 +69,7 @@ export type GameState = Readonly<{
 }>;
 ```
 
-`cell` is the gameplay source of truth. Pixel coordinates and rectangle dimensions are derived in the render layer from `state.board` and `state.canvas`.
-
-The implementation keeps `xPos`, `yPos`, `size`, and optional `cell`/`board` fields during the version 1 to version 2 compatibility window. Version 2 state uses `board` and actor `cell` values for movement and render projection. States without grid data continue through the legacy pixel fallback so older test-loaded state remains usable until the compatibility fields can be removed in a later state-shape cleanup.
+`cell` is the gameplay source of truth. Pixel coordinates and rectangle dimensions are derived in the render layer from `state.board` and `state.canvas`. Actor `xPos` / `yPos` fields are removed from `Player` and `Enemy`; pixel coordinates remain only on `RenderCommand` values and raw browser input events.
 
 ```ts
 // packages/game/lib/state/grid.ts
@@ -106,52 +99,29 @@ export const nextEnemyCellTowardPlayer: (
 ) => GridCell;
 ```
 
-`nextEnemyCellTowardPlayer` returns the enemy's current cell when the enemy already shares the player cell in migrated or test-loaded data. Normal state transitions prevent that overlap.
-
-```ts
-// packages/game/lib/state/migrations.ts
-export const migrateV1toV2: (state: GameStateV1) => GameState;
-```
-
-`GameStateV1` stays local to the migration module. Persisted state migration is pure and tested with representative version 1 data.
+`nextEnemyCellTowardPlayer` returns the enemy's current cell if a caller supplies an already-overlapping state. Normal state construction and movement prevent that overlap.
 
 ## Data Shape Changes
 
-`GameState` gains `board`.
+`GameState.board` is required.
 
-`Player` changes from pixel position plus size:
-
-```ts
-{
-  (id, size, xPos, yPos);
-}
-```
-
-to grid source-of-truth position while retaining legacy pixel fields for compatibility:
+`Player` changes from transitional grid plus pixel position:
 
 ```ts
 {
-  (cell, id, size, xPos, yPos);
+  (cell, id, size);
 }
 ```
 
-`Enemy` changes from pixel position plus size:
+`Enemy` changes from transitional grid plus pixel position:
 
 ```ts
 {
-  (id, size, spawnOrder, xPos, yPos);
+  (cell, id, size, spawnOrder);
 }
 ```
 
-to grid source-of-truth position while retaining legacy pixel fields for compatibility:
-
-```ts
-{
-  (cell, id, spawnOrder, size, xPos, yPos);
-}
-```
-
-`stateVersion` increments from `1` to `2`. Replay fixtures and final-state snapshots are updated to version 2. Version 1 replay fixtures are not silently accepted as version 2 fixtures; persisted version 1 `GameState` values are migrated through `migrateV1toV2`.
+`stateVersion` increments from `2` to `3`. Replay fixtures and final-state snapshots are updated to version 3. Version 1 and version 2 replay fixtures are not silently accepted as version 3 fixtures. No runtime migration is provided for old `GameState` values because the compatibility window is intentionally closed.
 
 ## Movement Rules
 
@@ -178,7 +148,7 @@ Turn advancement:
 - `advanceGameState(state, inputs)` still returns `state` unchanged when `inputs` is empty.
 - `advanceGameState` resets `playerMoved` to `false` at the start of each input-bearing logical tick.
 - Queued inputs are processed in order.
-- Version 2 `updateEnemies` advances on `tick` only when `state.playerMoved === true`; states without grid data retain the legacy pixel chase fallback.
+- `updateEnemies` advances on `tick` only when `state.playerMoved === true`.
 - A blocked player input does not advance enemies.
 - `frameIndex` increments only when at least one input was processed, matching the current logical tick contract.
 
@@ -231,9 +201,9 @@ The first pass uses full-cell rectangles. Gaps, outlines, animation, and sprites
 
 ### State Shape
 
-- **Chosen: make `cell` the source of truth while temporarily retaining actor pixel fields.** This makes occupancy unambiguous and keeps gameplay state independent from canvas size while preserving compatibility for existing loaded state and tests.
+- **Chosen: make `board` and actor `cell` required and remove actor `xPos` / `yPos`.** This closes the compatibility window and makes impossible the accidental use of pixel actor state for gameplay.
 - **Alternative: keep `xPos` and `yPos` and snap them to grid multiples.** Rejected because pixel coordinates would remain the apparent source of truth, making occupancy checks depend on render geometry and canvas dimensions.
-- **Alternative: remove pixel fields immediately.** Deferred because existing shell and test surfaces still load transitional `GameState` literals; this can be completed in a later cleanup once all consumers use render-derived rectangles.
+- **Alternative: keep optional `board` / `cell` and legacy fallbacks.** Rejected because the compatibility window already served its migration purpose and now makes future movement code harder to reason about.
 
 ### Board Size
 
@@ -255,9 +225,9 @@ The first pass uses full-cell rectangles. Gaps, outlines, animation, and sprites
 
 ### Migration
 
-- **Chosen: add a pure `migrateV1toV2` and bump replay fixtures to version 2.** This follows the local migration workflow and keeps replay failures explicit.
-- **Alternative: update `GameState` without a migration.** Rejected because version 1 snapshots and test-loaded states would silently change meaning.
-- **Alternative: keep accepting version 1 replay fixtures directly.** Rejected because fixture inputs would replay under different movement semantics while claiming the old state version.
+- **Chosen: remove runtime state migration and bump replay fixtures to version 3.** This makes old state rejection explicit and keeps the domain model grid-only.
+- **Alternative: add `migrateV2toV3`.** Rejected because the user explicitly requested dropping the compatibility window and old/gridless loaded-state support.
+- **Alternative: keep accepting version 2 replay fixtures directly.** Rejected because fixture final states would no longer share the same actor shape.
 
 ## Reuse Map
 
@@ -273,7 +243,7 @@ The first pass uses full-cell rectangles. Gaps, outlines, animation, and sprites
 - `packages/game/lib/state/run-replay.ts` — deterministic replay driver.
 - `packages/game/lib/render/project-render-commands.ts` — existing pure render projection.
 - `packages/game/lib/effects/execute-render-command.ts` — existing Canvas executor for projected rectangles.
-- `packages/game/tests/fixtures/canonical-replay.json` — fixture to update to version 2 semantics.
+- `packages/game/tests/fixtures/canonical-replay.json` — fixture to update to version 3 semantics.
 - `packages/game/tests/snapshots/canonical-replay.json` — final-state baseline to update after replay changes.
 
 ## Test Strategy
@@ -285,7 +255,7 @@ The first pass uses full-cell rectangles. Gaps, outlines, animation, and sprites
 - Unit tests for `update-enemies.ts` cover player blocking, enemy blocking, same-destination priority, no fallback pathing, and `spawnOrder` ordering.
 - Property tests assert every actor remains inside board bounds after arbitrary movement sequences.
 - Property tests assert all occupied cells are unique after arbitrary movement sequences.
-- Migration tests cover representative version 1 pixel positions mapping to version 2 cells.
+- Replay fixture tests reject old state versions instead of migrating old pixel-position states.
 - Replay tests update the canonical fixture to include one blocked player move and one blocked enemy move.
 - Render projection tests assert grid cells produce deterministic pixel rectangles.
 
@@ -297,5 +267,5 @@ The first pass uses full-cell rectangles. Gaps, outlines, animation, and sprites
 - Blocked player moves do not advance enemy movement.
 - Enemies move one deterministic orthogonal cell by `spawnOrder` and stay put when blocked.
 - Render commands derive pixel rectangles from grid cells and canvas size.
-- Replay fixture parsing, replay snapshots, and state migration use `stateVersion: 2`.
+- Replay fixture parsing and replay snapshots use `stateVersion: 3`.
 - `pnpm run ok` passes after implementation.
