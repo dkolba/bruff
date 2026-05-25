@@ -44,18 +44,24 @@ export type Board = Readonly<{
 }>;
 
 export type Enemy = Readonly<{
-  cell: GridCell;
+  cell?: GridCell;
   id: EnemyId;
+  size: number;
   spawnOrder: number;
+  xPos: number;
+  yPos: number;
 }>;
 
 export type Player = Readonly<{
-  cell: GridCell;
+  cell?: GridCell;
   id: PlayerId;
+  size: number;
+  xPos: number;
+  yPos: number;
 }>;
 
 export type GameState = Readonly<{
-  board: Board;
+  board?: Board;
   canvas: CanvasSize;
   enemies: ReadonlyArray<Enemy>;
   input: ReadonlyArray<InputAction>;
@@ -69,6 +75,8 @@ export type GameState = Readonly<{
 ```
 
 `cell` is the gameplay source of truth. Pixel coordinates and rectangle dimensions are derived in the render layer from `state.board` and `state.canvas`.
+
+The implementation keeps `xPos`, `yPos`, `size`, and optional `cell`/`board` fields during the version 1 to version 2 compatibility window. Version 2 state uses `board` and actor `cell` values for movement and render projection. States without grid data continue through the legacy pixel fallback so older test-loaded state remains usable until the compatibility fields can be removed in a later state-shape cleanup.
 
 ```ts
 // packages/game/lib/state/grid.ts
@@ -119,11 +127,11 @@ export const migrateV1toV2: (state: GameStateV1) => GameState;
 }
 ```
 
-to grid position:
+to grid source-of-truth position while retaining legacy pixel fields for compatibility:
 
 ```ts
 {
-  (cell, id);
+  (cell, id, size, xPos, yPos);
 }
 ```
 
@@ -135,11 +143,11 @@ to grid position:
 }
 ```
 
-to grid position:
+to grid source-of-truth position while retaining legacy pixel fields for compatibility:
 
 ```ts
 {
-  (cell, id, spawnOrder);
+  (cell, id, spawnOrder, size, xPos, yPos);
 }
 ```
 
@@ -170,7 +178,7 @@ Turn advancement:
 - `advanceGameState(state, inputs)` still returns `state` unchanged when `inputs` is empty.
 - `advanceGameState` resets `playerMoved` to `false` at the start of each input-bearing logical tick.
 - Queued inputs are processed in order.
-- `updateEnemies` advances on `tick` only when `state.playerMoved === true`.
+- Version 2 `updateEnemies` advances on `tick` only when `state.playerMoved === true`; states without grid data retain the legacy pixel chase fallback.
 - A blocked player input does not advance enemies.
 - `frameIndex` increments only when at least one input was processed, matching the current logical tick contract.
 
@@ -223,9 +231,9 @@ The first pass uses full-cell rectangles. Gaps, outlines, animation, and sprites
 
 ### State Shape
 
-- **Chosen: replace actor pixel fields with `cell`.** This makes occupancy unambiguous and keeps gameplay state independent from canvas size.
+- **Chosen: make `cell` the source of truth while temporarily retaining actor pixel fields.** This makes occupancy unambiguous and keeps gameplay state independent from canvas size while preserving compatibility for existing loaded state and tests.
 - **Alternative: keep `xPos` and `yPos` and snap them to grid multiples.** Rejected because pixel coordinates would remain the apparent source of truth, making occupancy checks depend on render geometry and canvas dimensions.
-- **Alternative: store both `cell` and pixel fields.** Rejected because duplicated position data can drift and creates illegal states that the type model should avoid.
+- **Alternative: remove pixel fields immediately.** Deferred because existing shell and test surfaces still load transitional `GameState` literals; this can be completed in a later cleanup once all consumers use render-derived rectangles.
 
 ### Board Size
 

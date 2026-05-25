@@ -31,4 +31,4 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T27 — Update `packages/game/README.md` to describe grid movement, board state, and version 2 replay semantics.
 - [x] T28 — Run `CI=true pnpm --filter @bruff/game run format`, `CI=true pnpm --filter @bruff/game run lint`, `CI=true pnpm --filter @bruff/game run typecheck`, and `CI=true pnpm --filter @bruff/game run test`; fix failures in the files touched by T1-T27.
 - [x] T29 — Review `specs/small-grid-occupancy/spec.md` and append a `## Verification` section mapping each accepted behaviour to tests or gates.
-- [ ] T30 — Review `specs/small-grid-occupancy/design.md` and update any drift found during implementation.
+- [x] T30 — Review `specs/small-grid-occupancy/design.md` and update any drift found during implementation.
