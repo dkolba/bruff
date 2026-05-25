@@ -25,7 +25,7 @@ Use this skill when writing tests for Node.js modules where the test stack must 
 
 Node.js runs TypeScript through type stripping. Keep tests and imported test-only helpers inside erasable TypeScript syntax:
 
-- Use `.ts`, `.mts`, or `.cts`; do not use `.tsx`.
+- Use `.ts`, do not use `.mts`, `.cts` or `.tsx`.
 - Include real file extensions in relative imports: `./parser.ts`, not `./parser`.
 - Use `import type` for type-only imports.
 - Avoid syntax that requires transformation: `enum`, parameter properties, runtime namespaces, decorators, and TypeScript path aliases.
@@ -79,7 +79,7 @@ Useful native runner flags:
 
 ## Test Structure
 
-Use ESM-style imports unless the package is explicitly CommonJS:
+Use ESM-style imports:
 
 ```ts
 import assert from "node:assert/strict";
@@ -187,8 +187,8 @@ For timers, use `context.mock.timers` and advance time deterministically. Avoid 
 
 ## Do Not Use
 
-- `expect`, snapshots, fake DOMs, or browser globals such as `window` and `document`.
-- Transpiler-only TypeScript syntax unless the package already has a non-native test runner.
+- `expect`, fake DOMs, or browser globals such as `window` and `document`.
+- Transpiler-only TypeScript syntax
 - `assert.ok(actual)` when a more precise assertion is available.
 - `assert.doesNotThrow()` or `assert.doesNotReject()` as a substitute for asserting the real outcome.
 - Focused tests, skipped tests, or random temporary files left behind after the run.
