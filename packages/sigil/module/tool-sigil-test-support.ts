@@ -50,6 +50,30 @@ export const requireElement = <ElementType extends Element>(
   return element;
 };
 
+/** Waits for a matched shadow DOM element. */
+export const waitForElement = <ElementType extends Element>(
+  shadowRoot: ShadowRoot,
+  selector: string,
+): Promise<ElementType> => {
+  const immediateElement = shadowRoot.querySelector<ElementType>(selector);
+  if (immediateElement !== null) {
+    return Promise.resolve(immediateElement);
+  }
+
+  return new Promise<ElementType>((resolve) => {
+    const observer = new MutationObserver((): void => {
+      const element = shadowRoot.querySelector<ElementType>(selector);
+      if (element === null) {
+        return;
+      }
+
+      observer.disconnect();
+      resolve(element);
+    });
+    observer.observe(shadowRoot, { childList: true, subtree: true });
+  });
+};
+
 /** Waits for component microtasks and file parsing to settle in browser tests. */
 export const waitForComponentUpdate = (): Promise<void> =>
   new Promise((resolve) => {

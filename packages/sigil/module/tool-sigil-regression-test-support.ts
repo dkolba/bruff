@@ -8,6 +8,7 @@ import {
   requireShadowRoot,
   selectFiles,
   waitForComponentUpdate,
+  waitForElement,
 } from "./tool-sigil-test-support.js";
 import {
   createMissingStarFontFile,
@@ -248,7 +249,7 @@ export const expectGlyphNameInputFocusPreserved = async (
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, "★");
 
-  const glyphNameInput = requireElement<HTMLInputElement>(
+  const glyphNameInput = await waitForElement<HTMLInputElement>(
     shadowRoot,
     'input[data-unicode="★"]',
   );

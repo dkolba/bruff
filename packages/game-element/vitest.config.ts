@@ -26,5 +26,6 @@ export default defineConfig({
       },
     },
     include: ["**/*.test.ts"], // Match test files
+    isolate: true,
   },
 });

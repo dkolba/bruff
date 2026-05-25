@@ -9,6 +9,7 @@ export default defineConfig({
     __BRUFF_TEST_MODE__: JSON.stringify(true),
   },
   test: {
+    isolate: true,
     browser: {
       enabled: true,
       headless: true,
