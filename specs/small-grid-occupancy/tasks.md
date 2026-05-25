@@ -10,7 +10,7 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T6 — Add `occupancy.ts` stubs in `packages/game/lib/state/occupancy.ts` for enemy and actor occupancy queries.
 - [x] T7 — Add unit tests for occupancy queries in `packages/game/lib/state/occupancy.test.ts`.
 - [x] T8 — Implement occupancy queries in `packages/game/lib/state/occupancy.ts`.
-- [ ] T9 — Update initial grid state in `packages/game/lib/state/create-initial-state.ts` and expectations in `packages/game/lib/state/create-initial-state.test.ts`.
+- [x] T9 — Update initial grid state in `packages/game/lib/state/create-initial-state.ts` and expectations in `packages/game/lib/state/create-initial-state.test.ts`.
 - [ ] T10 — Add player grid movement tests in `packages/game/lib/state/update-player.test.ts` for accepted movement, board blocks, enemy blocks, and `playerMoved`.
 - [ ] T11 — Refactor `packages/game/lib/state/update-player.ts` to apply one-cell grid movement through `grid.ts` and `occupancy.ts`.
 - [ ] T12 — Update player movement property tests in `packages/game/lib/state/update-player.property.test.ts` to assert board bounds and accepted movement semantics.

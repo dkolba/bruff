@@ -1,11 +1,19 @@
 import {
+  BOARD_COLUMNS,
+  BOARD_ROWS,
+  ENEMY_SIZE,
+  FIVE,
+  ONE,
+  PLAYER_SIZE,
+  TWO,
+} from "../core/constants.js";
+import {
   type Brand,
   brand,
   createPrng,
   nextId,
   type PrngState,
 } from "@bruff/utils";
-import { ENEMY_SIZE, PLAYER_SIZE } from "../core/constants.js";
 import type { GameState } from "../core/types.ts";
 
 const INITIAL_SEED = 1;
@@ -45,12 +53,17 @@ const createInitialState = (
   const enemy2 = drawId<"EnemyId">(enemy1.prng);
 
   return {
+    board: {
+      columns: BOARD_COLUMNS,
+      rows: BOARD_ROWS,
+    },
     canvas: {
       height: canvas.height,
       width: canvas.width,
     },
     enemies: [
       {
+        cell: { column: ONE, row: ONE },
         id: enemy0.id,
         size: ENEMY_SIZE,
         spawnOrder: 0,
@@ -58,6 +71,7 @@ const createInitialState = (
         yPos: 50,
       },
       {
+        cell: { column: FIVE, row: ONE },
         id: enemy1.id,
         size: ENEMY_SIZE,
         spawnOrder: 1,
@@ -65,6 +79,7 @@ const createInitialState = (
         yPos: 100,
       },
       {
+        cell: { column: ONE, row: FIVE },
         id: enemy2.id,
         size: ENEMY_SIZE,
         spawnOrder: 2,
@@ -75,6 +90,7 @@ const createInitialState = (
     frameIndex: INITIAL_FRAME_INDEX,
     input: [],
     player: {
+      cell: { column: TWO + ONE, row: TWO + ONE },
       id: player.id,
       size: PLAYER_SIZE,
       xPos: 200,
