@@ -1,4 +1,4 @@
-/* eslint-disable no-magic-numbers, no-underscore-dangle, unicorn/prefer-global-this -- E2E checks intentionally target the browser test API and fixed fixture values. */
+/* eslint-disable max-lines, max-lines-per-function, max-statements, no-magic-numbers, no-underscore-dangle, unicorn/prefer-global-this -- E2E checks intentionally target the browser test API and fixed fixture values. */
 import { expect, type Page } from "@playwright/test";
 import { gotoTestMode, test } from "./base-fixtures.js";
 
@@ -269,4 +269,156 @@ test("keeps legacy pixel movement working for loaded states without grid data", 
 
   expect(state?.xPos).toBe(LEGACY_MOVE_X_POS);
   expect(state?.yPos).toBe(PLAYER_Y_POS);
+});
+
+test("resolves version 2 grid enemy movement through the browser test API", async ({
+  page,
+}: {
+  page: Page;
+}) => {
+  await gotoTestMode(page);
+
+  const snapshots = await page.evaluate(() => {
+    const testApi = window.__bruffTestApi;
+    const initialState = testApi?.getState();
+    const [enemy0, enemy1] = initialState?.enemies ?? [];
+    if (
+      testApi === undefined ||
+      initialState === undefined ||
+      enemy0 === undefined ||
+      enemy1 === undefined
+    ) {
+      return null;
+    }
+
+    const loadScenario = (
+      enemies: typeof initialState.enemies,
+      playerCell: { column: number; row: number },
+      playerMoved: boolean,
+    ): ReadonlyArray<{ column: number; row: number } | undefined> => {
+      testApi.loadState({
+        ...initialState,
+        board: { columns: 7, rows: 7 },
+        enemies,
+        player: {
+          ...initialState.player,
+          cell: playerCell,
+          xPos: playerCell.column,
+          yPos: playerCell.row,
+        },
+        playerMoved,
+        stateVersion: 2,
+      });
+      testApi.dispatchInput("ArrowUp");
+      return testApi.stepFrames(1).enemies.map((enemy) => enemy.cell);
+    };
+
+    const accepted = loadScenario(
+      [
+        {
+          ...enemy0,
+          cell: { column: 2, row: 0 },
+          spawnOrder: 0,
+        },
+      ],
+      { column: 4, row: 0 },
+      true,
+    );
+
+    const playerBlocked = loadScenario(
+      [
+        {
+          ...enemy0,
+          cell: { column: 3, row: 0 },
+          spawnOrder: 0,
+        },
+      ],
+      { column: 4, row: 0 },
+      true,
+    );
+
+    const enemyBlocked = loadScenario(
+      [
+        {
+          ...enemy0,
+          cell: { column: 2, row: 0 },
+          spawnOrder: 0,
+        },
+        {
+          ...enemy1,
+          cell: { column: 3, row: 0 },
+          spawnOrder: 1,
+        },
+      ],
+      { column: 4, row: 0 },
+      true,
+    );
+
+    const reservedBlocked = loadScenario(
+      [
+        {
+          ...enemy0,
+          cell: { column: 2, row: 2 },
+          spawnOrder: 0,
+        },
+        {
+          ...enemy1,
+          cell: { column: 1, row: 1 },
+          spawnOrder: 1,
+        },
+      ],
+      { column: 2, row: 0 },
+      true,
+    );
+
+    const noAcceptedPlayerMove = loadScenario(
+      [
+        {
+          ...enemy0,
+          cell: { column: 2, row: 0 },
+          spawnOrder: 0,
+        },
+      ],
+      { column: 4, row: 0 },
+      false,
+    );
+
+    const enemyWithoutCell = loadScenario(
+      [
+        {
+          id: enemy0.id,
+          size: enemy0.size,
+          spawnOrder: 0,
+          xPos: enemy0.xPos,
+          yPos: enemy0.yPos,
+        },
+      ],
+      { column: 4, row: 0 },
+      true,
+    );
+
+    return {
+      accepted,
+      enemyBlocked,
+      enemyWithoutCell,
+      noAcceptedPlayerMove,
+      playerBlocked,
+      reservedBlocked,
+    };
+  });
+
+  expect(snapshots?.accepted).toStrictEqual([{ column: 3, row: 0 }]);
+  expect(snapshots?.playerBlocked).toStrictEqual([{ column: 3, row: 0 }]);
+  expect(snapshots?.enemyBlocked).toStrictEqual([
+    { column: 2, row: 0 },
+    { column: 3, row: 0 },
+  ]);
+  expect(snapshots?.reservedBlocked).toStrictEqual([
+    { column: 2, row: 1 },
+    { column: 1, row: 1 },
+  ]);
+  expect(snapshots?.noAcceptedPlayerMove).toStrictEqual([
+    { column: 2, row: 0 },
+  ]);
+  expect(snapshots?.enemyWithoutCell).toStrictEqual([undefined]);
 });

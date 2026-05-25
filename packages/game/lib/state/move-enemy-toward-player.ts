@@ -13,7 +13,6 @@ const signedStep = (distance: number): number => Math.sign(distance) * ONE;
  * @param player - Player to move toward
  * @returns Candidate destination cell
  */
-/* istanbul ignore next -- wired into browser simulation in T16; covered by unit tests now. */
 export const nextEnemyCellTowardPlayer = (
   enemy: Enemy,
   player: Player,

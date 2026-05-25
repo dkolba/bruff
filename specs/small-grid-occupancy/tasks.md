@@ -16,7 +16,7 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T12 — Update player movement property tests in `packages/game/lib/state/update-player.property.test.ts` to assert board bounds and accepted movement semantics.
 - [x] T13 — Add enemy destination tests in `packages/game/lib/state/move-enemy-toward-player.test.ts` for horizontal priority, vertical priority, tie priority, and overlapping defensive input.
 - [x] T14 — Refactor `packages/game/lib/state/move-enemy-toward-player.ts` to return deterministic grid-cell destinations.
-- [ ] T15 — Add enemy occupancy resolution tests in `packages/game/lib/state/update-enemies.test.ts` for player blocks, enemy blocks, same-destination priority, and `spawnOrder` order.
+- [x] T15 — Add enemy occupancy resolution tests in `packages/game/lib/state/update-enemies.test.ts` for player blocks, enemy blocks, same-destination priority, and `spawnOrder` order.
 - [ ] T16 — Refactor `packages/game/lib/state/update-enemies.ts` to resolve sequential grid movement only after accepted player movement.
 - [ ] T17 — Update enemy movement property tests in `packages/game/lib/state/update-enemies.property.test.ts` to assert board bounds, stable enemy count, and unique occupied cells.
 - [ ] T18 — Update `packages/game/lib/state/advance-game-state.test.ts` for blocked-input enemy advancement and frame-index expectations.
