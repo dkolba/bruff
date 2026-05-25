@@ -16,7 +16,6 @@ const ONE_FRAME = 1;
 const INITIAL_TIME_MS = 100;
 const TWO_FRAMES = 2;
 const THREE_FRAMES = 3;
-const LOADED_PLAYER_X_POS = 320;
 
 const createState = (): GameState => ({
   board: { columns: BOARD_COLUMNS, rows: BOARD_ROWS },
@@ -28,8 +27,6 @@ const createState = (): GameState => ({
     cell: { column: 3, row: 3 },
     id: brand<"PlayerId">("test-player"),
     size: 20,
-    xPos: 200,
-    yPos: 200,
   },
   playerMoved: false,
   prng: createPrng(TEST_SEED),
@@ -228,7 +225,6 @@ describe("createFrameStepDriver", () => {
       player: {
         ...initialState.player,
         cell: { column: 4, row: 3 },
-        xPos: LOADED_PLAYER_X_POS,
       },
     };
     const driver = createFrameStepDriver({

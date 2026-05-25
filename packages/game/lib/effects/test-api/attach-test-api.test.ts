@@ -28,8 +28,6 @@ const createState = (): GameState => ({
     cell: { column: 3, row: 3 },
     id: brand<"PlayerId">("test-player"),
     size: 20,
-    xPos: 200,
-    yPos: 200,
   },
   playerMoved: false,
   prng: createPrng(TEST_SEED),

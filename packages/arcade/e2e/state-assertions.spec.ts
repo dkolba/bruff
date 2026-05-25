@@ -160,8 +160,6 @@ test("blocks grid movement at the board edge", async ({
       player: {
         ...initialState.player,
         cell: { column: 0, row: 0 },
-        xPos: 0,
-        yPos: 0,
       },
     });
     testApi.dispatchInput("ArrowLeft");
@@ -203,15 +201,11 @@ test("blocks grid movement into an enemy-occupied cell", async ({
         {
           ...enemy,
           cell: { column: 4, row: 3 },
-          xPos: 205,
-          yPos: 200,
         },
       ],
       player: {
         ...initialState.player,
         cell: { column: 3, row: 3 },
-        xPos: 200,
-        yPos: 200,
       },
     });
     testApi.dispatchInput("ArrowRight");
@@ -257,8 +251,6 @@ test("resolves version 3 grid enemy movement through the browser test API", asyn
         player: {
           ...initialState.player,
           cell: playerCell,
-          xPos: playerCell.column,
-          yPos: playerCell.row,
         },
         playerMoved: false,
         stateVersion: 3,

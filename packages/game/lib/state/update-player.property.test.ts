@@ -1,23 +1,15 @@
-/* eslint-disable max-lines-per-function, sort-imports -- Property cases keep arbitraries and assertions together. */
+/* eslint-disable sort-imports -- Property cases keep arbitraries and assertions together. */
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect } from "vitest";
 import { fc, test } from "@fast-check/vitest";
-import {
-  BOARD_COLUMNS,
-  BOARD_ROWS,
-  ONE,
-  PLAYER_SIZE,
-  TWO,
-  ZERO,
-} from "../core/constants.js";
+import { BOARD_COLUMNS, BOARD_ROWS, ONE, ZERO } from "../core/constants.js";
 import type { GameAction, InputAction } from "../core/actions.ts";
 import type { GameState, GridCell } from "../core/types.ts";
 import updatePlayer from "./update-player.js";
 import { cellForAction, isCellInsideBoard } from "./grid.js";
 
-const STATE_VERSION = 1;
 const TEST_SEED = 1;
-const MIN_CANVAS = PLAYER_SIZE * TWO;
+const MIN_CANVAS = 1;
 const MAX_CANVAS = 4096;
 const INTERIOR_MIN = ONE;
 
@@ -49,31 +41,22 @@ const gameStateArb: fc.Arbitrary<GameState> = fc
     cell: gridCellArb,
   })
   .chain(({ canvasHeight, canvasWidth, cell }) =>
-    fc
-      .record({
-        xPos: fc.integer({ max: canvasWidth - PLAYER_SIZE, min: 0 }),
-        yPos: fc.integer({ max: canvasHeight - PLAYER_SIZE, min: 0 }),
-      })
-      .map(
-        ({ xPos, yPos }): GameState => ({
-          board: { columns: BOARD_COLUMNS, rows: BOARD_ROWS },
-          canvas: { height: canvasHeight, width: canvasWidth },
-          enemies: [],
-          frameIndex: 0,
-          input: [],
-          player: {
-            cell,
-            id: brand<"PlayerId">("test-player"),
-            size: PLAYER_SIZE,
-            xPos,
-            yPos,
-          },
-          playerMoved: false,
-          prng: createPrng(TEST_SEED),
-          seed: TEST_SEED,
-          stateVersion: STATE_VERSION,
-        }),
-      ),
+    fc.constant({
+      board: { columns: BOARD_COLUMNS, rows: BOARD_ROWS },
+      canvas: { height: canvasHeight, width: canvasWidth },
+      enemies: [],
+      frameIndex: 0,
+      input: [],
+      player: {
+        cell,
+        id: brand<"PlayerId">("test-player"),
+        size: 20,
+      },
+      playerMoved: false,
+      prng: createPrng(TEST_SEED),
+      seed: TEST_SEED,
+      stateVersion: 3,
+    }),
   );
 
 const interiorGameStateArb: fc.Arbitrary<GameState> = gameStateArb.map(
@@ -99,11 +82,7 @@ describe("updatePlayer (property-based)", () => {
     "keeps the player inside board bounds for any action",
     (state, action) => {
       const next = updatePlayer(state, action);
-      expect(
-        next.board === undefined || next.player.cell === undefined
-          ? false
-          : isCellInsideBoard(next.player.cell, next.board),
-      ).toBe(true);
+      expect(isCellInsideBoard(next.player.cell, next.board)).toBe(true);
     },
   );
 
@@ -111,28 +90,10 @@ describe("updatePlayer (property-based)", () => {
     "accepts unblocked interior grid movement",
     (state, action) => {
       const next = updatePlayer(state, action);
-      const expectedCell =
-        state.player.cell === undefined
-          ? undefined
-          : cellForAction(state.player.cell, action);
+      const expectedCell = cellForAction(state.player.cell, action);
 
       expect(next.player.cell).toStrictEqual(expectedCell);
       expect(next.playerMoved).toBe(true);
-    },
-  );
-
-  test.prop([gameStateArb, gameActionArb])(
-    "keeps the player inside canvas bounds for any action",
-    (state, action) => {
-      const next = updatePlayer(state, action);
-      expect(next.player.xPos).toBeGreaterThanOrEqual(ZERO);
-      expect(next.player.yPos).toBeGreaterThanOrEqual(ZERO);
-      expect(next.player.xPos).toBeLessThanOrEqual(
-        next.canvas.width - PLAYER_SIZE,
-      );
-      expect(next.player.yPos).toBeLessThanOrEqual(
-        next.canvas.height - PLAYER_SIZE,
-      );
     },
   );
 

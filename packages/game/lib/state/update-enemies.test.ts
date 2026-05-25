@@ -29,16 +29,12 @@ const createGridEnemy = (enemySpec: EnemySpec): Enemy => ({
   id: brand<"EnemyId">(enemySpec.id),
   size: ENEMY_SIZE,
   spawnOrder: enemySpec.spawnOrder,
-  xPos: enemySpec.cell.column,
-  yPos: enemySpec.cell.row,
 });
 
 const createPlayer = (cell: GridCell): Player => ({
   cell,
   id: brand<"PlayerId">("test-player"),
   size: PLAYER_SIZE,
-  xPos: cell.column,
-  yPos: cell.row,
 });
 
 const createGridState = (

@@ -28,8 +28,6 @@ const createBaseState = (): GameState => ({
     cell: TEST_PLAYER_CELL,
     id: brand<"PlayerId">("test-player"),
     size: PLAYER_SIZE,
-    xPos: 200,
-    yPos: 200,
   },
   playerMoved: false,
   prng: createPrng(TEST_SEED),
@@ -100,8 +98,6 @@ describe("updatePlayer", () => {
       const baseState = createBaseState();
       const updatedState = updatePlayer(baseState, action);
       expect(updatedState.player.cell).toStrictEqual(expected.cell);
-      expect(updatedState.player.xPos).toBe(baseState.player.xPos);
-      expect(updatedState.player.yPos).toBe(baseState.player.yPos);
       expect(updatedState.playerMoved).toBe(true);
     },
   );
@@ -113,15 +109,11 @@ describe("updatePlayer", () => {
       player: {
         ...baseState.player,
         cell: { column: ZERO, row: ZERO },
-        xPos: ZERO,
-        yPos: ZERO,
       },
     };
     const afterUp = updatePlayer(cornered, { type: "move-up" });
     const afterLeft = updatePlayer(afterUp, { type: "move-left" });
     expect(afterLeft.player.cell).toStrictEqual({ column: ZERO, row: ZERO });
-    expect(afterLeft.player.xPos).toBe(ZERO);
-    expect(afterLeft.player.yPos).toBe(ZERO);
   });
 
   it("blocks movement into an enemy-occupied cell", () => {
@@ -137,8 +129,6 @@ describe("updatePlayer", () => {
           id: brand<"EnemyId">("blocking-enemy"),
           size: ENEMY_SIZE,
           spawnOrder: ZERO,
-          xPos: ZERO,
-          yPos: ZERO,
         },
       ],
     };

@@ -17,30 +17,22 @@ const EXPECTED_ENEMIES = [
     cell: { column: ONE, row: ONE },
     size: ENEMY_SIZE,
     spawnOrder: 0,
-    xPos: 50,
-    yPos: 50,
   },
   {
     cell: { column: FIVE, row: ONE },
     size: ENEMY_SIZE,
     spawnOrder: 1,
-    xPos: 300,
-    yPos: 100,
   },
   {
     cell: { column: ONE, row: FIVE },
     size: ENEMY_SIZE,
     spawnOrder: 2,
-    xPos: 100,
-    yPos: 300,
   },
 ];
 
 const EXPECTED_PLAYER = {
   cell: { column: TWO + ONE, row: TWO + ONE },
   size: PLAYER_SIZE,
-  xPos: 200,
-  yPos: 200,
 };
 
 describe("createInitialState", () => {

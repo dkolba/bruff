@@ -31,8 +31,6 @@ export type Enemy = Readonly<{
   id: EnemyId;
   size: number;
   spawnOrder: number;
-  xPos: number;
-  yPos: number;
 }>;
 
 /** The player-controlled entity. */
@@ -40,8 +38,6 @@ export type Player = Readonly<{
   cell: GridCell;
   id: PlayerId;
   size: number;
-  xPos: number;
-  yPos: number;
 }>;
 
 /** Canvas dimensions in pixels. */

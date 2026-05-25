@@ -14,9 +14,7 @@ const ONE = 1;
 const CANVAS_HEIGHT = 600;
 const CANVAS_WIDTH = 800;
 const ENEMY_SIZE = 20;
-const ENEMY_POS = 50;
 const PLAYER_SIZE = 20;
-const PLAYER_POS = 200;
 const TEST_SEED = 1;
 const FRAME_INDEX = 7;
 
@@ -25,8 +23,6 @@ const createEnemy = (id: string, spawnOrder: number): Enemy => ({
   id: brand<"EnemyId">(id),
   size: ENEMY_SIZE,
   spawnOrder,
-  xPos: ENEMY_POS,
-  yPos: ENEMY_POS,
 });
 
 const createState = (
@@ -42,8 +38,6 @@ const createState = (
     cell: { column: ONE, row: ONE },
     id: brand<"PlayerId">("test-player"),
     size: PLAYER_SIZE,
-    xPos: PLAYER_POS,
-    yPos: PLAYER_POS,
   },
   playerMoved: false,
   prng: createPrng(TEST_SEED),

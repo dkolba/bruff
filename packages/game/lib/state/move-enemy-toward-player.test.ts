@@ -5,8 +5,6 @@ import { brand } from "@bruff/utils";
 import { nextEnemyCellTowardPlayer } from "./move-enemy-toward-player.js";
 import type { Enemy, Player } from "../core/types.ts";
 
-const TEST_POS_100 = 100;
-const TEST_POS_50 = 50;
 const TEST_PLAYER_SIZE = 20;
 
 const ENEMY_ID = brand<"EnemyId">("test-enemy");
@@ -15,8 +13,6 @@ const GRID_PLAYER: Player = {
   cell: { column: TWO + ONE, row: TWO + ONE },
   id: PLAYER_ID,
   size: TEST_PLAYER_SIZE,
-  xPos: TEST_POS_100,
-  yPos: TEST_POS_100,
 };
 
 const createGridEnemy = (cell: Enemy["cell"]): Enemy => ({
@@ -24,8 +20,6 @@ const createGridEnemy = (cell: Enemy["cell"]): Enemy => ({
   id: ENEMY_ID,
   size: ENEMY_SIZE,
   spawnOrder: ZERO,
-  xPos: TEST_POS_50,
-  yPos: TEST_POS_50,
 });
 
 const testGridDestination = (): void => {

@@ -22,8 +22,6 @@ const createEnemy = (cell: GridCell): Enemy => ({
   id: brand<"EnemyId">("test-enemy"),
   size: ENEMY_SIZE,
   spawnOrder: ZERO,
-  xPos: ZERO,
-  yPos: ZERO,
 });
 
 const createState = (): GameState => ({
@@ -36,8 +34,6 @@ const createState = (): GameState => ({
     cell: PLAYER_CELL,
     id: brand<"PlayerId">("test-player"),
     size: PLAYER_SIZE,
-    xPos: ZERO,
-    yPos: ZERO,
   },
   playerMoved: false,
   prng: createPrng(ONE),
