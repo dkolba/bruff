@@ -16,18 +16,23 @@ Code is split by layer:
 - `lib/render/` — pure render-adjacent data such as `RenderStats`.
 - `lib/effects/` — DOM, Canvas, time, logging, RAF, and test API wiring.
 
-`GameState` carries replay-critical fields:
+`GameState` carries replay-critical fields and a fixed `7x7` tactical board:
 
 ```ts
 type GameState = Readonly<{
   stateVersion: number;
   seed: number;
   frameIndex: number;
-  // canvas, player, enemies, input, playerMoved, prng
+  board: { columns: 7; rows: 7 };
+  player: { cell: GridCell };
+  enemies: ReadonlyArray<{ cell: GridCell; spawnOrder: number }>;
+  // canvas, input, playerMoved, prng
 }>;
 ```
 
-`frameIndex` increments once per logical tick. Render-only frames with no queued input redraw the canvas without advancing enemies or `frameIndex`. `seed` and `prng` make entity identity and future random choices reproducible.
+Player and enemy gameplay positions are grid cells. Movement inputs propose one orthogonal cell; moves outside the board or into an occupied enemy cell are blocked. Enemies move only after an accepted player move, resolve in ascending `spawnOrder`, and stay still when the proposed cell is occupied by the player, an enemy at turn start, or an earlier enemy destination. Render commands derive full-cell rectangles from `board` and `canvas`, so gameplay state stays independent of pixel dimensions.
+
+`frameIndex` increments once per logical tick with queued input. Render-only frames with no queued input redraw the canvas without advancing enemies or `frameIndex`. `seed` and `prng` make entity identity and future random choices reproducible.
 
 ## Testing Pyramid
 
@@ -40,7 +45,7 @@ Replay fixture shape:
 
 ```json
 {
-  "stateVersion": 1,
+  "stateVersion": 2,
   "seed": 1,
   "initialCanvas": { "height": 600, "width": 800 },
   "frames": [{ "frame": 1, "input": "move-right" }],
@@ -48,7 +53,7 @@ Replay fixture shape:
 }
 ```
 
-`frames` are applied before the matching replay frame. Replay frames with no input are render-only and do not increment `frameIndex`. Fixture inputs use normalized action names: `move-up`, `move-down`, `move-left`, and `move-right`.
+`frames` are applied before the matching replay frame. Replay frames with no input are render-only and do not increment `frameIndex`. Fixture inputs use normalized action names: `move-up`, `move-down`, `move-left`, and `move-right`. Version 2 fixtures replay against grid movement semantics; persisted version 1 `GameState` values migrate through `migrateV1toV2`.
 
 ## Commands
 

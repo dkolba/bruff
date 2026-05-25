@@ -28,7 +28,7 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T24 — Update render projection tests in `packages/game/lib/render/project-render-commands.test.ts` for cell-to-pixel rectangle mapping.
 - [x] T25 — Refactor `packages/game/lib/render/project-render-commands.ts` to derive foreground rectangles from `state.board`, `state.canvas`, and actor cells.
 - [x] T26 — Update render and effects tests in `packages/game/lib/render/render-stats.test.ts`, `packages/game/lib/effects/render.test.ts`, `packages/game/lib/effects/frame-step-driver.test.ts`, and `packages/game/lib/effects/test-api/attach-test-api.test.ts` for grid-shaped `GameState` literals.
-- [ ] T27 — Update `packages/game/README.md` to describe grid movement, board state, and version 2 replay semantics.
+- [x] T27 — Update `packages/game/README.md` to describe grid movement, board state, and version 2 replay semantics.
 - [ ] T28 — Run `CI=true pnpm --filter @bruff/game run format`, `CI=true pnpm --filter @bruff/game run lint`, `CI=true pnpm --filter @bruff/game run typecheck`, and `CI=true pnpm --filter @bruff/game run test`; fix failures in the files touched by T1-T27.
 - [ ] T29 — Review `specs/small-grid-occupancy/spec.md` and append a `## Verification` section mapping each accepted behaviour to tests or gates.
 - [ ] T30 — Review `specs/small-grid-occupancy/design.md` and update any drift found during implementation.
