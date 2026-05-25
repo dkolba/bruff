@@ -7,7 +7,7 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T3 — Add `grid.ts` stubs in `packages/game/lib/state/grid.ts` for `cellForAction`, `cellsEqual`, and `isCellInsideBoard`.
 - [x] T4 — Add unit tests for grid helpers in `packages/game/lib/state/grid.test.ts`.
 - [x] T5 — Implement grid helpers in `packages/game/lib/state/grid.ts`.
-- [ ] T6 — Add `occupancy.ts` stubs in `packages/game/lib/state/occupancy.ts` for enemy and actor occupancy queries.
+- [x] T6 — Add `occupancy.ts` stubs in `packages/game/lib/state/occupancy.ts` for enemy and actor occupancy queries.
 - [ ] T7 — Add unit tests for occupancy queries in `packages/game/lib/state/occupancy.test.ts`.
 - [ ] T8 — Implement occupancy queries in `packages/game/lib/state/occupancy.ts`.
 - [ ] T9 — Update initial grid state in `packages/game/lib/state/create-initial-state.ts` and expectations in `packages/game/lib/state/create-initial-state.test.ts`.
