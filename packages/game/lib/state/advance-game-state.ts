@@ -25,7 +25,7 @@ export const advanceGameState = (
   const nextState = actions.reduce<GameState>(
     (currentState, action) =>
       updateEnemies(updatePlayer(currentState, action), action),
-    { ...state, input: [] },
+    { ...state, input: [], playerMoved: false },
   );
 
   return {

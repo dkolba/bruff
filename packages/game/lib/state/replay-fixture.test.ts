@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { CURRENT_STATE_VERSION } from "../core/constants.js";
 import { parseReplayFixture } from "./replay-fixture.js";
 
 const validFixture = {
   frames: [{ frame: 1, input: "move-right" }],
   initialCanvas: { height: 600, width: 800 },
   seed: 1,
-  stateVersion: 1,
+  stateVersion: CURRENT_STATE_VERSION,
   totalFrames: 1,
 };
 
@@ -53,8 +54,12 @@ describe("parseReplayFixture numeric field validation", () => {
   });
 
   it("rejects an invalid state version", () => {
-    expect(parseReplayFixture({ ...validFixture, stateVersion: 2 })).toEqual({
-      error: { expected: 1, got: 2, type: "stateVersionMismatch" },
+    expect(parseReplayFixture({ ...validFixture, stateVersion: 1 })).toEqual({
+      error: {
+        expected: CURRENT_STATE_VERSION,
+        got: 1,
+        type: "stateVersionMismatch",
+      },
       type: "error",
     });
   });

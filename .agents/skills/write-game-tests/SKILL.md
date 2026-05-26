@@ -15,6 +15,7 @@ Use the current test harness vocabulary:
 
 - `advanceGameState(state, inputs)` is the pure logical step. Empty `inputs` returns the same state; queued input advances exactly one logical tick, applies player input first, then the tick action.
 - `frameIndex` counts logical ticks, not rendered frames. Render-only `stepFrames(n)` calls with no queued input must not move enemies or increment `frameIndex`.
+- Gameplay movement is grid-based. State tests should assert actor `cell` and board occupancy invariants; actors must not carry `xPos` / `yPos`.
 - `createFrameStepDriver` / `stepFrames(n)` exercise the effects-layer driver with a `manualClock`; they may render and advance animation time even when state does not tick.
 - `projectRenderCommands(state)` is the pure foreground draw plan. It should be tested with literal `GameState` values and exact `ReadonlyArray<RenderCommand>` expectations.
 - `executeRenderCommand` / `executeRenderCommands` are effects-layer Canvas executors. They are tested with the browser provider and a real `CanvasRenderingContext2D` spy, not from pure render tests.
@@ -42,7 +43,7 @@ describe("updatePlayer", () => {
     const state: GameState = /* … */;
     expect(updatePlayer(state, { type: "move-up" })).toStrictEqual({
       ...state,
-      player: { ...state.player, yPos: state.player.yPos - PLAYER_SPEED },
+      player: { ...state.player, cell: { column: 3, row: 2 } },
       playerMoved: true,
     });
   });
@@ -59,7 +60,7 @@ Properties to test:
 
 - **PRNG**: same seed → same sequence of values.
 - **Reducers**: applying inverse actions returns to original state (where applicable).
-- **State transitions**: `frameIndex` never decreases and increments only for logical ticks with input.
+- **State transitions**: `frameIndex` never decreases, increments only for logical ticks with input, actors stay inside `board`, and no two actors occupy the same cell after valid transitions.
 - **Replay runners**: output is deterministic given the same seed and fixture; replay frames without input are render-only and do not increment `frameIndex`.
 
 ```ts

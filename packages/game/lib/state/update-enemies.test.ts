@@ -1,65 +1,154 @@
+/* eslint-disable max-lines-per-function, sort-imports -- Grid occupancy scenarios keep compact state fixtures inline. */
 import { brand, createPrng } from "@bruff/utils";
-import { describe, expect, it, vi } from "vitest";
-import type { Enemy, GameState } from "../core/types.ts";
-import { moveEnemyTowardPlayer } from "./move-enemy-toward-player.js";
+import { describe, expect, it } from "vitest";
+import type { Enemy, GameState, GridCell, Player } from "../core/types.ts";
+import {
+  CURRENT_STATE_VERSION,
+  ENEMY_SIZE,
+  PLAYER_SIZE,
+  ZERO,
+} from "../core/constants.js";
 import { updateEnemies } from "./update-enemies.js";
 
-const ZERO = 0;
 const ONE = 1;
-const FIFTY_ONE = 51;
-const ONE_HUNDRED_ONE = 101;
+const TWO = 2;
+const THREE = 3;
+const FOUR = 4;
+const FIVE = 5;
 const TEST_SEED = 1;
-const STATE_VERSION = 1;
+const BOARD = { columns: 7, rows: 7 };
 
-vi.mock("./move-enemy-toward-player.ts", () => ({
-  moveEnemyTowardPlayer: vi.fn((enemy: Enemy) => ({
-    ...enemy,
-    xPos: enemy.xPos + ONE,
-  })),
-}));
+type EnemySpec = Readonly<{
+  cell: GridCell;
+  id: string;
+  spawnOrder: number;
+}>;
 
-const createState = (): GameState => ({
+const createGridEnemy = (enemySpec: EnemySpec): Enemy => ({
+  cell: enemySpec.cell,
+  id: brand<"EnemyId">(enemySpec.id),
+  size: ENEMY_SIZE,
+  spawnOrder: enemySpec.spawnOrder,
+});
+
+const createPlayer = (cell: GridCell): Player => ({
+  cell,
+  id: brand<"PlayerId">("test-player"),
+  size: PLAYER_SIZE,
+});
+
+const createGridState = (
+  playerCell: GridCell,
+  enemySpecs: ReadonlyArray<EnemySpec>,
+): GameState => ({
+  board: BOARD,
   canvas: { height: 600, width: 800 },
-  enemies: [
-    {
-      id: brand<"EnemyId">("test-enemy-0"),
-      size: 20,
-      spawnOrder: ZERO,
-      xPos: 50,
-      yPos: 50,
-    },
-    {
-      id: brand<"EnemyId">("test-enemy-1"),
-      size: 20,
-      spawnOrder: ONE,
-      xPos: 100,
-      yPos: 100,
-    },
-  ],
-  frameIndex: 0,
+  enemies: enemySpecs.map((enemySpec) => createGridEnemy(enemySpec)),
+  frameIndex: ZERO,
   input: [],
-  player: {
-    id: brand<"PlayerId">("test-player"),
-    size: 20,
-    xPos: 200,
-    yPos: 200,
-  },
-  playerMoved: false,
+  player: createPlayer(playerCell),
+  playerMoved: true,
   prng: createPrng(TEST_SEED),
   seed: TEST_SEED,
-  stateVersion: STATE_VERSION,
+  stateVersion: CURRENT_STATE_VERSION,
 });
 
 describe("updateEnemies", () => {
-  it("advances every enemy on a tick action", () => {
-    vi.mocked(moveEnemyTowardPlayer).mockClear();
-    const state = createState();
+  it("moves an enemy one grid cell on a tick after accepted player movement", () => {
+    const state = createGridState({ column: FOUR, row: ONE }, [
+      { cell: { column: TWO, row: ONE }, id: "test-enemy-0", spawnOrder: ZERO },
+    ]);
 
     const updatedState = updateEnemies(state, { type: "tick" });
 
-    expect(moveEnemyTowardPlayer).toHaveBeenCalledTimes(state.enemies.length);
-    expect(updatedState.enemies[ZERO]?.xPos).toBe(FIFTY_ONE);
-    expect(updatedState.enemies[ONE]?.xPos).toBe(ONE_HUNDRED_ONE);
+    expect(updatedState.enemies[ZERO]?.cell).toStrictEqual({
+      column: THREE,
+      row: ONE,
+    });
+  });
+
+  it("does not move grid enemies on a tick without accepted player movement", () => {
+    const state = {
+      ...createGridState({ column: FOUR, row: ONE }, [
+        {
+          cell: { column: TWO, row: ONE },
+          id: "test-enemy-0",
+          spawnOrder: ZERO,
+        },
+      ]),
+      playerMoved: false,
+    };
+
+    const updatedState = updateEnemies(state, { type: "tick" });
+
+    expect(updatedState.enemies).toStrictEqual(state.enemies);
+  });
+
+  it("leaves an enemy still when the player occupies the proposed cell", () => {
+    const state = createGridState({ column: THREE, row: ONE }, [
+      { cell: { column: TWO, row: ONE }, id: "test-enemy-0", spawnOrder: ZERO },
+    ]);
+
+    const updatedState = updateEnemies(state, { type: "tick" });
+
+    expect(updatedState.enemies[ZERO]?.cell).toStrictEqual({
+      column: TWO,
+      row: ONE,
+    });
+  });
+
+  it("leaves an enemy still when another enemy occupied the proposed cell at turn start", () => {
+    const state = createGridState({ column: FOUR, row: ONE }, [
+      { cell: { column: TWO, row: ONE }, id: "test-enemy-0", spawnOrder: ZERO },
+      {
+        cell: { column: THREE, row: ONE },
+        id: "test-enemy-1",
+        spawnOrder: ONE,
+      },
+    ]);
+
+    const updatedState = updateEnemies(state, { type: "tick" });
+
+    expect(updatedState.enemies[ZERO]?.cell).toStrictEqual({
+      column: TWO,
+      row: ONE,
+    });
+  });
+
+  it("gives same-destination priority to the first enemy by spawn order", () => {
+    const state = createGridState({ column: TWO, row: THREE }, [
+      { cell: { column: TWO, row: ONE }, id: "test-enemy-0", spawnOrder: ZERO },
+      { cell: { column: ONE, row: TWO }, id: "test-enemy-1", spawnOrder: ONE },
+    ]);
+
+    const updatedState = updateEnemies(state, { type: "tick" });
+
+    expect(updatedState.enemies[ZERO]?.cell).toStrictEqual({
+      column: TWO,
+      row: TWO,
+    });
+    expect(updatedState.enemies[ONE]?.cell).toStrictEqual({
+      column: ONE,
+      row: TWO,
+    });
+  });
+
+  it("resolves movement priority by spawn order instead of array order", () => {
+    const state = createGridState({ column: TWO, row: THREE }, [
+      { cell: { column: TWO, row: ONE }, id: "test-enemy-1", spawnOrder: ONE },
+      { cell: { column: ONE, row: TWO }, id: "test-enemy-0", spawnOrder: ZERO },
+    ]);
+
+    const updatedState = updateEnemies(state, { type: "tick" });
+
+    expect(updatedState.enemies[ZERO]?.cell).toStrictEqual({
+      column: TWO,
+      row: ONE,
+    });
+    expect(updatedState.enemies[ONE]?.cell).toStrictEqual({
+      column: TWO,
+      row: TWO,
+    });
   });
 
   it.each([
@@ -68,12 +157,12 @@ describe("updateEnemies", () => {
     { type: "move-right" },
     { type: "move-up" },
   ] as const)("leaves enemies unchanged on $type action", (action) => {
-    vi.mocked(moveEnemyTowardPlayer).mockClear();
-    const state = createState();
+    const state = createGridState({ column: FIVE, row: FIVE }, [
+      { cell: { column: ONE, row: ONE }, id: "test-enemy-0", spawnOrder: ZERO },
+    ]);
 
     const updatedState = updateEnemies(state, action);
 
-    expect(moveEnemyTowardPlayer).not.toHaveBeenCalled();
-    expect(updatedState.enemies).toEqual(state.enemies);
+    expect(updatedState.enemies).toStrictEqual(state.enemies);
   });
 });

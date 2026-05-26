@@ -13,6 +13,7 @@ Use when introducing a new game entity (e.g. `Enemy`, `Item`, `Projectile`).
 - Every entity has a branded ID: `Brand<string, "EntityNameId">` — never a plain `string`.
 - IDs are deterministically generated via the seeded PRNG stored in state — never `Math.random()`, never `crypto.randomUUID()`.
 - IDs are **never reused** within a run; spawn order is tracked for deterministic tie-breaking.
+- Board actors use `GridCell` for gameplay position. Do not add actor `xPos` / `yPos`; pixel coordinates belong only to render commands and raw browser input events.
 - Composition over nesting: share sub-shapes via type aliases, not inheritance.
 
 ## Steps
@@ -27,11 +28,12 @@ Use when introducing a new game entity (e.g. `Enemy`, `Item`, `Projectile`).
 2. **Declare the entity type** as a `Readonly` shape:
 
    ```ts
+   import type { GridCell } from "./types.ts";
+
    export type Enemy = Readonly<{
+     cell: GridCell;
      id: EnemyId;
      spawnOrder: number;
-     xPos: number;
-     yPos: number;
      size: number;
    }>;
    ```
@@ -42,16 +44,14 @@ Use when introducing a new game entity (e.g. `Enemy`, `Item`, `Projectile`).
 const createEnemy = (
   prng: PrngState,
   spawnOrder: number,
-  xPos: number,
-  yPos: number,
+  cell: GridCell,
 ): { enemy: Enemy; prng: PrngState } => {
   const step = nextId(prng);
   return {
     enemy: {
+      cell,
       id: brand<"EnemyId">(step.value),
       spawnOrder,
-      xPos,
-      yPos,
       size: ENEMY_SIZE,
     },
     prng: step.prng,

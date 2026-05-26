@@ -1,36 +1,27 @@
-import type { CanvasSize, Enemy, Player } from "../core/types.js";
-import { ENEMY_SIZE, ENEMY_SPEED, ZERO } from "../core/constants.js";
-import { clamp } from "@bruff/utils";
+import type { Enemy, GridCell, Player } from "../core/types.js";
+import { ONE, ZERO } from "../core/constants.js";
+
+const signedStep = (distance: number): number => Math.sign(distance) * ONE;
 
 /**
- * Moves an enemy one step toward the player, clamped within canvas bounds.
+ * Chooses the next orthogonal grid cell for an enemy moving toward the player.
  *
- * @param enemy - The enemy entity to move
- * @param player - The player entity to move toward
- * @param canvas - The canvas dimensions used for boundary clamping
- * @returns A new enemy object with updated position
+ * @param enemy - Enemy that is choosing a destination
+ * @param player - Player to move toward
+ * @returns Candidate destination cell
  */
-export const moveEnemyTowardPlayer = (
+export const nextEnemyCellTowardPlayer = (
   enemy: Enemy,
   player: Player,
-  canvas: CanvasSize,
-): Enemy => {
-  const dx = player.xPos - enemy.xPos;
-  const dy = player.yPos - enemy.yPos;
-  const distribution = Math.hypot(dx, dy);
+): GridCell => {
+  const columnDistance = player.cell.column - enemy.cell.column;
+  const rowDistance = player.cell.row - enemy.cell.row;
 
-  // Hitting negative zero "-0" would be a meaningless test
-  /* c8 ignore next */
-  if (distribution === ZERO) {
-    return { ...enemy };
+  if (columnDistance === ZERO && rowDistance === ZERO) {
+    return enemy.cell;
   }
 
-  const moveX = (dx / distribution) * ENEMY_SPEED;
-  const moveY = (dy / distribution) * ENEMY_SPEED;
-
-  return {
-    ...enemy,
-    xPos: clamp(enemy.xPos + moveX, ZERO, canvas.width - ENEMY_SIZE),
-    yPos: clamp(enemy.yPos + moveY, ZERO, canvas.height - ENEMY_SIZE),
-  };
+  return Math.abs(columnDistance) >= Math.abs(rowDistance)
+    ? { ...enemy.cell, column: enemy.cell.column + signedStep(columnDistance) }
+    : { ...enemy.cell, row: enemy.cell.row + signedStep(rowDistance) };
 };

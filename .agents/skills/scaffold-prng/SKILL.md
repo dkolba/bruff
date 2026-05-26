@@ -45,9 +45,10 @@ In `createInitialState`, accept or derive a deterministic seed:
 
 ```ts
 import { createPrng } from "@bruff/utils";
+import { CURRENT_STATE_VERSION } from "../core/constants.js";
 
 const createInitialState = (canvas: CanvasSize, seed = 1): GameState => ({
-  stateVersion: 1,
+  stateVersion: CURRENT_STATE_VERSION,
   seed,
   prng: createPrng(seed),
   frameIndex: 0,

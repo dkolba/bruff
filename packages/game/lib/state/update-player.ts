@@ -1,21 +1,33 @@
-import { PLAYER_SIZE, PLAYER_SPEED, ZERO } from "../core/constants.js";
-import { clamp } from "@bruff/utils";
-import type { GameAction } from "../core/actions.ts";
-import type { GameState } from "../core/types.ts";
+/* eslint-disable sort-imports -- Imports are grouped by reducer dependency role. */
+import { cellForAction, isCellInsideBoard } from "./grid.js";
+import { isCellOccupiedByEnemy } from "./occupancy.js";
+import type { GameAction, InputAction } from "../core/actions.ts";
+import type { GameState, GridCell } from "../core/types.ts";
 
-const applyDelta = (state: GameState, dx: number, dy: number): GameState => ({
+const isGridMoveBlocked = (state: GameState, destination: GridCell): boolean =>
+  !isCellInsideBoard(destination, state.board) ||
+  isCellOccupiedByEnemy(destination, state.enemies);
+
+const applyAcceptedGridMove = (
+  state: GameState,
+  destination: GridCell,
+): GameState => ({
   ...state,
   player: {
     ...state.player,
-    xPos: clamp(state.player.xPos + dx, ZERO, state.canvas.width - PLAYER_SIZE),
-    yPos: clamp(
-      state.player.yPos + dy,
-      ZERO,
-      state.canvas.height - PLAYER_SIZE,
-    ),
+    cell: destination,
   },
   playerMoved: true,
 });
+
+const applyGridMove = (state: GameState, action: InputAction): GameState => {
+  const destination = cellForAction(state.player.cell, action);
+  if (isGridMoveBlocked(state, destination)) {
+    return state;
+  }
+
+  return applyAcceptedGridMove(state, destination);
+};
 
 /**
  * Pure reducer for player movement. Maps each {@link GameAction}
@@ -32,16 +44,16 @@ const applyDelta = (state: GameState, dx: number, dy: number): GameState => ({
 const updatePlayer = (state: GameState, action: GameAction): GameState => {
   switch (action.type) {
     case "move-up": {
-      return applyDelta(state, ZERO, -PLAYER_SPEED);
+      return applyGridMove(state, action);
     }
     case "move-down": {
-      return applyDelta(state, ZERO, PLAYER_SPEED);
+      return applyGridMove(state, action);
     }
     case "move-left": {
-      return applyDelta(state, -PLAYER_SPEED, ZERO);
+      return applyGridMove(state, action);
     }
     case "move-right": {
-      return applyDelta(state, PLAYER_SPEED, ZERO);
+      return applyGridMove(state, action);
     }
     case "tick": {
       return state;

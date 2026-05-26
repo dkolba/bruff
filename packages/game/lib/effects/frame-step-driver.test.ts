@@ -2,33 +2,36 @@
 import { brand, createPrng } from "@bruff/utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { GameState } from "../core/types.ts";
+import {
+  BOARD_COLUMNS,
+  BOARD_ROWS,
+  CURRENT_STATE_VERSION,
+} from "../core/constants.js";
 import { createFrameStepDriver } from "./frame-step-driver.js";
 import { manualClock } from "./clock.js";
 
 const TEST_SEED = 1;
-const STATE_VERSION = 1;
 const ZERO = 0;
 const ONE_FRAME = 1;
 const INITIAL_TIME_MS = 100;
 const TWO_FRAMES = 2;
 const THREE_FRAMES = 3;
-const LOADED_PLAYER_X_POS = 320;
 
 const createState = (): GameState => ({
+  board: { columns: BOARD_COLUMNS, rows: BOARD_ROWS },
   canvas: { height: 600, width: 800 },
   enemies: [],
   frameIndex: ZERO,
   input: [],
   player: {
+    cell: { column: 3, row: 3 },
     id: brand<"PlayerId">("test-player"),
     size: 20,
-    xPos: 200,
-    yPos: 200,
   },
   playerMoved: false,
   prng: createPrng(TEST_SEED),
   seed: TEST_SEED,
-  stateVersion: STATE_VERSION,
+  stateVersion: CURRENT_STATE_VERSION,
 });
 
 const createContext = (): CanvasRenderingContext2D => {
@@ -132,8 +135,12 @@ describe("createFrameStepDriver", () => {
 
     const nextState = driver.stepFrames(ONE_FRAME);
 
-    expect(nextState.player.xPos).toBeGreaterThan(initialState.player.xPos);
-    expect(nextState.player.yPos).toBeGreaterThan(initialState.player.yPos);
+    expect(nextState.player.cell.column).toBeGreaterThan(
+      initialState.player.cell.column,
+    );
+    expect(nextState.player.cell.row).toBeGreaterThan(
+      initialState.player.cell.row,
+    );
     expect(nextState.frameIndex).toBe(ONE_FRAME);
   });
 
@@ -217,7 +224,7 @@ describe("createFrameStepDriver", () => {
       ...initialState,
       player: {
         ...initialState.player,
-        xPos: LOADED_PLAYER_X_POS,
+        cell: { column: 4, row: 3 },
       },
     };
     const driver = createFrameStepDriver({

@@ -39,6 +39,13 @@ Code must live in the correct layer. Dependencies flow strictly inward — later
 - **A-10 (MUST)** Zero mutation anywhere — no mutable variables, no array `.push()`, no object property assignment. Use spread for updates: `{ ...state, key: value }` and `[...arr, item]` are the canonical idioms.
 - **A-10a (MUST)** `GameState` carries replay-critical `stateVersion`, `seed`, `prng`, and monotonic `frameIndex` fields. `frameIndex` increments exactly once per logical tick in the shared deterministic step path.
 
+## Board, Movement & Occupancy
+
+- **A-10b (MUST)** Gameplay positions are discrete `GridCell` values on `GameState.board`. New state logic must use `cell`, `grid.ts`, and `occupancy.ts` for movement and blockers, not actor `xPos` / `yPos`.
+- **A-10c (MUST)** `Player` and `Enemy` do not carry actor `xPos` / `yPos`. Pixel coordinates belong only to render commands and raw browser input events.
+- **A-10d (MUST)** Render projection derives foreground rectangles from `board`, `canvas`, and actor cells in `project-render-commands.ts`. Canvas pixel dimensions must not feed back into tactical movement.
+- **A-10e (MUST)** Enemy grid movement resolves only after an accepted player move, in ascending `spawnOrder`, and must preserve the invariant that player and enemies do not end a valid transition on the same cell.
+
 ## Entity Identity
 
 - **A-11 (MUST)** Every entity has a branded ID type: `Brand<string, "EntityNameId">`.

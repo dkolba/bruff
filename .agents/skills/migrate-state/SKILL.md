@@ -16,7 +16,7 @@ Skipping this process silently breaks replay tests and deterministic run snapsho
 Every structural change to `GameState` requires:
 
 1. A `stateVersion` increment
-2. A pure migration function
+2. A pure migration function, unless the active spec explicitly closes the compatibility window and requires old state rejection
 3. Updated replay fixtures and snapshot baselines
 
 **Never** change field types or names without bumping `stateVersion`.
@@ -39,7 +39,8 @@ export type GameState = Readonly<{
 }>;
 ```
 
-`createInitialState` must set `stateVersion: 1` (or the current version).
+`createInitialState` must set `stateVersion: CURRENT_STATE_VERSION` from
+`packages/game/lib/core/constants.ts`.
 
 ### 2. Increment `stateVersion`
 
@@ -50,9 +51,9 @@ all places that construct a literal `GameState` (tests, `createInitialState`, fa
 export const CURRENT_STATE_VERSION = 2; // was 1
 ```
 
-### 3. Write a pure migration function
+### 3. Write a pure migration function, or document explicit rejection
 
-In `packages/game/lib/state/migrations.ts`:
+If old states remain supported, create or update `packages/game/lib/state/migrations.ts`:
 
 ```ts
 import type { GameState } from "../core/types.ts";
@@ -72,6 +73,9 @@ Rules for migration functions:
 - Pure — no side effects
 - Exhaustive — every field of the new shape must be present in the return value
 - Tested — unit test with a representative V1 fixture
+
+If the active spec intentionally drops old-state compatibility, delete stale
+migration code and update parser/tests so old versions fail explicitly.
 
 ### 4. Update snapshot / replay test baselines
 
@@ -113,7 +117,7 @@ export const migrateToLatest = (
 - [ ] `stateVersion` incremented in `GameState` type and `CURRENT_STATE_VERSION`
 - [ ] `createInitialState` produces new `stateVersion`
 - [ ] `seed`, `prng`, and `frameIndex` remain present and deterministic
-- [ ] Migration function written and unit tested
+- [ ] Migration function written and unit tested, or old-state rejection documented and tested
 - [ ] Replay fixture parser and runner still return typed `Result` values
 - [ ] JSON fixtures and final-state snapshots updated
 - [ ] Replay, property, and browser-control tests re-validated

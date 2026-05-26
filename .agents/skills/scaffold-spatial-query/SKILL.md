@@ -27,14 +27,18 @@ All functions live in `packages/game/lib/state/` (depends on `core/` + `state/` 
 
 ## Key Encoding
 
-For a 2D grid, encode `(x, y)` into a string key or a compact number:
+For the tactical board, encode a `GridCell` into a string key or a compact
+number:
 
 ```ts
 // String key (simple, readable)
-const gridKey = (x: number, y: number): string => `${x},${y}`;
+import type { GridCell } from "../core/types.ts";
+
+const gridKey = (cell: GridCell): string => `${cell.column},${cell.row}`;
 
 // Bit-packed number key (faster for large grids — requires bounded coords)
-const gridKey = (x: number, y: number): number => (x << 16) | (y & 0xffff);
+const gridKey = (cell: GridCell): number =>
+  (cell.column << 16) | (cell.row & 0xffff);
 ```
 
 Pick string keys by default; switch to number keys only if profiling shows a hot path.
@@ -44,20 +48,19 @@ Pick string keys by default; switch to number keys only if profiling shows a hot
 ## Collision Map Example
 
 ```ts
-import type { Enemy, GameState } from "../core/types.ts";
+import type { Enemy, GameState, GridCell } from "../core/types.ts";
 
 type CollisionMap = ReadonlyMap<string, Enemy>;
 
 const buildCollisionMap = (state: GameState): CollisionMap =>
   new Map(
-    state.enemies.map((e) => [
-      `${Math.floor(e.xPos)},${Math.floor(e.yPos)}`,
-      e,
-    ]),
+    state.enemies.flatMap((enemy) =>
+      enemy.cell === undefined ? [] : [[gridKey(enemy.cell), enemy]],
+    ),
   );
 
-const isOccupied = (map: CollisionMap, x: number, y: number): boolean =>
-  map.has(`${x},${y}`);
+const isOccupied = (map: CollisionMap, cell: GridCell): boolean =>
+  map.has(gridKey(cell));
 ```
 
 Note: `new Map(...)` constructed from an iterable is not mutation — it's allocation.
@@ -77,15 +80,15 @@ type ChunkKey = string; // `${chunkX},${chunkY}`
 type Chunk = ReadonlyMap<string, Entity>;
 type ChunkedGrid = ReadonlyMap<ChunkKey, Chunk>;
 
-const chunkKey = (x: number, y: number): ChunkKey =>
-  `${Math.floor(x / CHUNK_SIZE)},${Math.floor(y / CHUNK_SIZE)}`;
+const chunkKey = (cell: GridCell): ChunkKey =>
+  `${Math.floor(cell.column / CHUNK_SIZE)},${Math.floor(cell.row / CHUNK_SIZE)}`;
 
 const buildChunkedGrid = (state: GameState): ChunkedGrid =>
   state.entities.reduce<Map<ChunkKey, Chunk>>((chunks, entity) => {
-    const key = chunkKey(entity.xPos, entity.yPos);
+    const key = chunkKey(entity.cell);
     const chunk = new Map(chunks.get(key) ?? []);
-    chunk.set(`${entity.xPos},${entity.yPos}`, entity);
-    return new Map(chunks).set(key, chunk);
+    const nextChunk = new Map([...chunk, [gridKey(entity.cell), entity]]);
+    return new Map([...chunks, [key, nextChunk]]);
   }, new Map());
 ```
 
@@ -94,13 +97,12 @@ const buildChunkedGrid = (state: GameState): ChunkedGrid =>
 ## Query Functions
 
 ```ts
-const queryAt = (map: CollisionMap, x: number, y: number): Enemy | undefined =>
-  map.get(`${x},${y}`);
+const queryAt = (map: CollisionMap, cell: GridCell): Enemy | undefined =>
+  map.get(gridKey(cell));
 
 const queryNeighbours = (
   map: CollisionMap,
-  x: number,
-  y: number,
+  cell: GridCell,
 ): ReadonlyArray<Enemy> => {
   const offsets = [
     [-1, 0],
@@ -109,7 +111,10 @@ const queryNeighbours = (
     [0, 1],
   ];
   return offsets.flatMap(([dx, dy]) => {
-    const e = queryAt(map, x + (dx ?? 0), y + (dy ?? 0));
+    const e = queryAt(map, {
+      column: cell.column + (dx ?? 0),
+      row: cell.row + (dy ?? 0),
+    });
     return e ? [e] : [];
   });
 };
@@ -125,15 +130,15 @@ import { buildCollisionMap, isOccupied, queryAt } from "./collision-map.js";
 
 describe("buildCollisionMap", () => {
   it("maps enemy positions to entities", () => {
-    const state = /* GameState with one enemy at (3, 5) */;
+    const state = /* GameState with one enemy at { column: 3, row: 5 } */;
     const map = buildCollisionMap(state);
-    expect(isOccupied(map, 3, 5)).toBe(true);
-    expect(isOccupied(map, 0, 0)).toBe(false);
+    expect(isOccupied(map, { column: 3, row: 5 })).toBe(true);
+    expect(isOccupied(map, { column: 0, row: 0 })).toBe(false);
   });
 
   it("returns undefined for empty cell", () => {
     const map = buildCollisionMap(/* empty state */);
-    expect(queryAt(map, 10, 10)).toBeUndefined();
+    expect(queryAt(map, { column: 10, row: 10 })).toBeUndefined();
   });
 });
 ```
