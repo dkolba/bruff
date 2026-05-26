@@ -4,9 +4,17 @@
     "baseUrl": ".",
     "composite": true,
     "paths": {
+      "@bruff/utils": ["index.ts"],
+      "@bruff/utils/dom": ["dom.ts"],
       "@/*": ["module/*"]
     }
   },
-  "include": ["index.ts", "module/**/**.ts", "vitest.config.ts"],
+  "include": [
+    "dom.ts",
+    "index.ts",
+    "module/**/**.ts",
+    "vitest.config.ts",
+    "vitest.node.config.ts"
+  ],
   "exclude": ["node_modules", "eslint.config.js"]
 }

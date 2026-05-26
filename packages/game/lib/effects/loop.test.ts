@@ -15,9 +15,12 @@ vi.mock("@bruff/utils", async (importOriginal) => {
   return {
     ...original,
     log: vi.fn(),
-    radiatingBarsBackgroundAnimation: vi.fn(),
   };
 });
+
+vi.mock("@bruff/utils/dom", () => ({
+  radiatingBarsBackgroundAnimation: vi.fn(),
+}));
 
 vi.mock("./curtain-up.js", () => ({
   default: vi.fn(),

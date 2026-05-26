@@ -9,15 +9,15 @@ This package contains the core game logic. The rules below apply to every file u
 
 Code must live in the correct layer. Dependencies flow strictly inward — later layers may depend on earlier ones but inner layers must never import outer layers, and no circular dependencies are allowed.
 
-`@bruff/utils` imports are allowed where they provide shared pure helpers or shell services. The `log()` event-bus helper is shell-only: use it from `effects/` or the entry point, never from `core/`, `state/`, `input/`, or `render/`.
+`@bruff/utils` imports are allowed where they provide shared pure helpers. The `log()` event-bus helper is shell-only: use it from `effects/` or the entry point, never from `core/`, `state/`, `input/`, or `render/`. `@bruff/utils/dom` imports are browser-shell utilities and are allowed only from `effects/` or tests for effects-layer code.
 
-| Layer   | Location                     | May import from                                    |
-| ------- | ---------------------------- | -------------------------------------------------- |
-| Core    | `packages/game/lib/core/`    | Nothing except shared `@bruff/utils` types/helpers |
-| State   | `packages/game/lib/state/`   | `core/`, shared `@bruff/utils` helpers             |
-| Input   | `packages/game/lib/input/`   | `core/`, `state/`, shared `@bruff/utils` helpers   |
-| Render  | `packages/game/lib/render/`  | `core/`, `state/`, shared `@bruff/utils` helpers   |
-| Effects | `packages/game/lib/effects/` | Shell wiring over inner layers and `@bruff/utils`  |
+| Layer   | Location                     | May import from                                                        |
+| ------- | ---------------------------- | ---------------------------------------------------------------------- |
+| Core    | `packages/game/lib/core/`    | Nothing except shared `@bruff/utils` types/helpers                     |
+| State   | `packages/game/lib/state/`   | `core/`, shared `@bruff/utils` helpers                                 |
+| Input   | `packages/game/lib/input/`   | `core/`, `state/`, shared `@bruff/utils` helpers                       |
+| Render  | `packages/game/lib/render/`  | `core/`, `state/`, shared `@bruff/utils` helpers                       |
+| Effects | `packages/game/lib/effects/` | Shell wiring over inner layers, `@bruff/utils`, and `@bruff/utils/dom` |
 
 ### Dependency Rules
 
@@ -71,7 +71,7 @@ All events that flow through the game loop must obey the following rules:
 
 ## Zero External Runtime Dependencies
 
-- **A-23 (MUST)** `packages/game` has zero external runtime dependencies beyond `@bruff/utils`, `@bruff/game-element`, and browser built-ins.
+- **A-23 (MUST)** `packages/game` has zero external runtime dependencies beyond `@bruff/utils`, `@bruff/game-element`, and browser built-ins. The `@bruff/utils/dom` subpath is part of `@bruff/utils` and remains effects-only.
 - **A-24 (MUST)** All FP helpers, PRNG, and math utilities are implemented in-house in `@bruff/utils`.
 
 ## Rendering

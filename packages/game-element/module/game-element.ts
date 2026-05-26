@@ -1,4 +1,5 @@
-import { consoleLogHandler, onLog } from "@bruff/utils";
+import { consoleLogHandler } from "@bruff/utils/dom";
+import { onLog } from "@bruff/utils";
 
 /** Browser test API stored by the game package in test mode. */
 export type GameElementTestApi = unknown;

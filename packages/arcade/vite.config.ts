@@ -35,6 +35,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ["@bruff/game", "@bruff/utils"],
+    exclude: ["@bruff/game", "@bruff/utils", "@bruff/utils/dom"],
   },
 });
