@@ -216,6 +216,7 @@ The repo is a pnpm monorepo. Package-specific rules auto-load from `packages/<pa
 | `@bruff/arcade`        | E2E host — Vite app + Playwright tests across desktop/mobile browsers                | `packages/arcade/AGENTS.override.md`       |
 | `@bruff/sigil`         | Development-only font glyph JSON extraction tool                                     | `packages/sigil/AGENTS.override.md`        |
 | `@bruff/utils`         | Shared utilities — universal root helpers plus explicit DOM subpath services         | `packages/utils/AGENTS.override.md`        |
+| `@bruff/cli`           | Terminal shell spike — ANSI mock renderer with injected stdin/stdout boundaries      | `packages/cli/AGENTS.override.md`          |
 | `@bruff/eslint-config` | Shared ESLint flat config                                                            | (none — config-only package)               |
 
 When working in a single package, also read its `README.md` for build/test commands and architectural role.

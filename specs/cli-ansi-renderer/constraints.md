@@ -1,0 +1,21 @@
+# CLI ANSI Renderer — Constraints
+
+- Runtime source in `packages/cli` may import Node built-ins and `@bruff/glyph`.
+- Runtime source in `packages/cli` must not import any other workspace package.
+- Test source in `packages/cli` must not import any other workspace package except `@bruff/glyph`.
+- Package-local tooling config must import `@bruff/eslint-config` instead of duplicating lint rules.
+- `@bruff/eslint-config` is allowed only from `packages/cli/eslint.config.js` and package metadata.
+- `@bruff/glyph` is used only as a character catalog for rendered terminal cells.
+- No files in `packages/game`, `packages/game-element`, `packages/arcade`, `packages/sigil`, or `packages/utils` may be changed for this spec.
+- The CLI renders mock data only.
+- The CLI reads only the minimal quit shortcuts: `q`, `Q`, and `Ctrl+C`.
+- The CLI may enter raw terminal mode only while waiting for the quit shortcut, and must restore raw mode before pausing input.
+- The CLI does not read gameplay input, mutate game state, or start a game loop.
+- The CLI runs TypeScript directly through Node.js native TypeScript support.
+- No runtime transpiler or bundler is allowed: no `tsx`, `ts-node`, Babel, Vite, Vitest, Jest, or Playwright for `@bruff/cli`.
+- Tests use TypeScript files executed by Node's native test runner.
+- Tests import `node:test` and `node:assert/strict`.
+- TypeScript files use erasable syntax only: no `enum`, runtime namespace, parameter properties, decorators, JSX, or path aliases.
+- Relative imports include real `.ts` extensions.
+- Type-only imports use `import type`.
+- `tsc --noEmit` is allowed for type checking; it must not emit JavaScript artifacts.
