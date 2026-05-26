@@ -40,6 +40,7 @@ export const encodeAnsiCommand = (command: AnsiCommand): string => {
     case "write-glyph": {
       return command.glyph;
     }
+    /* node:coverage ignore next 5 */
     default: {
       const _exhaustive: never = command;
       return _exhaustive;

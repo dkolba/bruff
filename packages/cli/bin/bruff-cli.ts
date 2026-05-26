@@ -52,6 +52,39 @@ export type TextInput = Readonly<{
 }>;
 
 /**
+ * Process stdin shape adapted into the CLI text input port.
+ */
+export type ProcessTextInput = Readonly<{
+  /**
+   * Whether the process input supports terminal behaviour.
+   */
+  isTTY?: boolean;
+  /**
+   * Remove an input listener.
+   */
+  off: (
+    eventName: "data",
+    listener: (chunk: TextInputChunk) => void,
+  ) => unknown;
+  /**
+   * Register an input listener.
+   */
+  on: (eventName: "data", listener: (chunk: TextInputChunk) => void) => unknown;
+  /**
+   * Stop reading input.
+   */
+  pause: () => unknown;
+  /**
+   * Start reading input.
+   */
+  resume: () => unknown;
+  /**
+   * Enable or disable terminal raw mode.
+   */
+  setRawMode?: (enabled: boolean) => unknown;
+}>;
+
+/**
  * Input and output ports for the CLI session.
  */
 export type BruffCliPorts = Readonly<{
@@ -61,6 +94,20 @@ export type BruffCliPorts = Readonly<{
   input: TextInput;
   /**
    * Terminal output.
+   */
+  writer: TextWriter;
+}>;
+
+/**
+ * Process input and output ports used by the executable CLI wrapper.
+ */
+export type BruffCliProcessPorts = Readonly<{
+  /**
+   * Process terminal input.
+   */
+  input: ProcessTextInput;
+  /**
+   * Process terminal output.
    */
   writer: TextWriter;
 }>;
@@ -80,34 +127,37 @@ const disableRawMode = (input: TextInput): TextInput =>
     ? input.setRawMode(false).pause()
     : input.pause();
 
-const createProcessInput = (): TextInput => {
+/**
+ * Adapt a process-like input stream into the CLI text input port.
+ */
+export const createTextInput = (source: ProcessTextInput): TextInput => {
   const input: TextInput = {
-    isTTY: process.stdin.isTTY,
+    isTTY: source.isTTY,
     off: (
       eventName: "data",
       listener: (chunk: TextInputChunk) => void,
     ): TextInput => {
-      process.stdin.off(eventName, listener);
+      source.off(eventName, listener);
       return input;
     },
     on: (
       eventName: "data",
       listener: (chunk: TextInputChunk) => void,
     ): TextInput => {
-      process.stdin.on(eventName, listener);
+      source.on(eventName, listener);
       return input;
     },
     pause: (): TextInput => {
-      process.stdin.pause();
+      source.pause();
       return input;
     },
     resume: (): TextInput => {
-      process.stdin.resume();
+      source.resume();
       return input;
     },
     setRawMode: (enabled: boolean): TextInput => {
-      if (process.stdin.isTTY === true) {
-        process.stdin.setRawMode(enabled);
+      if (source.isTTY === true && source.setRawMode !== undefined) {
+        source.setRawMode(enabled);
       }
 
       return input;
@@ -142,7 +192,10 @@ export const runBruffCli = (ports: BruffCliPorts): WriteFrameResult => {
   return writeResult;
 };
 
-const isCliEntryPoint = (
+/**
+ * Determine whether this module is being executed as the process entrypoint.
+ */
+export const isCliEntryPoint = (
   argv: ReadonlyArray<string>,
   moduleUrl: string,
 ): boolean => {
@@ -153,9 +206,21 @@ const isCliEntryPoint = (
     : pathToFileURL(entryPath).href === moduleUrl;
 };
 
+/**
+ * Render the CLI using process-like ports.
+ */
+export const runBruffCliWithProcess = (
+  ports: BruffCliProcessPorts,
+): WriteFrameResult =>
+  runBruffCli({
+    input: createTextInput(ports.input),
+    writer: ports.writer,
+  });
+
+/* node:coverage ignore next 10 */
 if (isCliEntryPoint(process.argv, import.meta.url)) {
-  const writeResult = runBruffCli({
-    input: createProcessInput(),
+  const writeResult = runBruffCliWithProcess({
+    input: process.stdin,
     writer: process.stdout,
   });
 

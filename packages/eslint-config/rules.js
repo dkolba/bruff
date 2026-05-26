@@ -72,7 +72,7 @@ export const overrideRulesEslint = {
     "error",
     "always",
     {
-      ignorePattern: "c8 ignore",
+      ignorePattern: "(?:c8|node:coverage) ignore",
     },
   ],
 };
