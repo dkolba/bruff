@@ -83,4 +83,4 @@ Coverage thresholds are set at **100%** for branches, functions, lines, and stat
 
 ## Console log forwarding
 
-`GameElement` subscribes to `@bruff/utils` log events while connected. It forwards each event to the matching browser `console` method and unsubscribes in `disconnectedCallback`.
+`GameElement` subscribes to `@bruff/utils` log events while connected. It forwards each event through `consoleLogHandler` from `@bruff/utils/dom`, which owns the browser `console` call, and unsubscribes in `disconnectedCallback`.

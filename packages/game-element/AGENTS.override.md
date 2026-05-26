@@ -15,5 +15,5 @@ This package is the **imperative shell** in the Functional Core / Imperative She
 - **GE-3 (MUST)** `connectedCallback` is idempotent — calling it more than once must not recreate the shadow root.
 - **GE-4 (MUST)** Tests run in a real browser via Vitest + Playwright provider. Coverage thresholds are 100% for branches, functions, lines, and statements.
 - **GE-5 (MUST)** No game logic, no `GameState`, no actions, no rendering decisions. This package is structural shell wiring only: it exposes a canvas and owns the lifecycle of the console log forwarding subscription.
-- **GE-6 (MUST)** `GameElement` subscribes to `onLog(consoleLogHandler)` idempotently in `connectedCallback` and unsubscribes in `disconnectedCallback`. Do not add direct `console.*` calls here; console output stays behind `consoleLogHandler` in `@bruff/utils`.
+- **GE-6 (MUST)** `GameElement` subscribes to `onLog(consoleLogHandler)` idempotently in `connectedCallback` and unsubscribes in `disconnectedCallback`. Import `onLog` from `@bruff/utils` and `consoleLogHandler` from `@bruff/utils/dom`. Do not add direct `console.*` calls here; console output stays behind `consoleLogHandler`.
 - **GE-7 (MUST)** The optional `testApi` surface is opaque shell wiring only. `GameElement` may store and expose it per instance, but it must not import `GameState`, actions, or game logic types to do so.

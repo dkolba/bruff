@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function, sort-imports -- Driver construction keeps closure state together and import groups readable. */
-import { radiatingBarsBackgroundAnimation } from "@bruff/utils";
+import { radiatingBarsBackgroundAnimation } from "@bruff/utils/dom";
 import type { GameState } from "../core/types.ts";
 import type { InputAction } from "../core/actions.ts";
 import {

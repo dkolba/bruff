@@ -19,6 +19,7 @@ export default defineConfig({
       exclude: [
         "index.js",
         "vitest.config.ts",
+        "vitest.node.config.ts",
         "eslint.config.js",
         "**/*.d.ts",
       ],
@@ -30,6 +31,7 @@ export default defineConfig({
         statements: 100,
       },
     },
+    exclude: ["**/*.node.test.ts"],
     include: ["**/*.test.ts"], // Match test files
     isolate: true,
   },

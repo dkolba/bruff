@@ -1,5 +1,7 @@
 # Event Bus Logging — Design
 
+> Later update: `log()` and `onLog()` remain on the universal `@bruff/utils` root export, but `consoleLogHandler` now exports from `@bruff/utils/dom`. The private bus transport is now an in-memory subscriber list rather than `EventTarget` / `CustomEvent`, so Node.js consumers can import the root export safely.
+
 ## Layer assignment
 
 | Module                                                  | Package               | Layer                                                                                                                                  |

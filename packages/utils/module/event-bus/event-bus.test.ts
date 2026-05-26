@@ -38,14 +38,8 @@ describe("onLog delivery", () => {
     cleanup();
   });
 
-  it("ignores non-log events delivered by the browser listener", () => {
-    vi.spyOn(EventTarget.prototype, "addEventListener").mockImplementation(
-      (_type, listener): void => {
-        if (typeof listener === "function") {
-          listener(new Event("not-log"));
-        }
-      },
-    );
+  it("does not replay past events to new subscribers", () => {
+    log({ level: "info", message: "before-subscribe" });
     const handler = vi.fn();
     const cleanup = onLog(handler);
 
