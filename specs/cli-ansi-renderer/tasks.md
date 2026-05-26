@@ -1,0 +1,23 @@
+# CLI ANSI Renderer — Tasks
+
+- [x] T1 — Add `packages/cli/package.json`, `packages/cli/tsconfig.json`, `packages/cli/eslint.config.js`, `packages/cli/README.md`, `packages/cli/index.ts`, and `packages/cli/module/.gitkeep`.
+- [x] T2 — Add native Node test scripts and type-check scripts in `packages/cli/package.json` and `packages/cli/tsconfig.json`.
+- [x] T3 — Add terminal model types in `packages/cli/module/terminal-cell.ts`.
+- [x] T4 — Add ANSI encoder tests in `packages/cli/module/ansi.test.ts` covering cursor movement, foreground color, background color, glyph writes, and style reset.
+- [x] T5 — Implement ANSI encoder types and functions in `packages/cli/module/ansi.ts`.
+- [x] T6 — Add mock scene tests in `packages/cli/module/mock-scene.test.ts` proving glyphs come from `@bruff/glyph` and the scene contains multiple foreground and background colors.
+- [x] T7 — Implement deterministic mock scene creation in `packages/cli/module/mock-scene.ts`.
+- [x] T8 — Add frame rendering tests in `packages/cli/module/render-frame.test.ts` covering cursor positioning, color commands, glyph commands, empty frames, and final reset.
+- [x] T9 — Implement frame-to-command rendering in `packages/cli/module/render-frame.ts`.
+- [x] T10 — Add writer boundary tests in `packages/cli/module/write-frame.test.ts` covering successful writes, `false` write results, and thrown writer errors.
+- [x] T11 — Implement writer boundary in `packages/cli/module/write-frame.ts`.
+- [x] T12 — Add executable entry tests in `packages/cli/bin/bruff-cli.test.ts` covering injected writer behaviour without spawning a terminal.
+- [x] T13 — Implement executable entry point in `packages/cli/bin/bruff-cli.ts` and package script metadata in `packages/cli/package.json`.
+- [x] T14 — Add `@bruff/eslint-config` as a workspace dev dependency and use it from `packages/cli/eslint.config.js`.
+- [x] T15 — Export public CLI renderer APIs from `packages/cli/index.ts`.
+- [x] T16 — Document mock-only CLI usage, native TypeScript constraints, and deferred game integration in `packages/cli/README.md`.
+- [x] T17 — Run `pnpm --filter @bruff/cli run format`, `pnpm --filter @bruff/cli run lint`, `pnpm --filter @bruff/cli run typecheck`, and `pnpm --filter @bruff/cli run test`, then record verification in `specs/cli-ansi-renderer/spec.md`.
+- [x] T18 — Add clear-screen ANSI encoding tests in `packages/cli/module/ansi.test.ts` and command support in `packages/cli/module/ansi.ts`.
+- [x] T19 — Add prompt-cleanup frame rendering tests in `packages/cli/module/render-frame.test.ts` and cursor cleanup commands in `packages/cli/module/render-frame.ts`.
+- [x] T20 — Add injected quit-input tests in `packages/cli/bin/bruff-cli.test.ts` and wait for `q`, `Q`, or `Ctrl+C` in `packages/cli/bin/bruff-cli.ts`.
+- [x] T21 — Run `pnpm --filter @bruff/cli run lint`, `pnpm --filter @bruff/cli run typecheck`, `pnpm --filter @bruff/cli run test`, and `printf q | CI=true pnpm --filter @bruff/cli run cli`, then update `specs/cli-ansi-renderer/spec.md`.

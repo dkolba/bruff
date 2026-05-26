@@ -1,0 +1,25 @@
+{
+  "name": "@bruff/cli",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Terminal ANSI renderer spike for Bruff mock scenes.",
+  "type": "module",
+  "main": "index.ts",
+  "dependencies": {
+    "@bruff/glyph": "workspace:0.0.0"
+  },
+  "scripts": {
+    "cli": "node bin/bruff-cli.ts",
+    "format": "prettier --write .",
+    "lint": "eslint",
+    "test": "node --test \"**/*.test.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@bruff/eslint-config": "workspace:0.0.0",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  }
+}
