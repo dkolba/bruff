@@ -1,6 +1,6 @@
-export { log, onLog } from "./module/event-bus/event-bus.js";
-export type { LogEvent } from "./module/event-bus/log-event.js";
-export type { LogLevel } from "./module/event-bus/log-level.js";
+export { log, onLog } from "./module/event-bus/event-bus.ts";
+export type { LogEvent } from "./module/event-bus/log-event.ts";
+export type { LogLevel } from "./module/event-bus/log-level.ts";
 export {
   flatMapOption,
   isNone,
@@ -12,14 +12,14 @@ export {
   type Some,
   some,
   toResult,
-} from "./module/fp/option.js";
-export { pipe } from "./module/fp/pipe.js";
+} from "./module/fp/option.ts";
+export { pipe } from "./module/fp/pipe.ts";
 export {
   createPrng,
   nextId,
   nextNumber,
   type PrngState,
-} from "./module/fp/prng.js";
+} from "./module/fp/prng.ts";
 export {
   error,
   type Failure,
@@ -32,8 +32,8 @@ export {
   type Ok,
   type Result,
   unwrapOr,
-} from "./module/fp/result.js";
-export { clamp } from "./module/math/clamp.js";
-export { hsla } from "./module/color/hsla.js";
-export { getCardinalDirection } from "./module/direction/get-cardinal-direction.js";
-export { brand, type Brand } from "./module/types/brand.js";
+} from "./module/fp/result.ts";
+export { clamp } from "./module/math/clamp.ts";
+export { hsla } from "./module/color/hsla.ts";
+export { getCardinalDirection } from "./module/direction/get-cardinal-direction.ts";
+export { brand, type Brand } from "./module/types/brand.ts";

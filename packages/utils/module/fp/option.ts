@@ -1,4 +1,4 @@
-import { error, ok, type Result } from "./result.js";
+import { error, ok, type Result } from "./result.ts";
 
 /**
  * The present variant of an {@link Option}.

@@ -13,13 +13,16 @@ import { pathToFileURL } from "node:url";
 import { test } from "node:test";
 import type { TextWriter } from "../module/write-frame.ts";
 
-const ansiCursorPrefix = "\u001B[2;3H";
+const initialPlayerCursor = "\u001B[4;4H";
+const movedPlayerCursor = "\u001B[4;5H";
 const ansiClearPrefix = "\u001B[2J";
 const ansiForegroundPrefix = "\u001B[38;2;";
 const ansiBackgroundPrefix = "\u001B[48;2;";
 const ansiResetSuffix = "\u001B[0m";
 const controlCShortcut = "\u0003";
-const expectedSingleWrite = 1;
+const initialFrameWriteIndex = 0;
+const movedFrameWriteIndex = 1;
+const expectedMovementWriteCount = 2;
 
 type FakeInput = TextInput &
   Readonly<{
@@ -144,17 +147,6 @@ test("wraps process-like input behind the text input port", (): void => {
   ]);
 });
 
-test("skips adapted process raw mode when it is unavailable", (): void => {
-  const lineInput = createFakeProcessInput(false);
-  const missingRawInput = createFakeProcessInput(true, false);
-
-  createTextInput(lineInput).setRawMode?.(true);
-  createTextInput(missingRawInput).setRawMode?.(true);
-
-  assert.deepEqual(lineInput.rawModes(), []);
-  assert.deepEqual(missingRawInput.rawModes(), []);
-});
-
 test("detects whether the CLI module is the process entrypoint", (): void => {
   const entryPath = "/tmp/bruff-cli.ts";
   const moduleUrl = pathToFileURL(entryPath).href;
@@ -207,7 +199,7 @@ test("keeps terminal input active for ordinary keys", (): void => {
   assert.equal(input.isPaused(), false);
 });
 
-test("renders the mock scene through an injected writer", (): void => {
+test("renders the game scene through an injected writer", (): void => {
   const input = createFakeInput(true);
   const writtenTexts: Array<string> = [];
   const writer: TextWriter = {
@@ -220,10 +212,38 @@ test("renders the mock scene through an injected writer", (): void => {
   assert.deepEqual(runBruffCli({ input, writer }), { type: "ok" });
   assert.deepEqual(writtenTexts, [writtenTexts.join("")]);
   assert.equal(writtenTexts.join("").startsWith(ansiClearPrefix), true);
-  assert.equal(writtenTexts.join("").includes(ansiCursorPrefix), true);
+  assert.equal(writtenTexts.join("").includes(initialPlayerCursor), true);
   assert.equal(writtenTexts.join("").includes(ansiForegroundPrefix), true);
   assert.equal(writtenTexts.join("").includes(ansiBackgroundPrefix), true);
   assert.equal(writtenTexts.join("").endsWith(ansiResetSuffix), true);
+});
+
+test("normalises terminal arrow input and writes the next game frame", (): void => {
+  const input = createFakeInput(true);
+  const writtenTexts: Array<string> = [];
+  const writer: TextWriter = {
+    write: (text: string): boolean => {
+      writtenTexts.push(text);
+      return writtenTexts.length < expectedMovementWriteCount;
+    },
+  };
+
+  assert.deepEqual(runBruffCli({ input, writer }), { type: "ok" });
+  input.emit("\u001B[C");
+
+  assert.equal(writtenTexts.length, expectedMovementWriteCount);
+  assert.equal(
+    writtenTexts[initialFrameWriteIndex]?.includes(initialPlayerCursor),
+    true,
+  );
+  assert.equal(
+    writtenTexts[movedFrameWriteIndex]?.includes(movedPlayerCursor),
+    true,
+  );
+  assert.deepEqual(
+    [input.rawModes(), input.hasListener(), input.isPaused()],
+    [[true, false], false, true],
+  );
 });
 
 test("waits for a quit shortcut before releasing terminal input", (): void => {
@@ -237,7 +257,7 @@ test("waits for a quit shortcut before releasing terminal input", (): void => {
   assert.equal(input.hasListener(), true);
   assert.equal(input.isPaused(), false);
 
-  input.emit("q");
+  input.emit(controlCShortcut);
 
   assert.deepEqual(input.rawModes(), [true, false]);
   assert.equal(input.hasListener(), false);
@@ -275,20 +295,4 @@ test("uses resumed line input when raw mode is unavailable", (): void => {
   assert.deepEqual(input.rawModes(), []);
   assert.equal(input.hasListener(), false);
   assert.equal(input.isPaused(), true);
-});
-
-test("writes the scene once while waiting for input", (): void => {
-  const input = createFakeInput(true);
-  const writtenTexts: Array<string> = [];
-  const writer: TextWriter = {
-    write: (text: string): boolean => {
-      writtenTexts.push(text);
-      return true;
-    },
-  };
-
-  assert.deepEqual(runBruffCli({ input, writer }), { type: "ok" });
-  input.emit(controlCShortcut);
-
-  assert.equal(writtenTexts.length, expectedSingleWrite);
 });

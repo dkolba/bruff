@@ -2,6 +2,21 @@
   "version": "0.0.0",
   "configurations": [
     {
+      "name": "CLI: Debug",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/packages/cli",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--conditions=bruff-source",
+        "--experimental-strip-types",
+        "--experimental-transform-types"
+      ],
+      "program": "${workspaceFolder}/packages/cli/bin/bruff-cli.ts",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
       "name": "Arcade: Vite Dev Server",
       "type": "node",
       "request": "launch",

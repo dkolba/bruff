@@ -1,5 +1,5 @@
 import type { Enemy, GameState, GridCell } from "../core/types.ts";
-import { cellsEqual } from "./grid.js";
+import { cellsEqual } from "./grid.ts";
 
 /**
  * Checks whether any enemy occupies a cell.

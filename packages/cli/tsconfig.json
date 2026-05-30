@@ -11,6 +11,6 @@
     "types": ["node"],
     "verbatimModuleSyntax": true
   },
-  "include": ["index.ts", "module/**/*.ts", "bin/**/*.ts"],
+  "include": ["index.ts", "module/**/*.ts", "bin/**/*.ts", "testrunner.ts"],
   "exclude": ["node_modules", "eslint.config.js"]
 }

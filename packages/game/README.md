@@ -6,6 +6,28 @@ A TypeScript game package that registers `<bruff-game>` and runs a deterministic
 import "@bruff/game";
 ```
 
+The root package export is browser-first. Node or terminal consumers that need
+deterministic state and renderer-neutral board data use the explicit DOM-free
+subpath:
+
+```ts
+import {
+  createHeadlessGame,
+  normaliseKey,
+  projectHeadlessFrame,
+  stepHeadlessGame,
+} from "@bruff/game/headless";
+
+const state = createHeadlessGame({
+  canvas: { height: 7, width: 7 },
+  seed: 1,
+});
+const input = normaliseKey("ArrowRight");
+const nextState =
+  input.type === "some" ? stepHeadlessGame(state, [input.value]) : state;
+const frame = projectHeadlessFrame(nextState);
+```
+
 ## Architecture
 
 Code is split by layer:
@@ -14,6 +36,7 @@ Code is split by layer:
 - `lib/state/` — pure reducers, initial state, replay fixtures, and replay runners.
 - `lib/input/` — raw input normalization into `InputAction`.
 - `lib/render/` — pure render-adjacent data such as `RenderStats`.
+- `lib/headless/` — pure public facade for DOM-free simulation and frame data.
 - `lib/effects/` — DOM, Canvas, time, logging, RAF, and test API wiring.
 
 `GameState` carries replay-critical fields and a fixed `7x7` tactical board:
