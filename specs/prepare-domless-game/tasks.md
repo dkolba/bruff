@@ -1,0 +1,28 @@
+# Prepare DOMless Game - Tasks
+
+- [x] T1 - Add failing headless export tests in `packages/game/lib/headless/index.test.ts`
+- [x] T2 - Add `./headless` export metadata in `packages/game/package.json`
+- [x] T3 - Add `createHeadlessGame()` in `packages/game/lib/headless/create-headless-game.ts`
+- [x] T4 - Add `stepHeadlessGame()` in `packages/game/lib/headless/step-headless-game.ts`
+- [x] T5 - Add renderer-neutral cell projection tests in `packages/game/lib/render/project-render-cells.test.ts`
+- [x] T6 - Add `projectRenderCells()` in `packages/game/lib/render/project-render-cells.ts`
+- [x] T7 - Refactor `projectRenderCommands()` in `packages/game/lib/render/project-render-commands.ts`
+- [x] T8 - Add headless frame projection tests in `packages/game/lib/headless/project-headless-frame.test.ts`
+- [x] T9 - Add `projectHeadlessFrame()` in `packages/game/lib/headless/project-headless-frame.ts`
+- [x] T10 - Add public headless facade exports in `packages/game/lib/headless/index.ts`
+- [x] T11 - Update library build entries in `packages/game/vite.config.lib.ts`
+- [x] T12 - Update game package guidance in `packages/game/AGENTS.override.md`
+- [x] T13 - Update game usage docs in `packages/game/README.md`
+- [x] T14 - Add CLI dependency on `@bruff/game` in `packages/cli/package.json`
+- [x] T15 - Update CLI package guidance in `packages/cli/AGENTS.override.md`
+- [x] T16 - Add game-to-terminal adapter tests in `packages/cli/module/game-frame.test.ts`
+- [x] T17 - Add `gameFrameToTerminalFrame()` in `packages/cli/module/game-frame.ts`
+- [x] T18 - Refactor CLI port tests in `packages/cli/bin/bruff-cli.test.ts`
+- [x] T19 - Refactor `runBruffCli()` in `packages/cli/bin/bruff-cli.ts`
+- [x] T20 - Remove mock-scene runtime usage from `packages/cli/index.ts`
+- [x] T21 - Verify browser entry behaviour with existing tests in `packages/game/lib/effects/entry.test.ts`
+- [x] T22 - Run package gates named in `specs/prepare-domless-game/acceptance.md`
+- [x] T23 - Add terminal arrow CSI sequence coverage for `normaliseKey()` and CLI input handling
+- [x] T24 - Add the `bruff-source` export condition for native TypeScript workspace consumers
+- [x] T25 - Switch the CLI run, test, and VS Code debug paths to native Node TypeScript source loading without prebuilding `@bruff/game`
+- [x] T26 - Update source-loaded headless and utility imports to use `.ts` specifiers

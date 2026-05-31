@@ -1,8 +1,14 @@
 import type { Board, CanvasSize, GameState, GridCell } from "../core/types.ts";
+import { projectRenderCells } from "./project-render-cells.js";
+import type { RenderCellEntity } from "./project-render-cells.ts";
 import type { RenderCommand } from "../core/actions.ts";
 
 const PLAYER_COLOR = "blue";
 const ENEMY_COLOR = "red";
+const RENDER_CELL_COLORS: Readonly<Record<RenderCellEntity, string>> = {
+  enemy: ENEMY_COLOR,
+  player: PLAYER_COLOR,
+};
 
 type CellRenderContext = Readonly<{
   board: Board;
@@ -27,21 +33,8 @@ const cellRenderCommand = (
   };
 };
 
-const playerRenderCommand = (state: GameState): RenderCommand =>
-  cellRenderCommand(state.player.cell, {
-    board: state.board,
-    canvas: state.canvas,
-    color: PLAYER_COLOR,
-  });
-
-const enemyRenderCommand =
-  (state: GameState) =>
-  (enemy: GameState["enemies"][number]): RenderCommand =>
-    cellRenderCommand(enemy.cell, {
-      board: state.board,
-      canvas: state.canvas,
-      color: ENEMY_COLOR,
-    });
+const colorForEntity = (entity: RenderCellEntity): string =>
+  RENDER_CELL_COLORS[entity];
 
 /**
  * Projects a state snapshot into ordered foreground render commands.
@@ -50,7 +43,11 @@ const enemyRenderCommand =
  */
 export const projectRenderCommands = (
   state: GameState,
-): ReadonlyArray<RenderCommand> => [
-  playerRenderCommand(state),
-  ...state.enemies.map(enemyRenderCommand(state)),
-];
+): ReadonlyArray<RenderCommand> =>
+  projectRenderCells(state).map((cell) =>
+    cellRenderCommand(cell.cell, {
+      board: state.board,
+      canvas: state.canvas,
+      color: colorForEntity(cell.entity),
+    }),
+  );

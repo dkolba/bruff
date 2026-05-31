@@ -1,3 +1,4 @@
+/* node:coverage ignore next 2 */
 import type { TerminalCell, TerminalFrame } from "./terminal-cell.ts";
 import type { AnsiCommand } from "./ansi.ts";
 

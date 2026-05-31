@@ -7,7 +7,7 @@ import {
   ONE,
   PLAYER_SIZE,
   TWO,
-} from "../core/constants.js";
+} from "../core/constants.ts";
 import {
   type Brand,
   brand,

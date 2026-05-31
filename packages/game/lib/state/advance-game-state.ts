@@ -1,7 +1,7 @@
 import type { GameAction, InputAction } from "../core/actions.ts";
 import type { GameState } from "../core/types.ts";
-import { updateEnemies } from "./update-enemies.js";
-import updatePlayer from "./update-player.js";
+import { updateEnemies } from "./update-enemies.ts";
+import updatePlayer from "./update-player.ts";
 
 const FRAME_INDEX_INCREMENT = 1;
 const NO_INPUTS = 0;

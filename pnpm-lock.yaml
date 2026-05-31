@@ -140,6 +140,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@bruff/game':
+        specifier: workspace:0.0.0
+        version: link:../game
       '@bruff/glyph':
         specifier: workspace:0.0.0
         version: link:../glyph

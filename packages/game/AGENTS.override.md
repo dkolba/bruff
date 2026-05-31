@@ -11,13 +11,19 @@ Code must live in the correct layer. Dependencies flow strictly inward — later
 
 `@bruff/utils` imports are allowed where they provide shared pure helpers. The `log()` event-bus helper is shell-only: use it from `effects/` or the entry point, never from `core/`, `state/`, `input/`, or `render/`. `@bruff/utils/dom` imports are browser-shell utilities and are allowed only from `effects/` or tests for effects-layer code.
 
-| Layer   | Location                     | May import from                                                        |
-| ------- | ---------------------------- | ---------------------------------------------------------------------- |
-| Core    | `packages/game/lib/core/`    | Nothing except shared `@bruff/utils` types/helpers                     |
-| State   | `packages/game/lib/state/`   | `core/`, shared `@bruff/utils` helpers                                 |
-| Input   | `packages/game/lib/input/`   | `core/`, `state/`, shared `@bruff/utils` helpers                       |
-| Render  | `packages/game/lib/render/`  | `core/`, `state/`, shared `@bruff/utils` helpers                       |
-| Effects | `packages/game/lib/effects/` | Shell wiring over inner layers, `@bruff/utils`, and `@bruff/utils/dom` |
+| Layer    | Location                      | May import from                                                        |
+| -------- | ----------------------------- | ---------------------------------------------------------------------- |
+| Core     | `packages/game/lib/core/`     | Nothing except shared `@bruff/utils` types/helpers                     |
+| State    | `packages/game/lib/state/`    | `core/`, shared `@bruff/utils` helpers                                 |
+| Input    | `packages/game/lib/input/`    | `core/`, `state/`, shared `@bruff/utils` helpers                       |
+| Render   | `packages/game/lib/render/`   | `core/`, `state/`, shared `@bruff/utils` helpers                       |
+| Headless | `packages/game/lib/headless/` | Pure public facade over `core/`, `state/`, `input/`, and `render/`     |
+| Effects  | `packages/game/lib/effects/`  | Shell wiring over inner layers, `@bruff/utils`, and `@bruff/utils/dom` |
+
+`lib/headless/` is the only DOM-free public game facade for Node consumers.
+It may import `core/`, `state/`, `input/`, and `render/`, but it must not
+import `effects/`, `@bruff/game-element`, `@bruff/utils/dom`, Node built-ins, or
+`@bruff/cli`. Keep browser setup behind the root `@bruff/game` export.
 
 ### Dependency Rules
 

@@ -1,6 +1,6 @@
 /* eslint-disable sort-imports -- Imports are grouped by reducer dependency role. */
-import { cellForAction, isCellInsideBoard } from "./grid.js";
-import { isCellOccupiedByEnemy } from "./occupancy.js";
+import { cellForAction, isCellInsideBoard } from "./grid.ts";
+import { isCellOccupiedByEnemy } from "./occupancy.ts";
 import type { GameAction, InputAction } from "../core/actions.ts";
 import type { GameState, GridCell } from "../core/types.ts";
 

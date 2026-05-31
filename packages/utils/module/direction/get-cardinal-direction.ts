@@ -2,7 +2,7 @@ import {
   EIGHT,
   EIGHTH_CIRCLE_DEGREES,
   HALF_CIRCLE_DEGREES,
-} from "../constants.js";
+} from "../constants.ts";
 
 /**
  * Returns the cardinal or intercardinal direction string for a given 2D delta.

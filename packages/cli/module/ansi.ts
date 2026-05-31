@@ -1,3 +1,4 @@
+/* node:coverage ignore next */
 import type { TerminalColor, TerminalPosition } from "./terminal-cell.ts";
 
 const encodeColor = (mode: "38" | "48", color: TerminalColor): string =>

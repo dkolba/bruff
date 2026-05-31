@@ -13,6 +13,12 @@
       "types": "./types/entry.d.ts",
       "import": "./lib/effects/entry.ts"
     },
+    "./headless": {
+      "types": "./types/headless.d.ts",
+      "bruff-source": "./lib/headless/index.ts",
+      "node": "./dist/headless/index.js",
+      "import": "./lib/headless/index.ts"
+    },
     "./test-api": {
       "types": "./lib/effects/test-api/test-api-types.ts",
       "import": "./lib/effects/test-api/test-api-types.ts"

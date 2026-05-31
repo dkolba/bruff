@@ -1,4 +1,4 @@
-import { HUE_DEGREES, PERCENTAGE } from "../constants.js";
+import { HUE_DEGREES, PERCENTAGE } from "../constants.ts";
 
 /**
  * Converts an HSLA object to a CSS hsla() string.

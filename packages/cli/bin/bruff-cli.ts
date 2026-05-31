@@ -1,14 +1,23 @@
 import {
+  createHeadlessGame,
+  type GameState,
+  normaliseKey,
+  projectHeadlessFrame,
+  stepHeadlessGame,
+} from "@bruff/game/headless";
+import {
   type TextWriter,
   type WriteFrameResult,
   writeTerminalFrame,
 } from "../module/write-frame.ts";
-import { createMockTerminalFrame } from "../module/mock-scene.ts";
+import { gameFrameToTerminalFrame } from "../module/game-frame.ts";
 import { pathToFileURL } from "node:url";
 
 const controlCShortcut = "\u0003";
 const lowercaseQuitShortcut = "q";
 const uppercaseQuitShortcut = "Q";
+const headlessCanvas = { height: 7, width: 7 };
+const headlessSeed = 1;
 
 /**
  * Text input chunk received from the terminal.
@@ -127,6 +136,20 @@ const disableRawMode = (input: TextInput): TextInput =>
     ? input.setRawMode(false).pause()
     : input.pause();
 
+const writeGameFrame = (
+  writer: TextWriter,
+  state: GameState,
+): WriteFrameResult =>
+  writeTerminalFrame(
+    writer,
+    gameFrameToTerminalFrame(projectHeadlessFrame(state)),
+  );
+
+const releaseCliInput = (
+  input: TextInput,
+  listener: (chunk: TextInputChunk) => void,
+): TextInput => disableRawMode(input.off("data", listener));
+
 /**
  * Adapt a process-like input stream into the CLI text input port.
  */
@@ -168,22 +191,37 @@ export const createTextInput = (source: ProcessTextInput): TextInput => {
 };
 
 /**
- * Render the deterministic mock scene and wait for a quit shortcut.
+ * Render the deterministic game scene and wait for input.
  */
 export const runBruffCli = (ports: BruffCliPorts): WriteFrameResult => {
-  const writeResult = writeTerminalFrame(
-    ports.writer,
-    createMockTerminalFrame(),
-  );
+  let currentState = createHeadlessGame({
+    canvas: headlessCanvas,
+    seed: headlessSeed,
+  });
+  const writeResult = writeGameFrame(ports.writer, currentState);
 
   if (writeResult.type === "error") {
     return writeResult;
   }
 
   const handleInput = (chunk: TextInputChunk): void => {
-    if (isQuitShortcut(chunk.toString())) {
-      ports.input.off("data", handleInput);
-      disableRawMode(ports.input);
+    const text = chunk.toString();
+
+    if (isQuitShortcut(text)) {
+      releaseCliInput(ports.input, handleInput);
+      return;
+    }
+
+    const input = normaliseKey(text);
+
+    if (input.type === "none") {
+      return;
+    }
+
+    currentState = stepHeadlessGame(currentState, [input.value]);
+
+    if (writeGameFrame(ports.writer, currentState).type === "error") {
+      releaseCliInput(ports.input, handleInput);
     }
   };
 

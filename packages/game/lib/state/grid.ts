@@ -1,5 +1,5 @@
 import type { Board, GridCell } from "../core/types.ts";
-import { ONE, ZERO } from "../core/constants.js";
+import { ONE, ZERO } from "../core/constants.ts";
 import type { InputAction } from "../core/actions.ts";
 
 /**
