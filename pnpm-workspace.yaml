@@ -18,7 +18,7 @@ catalog:
   "@eslint/js": 10.0.1
   "@fast-check/vitest": 0.4.1
   "@playwright/test": 1.60.0
-  "@types/node": 25.6.0
+  "@types/node": 25.9.1
   "@vitest/browser": 4.1.4
   "@vitest/browser-playwright": 4.1.4
   "@vitest/coverage-v8": 4.1.4
