@@ -29,3 +29,12 @@ Move the shared runtime contract for the Sigil downloadable glyph JSON payload i
 - Glyph names remain dynamic JSON object keys.
 - Numeric glyph metrics must be finite numbers.
 - Contract validation failure inside `@bruff/sigil` must surface as a typed `SigilExtractionError`.
+
+## Verification
+
+- `@bruff/contracts` exports Sigil glyph JSON schemas, inferred readonly types, and `parseSigilGlyphMap(input)` from the root export.
+- `@bruff/sigil` re-exports contract-owned payload types from `module/glyph-json.ts`.
+- `createSigilGlyphMap()` validates produced maps with `parseSigilGlyphMap()` and returns a typed `invalid-glyph-json` extraction error on contract failure.
+- Verified with `CI=true pnpm --filter @bruff/contracts run format`, `CI=true pnpm --filter @bruff/contracts run lint`, `CI=true pnpm --filter @bruff/contracts run typecheck`, and `CI=true pnpm --filter @bruff/contracts run test`.
+- Verified with `CI=true pnpm --filter @bruff/sigil run format`, `CI=true pnpm --filter @bruff/sigil run lint`, `CI=true pnpm --filter @bruff/sigil run typecheck`, and `CI=true pnpm --filter @bruff/sigil run test`.
+- Final package-boundary guidance was verified with `CI=true pnpm run ok`.
