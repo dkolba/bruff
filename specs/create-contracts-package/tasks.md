@@ -12,4 +12,4 @@
 - [x] T10 — Run `pnpm --filter @bruff/contracts run lint`
 - [x] T11 — Run `pnpm --filter @bruff/contracts run typecheck`
 - [x] T12 — Run `pnpm --filter @bruff/contracts run test`
-- [ ] T13 — Run root `pnpm run ok`
+- [x] T13 — Run root `pnpm run ok`
