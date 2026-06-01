@@ -1,3 +1,4 @@
+/* eslint-disable max-lines, unicorn/text-encoding-identifier-case -- Browser test helpers centralize reusable Sigil interactions and glyph group names such as ASCII. */
 import { createValidFontFile } from "./font-test-fixture.js";
 import { expect } from "vitest";
 import { ToolSigil } from "./tool-sigil.js";
@@ -141,6 +142,61 @@ export const renameGlyph = (
   glyphNameInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
 };
 
+/** Selects a staged shared glyph group for one source glyph row. */
+export const selectGlyphGroup = (
+  shadowRoot: ShadowRoot,
+  unicode: string,
+  groupName: string,
+): void => {
+  const groupSelect = requireElement<HTMLSelectElement>(
+    shadowRoot,
+    `select[data-action="glyph-group"][data-unicode="${unicode}"]`,
+  );
+
+  groupSelect.value = groupName;
+  groupSelect.dispatchEvent(new Event("change", { bubbles: true }));
+};
+
+/** Selects a shared glyph mapping for one source glyph row. */
+export const selectMappedGlyph = (
+  shadowRoot: ShadowRoot,
+  unicode: string,
+  glyphKey: string,
+): void => {
+  const glyphSelect = requireElement<HTMLSelectElement>(
+    shadowRoot,
+    `select[data-action="mapped-glyph"][data-unicode="${unicode}"]`,
+  );
+
+  glyphSelect.value = glyphKey;
+  glyphSelect.dispatchEvent(new Event("change", { bubbles: true }));
+};
+
+/** Selects a license for one source glyph row. */
+export const selectLicense = (
+  shadowRoot: ShadowRoot,
+  unicode: string,
+  licenseValue: string,
+): void => {
+  const licenseSelect = requireElement<HTMLSelectElement>(
+    shadowRoot,
+    `select[data-action="license"][data-unicode="${unicode}"]`,
+  );
+
+  licenseSelect.value = licenseValue;
+  licenseSelect.dispatchEvent(new Event("change", { bubbles: true }));
+};
+
+/** Selects the default test mapping and license for one source glyph row. */
+export const selectDefaultMappingAndLicense = (
+  shadowRoot: ShadowRoot,
+  unicode: string,
+): void => {
+  selectGlyphGroup(shadowRoot, unicode, "ASCII");
+  selectMappedGlyph(shadowRoot, unicode, "ASTERISK");
+  selectLicense(shadowRoot, unicode, "MIT");
+};
+
 /** Clicks the component download button. */
 export const clickDownload = (shadowRoot: ShadowRoot): void => {
   requireElement<HTMLButtonElement>(
@@ -235,6 +291,7 @@ export const expectEditedGlyphJsonDownload = async (
   urlStubs: ObjectUrlStubState,
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, "★");
+  selectDefaultMappingAndLicense(shadowRoot, "★");
   renameGlyph(shadowRoot, "★", "customStar");
   clickDownload(shadowRoot);
 
@@ -251,6 +308,7 @@ export const expectDeterministicFilenameDownload = async (
   clickState: DownloadClickState,
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, "★");
+  selectDefaultMappingAndLicense(shadowRoot, "★");
   clickDownload(shadowRoot);
 
   expect(clickState.downloads).toEqual(["sigil.json"]);
@@ -263,6 +321,7 @@ export const expectRevokedObjectUrlDownload = async (
   urlStubs: ObjectUrlStubState,
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, "★");
+  selectDefaultMappingAndLicense(shadowRoot, "★");
   clickDownload(shadowRoot);
 
   expect(urlStubs.revokedUrls).toEqual(["blob:sigil-json"]);
@@ -274,6 +333,7 @@ export const expectInvalidGlyphDownloadBlocked = async (
   urlStubs: ObjectUrlStubState,
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, "★");
+  selectDefaultMappingAndLicense(shadowRoot, "★");
   renameGlyph(shadowRoot, "★", "");
   forceDownloadClick(shadowRoot);
 

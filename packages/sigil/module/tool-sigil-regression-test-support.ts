@@ -1,3 +1,4 @@
+/* eslint-disable max-statements -- Browser regression helpers keep setup and assertions together for readability. */
 import {
   appendToolSigil,
   clickDownload,
@@ -6,6 +7,7 @@ import {
   renameGlyph,
   requireElement,
   requireShadowRoot,
+  selectDefaultMappingAndLicense,
   selectFiles,
   waitForComponentUpdate,
   waitForElement,
@@ -18,6 +20,7 @@ import { expect } from "vitest";
 import type { ToolSigil } from "./tool-sigil.js";
 
 const DOWNLOADED_BLOB_COUNT = 1;
+const MINIMUM_SELECT_OPTION_COUNT = 1;
 const PREVIEW_FONT_FAMILY_PREFIX = "tool-sigil-preview-font";
 
 type CreatedBlobState = Readonly<{
@@ -191,6 +194,7 @@ export const expectPartialGlyphJsonDownload = async (
   await loadCharactersFromTestFont(shadowRoot, "★?");
   expectMissingGlyphAlert(shadowRoot);
   expectStarGlyphRow(shadowRoot);
+  selectDefaultMappingAndLicense(shadowRoot, "★");
   renameGlyph(shadowRoot, "★", "customStar");
   clickDownload(shadowRoot);
 
@@ -204,6 +208,7 @@ export const expectUploadedFontPreview = async (
   shadowRoot: ShadowRoot,
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, "★");
+  selectDefaultMappingAndLicense(shadowRoot, "★");
   await waitForComponentUpdate();
 
   const preview = requireElement<HTMLElement>(shadowRoot, ".glyph-preview");
@@ -248,6 +253,7 @@ export const expectGlyphNameInputFocusPreserved = async (
   shadowRoot: ShadowRoot,
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, "★");
+  selectDefaultMappingAndLicense(shadowRoot, "★");
 
   const glyphNameInput = await waitForElement<HTMLInputElement>(
     shadowRoot,
@@ -265,4 +271,30 @@ export const expectGlyphNameInputFocusPreserved = async (
 
   expect(shadowRoot.activeElement).toBe(glyphNameInput);
   expect(glyphNameInput.value).toBe("cu");
+};
+
+export const expectGlyphSelectFocusPreserved = async (
+  shadowRoot: ShadowRoot,
+): Promise<void> => {
+  await loadCharactersFromTestFont(shadowRoot, "★");
+
+  const groupSelect = await waitForElement<HTMLSelectElement>(
+    shadowRoot,
+    'select[data-action="glyph-group"][data-unicode="★"]',
+  );
+  groupSelect.focus();
+
+  groupSelect.value = "BOX";
+  groupSelect.dispatchEvent(new Event("change", { bubbles: true }));
+  await waitForComponentUpdate();
+
+  expect(shadowRoot.activeElement).toBe(groupSelect);
+
+  const mappedGlyphSelect = requireElement<HTMLSelectElement>(
+    shadowRoot,
+    'select[data-action="mapped-glyph"][data-unicode="★"]',
+  );
+  expect(mappedGlyphSelect.options.length).toBeGreaterThan(
+    MINIMUM_SELECT_OPTION_COUNT,
+  );
 };

@@ -25,6 +25,20 @@ export default defineConfig({
       include: ["game/lib/**/*", "arcade/app.ts"],
       requireEnv: true,
     }),
+    {
+      name: "print-extra-urls",
+      configureServer(server) {
+        server.httpServer?.once("listening", () => {
+          const address = server.httpServer?.address();
+
+          if (typeof address === "object" && address) {
+            const baseUrl = `http://127.0.0.1:${address.port}`;
+            console.log("\nAdditional routes:");
+            console.log(`  Tools:  ${baseUrl}/tools`);
+          }
+        });
+      },
+    },
   ],
   server: {
     host: "127.0.0.1",

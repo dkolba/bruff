@@ -6,7 +6,10 @@ import {
   selectToolSigilDownloadGlyphMap,
   selectToolSigilViewModel,
   setToolSigilCharacters,
+  setToolSigilGlyphGroup,
   setToolSigilGlyphName,
+  setToolSigilLicense,
+  setToolSigilMappedGlyph,
   setToolSigilPreviewFontFamily,
   startToolSigilFontSelection,
   type ToolSigilState,
@@ -21,9 +24,11 @@ import {
 } from "./tool-sigil-preview-resource.js";
 import {
   renderToolSigil,
+  renderToolSigilSelection,
   renderToolSigilValidation,
 } from "./tool-sigil-render.js";
 import { loadSigilFontFile } from "./font-file.js";
+import type { SigilGlyphMapping } from "./glyph-json.js";
 import { TOOL_SIGIL_TEMPLATE } from "./tool-sigil-template.js";
 import { triggerJsonDownload } from "./glyph-download.js";
 
@@ -59,8 +64,17 @@ export class ToolSigil extends HTMLElement {
         onFontFileSelected: (fontFile) => {
           this.#handleFontFileSelected(fontFile);
         },
+        onGlyphGroupChange: (unicode, groupName) => {
+          this.#handleGlyphGroupChange(unicode, groupName);
+        },
         onGlyphNameInput: (unicode, glyphName) => {
           this.#handleGlyphNameInput(unicode, glyphName);
+        },
+        onLicenseChange: (unicode, licenseValue) => {
+          this.#handleLicenseChange(unicode, licenseValue);
+        },
+        onMappedGlyphChange: (unicode, mapping) => {
+          this.#handleMappedGlyphChange(unicode, mapping);
         },
       });
     }
@@ -107,6 +121,13 @@ export class ToolSigil extends HTMLElement {
     );
   }
 
+  #renderSelectionState(): void {
+    renderToolSigilSelection(
+      this.#ensureShadowRoot(),
+      selectToolSigilViewModel(this.#state),
+    );
+  }
+
   #handleCharactersInput(characters: string): void {
     this.#state = setToolSigilCharacters(this.#state, characters);
     this.#renderState();
@@ -115,6 +136,21 @@ export class ToolSigil extends HTMLElement {
   #handleGlyphNameInput(unicode: string, glyphName: string): void {
     this.#state = setToolSigilGlyphName(this.#state, unicode, glyphName);
     this.#renderValidationState();
+  }
+
+  #handleGlyphGroupChange(unicode: string, groupName: string): void {
+    this.#state = setToolSigilGlyphGroup(this.#state, unicode, groupName);
+    this.#renderSelectionState();
+  }
+
+  #handleMappedGlyphChange(unicode: string, mapping: SigilGlyphMapping): void {
+    this.#state = setToolSigilMappedGlyph(this.#state, unicode, mapping);
+    this.#renderSelectionState();
+  }
+
+  #handleLicenseChange(unicode: string, licenseValue: string): void {
+    this.#state = setToolSigilLicense(this.#state, unicode, licenseValue);
+    this.#renderSelectionState();
   }
 
   #handleFontFileSelected(fontFile: File | undefined): void {

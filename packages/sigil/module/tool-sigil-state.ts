@@ -1,7 +1,19 @@
+/* eslint-disable max-lines -- Selection validation stays with the pure state API so the tool has one state boundary. */
+import {
+  findSigilGlyphOption,
+  SIGIL_GLYPH_GROUPS,
+  type SigilGlyphGroup,
+  type SigilGlyphGroupName,
+} from "./glyph-catalog.js";
+import {
+  OSI_LICENSE_OPTIONS,
+  type SigilLicenseOption,
+} from "./osi-license-catalog.js";
 import type {
   SigilExtractionError,
   SigilGlyphDraft,
   SigilGlyphMap,
+  SigilGlyphMapping,
 } from "./glyph-json.js";
 import { createSigilGlyphMap } from "./glyph-name.js";
 import { extractSigilGlyphs } from "./extract-glyphs.js";
@@ -9,6 +21,7 @@ import type { Font } from "opentype.js";
 import type { Result } from "@bruff/utils";
 
 const EMPTY_COUNT = 0;
+const FIRST_GLYPH_GROUP_INDEX = 0;
 const INITIAL_FONT_LOAD_TOKEN = 0;
 const NEXT_FONT_LOAD_TOKEN_OFFSET = 1;
 
@@ -37,6 +50,121 @@ const extractDrafts = (
   };
 };
 
+const firstGlyphGroupName = (
+  glyphGroups: ReadonlyArray<SigilGlyphGroup>,
+): SigilGlyphGroupName | undefined =>
+  glyphGroups[FIRST_GLYPH_GROUP_INDEX]?.groupName;
+
+const createMissingMappedGlyphError = (
+  draft: SigilGlyphDraft,
+): SigilExtractionError => ({
+  message: `Select a glyph mapping for "${draft.glyph.unicode}".`,
+  type: "missing-mapped-glyph",
+});
+
+const createMissingLicenseError = (
+  draft: SigilGlyphDraft,
+): SigilExtractionError => ({
+  message: `Select a LICENSE value for "${draft.glyph.unicode}".`,
+  type: "missing-license",
+});
+
+const emptyGlyphCatalogError: SigilExtractionError = {
+  message: "No shared glyph catalog options are available.",
+  type: "empty-glyph-catalog",
+};
+
+const emptyLicenseCatalogError: SigilExtractionError = {
+  message: "No OSI license options are available.",
+  type: "empty-license-catalog",
+};
+
+const hasLicenseValue = (
+  licenseOptions: ReadonlyArray<SigilLicenseOption>,
+  licenseValue: string,
+): boolean =>
+  licenseOptions.some((licenseOption) => licenseOption.value === licenseValue);
+
+const selectedLicensesByUnicode = (
+  state: ToolSigilState,
+): Readonly<Record<string, string>> =>
+  Object.fromEntries(
+    state.drafts
+      .map((draft): readonly [string, string | undefined] => [
+        draft.glyph.unicode,
+        state.selectedLicensesByUnicode[draft.glyph.unicode] ??
+          state.lastSelectedLicense,
+      ])
+      .filter((entry): entry is readonly [string, string] => {
+        const [, licenseValue] = entry;
+
+        return (
+          licenseValue !== undefined &&
+          hasLicenseValue(state.licenseOptions, licenseValue)
+        );
+      }),
+  );
+
+const stagedGlyphGroupsByUnicode = (
+  state: ToolSigilState,
+): Readonly<Record<string, SigilGlyphGroupName>> => {
+  const defaultGroupName = firstGlyphGroupName(state.glyphGroups);
+
+  return Object.fromEntries(
+    state.drafts
+      .map((draft): readonly [string, SigilGlyphGroupName | undefined] => [
+        draft.glyph.unicode,
+        state.stagedGlyphGroupsByUnicode[draft.glyph.unicode] ??
+          defaultGroupName,
+      ])
+      .filter((entry): entry is readonly [string, SigilGlyphGroupName] => {
+        const [, groupName] = entry;
+
+        return groupName !== undefined;
+      }),
+  );
+};
+
+const isValidGlyphMapping = (mapping: SigilGlyphMapping): boolean =>
+  findSigilGlyphOption(mapping.groupName, mapping.glyphKey)?.glyph ===
+  mapping.glyph;
+
+const mappedGlyphErrors = (
+  state: ToolSigilState,
+): ReadonlyArray<SigilExtractionError> =>
+  state.drafts
+    .filter((draft) => {
+      const selectedGlyph = state.selectedGlyphsByUnicode[draft.glyph.unicode];
+
+      return selectedGlyph === undefined || !isValidGlyphMapping(selectedGlyph);
+    })
+    .map((draft) => createMissingMappedGlyphError(draft));
+
+const licenseErrors = (
+  state: ToolSigilState,
+): ReadonlyArray<SigilExtractionError> => {
+  const effectiveLicensesByUnicode = selectedLicensesByUnicode(state);
+
+  return state.drafts
+    .filter(
+      (draft) => effectiveLicensesByUnicode[draft.glyph.unicode] === undefined,
+    )
+    .map((draft) => createMissingLicenseError(draft));
+};
+
+const catalogErrors = (
+  state: ToolSigilState,
+): ReadonlyArray<SigilExtractionError> => [
+  ...(state.drafts.length > EMPTY_COUNT &&
+  state.glyphGroups.length === EMPTY_COUNT
+    ? [emptyGlyphCatalogError]
+    : []),
+  ...(state.drafts.length > EMPTY_COUNT &&
+  state.licenseOptions.length === EMPTY_COUNT
+    ? [emptyLicenseCatalogError]
+    : []),
+];
+
 /** Immutable state owned by the `<tool-sigil>` coordinator. */
 export type ToolSigilState = Readonly<{
   characters: string;
@@ -47,6 +175,12 @@ export type ToolSigilState = Readonly<{
   fontLoadToken: number;
   namesByUnicode: Readonly<Record<string, string>>;
   previewFontFamily: string;
+  stagedGlyphGroupsByUnicode: Readonly<Record<string, SigilGlyphGroupName>>;
+  selectedGlyphsByUnicode: Readonly<Record<string, SigilGlyphMapping>>;
+  selectedLicensesByUnicode: Readonly<Record<string, string>>;
+  lastSelectedLicense: string | undefined;
+  glyphGroups: ReadonlyArray<SigilGlyphGroup>;
+  licenseOptions: ReadonlyArray<SigilLicenseOption>;
 }>;
 
 /** State and token returned when a new font selection starts. */
@@ -62,8 +196,13 @@ export type ToolSigilViewModel = Readonly<{
   errors: ReadonlyArray<SigilExtractionError>;
   fontFileNameText: string;
   glyphCountText: string;
+  glyphGroups: ReadonlyArray<SigilGlyphGroup>;
+  licenseOptions: ReadonlyArray<SigilLicenseOption>;
   namesByUnicode: Readonly<Record<string, string>>;
   previewFontFamily: string;
+  stagedGlyphGroupsByUnicode: Readonly<Record<string, SigilGlyphGroupName>>;
+  selectedGlyphsByUnicode: Readonly<Record<string, SigilGlyphMapping>>;
+  selectedLicensesByUnicode: Readonly<Record<string, string>>;
 }>;
 
 /** Creates the initial empty state for the sigil tool. */
@@ -74,8 +213,14 @@ export const createToolSigilState = (): ToolSigilState => ({
   font: undefined,
   fontFileName: undefined,
   fontLoadToken: INITIAL_FONT_LOAD_TOKEN,
+  glyphGroups: SIGIL_GLYPH_GROUPS,
+  lastSelectedLicense: undefined,
+  licenseOptions: OSI_LICENSE_OPTIONS,
   namesByUnicode: {},
   previewFontFamily: "",
+  selectedGlyphsByUnicode: {},
+  selectedLicensesByUnicode: {},
+  stagedGlyphGroupsByUnicode: {},
 });
 
 /**
@@ -138,6 +283,80 @@ export const setToolSigilGlyphName = (
   namesByUnicode: {
     ...state.namesByUnicode,
     [unicode]: glyphName,
+  },
+});
+
+/**
+ * Selects a staged `@bruff/glyph` group for one source character.
+ *
+ * @param state - Current tool state
+ * @param unicode - Source glyph Unicode character
+ * @param groupName - Selected glyph catalog group
+ * @returns Updated tool state
+ */
+export const setToolSigilGlyphGroup = (
+  state: ToolSigilState,
+  unicode: string,
+  groupName: SigilGlyphGroupName,
+): ToolSigilState => {
+  const selectedGlyph = state.selectedGlyphsByUnicode[unicode];
+  const selectedGlyphsByUnicode =
+    selectedGlyph?.groupName === groupName
+      ? state.selectedGlyphsByUnicode
+      : Object.fromEntries(
+          Object.entries(state.selectedGlyphsByUnicode).filter(
+            ([selectedUnicode]) => selectedUnicode !== unicode,
+          ),
+        );
+
+  return {
+    ...state,
+    selectedGlyphsByUnicode,
+    stagedGlyphGroupsByUnicode: {
+      ...state.stagedGlyphGroupsByUnicode,
+      [unicode]: groupName,
+    },
+  };
+};
+
+/**
+ * Selects a mapped `@bruff/glyph` glyph for one source character.
+ *
+ * @param state - Current tool state
+ * @param unicode - Source glyph Unicode character
+ * @param mapping - Selected glyph mapping
+ * @returns Updated tool state
+ */
+export const setToolSigilMappedGlyph = (
+  state: ToolSigilState,
+  unicode: string,
+  mapping: SigilGlyphMapping,
+): ToolSigilState => ({
+  ...state,
+  selectedGlyphsByUnicode: {
+    ...state.selectedGlyphsByUnicode,
+    [unicode]: mapping,
+  },
+});
+
+/**
+ * Selects a license for one source character and memorizes it for new rows.
+ *
+ * @param state - Current tool state
+ * @param unicode - Source glyph Unicode character
+ * @param licenseValue - Machine-readable selected license value
+ * @returns Updated tool state
+ */
+export const setToolSigilLicense = (
+  state: ToolSigilState,
+  unicode: string,
+  licenseValue: string,
+): ToolSigilState => ({
+  ...state,
+  lastSelectedLicense: licenseValue,
+  selectedLicensesByUnicode: {
+    ...state.selectedLicensesByUnicode,
+    [unicode]: licenseValue,
   },
 });
 
@@ -215,11 +434,19 @@ export const clearToolSigilPreviewFontFamily = (
 export const selectToolSigilVisibleErrors = (
   state: ToolSigilState,
 ): ReadonlyArray<SigilExtractionError> => {
-  const nameResult = createSigilGlyphMap(state.drafts, state.namesByUnicode);
+  const nameResult = createSigilGlyphMap(state.drafts, state.namesByUnicode, {
+    licensesByUnicode: selectedLicensesByUnicode(state),
+    mappedGlyphsByUnicode: state.selectedGlyphsByUnicode,
+  });
+  const selectionErrors = [
+    ...catalogErrors(state),
+    ...mappedGlyphErrors(state),
+    ...licenseErrors(state),
+  ];
 
   return nameResult.type === "error"
-    ? [...state.errors, ...nameResult.error]
-    : state.errors;
+    ? [...state.errors, ...nameResult.error, ...selectionErrors]
+    : [...state.errors, ...selectionErrors];
 };
 
 /**
@@ -231,7 +458,10 @@ export const selectToolSigilVisibleErrors = (
 export const selectToolSigilDownloadGlyphMap = (
   state: ToolSigilState,
 ): Result<SigilGlyphMap, ReadonlyArray<SigilExtractionError>> =>
-  createSigilGlyphMap(state.drafts, state.namesByUnicode);
+  createSigilGlyphMap(state.drafts, state.namesByUnicode, {
+    licensesByUnicode: selectedLicensesByUnicode(state),
+    mappedGlyphsByUnicode: state.selectedGlyphsByUnicode,
+  });
 
 /**
  * Selects whether the JSON download command should be disabled.
@@ -243,6 +473,9 @@ export const selectToolSigilDownloadDisabled = (
   state: ToolSigilState,
 ): boolean =>
   selectToolSigilDownloadGlyphMap(state).type === "error" ||
+  mappedGlyphErrors(state).length > EMPTY_COUNT ||
+  licenseErrors(state).length > EMPTY_COUNT ||
+  catalogErrors(state).length > EMPTY_COUNT ||
   state.drafts.length === EMPTY_COUNT;
 
 /**
@@ -259,6 +492,11 @@ export const selectToolSigilViewModel = (
   errors: selectToolSigilVisibleErrors(state),
   fontFileNameText: fileNameText(state.fontFileName),
   glyphCountText: glyphCountText(state.drafts),
+  glyphGroups: state.glyphGroups,
+  licenseOptions: state.licenseOptions,
   namesByUnicode: state.namesByUnicode,
   previewFontFamily: state.previewFontFamily,
+  selectedGlyphsByUnicode: state.selectedGlyphsByUnicode,
+  selectedLicensesByUnicode: selectedLicensesByUnicode(state),
+  stagedGlyphGroupsByUnicode: stagedGlyphGroupsByUnicode(state),
 });
