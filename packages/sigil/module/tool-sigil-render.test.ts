@@ -1,4 +1,4 @@
-/* eslint-disable max-lines-per-function, no-magic-numbers, unicorn/text-encoding-identifier-case -- Render tests use small literal view models for glyph catalog UI states. */
+/* eslint-disable unicorn/text-encoding-identifier-case -- Render tests use small literal view models for glyph catalog UI states. */
 import { describe, expect, it } from "vitest";
 import {
   renderToolSigil,
@@ -6,6 +6,8 @@ import {
 } from "./tool-sigil-render.js";
 import { requireElement } from "./tool-sigil-test-support.js";
 import type { ToolSigilViewModel } from "./tool-sigil-state.js";
+
+const EMPTY_CATALOG_MAPPED_GLYPH_OPTION_COUNT = 1;
 
 const viewModel = (
   override: Partial<ToolSigilViewModel> = {},
@@ -55,6 +57,35 @@ const createRenderShadowRoot = (): ShadowRoot => {
   return shadowRoot;
 };
 
+const glyphCatalogViewModel = (): Pick<
+  ToolSigilViewModel,
+  "glyphGroups" | "licenseOptions"
+> => ({
+  glyphGroups: [
+    {
+      glyphs: [
+        {
+          glyph: "*",
+          glyphKey: "ASTERISK",
+          groupName: "ASCII",
+          label: "ASTERISK *",
+        },
+      ],
+      groupName: "ASCII",
+      label: "ASCII",
+    },
+  ],
+  licenseOptions: [
+    {
+      id: "mit",
+      label: "MIT License (MIT)",
+      name: "MIT License",
+      spdxId: "MIT",
+      value: "MIT",
+    },
+  ],
+});
+
 describe("renderToolSigil", () => {
   it("renders empty catalog selection fallbacks", () => {
     const shadowRoot = createRenderShadowRoot();
@@ -72,11 +103,11 @@ describe("renderToolSigil", () => {
         shadowRoot,
         'select[data-action="mapped-glyph"][data-unicode="★"]',
       ).options.length,
-    ).toBe(1);
+    ).toBe(EMPTY_CATALOG_MAPPED_GLYPH_OPTION_COUNT);
   });
 });
 
-describe("renderToolSigilSelection", () => {
+describe("renderToolSigilSelection optional controls", () => {
   it("skips missing optional row controls", () => {
     const shadowRoot = createRenderShadowRoot();
 
@@ -100,33 +131,12 @@ describe("renderToolSigilSelection", () => {
       ).disabled,
     ).toBe(true);
   });
+});
 
+describe("renderToolSigilSelection row values", () => {
   it("updates existing row control values", () => {
     const shadowRoot = createRenderShadowRoot();
-
-    const glyphGroups = [
-      {
-        glyphs: [
-          {
-            glyph: "*",
-            glyphKey: "ASTERISK",
-            groupName: "ASCII",
-            label: "ASTERISK *",
-          },
-        ],
-        groupName: "ASCII",
-        label: "ASCII",
-      },
-    ];
-    const licenseOptions = [
-      {
-        id: "mit",
-        label: "MIT License (MIT)",
-        name: "MIT License",
-        spdxId: "MIT",
-        value: "MIT",
-      },
-    ];
+    const { glyphGroups, licenseOptions } = glyphCatalogViewModel();
 
     renderToolSigil(shadowRoot, viewModel({ glyphGroups, licenseOptions }));
     renderToolSigilSelection(

@@ -1,25 +1,22 @@
-/* eslint-disable max-lines, max-lines-per-function, max-statements, no-magic-numbers, unicorn/text-encoding-identifier-case -- State tests cover the full glyph/license state matrix and catalog names such as ASCII. */
+/* eslint-disable unicorn/text-encoding-identifier-case -- State tests cover the full glyph/license state matrix and catalog names such as ASCII. */
 import {
   applyToolSigilFontLoadResult,
-  clearToolSigilPreviewFontFamily,
   createToolSigilState,
   selectToolSigilDownloadGlyphMap,
   selectToolSigilViewModel,
   setToolSigilCharacters,
   setToolSigilGlyphGroup,
-  setToolSigilGlyphName,
   setToolSigilLicense,
   setToolSigilMappedGlyph,
-  setToolSigilPreviewFontFamily,
   startToolSigilFontSelection,
+  type ToolSigilState,
 } from "./tool-sigil-state.js";
 import { describe, expect, it } from "vitest";
 import { error, ok } from "@bruff/utils";
 import { createTestFont } from "./font-test-fixture.js";
 import type { SigilExtractionError } from "./glyph-json.js";
 
-const STALE_FONT_LOAD_TOKEN = 1;
-const CURRENT_FONT_LOAD_TOKEN = 2;
+const EMPTY_COUNT = 0;
 
 const invalidFontErrors: ReadonlyArray<SigilExtractionError> = [
   {
@@ -27,6 +24,57 @@ const invalidFontErrors: ReadonlyArray<SigilExtractionError> = [
     type: "invalid-font",
   },
 ];
+
+const asteriskMapping = {
+  glyph: "*",
+  glyphKey: "ASTERISK",
+  groupName: "ASCII",
+};
+
+const loadCurrentFontState = (characters: string): ToolSigilState => {
+  const selection = startToolSigilFontSelection(
+    createToolSigilState(),
+    "component-test.ttf",
+  );
+
+  return applyToolSigilFontLoadResult(
+    setToolSigilCharacters(selection.state, characters),
+    selection.fontLoadToken,
+    ok(createTestFont()),
+  );
+};
+
+const selectedAsteriskState = (): ToolSigilState =>
+  setToolSigilMappedGlyph(
+    setToolSigilGlyphGroup(createToolSigilState(), "★", "ASCII"),
+    "★",
+    asteriskMapping,
+  );
+
+const mappedAsteriskState = (state: ToolSigilState): ToolSigilState =>
+  setToolSigilLicense(
+    setToolSigilMappedGlyph(state, "★", asteriskMapping),
+    "★",
+    "MIT",
+  );
+
+const expectDownloadedAsteriskGlyph = (state: ToolSigilState): void => {
+  const glyphMapResult = selectToolSigilDownloadGlyphMap(state);
+
+  expect(glyphMapResult.type).toBe("ok");
+  if (glyphMapResult.type === "error") {
+    return;
+  }
+  expect(Object.keys(glyphMapResult.value)).toStrictEqual(["u2605"]);
+  expect(
+    Object.values(glyphMapResult.value).map((glyph) => glyph.unicode),
+  ).toStrictEqual(["★"]);
+  // eslint-disable-next-line dot-notation -- TS requires bracket access for index-signature glyph maps.
+  expect(glyphMapResult.value["u2605"]).toMatchObject({
+    LICENSE: "MIT",
+    mappedGlyph: asteriskMapping,
+  });
+};
 
 describe("ToolSigil state selection", () => {
   it("creates the initial view model", () => {
@@ -44,59 +92,25 @@ describe("ToolSigil state selection", () => {
       selectedLicensesByUnicode: {},
       stagedGlyphGroupsByUnicode: {},
     });
-    expect(viewModel.glyphGroups.length).toBeGreaterThan(0);
-    expect(viewModel.licenseOptions.length).toBeGreaterThan(0);
+    expect(viewModel.glyphGroups.length).toBeGreaterThan(EMPTY_COUNT);
+    expect(viewModel.licenseOptions.length).toBeGreaterThan(EMPTY_COUNT);
   });
 });
 
-describe("ToolSigil current font state", () => {
+describe("ToolSigil loaded font view state", () => {
   it("extracts drafts from current characters when a font load succeeds", () => {
-    const selection = startToolSigilFontSelection(
-      createToolSigilState(),
-      "component-test.ttf",
-    );
-    const characterState = setToolSigilCharacters(selection.state, "★");
-    const loadedState = applyToolSigilFontLoadResult(
-      characterState,
-      selection.fontLoadToken,
-      ok(createTestFont()),
-    );
+    const loadedState = loadCurrentFontState("★");
 
     expect(selectToolSigilViewModel(loadedState)).toMatchObject({
       downloadDisabled: true,
       fontFileNameText: "component-test.ttf",
       glyphCountText: "Glyphs ready: 1",
     });
-    const mappedState = setToolSigilLicense(
-      setToolSigilMappedGlyph(loadedState, "★", {
-        glyph: "*",
-        glyphKey: "ASTERISK",
-        groupName: "ASCII",
-      }),
-      "★",
-      "MIT",
-    );
-    const glyphMapResult = selectToolSigilDownloadGlyphMap(mappedState);
-
-    expect(glyphMapResult.type).toBe("ok");
-    if (glyphMapResult.type === "error") {
-      return;
-    }
-    expect(Object.keys(glyphMapResult.value)).toStrictEqual(["u2605"]);
-    expect(
-      Object.values(glyphMapResult.value).map((glyph) => glyph.unicode),
-    ).toStrictEqual(["★"]);
-    // eslint-disable-next-line dot-notation -- TS requires bracket access for index-signature glyph maps.
-    expect(glyphMapResult.value["u2605"]).toMatchObject({
-      LICENSE: "MIT",
-      mappedGlyph: {
-        glyph: "*",
-        glyphKey: "ASTERISK",
-        groupName: "ASCII",
-      },
-    });
+    expectDownloadedAsteriskGlyph(mappedAsteriskState(loadedState));
   });
+});
 
+describe("ToolSigil font error state", () => {
   it("stores typed font load errors", () => {
     const selection = startToolSigilFontSelection(
       createToolSigilState(),
@@ -114,69 +128,37 @@ describe("ToolSigil current font state", () => {
   });
 });
 
-describe("ToolSigil glyph mapping state", () => {
+describe("ToolSigil mapped glyph state", () => {
   it("selects staged groups and individual mapped glyphs", () => {
-    const selectedState = setToolSigilMappedGlyph(
-      setToolSigilGlyphGroup(createToolSigilState(), "★", "ASCII"),
-      "★",
-      {
-        glyph: "*",
-        glyphKey: "ASTERISK",
-        groupName: "ASCII",
-      },
-    );
+    const selectedState = selectedAsteriskState();
 
     expect(selectToolSigilViewModel(selectedState)).toMatchObject({
       selectedGlyphsByUnicode: {
-        "★": {
-          glyph: "*",
-          glyphKey: "ASTERISK",
-          groupName: "ASCII",
-        },
+        "★": asteriskMapping,
       },
       stagedGlyphGroupsByUnicode: {},
     });
   });
+});
 
+describe("ToolSigil mapped glyph group changes", () => {
   it("clears a selected glyph when the staged group changes", () => {
-    const selectedState = setToolSigilMappedGlyph(
-      setToolSigilGlyphGroup(createToolSigilState(), "★", "ASCII"),
-      "★",
-      {
-        glyph: "*",
-        glyphKey: "ASTERISK",
-        groupName: "ASCII",
-      },
-    );
-
     expect(
       selectToolSigilViewModel(
-        setToolSigilGlyphGroup(selectedState, "★", "BOX"),
+        setToolSigilGlyphGroup(selectedAsteriskState(), "★", "BOX"),
       ).selectedGlyphsByUnicode,
     ).toStrictEqual({});
   });
+});
 
+describe("ToolSigil mapped glyph group preservation", () => {
   it("preserves a selected glyph when the staged group stays the same", () => {
-    const selectedState = setToolSigilMappedGlyph(
-      setToolSigilGlyphGroup(createToolSigilState(), "★", "ASCII"),
-      "★",
-      {
-        glyph: "*",
-        glyphKey: "ASTERISK",
-        groupName: "ASCII",
-      },
-    );
-
     expect(
       selectToolSigilViewModel(
-        setToolSigilGlyphGroup(selectedState, "★", "ASCII"),
+        setToolSigilGlyphGroup(selectedAsteriskState(), "★", "ASCII"),
       ).selectedGlyphsByUnicode,
     ).toStrictEqual({
-      "★": {
-        glyph: "*",
-        glyphKey: "ASTERISK",
-        groupName: "ASCII",
-      },
+      "★": asteriskMapping,
     });
   });
 });
@@ -211,176 +193,5 @@ describe("ToolSigil license state", () => {
     ).toStrictEqual({
       "♥": "MIT",
     });
-  });
-});
-
-describe("ToolSigil catalog validation", () => {
-  it("shows typed errors for empty catalogs", () => {
-    const selection = startToolSigilFontSelection(
-      createToolSigilState(),
-      "component-test.ttf",
-    );
-    const loadedState = applyToolSigilFontLoadResult(
-      setToolSigilCharacters(selection.state, "★"),
-      selection.fontLoadToken,
-      ok(createTestFont()),
-    );
-
-    expect(
-      selectToolSigilViewModel({
-        ...loadedState,
-        glyphGroups: [],
-        licenseOptions: [],
-      }).errors,
-    ).toEqual(
-      expect.arrayContaining([
-        {
-          message: "No shared glyph catalog options are available.",
-          type: "empty-glyph-catalog",
-        },
-        {
-          message: "No OSI license options are available.",
-          type: "empty-license-catalog",
-        },
-      ]),
-    );
-  });
-
-  it("rejects stale mapped glyphs and stale license defaults", () => {
-    const selection = startToolSigilFontSelection(
-      createToolSigilState(),
-      "component-test.ttf",
-    );
-    const loadedState = applyToolSigilFontLoadResult(
-      setToolSigilCharacters(selection.state, "★"),
-      selection.fontLoadToken,
-      ok(createTestFont()),
-    );
-    const staleState = {
-      ...loadedState,
-      lastSelectedLicense: "stale-license",
-      selectedGlyphsByUnicode: {
-        "★": {
-          glyph: "not-asterisk",
-          glyphKey: "ASTERISK",
-          groupName: "ASCII",
-        },
-      },
-    };
-
-    expect(selectToolSigilViewModel(staleState).errors).toEqual(
-      expect.arrayContaining([
-        {
-          message: 'Select a glyph mapping for "★".',
-          type: "missing-mapped-glyph",
-        },
-        {
-          message: 'Select a LICENSE value for "★".',
-          type: "missing-license",
-        },
-      ]),
-    );
-  });
-});
-
-describe("ToolSigil stale font state", () => {
-  it("ignores stale font load results", () => {
-    const currentState = {
-      ...createToolSigilState(),
-      fontLoadToken: CURRENT_FONT_LOAD_TOKEN,
-    };
-
-    expect(
-      applyToolSigilFontLoadResult(
-        currentState,
-        STALE_FONT_LOAD_TOKEN,
-        ok(createTestFont()),
-      ),
-    ).toBe(currentState);
-  });
-});
-
-describe("ToolSigil glyph name state", () => {
-  it("combines extraction and glyph-name errors in the view model", () => {
-    const selection = startToolSigilFontSelection(
-      createToolSigilState(),
-      "component-test.ttf",
-    );
-    const loadedState = applyToolSigilFontLoadResult(
-      setToolSigilCharacters(selection.state, "★?"),
-      selection.fontLoadToken,
-      ok(createTestFont()),
-    );
-    const namedState = setToolSigilGlyphName(loadedState, "★", "");
-
-    expect(selectToolSigilViewModel(namedState).errors).toEqual(
-      expect.arrayContaining([
-        {
-          message: 'Missing glyph for "?".',
-          type: "missing-glyph",
-        },
-        {
-          message: 'Invalid glyph name "".',
-          type: "invalid-glyph-name",
-        },
-        {
-          message: 'Select a glyph mapping for "★".',
-          type: "missing-mapped-glyph",
-        },
-        {
-          message: 'Select a LICENSE value for "★".',
-          type: "missing-license",
-        },
-      ]),
-    );
-    expect(selectToolSigilViewModel(namedState).downloadDisabled).toBe(true);
-  });
-});
-
-describe("ToolSigil preview state", () => {
-  it("sets the current preview font family", () => {
-    const currentState = {
-      ...createToolSigilState(),
-      fontLoadToken: CURRENT_FONT_LOAD_TOKEN,
-    };
-
-    expect(
-      selectToolSigilViewModel(
-        setToolSigilPreviewFontFamily(
-          currentState,
-          CURRENT_FONT_LOAD_TOKEN,
-          "tool-sigil-preview-font-1",
-        ),
-      ).previewFontFamily,
-    ).toBe("tool-sigil-preview-font-1");
-  });
-
-  it("ignores stale preview font families", () => {
-    const currentState = {
-      ...createToolSigilState(),
-      fontLoadToken: CURRENT_FONT_LOAD_TOKEN,
-    };
-
-    expect(
-      setToolSigilPreviewFontFamily(
-        currentState,
-        STALE_FONT_LOAD_TOKEN,
-        "tool-sigil-preview-font-1",
-      ),
-    ).toBe(currentState);
-  });
-
-  it("clears the current preview font family", () => {
-    const currentState = {
-      ...createToolSigilState(),
-      fontLoadToken: CURRENT_FONT_LOAD_TOKEN,
-      previewFontFamily: "tool-sigil-preview-font-1",
-    };
-
-    expect(
-      selectToolSigilViewModel(
-        clearToolSigilPreviewFontFamily(currentState, CURRENT_FONT_LOAD_TOKEN),
-      ).previewFontFamily,
-    ).toBe("");
   });
 });

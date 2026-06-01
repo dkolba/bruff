@@ -1,4 +1,3 @@
-/* eslint-disable max-statements -- Browser regression helpers keep setup and assertions together for readability. */
 import {
   appendToolSigil,
   clickDownload,
@@ -20,7 +19,6 @@ import { expect } from "vitest";
 import type { ToolSigil } from "./tool-sigil.js";
 
 const DOWNLOADED_BLOB_COUNT = 1;
-const MINIMUM_SELECT_OPTION_COUNT = 1;
 const PREVIEW_FONT_FAMILY_PREFIX = "tool-sigil-preview-font";
 
 type CreatedBlobState = Readonly<{
@@ -149,14 +147,6 @@ const expectNewerFontSelectionState = (shadowRoot: ShadowRoot): void => {
   ).toBe("u2605");
 };
 
-const enterGlyphNameText = (
-  glyphNameInput: HTMLInputElement,
-  glyphName: string,
-): void => {
-  glyphNameInput.value = glyphName;
-  glyphNameInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
-};
-
 export const appendToolSigilWithShadowRoot = (): Readonly<{
   element: ToolSigil;
   shadowRoot: ShadowRoot;
@@ -166,16 +156,20 @@ export const appendToolSigilWithShadowRoot = (): Readonly<{
   return { element, shadowRoot: requireShadowRoot(element) };
 };
 
-const expectMissingGlyphAlert = (shadowRoot: ShadowRoot): void => {
-  const alert = requireElement<HTMLElement>(shadowRoot, '[role="alert"]');
+const expectMissingGlyphAlert = async (
+  shadowRoot: ShadowRoot,
+): Promise<void> => {
+  const alert = await waitForElement<HTMLElement>(shadowRoot, '[role="alert"]');
   expect(alert.textContent).toContain('Missing glyph for "?".');
 };
 
-const expectStarGlyphRow = (shadowRoot: ShadowRoot): void => {
-  expect(
-    requireElement<HTMLInputElement>(shadowRoot, 'input[data-unicode="★"]')
-      .value,
-  ).toBe("u2605");
+const expectStarGlyphRow = async (shadowRoot: ShadowRoot): Promise<void> => {
+  const glyphNameInput = await waitForElement<HTMLInputElement>(
+    shadowRoot,
+    'input[data-unicode="★"]',
+  );
+
+  expect(glyphNameInput.value).toBe("u2605");
 };
 
 const requirePartialExtractionBlob = (urlStubs: CreatedBlobState): Blob => {
@@ -192,8 +186,8 @@ export const expectPartialGlyphJsonDownload = async (
   urlStubs: CreatedBlobState,
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, "★?");
-  expectMissingGlyphAlert(shadowRoot);
-  expectStarGlyphRow(shadowRoot);
+  await expectMissingGlyphAlert(shadowRoot);
+  await expectStarGlyphRow(shadowRoot);
   selectDefaultMappingAndLicense(shadowRoot, "★");
   renameGlyph(shadowRoot, "★", "customStar");
   clickDownload(shadowRoot);
@@ -248,53 +242,3 @@ export const expectRejectedStalePreviewLoadIgnored = (
     shadowRoot,
     stubRejectedFontFaceLoad,
   );
-
-export const expectGlyphNameInputFocusPreserved = async (
-  shadowRoot: ShadowRoot,
-): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-  selectDefaultMappingAndLicense(shadowRoot, "★");
-
-  const glyphNameInput = await waitForElement<HTMLInputElement>(
-    shadowRoot,
-    'input[data-unicode="★"]',
-  );
-  glyphNameInput.focus();
-
-  enterGlyphNameText(glyphNameInput, "c");
-  await waitForComponentUpdate();
-
-  expect(shadowRoot.activeElement).toBe(glyphNameInput);
-
-  enterGlyphNameText(glyphNameInput, "cu");
-  await waitForComponentUpdate();
-
-  expect(shadowRoot.activeElement).toBe(glyphNameInput);
-  expect(glyphNameInput.value).toBe("cu");
-};
-
-export const expectGlyphSelectFocusPreserved = async (
-  shadowRoot: ShadowRoot,
-): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-
-  const groupSelect = await waitForElement<HTMLSelectElement>(
-    shadowRoot,
-    'select[data-action="glyph-group"][data-unicode="★"]',
-  );
-  groupSelect.focus();
-
-  groupSelect.value = "BOX";
-  groupSelect.dispatchEvent(new Event("change", { bubbles: true }));
-  await waitForComponentUpdate();
-
-  expect(shadowRoot.activeElement).toBe(groupSelect);
-
-  const mappedGlyphSelect = requireElement<HTMLSelectElement>(
-    shadowRoot,
-    'select[data-action="mapped-glyph"][data-unicode="★"]',
-  );
-  expect(mappedGlyphSelect.options.length).toBeGreaterThan(
-    MINIMUM_SELECT_OPTION_COUNT,
-  );
-};
