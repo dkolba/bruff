@@ -356,6 +356,9 @@ importers:
 
   packages/sigil:
     dependencies:
+      '@bruff/contracts':
+        specifier: workspace:0.0.0
+        version: link:../contracts
       '@bruff/glyph':
         specifier: workspace:0.0.0
         version: link:../glyph

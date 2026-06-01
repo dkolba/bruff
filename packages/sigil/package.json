@@ -30,6 +30,7 @@
     "vitest": "catalog:"
   },
   "dependencies": {
+    "@bruff/contracts": "workspace:0.0.0",
     "@bruff/glyph": "workspace:0.0.0",
     "@bruff/utils": "workspace:0.0.0",
     "opentype.js": "2.0.0"
