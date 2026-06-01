@@ -6,7 +6,7 @@
 - [x] T4 — Add failing parser tests in `packages/contracts/module/shared-object.test.ts`
 - [x] T5 — Implement `sharedObjectSchema`, `SharedObject`, `ParseSharedObjectError`, and `parseSharedObject` in `packages/contracts/module/shared-object.ts`
 - [x] T6 — Export the shared object contract API from `packages/contracts/index.ts`
-- [ ] T7 — Add `packages/contracts/README.md` documenting exports, commands, and the no-consumer-migration boundary
+- [x] T7 — Add `packages/contracts/README.md` documenting exports, commands, and the no-consumer-migration boundary
 - [ ] T8 — Add `packages/contracts/AGENTS.override.md` documenting contracts package rules
 - [ ] T9 — Run `pnpm --filter @bruff/contracts run format`
 - [ ] T10 — Run `pnpm --filter @bruff/contracts run lint`
