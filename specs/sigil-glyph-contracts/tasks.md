@@ -4,5 +4,5 @@
 - [x] T4 — Refactor `packages/sigil/module/glyph-json.ts` to re-export contract-owned payload types.
 - [x] T5 — Add Sigil map validation tests in `packages/sigil/module/glyph-name.test.ts`.
 - [x] T6 — Validate produced glyph maps through `parseSigilGlyphMap` in `packages/sigil/module/glyph-name.ts`.
-- [ ] T7 — Update `packages/contracts/README.md`, `packages/contracts/AGENTS.override.md`, and `packages/sigil/README.md` for the new contract boundary.
+- [x] T7 — Update `packages/contracts/README.md`, `packages/contracts/AGENTS.override.md`, and `packages/sigil/README.md` for the new contract boundary.
 - [ ] T8 — Review `specs/sigil-glyph-contracts/spec.md` and `specs/sigil-glyph-contracts/design.md`, then record final verification.

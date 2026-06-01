@@ -2,33 +2,33 @@
 
 ## Layer Assignment
 
-| File | Package | Role |
-| --- | --- | --- |
-| `packages/contracts/module/sigil-glyph-json.ts` | `@bruff/contracts` | Universal Zod schemas, inferred readonly payload types, and parser for Sigil glyph JSON maps. |
-| `packages/contracts/module/sigil-glyph-json.test.ts` | `@bruff/contracts` | Browser Vitest coverage for valid and invalid payload parsing. |
-| `packages/contracts/index.ts` | `@bruff/contracts` | Root export for the new schemas, types, and parser. |
-| `packages/sigil/module/glyph-json.ts` | `@bruff/sigil` | Sigil-local bridge that re-exports contract-owned payload types and keeps extraction-only types. |
-| `packages/sigil/module/glyph-name.ts` | `@bruff/sigil` | Produces glyph maps and validates them through `parseSigilGlyphMap`. |
-| `packages/sigil/module/glyph-name.test.ts` | `@bruff/sigil` | Tests validation failure from contract parsing. |
-| `packages/sigil/package.json` | `@bruff/sigil` | Adds `@bruff/contracts` dependency. |
+| File                                                 | Package            | Role                                                                                             |
+| ---------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------ |
+| `packages/contracts/module/sigil-glyph-json.ts`      | `@bruff/contracts` | Universal Zod schemas, inferred readonly payload types, and parser for Sigil glyph JSON maps.    |
+| `packages/contracts/module/sigil-glyph-json.test.ts` | `@bruff/contracts` | Browser Vitest coverage for valid and invalid payload parsing.                                   |
+| `packages/contracts/index.ts`                        | `@bruff/contracts` | Root export for the new schemas, types, and parser.                                              |
+| `packages/sigil/module/glyph-json.ts`                | `@bruff/sigil`     | Sigil-local bridge that re-exports contract-owned payload types and keeps extraction-only types. |
+| `packages/sigil/module/glyph-name.ts`                | `@bruff/sigil`     | Produces glyph maps and validates them through `parseSigilGlyphMap`.                             |
+| `packages/sigil/module/glyph-name.test.ts`           | `@bruff/sigil`     | Tests validation failure from contract parsing.                                                  |
+| `packages/sigil/package.json`                        | `@bruff/sigil`     | Adds `@bruff/contracts` dependency.                                                              |
 
 ## Public API Surface
 
 `@bruff/contracts` adds these root exports:
 
 ```ts
-sigilGlyphBoundsSchema
-sigilSourceGlyphSchema
-sigilGlyphMappingSchema
-sigilGlyphSchema
-sigilGlyphMapSchema
-parseSigilGlyphMap(input)
-SigilGlyphBounds
-SigilSourceGlyph
-SigilGlyphMapping
-SigilGlyph
-SigilGlyphMap
-ParseSigilGlyphMapError
+sigilGlyphBoundsSchema;
+sigilSourceGlyphSchema;
+sigilGlyphMappingSchema;
+sigilGlyphSchema;
+sigilGlyphMapSchema;
+parseSigilGlyphMap(input);
+SigilGlyphBounds;
+SigilSourceGlyph;
+SigilGlyphMapping;
+SigilGlyph;
+SigilGlyphMap;
+ParseSigilGlyphMapError;
 ```
 
 `parseSigilGlyphMap(input)` returns `Result<SigilGlyphMap, ParseSigilGlyphMapError>` and uses Zod `safeParse`.

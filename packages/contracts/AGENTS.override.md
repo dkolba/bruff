@@ -13,6 +13,7 @@ This package contains shared runtime object and type contracts.
 - **C-2 (MUST)** Do not import DOM, Canvas, Vite app, CLI, game shell, or browser-global APIs.
 - **C-3 (MUST)** Do not migrate existing workspace packages to consume `@bruff/contracts` unless that migration is the explicit task.
 - **C-4 (MUST)** Export schemas and inferred types from the same source module.
+- **C-4a (MUST)** Sigil glyph JSON payload contracts model downloadable glyph-map data only. Sigil extraction errors, draft rows, UI state, DOM behavior, font parsing, and catalog projection stay in `@bruff/sigil`.
 
 ## Contract Rules
 

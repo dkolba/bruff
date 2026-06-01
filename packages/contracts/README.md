@@ -16,6 +16,18 @@ Use it for shared contract schemas and parser helpers:
 - `parseSharedObject(input)`
 - `SharedObject`
 - `ParseSharedObjectError`
+- `sigilGlyphBoundsSchema`
+- `sigilSourceGlyphSchema`
+- `sigilGlyphMappingSchema`
+- `sigilGlyphSchema`
+- `sigilGlyphMapSchema`
+- `parseSigilGlyphMap(input)`
+- `SigilGlyphBounds`
+- `SigilSourceGlyph`
+- `SigilGlyphMapping`
+- `SigilGlyph`
+- `SigilGlyphMap`
+- `ParseSigilGlyphMapError`
 
 ## API
 
@@ -29,9 +41,19 @@ Parses an `unknown` input with `sharedObjectSchema.safeParse()` and returns a `R
 
 Invalid inputs return an explicit error value with reason `"INVALID_SHARED_OBJECT"` and the Zod issues. Parser helpers in this package do not throw.
 
+### `sigilGlyphMapSchema`
+
+Zod schema for downloadable Sigil glyph JSON keyed by editable glyph names. Each value contains source glyph metrics, bounds, SVG path data, selected `@bruff/glyph` mapping, and exact `"LICENSE"` value.
+
+### `parseSigilGlyphMap(input)`
+
+Parses an `unknown` input with `sigilGlyphMapSchema.safeParse()` and returns a `Result<SigilGlyphMap, ParseSigilGlyphMapError>` from `@bruff/utils`.
+
+Invalid inputs return an explicit error value with reason `"INVALID_SIGIL_GLYPH_MAP"` and the Zod issues. Parser helpers in this package do not throw.
+
 ## Boundary
 
-This package is intentionally unused by current workspace packages at creation time. Do not migrate `@bruff/game`, `@bruff/game-element`, `@bruff/arcade`, `@bruff/sigil`, `@bruff/glyph`, `@bruff/cli`, or `@bruff/utils` to consume `@bruff/contracts` as part of package scaffolding work.
+`@bruff/sigil` consumes the Sigil glyph JSON payload contracts so the development tool validates downloadable glyph maps against a shared runtime schema before browser download.
 
 Add concrete contract domains only when a shape is shared across package boundaries and needs runtime validation.
 
