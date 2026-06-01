@@ -138,13 +138,17 @@ const selectNewerFont = (shadowRoot: ShadowRoot): void => {
   selectFiles(fileInput, [createValidFontFile("newer.ttf")]);
 };
 
-const expectNewerFontSelectionState = (shadowRoot: ShadowRoot): void => {
+const expectNewerFontSelectionState = async (
+  shadowRoot: ShadowRoot,
+): Promise<void> => {
+  const glyphNameInput = await waitForElement<HTMLInputElement>(
+    shadowRoot,
+    'input[data-unicode="★"]',
+  );
+
   expect(shadowRoot.textContent).toContain("newer.ttf");
   expect(shadowRoot.textContent).not.toContain('Missing glyph for "★".');
-  expect(
-    requireElement<HTMLInputElement>(shadowRoot, 'input[data-unicode="★"]')
-      .value,
-  ).toBe("u2605");
+  expect(glyphNameInput.value).toBe("u2605");
 };
 
 export const appendToolSigilWithShadowRoot = (): Readonly<{
@@ -219,12 +223,12 @@ const expectNewerFontSelectionWithFontFaceStub = async (
     const { deferredFontBuffer, staleFontBuffer } =
       await loadDelayedStaleFontSelection(shadowRoot);
     selectNewerFont(shadowRoot);
-    await waitForComponentUpdate();
+    await expectNewerFontSelectionState(shadowRoot);
 
     deferredFontBuffer.resolve(staleFontBuffer);
     await waitForComponentUpdate();
 
-    expectNewerFontSelectionState(shadowRoot);
+    await expectNewerFontSelectionState(shadowRoot);
   } finally {
     restoreFontFace();
   }

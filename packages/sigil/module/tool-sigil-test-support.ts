@@ -60,6 +60,19 @@ export const waitForElement = <ElementType extends Element>(
   });
 };
 
+const waitForFontProcessing = (
+  shadowRoot: ShadowRoot,
+  characters: string,
+): Promise<Element> => {
+  const [unicode] = characters;
+  const selector =
+    unicode === undefined
+      ? '[role="alert"]'
+      : `input[data-unicode="${unicode}"], [role="alert"]`;
+
+  return waitForElement(shadowRoot, selector);
+};
+
 /** Waits for component microtasks and file parsing to settle in browser tests. */
 export const waitForComponentUpdate = (): Promise<void> =>
   new Promise((resolve) => {
@@ -109,7 +122,7 @@ export const loadCharactersFromTestFont = async (
 
   selectFiles(fileInput, [createValidFontFile("component-test.ttf")]);
   enterCharacters(characterInput, characters);
-  await waitForComponentUpdate();
+  await waitForFontProcessing(shadowRoot, characters);
 };
 
 /** Renames one rendered glyph input. */

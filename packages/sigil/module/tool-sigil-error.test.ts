@@ -5,15 +5,15 @@ import {
   requireElement,
   requireShadowRoot,
   selectFiles,
-  waitForComponentUpdate,
+  waitForElement,
 } from "./tool-sigil-test-support.js";
 import { describe, expect, it } from "vitest";
 
-const expectAlertText = (
+const expectAlertText = async (
   shadowRoot: ShadowRoot,
   expectedText: string,
-): void => {
-  const alert = requireElement<HTMLElement>(shadowRoot, '[role="alert"]');
+): Promise<void> => {
+  const alert = await waitForElement<HTMLElement>(shadowRoot, '[role="alert"]');
 
   expect(alert.textContent).toContain(expectedText);
 };
@@ -28,9 +28,8 @@ describe("ToolSigil font error state", () => {
     );
 
     selectFiles(fileInput, [new File(["not a font"], "broken.ttf")]);
-    await waitForComponentUpdate();
 
-    expectAlertText(
+    await expectAlertText(
       shadowRoot,
       'Could not parse "broken.ttf" as a supported font.',
     );
@@ -46,7 +45,7 @@ describe("ToolSigil missing glyph error state", () => {
 
     await loadCharactersFromTestFont(shadowRoot, "?");
 
-    expectAlertText(shadowRoot, 'Missing glyph for "?".');
+    await expectAlertText(shadowRoot, 'Missing glyph for "?".');
 
     element.remove();
   });

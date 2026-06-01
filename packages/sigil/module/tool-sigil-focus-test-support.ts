@@ -2,7 +2,6 @@ import {
   loadCharactersFromTestFont,
   requireElement,
   selectDefaultMappingAndLicense,
-  waitForComponentUpdate,
   waitForElement,
 } from "./tool-sigil-test-support.js";
 import { expect } from "vitest";
@@ -34,13 +33,12 @@ const loadMappedAsteriskRow = async (shadowRoot: ShadowRoot): Promise<void> => {
   selectDefaultMappingAndLicense(shadowRoot, "★");
 };
 
-const enterFocusedGlyphNameText = async (
+const enterFocusedGlyphNameText = (
   shadowRoot: ShadowRoot,
   glyphNameInput: HTMLInputElement,
   glyphName: string,
-): Promise<void> => {
+): void => {
   enterGlyphNameText(glyphNameInput, glyphName);
-  await waitForComponentUpdate();
 
   expect(shadowRoot.activeElement).toBe(glyphNameInput);
 };
@@ -54,9 +52,10 @@ export const expectGlyphNameInputFocusPreserved = async (
     'input[data-unicode="★"]',
   );
   glyphNameInput.focus();
+  expect(shadowRoot.activeElement).toBe(glyphNameInput);
 
-  await enterFocusedGlyphNameText(shadowRoot, glyphNameInput, "c");
-  await enterFocusedGlyphNameText(shadowRoot, glyphNameInput, "cu");
+  enterFocusedGlyphNameText(shadowRoot, glyphNameInput, "c");
+  enterFocusedGlyphNameText(shadowRoot, glyphNameInput, "cu");
   expect(glyphNameInput.value).toBe("cu");
 };
 
@@ -70,10 +69,10 @@ export const expectGlyphSelectFocusPreserved = async (
     'select[data-action="glyph-group"][data-unicode="★"]',
   );
   groupSelect.focus();
+  expect(shadowRoot.activeElement).toBe(groupSelect);
 
   groupSelect.value = "BOX";
   groupSelect.dispatchEvent(new Event("change", { bubbles: true }));
-  await waitForComponentUpdate();
 
   expect(shadowRoot.activeElement).toBe(groupSelect);
 
