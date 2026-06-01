@@ -42,6 +42,9 @@ These rules ensure maintainability, safety, and developer velocity.
 - **C-17 (SHOULD NOT)** Use imperative loops (`for`, `while`, `do…while`) when `.map()`, `.filter()`, `.reduce()`, or `pipe()` express the intent more clearly. Reach for declarative iteration first.
 - **C-18 (SHOULD NOT)** Use the `this` keyword in domain code. Domain logic is built from standalone arrow functions; `this` may appear only in Web Component lifecycle methods (e.g. `connectedCallback`) where the platform requires it.
 - **C-19 (SHOULD NOT)** Declare module-level mutable state. Modules export `const` bindings and pure functions only — no top-level `let` reassignment, no `var`, no exported mutable objects. Shared mutable state lives in `GameState` (per A-6). A local `let` inside a single function as an accumulator is acceptable but `.reduce()` is usually clearer.
+- **C-20 (MUST)** Keep functions ≤ 50 lines.
+- **C-21 (MUST)** Keep functions to ≤ 10 statements.
+- **C-22 (MUST)** Do not use magic numbers. Give domain numbers intent-revealing names as constants.
 
 ---
 
@@ -57,7 +60,7 @@ These rules ensure maintainability, safety, and developer velocity.
 - **O-8 (MUST)** If you need to explain it, it's too complex
 - **O-9 (MUST)** DRY — eliminate duplication via abstraction once the same logic appears in three places (Rule of Three). Two near-identical blocks may stay until the third confirms the pattern.
 - **O-10 (MUST)** KISS — choose the boring, obvious approach. Cleverness is a defect; if a colleague has to ask "why is it like this?", simplify.
-- **O-11 (SHOULD)** Keep files ≤ ~200 lines (Small Files Principle). Files larger than this almost always hide a missing module boundary.
+- **O-11 (MUST)** Keep files ≤ 300 lines, and target ~200 lines where practical (Small Files Principle). Files larger than this almost always hide a missing module boundary (in rare cases, ask for permission to create larger files).
 - **O-12 (MUST)** One responsibility per file (extends O-6 from per-function to per-file). The file's name is its contract — if you can't pick a precise name, the file does too much.
 
 #### Technical Standards
@@ -214,7 +217,7 @@ The repo is a pnpm monorepo. Package-specific rules auto-load from `packages/<pa
 | `@bruff/game`          | Roguelike game logic — pure layered architecture (`core/state/input/render/effects`) | `packages/game/AGENTS.override.md`         |
 | `@bruff/game-element`  | Imperative shell — Web Component base class that mounts the canvas                   | `packages/game-element/AGENTS.override.md` |
 | `@bruff/arcade`        | E2E host — Vite app + Playwright tests across desktop/mobile browsers                | `packages/arcade/AGENTS.override.md`       |
-| `@bruff/sigil`         | Development-only font glyph JSON extraction tool                                     | `packages/sigil/AGENTS.override.md`        |
+| `@bruff/sigil`         | Development-only font glyph extraction, glyph mapping, and license JSON tool         | `packages/sigil/AGENTS.override.md`        |
 | `@bruff/utils`         | Shared utilities — universal root helpers plus explicit DOM subpath services         | `packages/utils/AGENTS.override.md`        |
 | `@bruff/cli`           | Terminal shell spike — ANSI mock renderer with injected stdin/stdout boundaries      | `packages/cli/AGENTS.override.md`          |
 | `@bruff/eslint-config` | Shared ESLint flat config                                                            | (none — config-only package)               |

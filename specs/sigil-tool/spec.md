@@ -33,6 +33,7 @@ The `<tool-sigil>` web component must remain a small plain Web Component coordin
 - Uploading, clearing, and replacing font files must keep the same behaviour after component composition refactors.
 - Character input, glyph extraction, missing-glyph errors, editable glyph names, invalid-name handling, empty glyph output handling, and `sigil.json` downloads must keep the same behaviour after component composition refactors.
 - Uploaded font previews must continue using a browser `FontFace` and must continue releasing preview resources when replaced or disconnected.
+- Pending preview-font loads must be ignored after the component disconnects, including avoiding late `document.fonts.add(...)` calls and late preview-loaded callbacks.
 
 ## Out of scope
 
@@ -99,6 +100,7 @@ The `<tool-sigil>` web component must remain a small plain Web Component coordin
 - WOFF2 file: explicitly rejected with a typed unsupported-format error.
 - Rapid font reselection: stale parse or preview completions from older selections must not overwrite the latest selected font, errors, previews, or extracted glyphs.
 - Stale preview-font rejection: a rejected preview-font load from an older selection must not clear a newer preview.
+- Disconnected component with pending preview load: if `FontFace.load()` resolves after disconnect, the preview resource must not install the font or call back into the component.
 - Clearing the file input: clears parsed font state, extraction results, errors, and preview font resources.
 - Very large character input: extraction is bounded by the number of distinct code points and should keep the UI responsive for typical icon-font use.
 - Glyph with no contours: included only if it is a valid mapped glyph, with empty path data and zero bounds.
@@ -112,3 +114,4 @@ The `<tool-sigil>` web component must remain a small plain Web Component coordin
 - **P2 — Render previews with the uploaded font.** Preview glyphs must use the selected font so icon fonts, private-use glyphs, and fonts with non-system shapes can be visually confirmed.
 - **P2 — Ignore stale font-load completions.** If a second font is selected before the first parse completes, only the latest selection may update component state.
 - **P2 — Preserve glyph-name input focus while typing.** Typing a name longer than one character must not require repeatedly clicking back into the same input after every keystroke.
+- **P2 — Ignore pending preview-font loads after disconnect.** If the component disconnects before `FontFace.load()` resolves, the preview resource must invalidate the pending load so it cannot install a font or render into a detached shadow root.

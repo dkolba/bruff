@@ -7,6 +7,8 @@ import {
   type PreviewFontState,
 } from "./preview-font.js";
 
+const NEXT_FONT_LOAD_TOKEN_OFFSET = 1;
+
 /** Callbacks emitted by the preview font resource owner. */
 export type ToolSigilPreviewResourceHandlers = Readonly<{
   onPreviewFontCleared: (fontLoadToken: number) => void;
@@ -33,6 +35,7 @@ export const createToolSigilPreviewResource = (
   let currentFontLoadToken = 0;
 
   const clear = (): void => {
+    currentFontLoadToken += NEXT_FONT_LOAD_TOKEN_OFFSET;
     previewFontState = clearPreviewFontFace(previewFontState);
   };
 

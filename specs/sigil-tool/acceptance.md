@@ -41,6 +41,7 @@
 - Given character input changes after the refactor, then glyph extraction, missing-glyph errors, editable glyph names, invalid-name validation, empty output handling, and `sigil.json` downloads match the previous behaviour.
 - Given a preview-font load or parse completion from an older file selection resolves or rejects after a newer selection, then it does not overwrite or clear the newer preview, errors, extracted glyph rows, or downloadable JSON.
 - Given the component disconnects after the refactor, then browser font resources and object URLs are still released at their existing boundaries.
+- Given the component disconnects while a preview `FontFace.load()` is still pending, then the late completion does not install a font, call the preview-loaded callback, or render into the detached component.
 
 ## Download acceptance
 
@@ -62,6 +63,8 @@
 - 2026-05-18 — `pnpm --filter @bruff/arcade run build` passed, including `check-bundle-clean` rejecting none of `__bruffTestApi`, `tool-sigil`, `@bruff/sigil`, `opentype`, or `dev-tools-router` in production assets.
 - 2026-05-18 — `npm run ok` passed after the final review updates: workspace format, lint, tests, typecheck, and build all completed successfully.
 - 2026-05-18 — Review follow-up tasks T31-T40 are implemented and verified: partial extraction preserves valid drafts, previews use the uploaded font, stale font parse/preview completions are ignored, and glyph-name input focus is preserved while typing multi-character names.
+- 2026-06-01 — Added T46 preview-resource disconnect coverage and verified the focused Chromium regression: `pnpm --filter @bruff/sigil exec vitest run --browser=chromium module/tool-sigil-preview-resource.test.ts`.
+- 2026-06-01 — Verified the disconnect fix with `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run typecheck`, `pnpm --filter @bruff/sigil run test`, and repo-wide `pnpm run lint`.
 - Production source maps remain emitted, but source contents are excluded so dev-only route source text is not embedded in production assets.
 
 ## Component composition verification checklist
