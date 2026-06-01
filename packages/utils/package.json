@@ -14,7 +14,7 @@
     "lint": "eslint",
     "test:watch": "vitest",
     "test": "pnpm run test:chromium && pnpm run test:firefox && pnpm run test:webkit",
-    "test:node": "vitest run --config vitest.node.config.ts",
+    "test:node": "vitest run --config vitest.node.config.ts --coverage",
     "test:chromium": "vitest run --browser=chromium --coverage ",
     "test:firefox": "vitest run --browser=firefox",
     "test:webkit": "vitest run --browser=webkit",

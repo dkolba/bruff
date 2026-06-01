@@ -1,14 +1,11 @@
-import {
-  brand,
-  clamp,
-  createPrng,
-  getCardinalDirection,
-  log,
-  ok,
-  onLog,
-  pipe,
-} from "@bruff/utils";
 import { describe, expect, it } from "vitest";
+import { pipe } from "./fp/pipe";
+import { clamp } from "./math/clamp";
+import { getCardinalDirection } from "./direction/get-cardinal-direction";
+import { ok } from "./fp/result";
+import { brand } from "./types/brand";
+import { createPrng } from "./fp/prng";
+import { log, onLog } from "./event-bus/event-bus";
 
 const ONE = 1;
 const TWO = 2;
