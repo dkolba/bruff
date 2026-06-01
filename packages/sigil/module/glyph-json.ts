@@ -44,6 +44,7 @@ export type SigilExtractionError = Readonly<{
     | "empty-license-catalog"
     | "empty-input"
     | "invalid-font"
+    | "invalid-glyph-json"
     | "invalid-glyph-name"
     | "missing-license"
     | "missing-glyph"

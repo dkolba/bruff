@@ -2,7 +2,7 @@
 - [x] T2 — Implement Sigil glyph JSON schemas and parser in `packages/contracts/module/sigil-glyph-json.ts` and `packages/contracts/index.ts`.
 - [x] T3 — Add `@bruff/contracts` to `packages/sigil/package.json`.
 - [x] T4 — Refactor `packages/sigil/module/glyph-json.ts` to re-export contract-owned payload types.
-- [ ] T5 — Add Sigil map validation tests in `packages/sigil/module/glyph-name.test.ts`.
-- [ ] T6 — Validate produced glyph maps through `parseSigilGlyphMap` in `packages/sigil/module/glyph-name.ts`.
+- [x] T5 — Add Sigil map validation tests in `packages/sigil/module/glyph-name.test.ts`.
+- [x] T6 — Validate produced glyph maps through `parseSigilGlyphMap` in `packages/sigil/module/glyph-name.ts`.
 - [ ] T7 — Update `packages/contracts/README.md`, `packages/contracts/AGENTS.override.md`, and `packages/sigil/README.md` for the new contract boundary.
 - [ ] T8 — Review `specs/sigil-glyph-contracts/spec.md` and `specs/sigil-glyph-contracts/design.md`, then record final verification.
