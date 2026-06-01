@@ -5,7 +5,7 @@ import {
   RANGE_SCALE,
   ROTATION_SPEED,
   TWO,
-} from "../constants";
+} from "../../constants";
 import { describe, expect, it, vi } from "vitest";
 import { radiatingBarsBackgroundAnimation } from "./radiating-bars-background-animation";
 

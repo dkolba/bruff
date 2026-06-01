@@ -1,5 +1,5 @@
 import { beforeEach, expect, test } from "vitest";
-import { error, ok } from "./fp/result.js";
+import { error, ok } from "../universal/fp/result.js";
 import { getShadowGameRoot } from "./get-shadow-game-root.js";
 
 let gameElement: HTMLElement = document.createElement("div");

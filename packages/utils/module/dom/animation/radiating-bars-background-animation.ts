@@ -9,8 +9,8 @@ import {
   ROTATION_SPEED,
   TWO,
   ZERO,
-} from "../constants.js";
-import { hsla } from "../color/hsla.js";
+} from "../../constants.js";
+import { hsla } from "../../universal/color/hsla.js";
 
 /**
  * Draws a single bar with color shifting based on position.

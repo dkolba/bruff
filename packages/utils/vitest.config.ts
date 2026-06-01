@@ -23,7 +23,7 @@ export default defineConfig({
         "eslint.config.js",
         "**/*.d.ts",
       ],
-      include: ["module/**/*.ts"],
+      include: ["module/dom/**/*.ts"],
       thresholds: {
         branches: 100,
         functions: 100,
@@ -32,7 +32,7 @@ export default defineConfig({
       },
     },
     exclude: ["**/*.node.test.ts"],
-    include: ["**/*.test.ts"], // Match test files
+    include: ["**/*.dom.test.ts"], // Match test files
     isolate: true,
   },
 });

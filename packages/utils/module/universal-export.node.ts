@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { pipe } from "./fp/pipe";
-import { clamp } from "./math/clamp";
-import { getCardinalDirection } from "./direction/get-cardinal-direction";
-import { ok } from "./fp/result";
-import { brand } from "./types/brand";
-import { createPrng } from "./fp/prng";
-import { log, onLog } from "./event-bus/event-bus";
+import { pipe } from "./universal/fp/pipe";
+import { clamp } from "./universal/math/clamp";
+import { getCardinalDirection } from "./universal/direction/get-cardinal-direction";
+import { ok } from "./universal/fp/result";
+import { brand } from "./universal/types/brand";
+import { createPrng } from "./universal/fp/prng";
+import { log, onLog } from "./universal/event-bus/event-bus";
 
 const ONE = 1;
 const TWO = 2;

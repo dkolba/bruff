@@ -1,4 +1,4 @@
-import { error, ok, type Result } from "./fp/result.js";
+import { error, ok, type Result } from "../universal/fp/result.js";
 
 /**
  * Gets the game's shadow root
