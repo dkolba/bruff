@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import type { Result } from "@bruff/utils";
 import {
   parseSharedObject,
-  sharedObjectSchema,
   type ParseSharedObjectError,
   type SharedObject,
+  sharedObjectSchema,
 } from "@bruff/contracts";
+import { type Result } from "@bruff/utils";
 
 const VALID_SHARED_OBJECT = { kind: "contract" };
 const INVALID_SHARED_OBJECT = { kind: "" };

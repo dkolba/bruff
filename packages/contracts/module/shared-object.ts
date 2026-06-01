@@ -1,12 +1,13 @@
+import { type core, z } from "zod";
 import { error, ok, type Result } from "@bruff/utils";
-import { z } from "zod";
-import type { core } from "zod";
+
+const MIN_SHARED_OBJECT_KIND_LENGTH = 1;
 
 /**
  * Runtime schema for a minimal shared object contract.
  */
 export const sharedObjectSchema = z.object({
-  kind: z.string().min(1),
+  kind: z.string().min(MIN_SHARED_OBJECT_KIND_LENGTH),
 });
 
 /**

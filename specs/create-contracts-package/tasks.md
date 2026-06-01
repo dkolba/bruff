@@ -9,7 +9,7 @@
 - [x] T7 — Add `packages/contracts/README.md` documenting exports, commands, and the no-consumer-migration boundary
 - [x] T8 — Add `packages/contracts/AGENTS.override.md` documenting contracts package rules
 - [x] T9 — Run `pnpm --filter @bruff/contracts run format`
-- [ ] T10 — Run `pnpm --filter @bruff/contracts run lint`
+- [x] T10 — Run `pnpm --filter @bruff/contracts run lint`
 - [ ] T11 — Run `pnpm --filter @bruff/contracts run typecheck`
 - [ ] T12 — Run `pnpm --filter @bruff/contracts run test`
 - [ ] T13 — Run root `pnpm run ok`
