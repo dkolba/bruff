@@ -10,6 +10,6 @@
 - [x] T8 — Add `packages/contracts/AGENTS.override.md` documenting contracts package rules
 - [x] T9 — Run `pnpm --filter @bruff/contracts run format`
 - [x] T10 — Run `pnpm --filter @bruff/contracts run lint`
-- [ ] T11 — Run `pnpm --filter @bruff/contracts run typecheck`
+- [x] T11 — Run `pnpm --filter @bruff/contracts run typecheck`
 - [ ] T12 — Run `pnpm --filter @bruff/contracts run test`
 - [ ] T13 — Run root `pnpm run ok`
