@@ -1,4 +1,4 @@
-import { error, ok, type Result } from "../../universal/fp/result.js";
+import { error, ok, type Result } from "../../universal/fp/result.ts";
 
 /**
  * Gets the 2D rendering context from a canvas element.

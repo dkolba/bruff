@@ -1,5 +1,5 @@
-import type { LogEvent } from "./log-event";
-import type { LogLevel } from "./log-level";
+import type { LogEvent } from "./log-event.ts";
+import type { LogLevel } from "./log-level.ts";
 
 type ConsoleLogSink = (...messages: ReadonlyArray<unknown>) => void;
 

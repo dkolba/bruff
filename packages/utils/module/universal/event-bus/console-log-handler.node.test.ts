@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { consoleLogHandler } from "./console-log-handler";
+import { consoleLogHandler } from "./console-log-handler.ts";
 
 const EXPECTED_CALL_COUNT = 1;
 const CONTEXT_ID = 1;

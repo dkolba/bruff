@@ -1,4 +1,4 @@
-import { log } from "../../universal/event-bus/event-bus.js";
+import { log } from "../../universal/event-bus/event-bus.ts";
 
 /**
  * Logs that the element has been resized

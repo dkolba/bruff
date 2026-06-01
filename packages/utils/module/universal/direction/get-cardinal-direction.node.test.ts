@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getCardinalDirection } from "./get-cardinal-direction.js";
+import { getCardinalDirection } from "./get-cardinal-direction.ts";
 
 const ZERO = 0;
 const ONE = 1;

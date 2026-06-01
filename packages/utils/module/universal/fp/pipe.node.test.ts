@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { pipe } from "./pipe.js";
+import { pipe } from "./pipe.ts";
 
 const ONE = 1;
 const TWO = 2;

@@ -1,7 +1,7 @@
 export { log, onLog } from "./module/universal/event-bus/event-bus.ts";
 export type { LogEvent } from "./module/universal/event-bus/log-event.ts";
 export type { LogLevel } from "./module/universal/event-bus/log-level.ts";
-export { consoleLogHandler } from "./module/universal/event-bus/console-log-handler.js";
+export { consoleLogHandler } from "./module/universal/event-bus/console-log-handler.ts";
 export {
   flatMapOption,
   isNone,

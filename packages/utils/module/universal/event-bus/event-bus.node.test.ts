@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { log, onLog } from "./event-bus";
+import { log, onLog } from "./event-bus.ts";
 
 const EXPECTED_CALL_COUNT = 1;
 const FIRST_CALL_INDEX = 0;

@@ -5,9 +5,9 @@ import {
   RANGE_SCALE,
   ROTATION_SPEED,
   TWO,
-} from "../../constants";
+} from "../../constants.ts";
 import { describe, expect, it, vi } from "vitest";
-import { radiatingBarsBackgroundAnimation } from "./radiating-bars-background-animation";
+import { radiatingBarsBackgroundAnimation } from "./radiating-bars-background-animation.ts";
 
 // Test constants
 const TEST_CANVAS_WIDTH = 800;

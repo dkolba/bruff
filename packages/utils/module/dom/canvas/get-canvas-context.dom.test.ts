@@ -1,6 +1,6 @@
 import { beforeEach, expect, test, vi } from "vitest";
-import { error, ok } from "../../universal/fp/result.js";
-import { getCanvasContext } from "./get-canvas-context.js";
+import { error, ok } from "../../universal/fp/result.ts";
+import { getCanvasContext } from "./get-canvas-context.ts";
 
 let canvas: HTMLCanvasElement = document.createElement("canvas");
 

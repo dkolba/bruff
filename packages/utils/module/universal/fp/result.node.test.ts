@@ -9,7 +9,7 @@ import {
   ok,
   type Result,
   unwrapOr,
-} from "./result.js";
+} from "./result.ts";
 
 const SAMPLE_VALUE = 42;
 const SAMPLE_REASON = "not-found";

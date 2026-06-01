@@ -1,6 +1,6 @@
 import { beforeEach, expect, test } from "vitest";
-import { error, ok } from "../../universal/fp/result.js";
-import { getCanvas } from "./get-canvas.js";
+import { error, ok } from "../../universal/fp/result.ts";
+import { getCanvas } from "./get-canvas.ts";
 
 let root: ShadowRoot = document
   .createElement("div")

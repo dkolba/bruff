@@ -1,4 +1,4 @@
-import { createPrng, nextId, nextNumber, type PrngState } from "./prng.js";
+import { createPrng, nextId, nextNumber, type PrngState } from "./prng.ts";
 import { describe, expect, it } from "vitest";
 
 const SEED_ONE = 42;

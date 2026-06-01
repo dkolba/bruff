@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hsla } from "./hsla.js";
+import { hsla } from "./hsla.ts";
 
 const testRed = (): void =>
   expect(

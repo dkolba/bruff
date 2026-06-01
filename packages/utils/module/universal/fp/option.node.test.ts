@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { error, ok } from "./result.js";
+import { error, ok } from "./result.ts";
 import {
   flatMapOption,
   isNone,
@@ -9,7 +9,7 @@ import {
   type Option,
   some,
   toResult,
-} from "./option.js";
+} from "./option.ts";
 
 const SAMPLE_VALUE = 42;
 const SAMPLE_REASON = "missing";
