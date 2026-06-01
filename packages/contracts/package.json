@@ -1,0 +1,33 @@
+{
+  "name": "@bruff/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "type": "module",
+  "main": "index.ts",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint",
+    "test:watch": "vitest",
+    "test": "pnpm run test:chromium && pnpm run test:firefox && pnpm run test:webkit",
+    "test:chromium": "vitest run --browser=chromium --coverage",
+    "test:firefox": "vitest run --browser=firefox",
+    "test:webkit": "vitest run --browser=webkit",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@bruff/eslint-config": "workspace:0.0.0",
+    "@vitest/browser": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "eslint": "catalog:",
+    "playwright": "catalog:",
+    "prettier": "catalog:",
+    "rimraf": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
