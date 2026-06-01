@@ -4,6 +4,8 @@ import type {
   SigilGlyph,
   SigilGlyphDraft,
   SigilGlyphMap,
+  SigilGlyphMapping,
+  SigilSourceGlyph,
 } from "./glyph-json.js";
 
 const EMPTY_NAME_LENGTH = 0;
@@ -16,6 +18,12 @@ type GlyphMapState = Readonly<{
   errors: ReadonlyArray<SigilExtractionError>;
   glyphMap: SigilGlyphMap;
   glyphNames: ReadonlySet<string>;
+}>;
+
+/** Mapping and license selections keyed by source Unicode character. */
+export type SigilGlyphMapSelection = Readonly<{
+  licensesByUnicode: Readonly<Record<string, string>>;
+  mappedGlyphsByUnicode: Readonly<Record<string, SigilGlyphMapping>>;
 }>;
 
 const createInitialGlyphMapState = (): GlyphMapState => ({
@@ -71,18 +79,46 @@ const addGlyphToMap = (
   [glyphName]: glyph,
 });
 
+/**
+ * Combines source glyph data with the selected shared glyph mapping.
+ *
+ * @param sourceGlyph - Extracted source-font glyph data
+ * @param mappedGlyph - Selected `@bruff/glyph` mapping
+ * @param license - Selected machine-readable license value
+ * @returns Downloadable sigil glyph payload
+ */
+export const createSigilGlyph = (
+  sourceGlyph: SigilSourceGlyph,
+  mappedGlyph: SigilGlyphMapping,
+  license: string,
+): SigilGlyph => ({
+  ...sourceGlyph,
+  LICENSE: license,
+  mappedGlyph,
+});
+
 const applyGlyphDraft =
-  (namesByUnicode: Readonly<Record<string, string>>) =>
+  (
+    namesByUnicode: Readonly<Record<string, string>>,
+    selection: SigilGlyphMapSelection,
+  ) =>
   (state: GlyphMapState, draft: SigilGlyphDraft): GlyphMapState => {
     const glyphName = namesByUnicode[draft.glyph.unicode] ?? draft.defaultName;
     const errors = glyphNameErrors(glyphName, state.glyphNames);
     const hasErrors = errors.length !== EMPTY_ERROR_COUNT;
+    const glyphMapping = selection.mappedGlyphsByUnicode[draft.glyph.unicode];
+    const license = selection.licensesByUnicode[draft.glyph.unicode];
 
     return {
       errors: [...state.errors, ...errors],
-      glyphMap: hasErrors
-        ? state.glyphMap
-        : addGlyphToMap(state.glyphMap, glyphName, draft.glyph),
+      glyphMap:
+        hasErrors || glyphMapping === undefined || license === undefined
+          ? state.glyphMap
+          : addGlyphToMap(
+              state.glyphMap,
+              glyphName,
+              createSigilGlyph(draft.glyph, glyphMapping, license),
+            ),
       glyphNames: new Set([...state.glyphNames, glyphName]),
     };
   };
@@ -92,14 +128,16 @@ const applyGlyphDraft =
  *
  * @param drafts - Extracted glyph drafts
  * @param namesByUnicode - Edited names keyed by source Unicode character
+ * @param selection - Selected mapped glyphs and licenses keyed by source Unicode
  * @returns Glyph map result or validation errors
  */
 export const createSigilGlyphMap = (
   drafts: ReadonlyArray<SigilGlyphDraft>,
   namesByUnicode: Readonly<Record<string, string>>,
+  selection: SigilGlyphMapSelection,
 ): Result<SigilGlyphMap, ReadonlyArray<SigilExtractionError>> => {
   const glyphMapState = drafts.reduce(
-    applyGlyphDraft(namesByUnicode),
+    applyGlyphDraft(namesByUnicode, selection),
     createInitialGlyphMapState(),
   );
 

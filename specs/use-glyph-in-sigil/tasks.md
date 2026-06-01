@@ -1,0 +1,28 @@
+# Use Glyph in Sigil — Tasks
+
+- [x] T1 — Add failing catalog projection tests in `packages/sigil/module/glyph-catalog.test.ts` for group ordering, option labels, and representative `@bruff/glyph` entries.
+- [x] T2 — Implement `packages/sigil/module/glyph-catalog.ts` and add `@bruff/glyph` to `packages/sigil/package.json`.
+- [x] T3 — Add failing OSI license catalog tests in `packages/sigil/module/osi-license-catalog.test.ts` for non-empty normalized options, unique values, and representative SPDX IDs.
+- [x] T4 — Add `packages/sigil/scripts/generate-osi-license-catalog.mjs`, wire a package script in `packages/sigil/package.json`, and generate `packages/sigil/module/osi-license-catalog.ts`.
+- [x] T5 — Add failing JSON type and map tests in `packages/sigil/module/glyph-name.test.ts` for `mappedGlyph` and exact `"LICENSE"` output fields.
+- [x] T6 — Extend `packages/sigil/module/glyph-json.ts` and `packages/sigil/module/glyph-name.ts` to include selected glyph mapping and license fields in downloadable entries.
+- [x] T7 — Add failing state tests in `packages/sigil/module/tool-sigil-state.test.ts` for staged group selection, individual glyph selection, and invalid glyph clearing when a group changes.
+- [x] T8 — Implement staged glyph mapping state transitions and selectors in `packages/sigil/module/tool-sigil-state.ts`.
+- [x] T9 — Add failing state tests in `packages/sigil/module/tool-sigil-state.test.ts` for license selection, `lastSelectedLicense`, and defaulting newly extracted rows to the last selected license.
+- [x] T10 — Implement license state transitions, license validation, and download-disabled selection in `packages/sigil/module/tool-sigil-state.ts`.
+- [x] T11 — Add failing binding tests in `packages/sigil/module/tool-sigil-bindings.test.ts` for glyph group, glyph option, and license select change events.
+- [x] T12 — Wire select event delegation in `packages/sigil/module/tool-sigil-bindings.ts`.
+- [x] T13 — Add failing render tests in `packages/sigil/module/tool-sigil.test.ts` for staged glyph group selects and filtered glyph selects.
+- [x] T14 — Render staged glyph group and filtered glyph selects in `packages/sigil/module/tool-sigil-render.ts`.
+- [x] T15 — Add failing render tests in `packages/sigil/module/tool-sigil.test.ts` for OSI license select options and default license selection.
+- [x] T16 — Render license selects and current license values in `packages/sigil/module/tool-sigil-render.ts`.
+- [x] T17 — Add failing component integration tests in `packages/sigil/module/tool-sigil.test.ts` for selecting one glyph and one license per emoji row.
+- [x] T18 — Wire glyph group, glyph selection, and license handlers through `packages/sigil/module/tool-sigil.ts`.
+- [x] T19 — Add failing component integration tests in `packages/sigil/module/tool-sigil.test.ts` for disabling download until every row has a selected glyph and license.
+- [x] T20 — Wire final download eligibility and visible validation errors through `packages/sigil/module/tool-sigil-state.ts` and `packages/sigil/module/tool-sigil-render.ts`.
+- [x] T21 — Add failing component download tests in `packages/sigil/module/tool-sigil.test.ts` for JSON entries containing source `unicode`, `mappedGlyph`, and exact `"LICENSE"` values.
+- [x] T22 — Update JSON download selection in `packages/sigil/module/tool-sigil-state.ts` so downloaded entries include the selected glyph mapping and license.
+- [x] T23 — Add failing focus-preservation tests in `packages/sigil/module/tool-sigil-focus.test.ts` for changing selects without recreating the active row unexpectedly.
+- [x] T24 — Preserve focused row controls while rerendering validation and select state in `packages/sigil/module/tool-sigil-render.ts`.
+- [x] T25 — Update `packages/sigil/README.md` to document the emoji-to-`@bruff/glyph` mapping workflow and OSI license catalog refresh command.
+- [x] T26 — Run `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run typecheck`, and `pnpm --filter @bruff/sigil run test`.

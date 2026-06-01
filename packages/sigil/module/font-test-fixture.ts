@@ -2,8 +2,10 @@ import { Font, Glyph, Path } from "opentype.js";
 
 const ORIGIN = 0;
 const STAR_CODE_POINT = 0x26_05;
+const HEART_CODE_POINT = 0x26_65;
 const NOTDEF_INDEX = 0;
 const STAR_ADVANCE_WIDTH = 600;
+const HEART_ADVANCE_WIDTH = 500;
 const NOTDEF_ADVANCE_WIDTH = 300;
 const DESCENDER = -200;
 
@@ -29,6 +31,17 @@ const createNotdefGlyph = (): Glyph =>
     path: new Path(),
   });
 
+const createHeartPath = (): Path => {
+  const path = new Path();
+
+  path.moveTo(ORIGIN, ORIGIN);
+  path.lineTo(HEART_ADVANCE_WIDTH, ORIGIN);
+  path.lineTo(HEART_ADVANCE_WIDTH, TEST_FONT_UNITS_PER_EM);
+  path.closePath();
+
+  return path;
+};
+
 /**
  * Creates a tiny valid font for browser file-upload tests.
  *
@@ -46,6 +59,12 @@ export const createTestFont = (): Font =>
         name: "star",
         path: createStarPath(),
         unicode: STAR_CODE_POINT,
+      }),
+      new Glyph({
+        advanceWidth: HEART_ADVANCE_WIDTH,
+        name: "heart",
+        path: createHeartPath(),
+        unicode: HEART_CODE_POINT,
       }),
     ],
     styleName: "Regular",

@@ -9,6 +9,7 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
     background: Canvas;
     font-family: system-ui, sans-serif;
     text-align: left;
+    height: 100%;
   }
 
   *,
@@ -18,8 +19,10 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
   }
 
   section {
+    height: inherit;
     max-width: 56rem;
     margin: 0 auto;
+    overflow-y: auto;
   }
 
   h1 {
@@ -31,6 +34,7 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
   p,
   label,
   input,
+  select,
   textarea,
   button {
     font: inherit;
@@ -54,6 +58,7 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
   }
 
   input,
+  select,
   textarea,
   button {
     border: 1px solid color-mix(in srgb, CanvasText 45%, Canvas);
@@ -90,7 +95,7 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
 
   .glyph-row {
     display: grid;
-    grid-template-columns: minmax(2rem, auto) minmax(0, 1fr);
+    grid-template-rows: minmax(2rem, auto) repeat(4, minmax(0, 1fr));
     gap: 0.75rem;
     align-items: end;
   }
