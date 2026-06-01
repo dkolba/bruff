@@ -18,6 +18,10 @@
     "test:webkit": "vitest run --browser=webkit",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@bruff/utils": "workspace:0.0.0",
+    "zod": "catalog:"
+  },
   "devDependencies": {
     "@bruff/eslint-config": "workspace:0.0.0",
     "@vitest/browser": "catalog:",

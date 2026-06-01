@@ -1,7 +1,7 @@
 # Create Contracts Package Tasks
 
 - [x] T1 — Add `packages/contracts/package.json`, `packages/contracts/tsconfig.json`, `packages/contracts/eslint.config.js`, and `packages/contracts/vitest.config.ts`
-- [ ] T2 — Add `zod` to `pnpm-workspace.yaml` catalog and `packages/contracts/package.json` dependencies
+- [x] T2 — Add `zod` to `pnpm-workspace.yaml` catalog and `packages/contracts/package.json` dependencies
 - [ ] T3 — Add empty public export files `packages/contracts/index.ts` and `packages/contracts/module/shared-object.ts`
 - [ ] T4 — Add failing parser tests in `packages/contracts/module/shared-object.test.ts`
 - [ ] T5 — Implement `sharedObjectSchema`, `SharedObject`, `ParseSharedObjectError`, and `parseSharedObject` in `packages/contracts/module/shared-object.ts`
