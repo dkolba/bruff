@@ -6,6 +6,7 @@ import {
   renameGlyph,
   requireElement,
   requireShadowRoot,
+  selectDefaultMappingAndLicense,
   selectFiles,
   waitForComponentUpdate,
   waitForElement,
@@ -137,21 +138,17 @@ const selectNewerFont = (shadowRoot: ShadowRoot): void => {
   selectFiles(fileInput, [createValidFontFile("newer.ttf")]);
 };
 
-const expectNewerFontSelectionState = (shadowRoot: ShadowRoot): void => {
+const expectNewerFontSelectionState = async (
+  shadowRoot: ShadowRoot,
+): Promise<void> => {
+  const glyphNameInput = await waitForElement<HTMLInputElement>(
+    shadowRoot,
+    'input[data-unicode="★"]',
+  );
+
   expect(shadowRoot.textContent).toContain("newer.ttf");
   expect(shadowRoot.textContent).not.toContain('Missing glyph for "★".');
-  expect(
-    requireElement<HTMLInputElement>(shadowRoot, 'input[data-unicode="★"]')
-      .value,
-  ).toBe("u2605");
-};
-
-const enterGlyphNameText = (
-  glyphNameInput: HTMLInputElement,
-  glyphName: string,
-): void => {
-  glyphNameInput.value = glyphName;
-  glyphNameInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
+  expect(glyphNameInput.value).toBe("u2605");
 };
 
 export const appendToolSigilWithShadowRoot = (): Readonly<{
@@ -163,16 +160,20 @@ export const appendToolSigilWithShadowRoot = (): Readonly<{
   return { element, shadowRoot: requireShadowRoot(element) };
 };
 
-const expectMissingGlyphAlert = (shadowRoot: ShadowRoot): void => {
-  const alert = requireElement<HTMLElement>(shadowRoot, '[role="alert"]');
+const expectMissingGlyphAlert = async (
+  shadowRoot: ShadowRoot,
+): Promise<void> => {
+  const alert = await waitForElement<HTMLElement>(shadowRoot, '[role="alert"]');
   expect(alert.textContent).toContain('Missing glyph for "?".');
 };
 
-const expectStarGlyphRow = (shadowRoot: ShadowRoot): void => {
-  expect(
-    requireElement<HTMLInputElement>(shadowRoot, 'input[data-unicode="★"]')
-      .value,
-  ).toBe("u2605");
+const expectStarGlyphRow = async (shadowRoot: ShadowRoot): Promise<void> => {
+  const glyphNameInput = await waitForElement<HTMLInputElement>(
+    shadowRoot,
+    'input[data-unicode="★"]',
+  );
+
+  expect(glyphNameInput.value).toBe("u2605");
 };
 
 const requirePartialExtractionBlob = (urlStubs: CreatedBlobState): Blob => {
@@ -189,8 +190,9 @@ export const expectPartialGlyphJsonDownload = async (
   urlStubs: CreatedBlobState,
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, "★?");
-  expectMissingGlyphAlert(shadowRoot);
-  expectStarGlyphRow(shadowRoot);
+  await expectMissingGlyphAlert(shadowRoot);
+  await expectStarGlyphRow(shadowRoot);
+  selectDefaultMappingAndLicense(shadowRoot, "★");
   renameGlyph(shadowRoot, "★", "customStar");
   clickDownload(shadowRoot);
 
@@ -204,6 +206,7 @@ export const expectUploadedFontPreview = async (
   shadowRoot: ShadowRoot,
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, "★");
+  selectDefaultMappingAndLicense(shadowRoot, "★");
   await waitForComponentUpdate();
 
   const preview = requireElement<HTMLElement>(shadowRoot, ".glyph-preview");
@@ -220,12 +223,12 @@ const expectNewerFontSelectionWithFontFaceStub = async (
     const { deferredFontBuffer, staleFontBuffer } =
       await loadDelayedStaleFontSelection(shadowRoot);
     selectNewerFont(shadowRoot);
-    await waitForComponentUpdate();
+    await expectNewerFontSelectionState(shadowRoot);
 
     deferredFontBuffer.resolve(staleFontBuffer);
     await waitForComponentUpdate();
 
-    expectNewerFontSelectionState(shadowRoot);
+    await expectNewerFontSelectionState(shadowRoot);
   } finally {
     restoreFontFace();
   }
@@ -243,26 +246,3 @@ export const expectRejectedStalePreviewLoadIgnored = (
     shadowRoot,
     stubRejectedFontFaceLoad,
   );
-
-export const expectGlyphNameInputFocusPreserved = async (
-  shadowRoot: ShadowRoot,
-): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-
-  const glyphNameInput = await waitForElement<HTMLInputElement>(
-    shadowRoot,
-    'input[data-unicode="★"]',
-  );
-  glyphNameInput.focus();
-
-  enterGlyphNameText(glyphNameInput, "c");
-  await waitForComponentUpdate();
-
-  expect(shadowRoot.activeElement).toBe(glyphNameInput);
-
-  enterGlyphNameText(glyphNameInput, "cu");
-  await waitForComponentUpdate();
-
-  expect(shadowRoot.activeElement).toBe(glyphNameInput);
-  expect(glyphNameInput.value).toBe("cu");
-};

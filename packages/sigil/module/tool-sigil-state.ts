@@ -1,22 +1,30 @@
+import {
+  SIGIL_GLYPH_GROUPS,
+  type SigilGlyphGroupName,
+} from "./glyph-catalog.js";
+import type { SigilExtractionError, SigilGlyphMapping } from "./glyph-json.js";
 import type {
-  SigilExtractionError,
-  SigilGlyphDraft,
-  SigilGlyphMap,
-} from "./glyph-json.js";
-import { createSigilGlyphMap } from "./glyph-name.js";
+  ToolSigilFontSelection,
+  ToolSigilState,
+} from "./tool-sigil-state-types.js";
 import { extractSigilGlyphs } from "./extract-glyphs.js";
 import type { Font } from "opentype.js";
+import { OSI_LICENSE_OPTIONS } from "./osi-license-catalog.js";
 import type { Result } from "@bruff/utils";
+export {
+  selectToolSigilDownloadDisabled,
+  selectToolSigilDownloadGlyphMap,
+  selectToolSigilViewModel,
+  selectToolSigilVisibleErrors,
+} from "./tool-sigil-state-selectors.js";
+export type {
+  ToolSigilFontSelection,
+  ToolSigilState,
+  ToolSigilViewModel,
+} from "./tool-sigil-state-types.js";
 
-const EMPTY_COUNT = 0;
 const INITIAL_FONT_LOAD_TOKEN = 0;
 const NEXT_FONT_LOAD_TOKEN_OFFSET = 1;
-
-const glyphCountText = (drafts: ReadonlyArray<SigilGlyphDraft>): string =>
-  `Glyphs ready: ${drafts.length}`;
-
-const fileNameText = (fileName: string | undefined): string =>
-  fileName ?? "No font selected";
 
 const extractDrafts = (
   font: Font | undefined,
@@ -37,35 +45,6 @@ const extractDrafts = (
   };
 };
 
-/** Immutable state owned by the `<tool-sigil>` coordinator. */
-export type ToolSigilState = Readonly<{
-  characters: string;
-  drafts: ReadonlyArray<SigilGlyphDraft>;
-  errors: ReadonlyArray<SigilExtractionError>;
-  font: Font | undefined;
-  fontFileName: string | undefined;
-  fontLoadToken: number;
-  namesByUnicode: Readonly<Record<string, string>>;
-  previewFontFamily: string;
-}>;
-
-/** State and token returned when a new font selection starts. */
-export type ToolSigilFontSelection = Readonly<{
-  fontLoadToken: number;
-  state: ToolSigilState;
-}>;
-
-/** Render-ready projection of `ToolSigilState`. */
-export type ToolSigilViewModel = Readonly<{
-  downloadDisabled: boolean;
-  drafts: ReadonlyArray<SigilGlyphDraft>;
-  errors: ReadonlyArray<SigilExtractionError>;
-  fontFileNameText: string;
-  glyphCountText: string;
-  namesByUnicode: Readonly<Record<string, string>>;
-  previewFontFamily: string;
-}>;
-
 /** Creates the initial empty state for the sigil tool. */
 export const createToolSigilState = (): ToolSigilState => ({
   characters: "",
@@ -74,8 +53,14 @@ export const createToolSigilState = (): ToolSigilState => ({
   font: undefined,
   fontFileName: undefined,
   fontLoadToken: INITIAL_FONT_LOAD_TOKEN,
+  glyphGroups: SIGIL_GLYPH_GROUPS,
+  lastSelectedLicense: undefined,
+  licenseOptions: OSI_LICENSE_OPTIONS,
   namesByUnicode: {},
   previewFontFamily: "",
+  selectedGlyphsByUnicode: {},
+  selectedLicensesByUnicode: {},
+  stagedGlyphGroupsByUnicode: {},
 });
 
 /**
@@ -138,6 +123,80 @@ export const setToolSigilGlyphName = (
   namesByUnicode: {
     ...state.namesByUnicode,
     [unicode]: glyphName,
+  },
+});
+
+/**
+ * Selects a staged `@bruff/glyph` group for one source character.
+ *
+ * @param state - Current tool state
+ * @param unicode - Source glyph Unicode character
+ * @param groupName - Selected glyph catalog group
+ * @returns Updated tool state
+ */
+export const setToolSigilGlyphGroup = (
+  state: ToolSigilState,
+  unicode: string,
+  groupName: SigilGlyphGroupName,
+): ToolSigilState => {
+  const selectedGlyph = state.selectedGlyphsByUnicode[unicode];
+  const selectedGlyphsByUnicode =
+    selectedGlyph?.groupName === groupName
+      ? state.selectedGlyphsByUnicode
+      : Object.fromEntries(
+          Object.entries(state.selectedGlyphsByUnicode).filter(
+            ([selectedUnicode]) => selectedUnicode !== unicode,
+          ),
+        );
+
+  return {
+    ...state,
+    selectedGlyphsByUnicode,
+    stagedGlyphGroupsByUnicode: {
+      ...state.stagedGlyphGroupsByUnicode,
+      [unicode]: groupName,
+    },
+  };
+};
+
+/**
+ * Selects a mapped `@bruff/glyph` glyph for one source character.
+ *
+ * @param state - Current tool state
+ * @param unicode - Source glyph Unicode character
+ * @param mapping - Selected glyph mapping
+ * @returns Updated tool state
+ */
+export const setToolSigilMappedGlyph = (
+  state: ToolSigilState,
+  unicode: string,
+  mapping: SigilGlyphMapping,
+): ToolSigilState => ({
+  ...state,
+  selectedGlyphsByUnicode: {
+    ...state.selectedGlyphsByUnicode,
+    [unicode]: mapping,
+  },
+});
+
+/**
+ * Selects a license for one source character and memorizes it for new rows.
+ *
+ * @param state - Current tool state
+ * @param unicode - Source glyph Unicode character
+ * @param licenseValue - Machine-readable selected license value
+ * @returns Updated tool state
+ */
+export const setToolSigilLicense = (
+  state: ToolSigilState,
+  unicode: string,
+  licenseValue: string,
+): ToolSigilState => ({
+  ...state,
+  lastSelectedLicense: licenseValue,
+  selectedLicensesByUnicode: {
+    ...state.selectedLicensesByUnicode,
+    [unicode]: licenseValue,
   },
 });
 
@@ -205,60 +264,3 @@ export const clearToolSigilPreviewFontFamily = (
   state: ToolSigilState,
   fontLoadToken: number,
 ): ToolSigilState => setToolSigilPreviewFontFamily(state, fontLoadToken, "");
-
-/**
- * Selects errors visible to the user, including glyph-name validation errors.
- *
- * @param state - Current tool state
- * @returns Visible extraction and naming errors
- */
-export const selectToolSigilVisibleErrors = (
-  state: ToolSigilState,
-): ReadonlyArray<SigilExtractionError> => {
-  const nameResult = createSigilGlyphMap(state.drafts, state.namesByUnicode);
-
-  return nameResult.type === "error"
-    ? [...state.errors, ...nameResult.error]
-    : state.errors;
-};
-
-/**
- * Selects the downloadable glyph map result for the current state.
- *
- * @param state - Current tool state
- * @returns Glyph map or typed glyph-name validation errors
- */
-export const selectToolSigilDownloadGlyphMap = (
-  state: ToolSigilState,
-): Result<SigilGlyphMap, ReadonlyArray<SigilExtractionError>> =>
-  createSigilGlyphMap(state.drafts, state.namesByUnicode);
-
-/**
- * Selects whether the JSON download command should be disabled.
- *
- * @param state - Current tool state
- * @returns True when the current state cannot produce a valid glyph map
- */
-export const selectToolSigilDownloadDisabled = (
-  state: ToolSigilState,
-): boolean =>
-  selectToolSigilDownloadGlyphMap(state).type === "error" ||
-  state.drafts.length === EMPTY_COUNT;
-
-/**
- * Creates the render-ready view model for the current state.
- *
- * @param state - Current tool state
- * @returns View model consumed by DOM rendering helpers
- */
-export const selectToolSigilViewModel = (
-  state: ToolSigilState,
-): ToolSigilViewModel => ({
-  downloadDisabled: selectToolSigilDownloadDisabled(state),
-  drafts: state.drafts,
-  errors: selectToolSigilVisibleErrors(state),
-  fontFileNameText: fileNameText(state.fontFileName),
-  glyphCountText: glyphCountText(state.drafts),
-  namesByUnicode: state.namesByUnicode,
-  previewFontFamily: state.previewFontFamily,
-});

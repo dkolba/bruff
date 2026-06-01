@@ -1,31 +1,49 @@
+/* eslint-disable unicorn/text-encoding-identifier-case -- Component integration tests cover the full Sigil browser workflow and glyph group names such as ASCII. */
 import "../index.js";
 import {
   appendToolSigil,
   enterCharacters,
-  expectDeterministicFilenameDownload,
-  expectEditedGlyphJsonDownload,
-  expectInvalidGlyphDownloadBlocked,
-  expectRevokedObjectUrlDownload,
   loadCharactersFromTestFont,
   requireElement,
   requireShadowRoot,
-  restoreDownloadTest,
   selectFiles,
-  stubObjectUrls,
-  trackDownloadClicks,
+  selectGlyphGroup,
+  selectLicense,
+  selectMappedGlyph,
   waitForComponentUpdate,
 } from "./tool-sigil-test-support.js";
-import {
-  appendToolSigilWithShadowRoot,
-  expectNewerFontSelectionToWin,
-  expectPartialGlyphJsonDownload,
-  expectRejectedStalePreviewLoadIgnored,
-  expectUploadedFontPreview,
-} from "./tool-sigil-regression-test-support.js";
 import { describe, expect, it } from "vitest";
 import { createValidFontFile } from "./font-test-fixture.js";
 import { registerToolSigil } from "./register-tool-sigil.js";
 import { ToolSigil } from "./tool-sigil.js";
+
+const selectedOptionValues = (
+  select: HTMLSelectElement,
+): ReadonlyArray<string> => [...select.options].map((option) => option.value);
+
+const expectInitialGlyphMappingOptions = (shadowRoot: ShadowRoot): void => {
+  const groupSelect = requireElement<HTMLSelectElement>(
+    shadowRoot,
+    'select[data-action="glyph-group"][data-unicode="★"]',
+  );
+  const glyphSelect = requireElement<HTMLSelectElement>(
+    shadowRoot,
+    'select[data-action="mapped-glyph"][data-unicode="★"]',
+  );
+
+  expect(selectedOptionValues(groupSelect)).toContain("ASCII");
+  expect(selectedOptionValues(glyphSelect)).toContain("ASTERISK");
+};
+
+const expectBoxGlyphMappingOptions = (shadowRoot: ShadowRoot): void => {
+  const glyphSelect = requireElement<HTMLSelectElement>(
+    shadowRoot,
+    'select[data-action="mapped-glyph"][data-unicode="★"]',
+  );
+
+  expect(selectedOptionValues(glyphSelect)).toContain("H");
+  expect(selectedOptionValues(glyphSelect)).not.toContain("ASTERISK");
+};
 
 describe("ToolSigil registration", () => {
   it("registers <tool-sigil> as a custom element", () => {
@@ -138,6 +156,84 @@ describe("ToolSigil glyph-name state", () => {
   });
 });
 
+describe("ToolSigil glyph mapping state", () => {
+  it("renders staged glyph group selects and filtered glyph selects", async () => {
+    const element = appendToolSigil();
+    const shadowRoot = requireShadowRoot(element);
+
+    await loadCharactersFromTestFont(shadowRoot, "★");
+    expectInitialGlyphMappingOptions(shadowRoot);
+    selectGlyphGroup(shadowRoot, "★", "BOX");
+    expectBoxGlyphMappingOptions(shadowRoot);
+
+    element.remove();
+  });
+});
+
+describe("ToolSigil license option state", () => {
+  it("renders OSI license options and applies the current value", async () => {
+    const element = appendToolSigil();
+    const shadowRoot = requireShadowRoot(element);
+
+    await loadCharactersFromTestFont(shadowRoot, "★");
+
+    const licenseSelect = requireElement<HTMLSelectElement>(
+      shadowRoot,
+      'select[data-action="license"][data-unicode="★"]',
+    );
+    expect([...licenseSelect.options].map((option) => option.value)).toEqual(
+      expect.arrayContaining(["Apache-2.0", "MIT", "OFL-1.1"]),
+    );
+    selectLicense(shadowRoot, "★", "MIT");
+    expect(licenseSelect.value).toBe("MIT");
+
+    element.remove();
+  });
+});
+
+describe("ToolSigil optional license control state", () => {
+  it("keeps selection rendering stable when an optional row control is absent", async () => {
+    const element = appendToolSigil();
+    const shadowRoot = requireShadowRoot(element);
+
+    await loadCharactersFromTestFont(shadowRoot, "★");
+    requireElement<HTMLSelectElement>(
+      shadowRoot,
+      'select[data-action="mapped-glyph"][data-unicode="★"]',
+    ).remove();
+    selectLicense(shadowRoot, "★", "MIT");
+
+    expect(
+      requireElement<HTMLSelectElement>(
+        shadowRoot,
+        'select[data-action="license"][data-unicode="★"]',
+      ).value,
+    ).toBe("MIT");
+
+    element.remove();
+  });
+});
+
+describe("ToolSigil license default state", () => {
+  it("defaults a new row to the last selected license", async () => {
+    const element = appendToolSigil();
+    const shadowRoot = requireShadowRoot(element);
+
+    await loadCharactersFromTestFont(shadowRoot, "★");
+    selectLicense(shadowRoot, "★", "MIT");
+    await loadCharactersFromTestFont(shadowRoot, "♥");
+
+    expect(
+      requireElement<HTMLSelectElement>(
+        shadowRoot,
+        'select[data-action="license"][data-unicode="♥"]',
+      ).value,
+    ).toBe("MIT");
+
+    element.remove();
+  });
+});
+
 describe("ToolSigil output state", () => {
   it("disables download until JSON is valid", () => {
     const element = appendToolSigil();
@@ -151,135 +247,24 @@ describe("ToolSigil output state", () => {
 
     element.remove();
   });
-});
 
-describe("ToolSigil download state", () => {
-  it("creates a JSON Blob with edited glyph names", async () => {
-    const urlStubs = stubObjectUrls();
+  it("keeps download disabled until every row has a mapped glyph and license", async () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
-
-    try {
-      await expectEditedGlyphJsonDownload(shadowRoot, urlStubs);
-    } finally {
-      restoreDownloadTest(element, urlStubs);
-    }
-  });
-
-  it("uses a deterministic sigil.json filename", async () => {
-    const urlStubs = stubObjectUrls();
-    const clickState = trackDownloadClicks();
-    const element = appendToolSigil();
-    const shadowRoot = requireShadowRoot(element);
-
-    try {
-      await expectDeterministicFilenameDownload(shadowRoot, clickState);
-    } finally {
-      restoreDownloadTest(element, urlStubs, clickState);
-    }
-  });
-
-  it("revokes the object URL after download", async () => {
-    const urlStubs = stubObjectUrls();
-    const element = appendToolSigil();
-    const shadowRoot = requireShadowRoot(element);
-
-    try {
-      await expectRevokedObjectUrlDownload(shadowRoot, urlStubs);
-    } finally {
-      restoreDownloadTest(element, urlStubs);
-    }
-  });
-
-  it("does not create JSON when glyph names are invalid", async () => {
-    const urlStubs = stubObjectUrls();
-    const element = appendToolSigil();
-    const shadowRoot = requireShadowRoot(element);
-
-    try {
-      await expectInvalidGlyphDownloadBlocked(shadowRoot, urlStubs);
-    } finally {
-      restoreDownloadTest(element, urlStubs);
-    }
-  });
-});
-
-describe("ToolSigil error state", () => {
-  it("shows font loading errors", async () => {
-    const element = appendToolSigil();
-    const shadowRoot = requireShadowRoot(element);
-    const fileInput = requireElement<HTMLInputElement>(
+    const downloadButton = requireElement<HTMLButtonElement>(
       shadowRoot,
-      'input[type="file"][name="font-file"]',
+      'button[data-action="download"]',
     );
 
-    selectFiles(fileInput, [new File(["not a font"], "broken.ttf")]);
-    await waitForComponentUpdate();
+    await loadCharactersFromTestFont(shadowRoot, "★");
+    expect(downloadButton.disabled).toBe(true);
 
-    const alert = requireElement<HTMLElement>(shadowRoot, '[role="alert"]');
-    expect(alert.textContent).toContain(
-      'Could not parse "broken.ttf" as a supported font.',
-    );
+    selectMappedGlyph(shadowRoot, "★", "ASTERISK");
+    expect(downloadButton.disabled).toBe(true);
 
-    element.remove();
-  });
-
-  it("shows missing glyph errors", async () => {
-    const element = appendToolSigil();
-    const shadowRoot = requireShadowRoot(element);
-
-    await loadCharactersFromTestFont(shadowRoot, "?");
-
-    const alert = requireElement<HTMLElement>(shadowRoot, '[role="alert"]');
-    expect(alert.textContent).toContain('Missing glyph for "?".');
+    selectLicense(shadowRoot, "★", "MIT");
+    expect(downloadButton.disabled).toBe(false);
 
     element.remove();
-  });
-});
-
-describe("ToolSigil partial extraction state", () => {
-  it("keeps valid glyph rows downloadable while showing missing glyph errors", async () => {
-    const urlStubs = stubObjectUrls();
-    const { element, shadowRoot } = appendToolSigilWithShadowRoot();
-
-    try {
-      await expectPartialGlyphJsonDownload(shadowRoot, urlStubs);
-    } finally {
-      restoreDownloadTest(element, urlStubs);
-    }
-  });
-});
-
-describe("ToolSigil uploaded font preview", () => {
-  it("uses the uploaded font family for glyph previews", async () => {
-    const { element, shadowRoot } = appendToolSigilWithShadowRoot();
-
-    try {
-      await expectUploadedFontPreview(shadowRoot);
-    } finally {
-      element.remove();
-    }
-  });
-});
-
-describe("ToolSigil stale font load state", () => {
-  it("ignores older font-load completion after a newer selection", async () => {
-    const { element, shadowRoot } = appendToolSigilWithShadowRoot();
-
-    try {
-      await expectNewerFontSelectionToWin(shadowRoot);
-    } finally {
-      element.remove();
-    }
-  });
-
-  it("ignores older preview-load rejection after a newer selection", async () => {
-    const { element, shadowRoot } = appendToolSigilWithShadowRoot();
-
-    try {
-      await expectRejectedStalePreviewLoadIgnored(shadowRoot);
-    } finally {
-      element.remove();
-    }
   });
 });

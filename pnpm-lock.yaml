@@ -313,6 +313,9 @@ importers:
 
   packages/sigil:
     dependencies:
+      '@bruff/glyph':
+        specifier: workspace:0.0.0
+        version: link:../glyph
       '@bruff/utils':
         specifier: workspace:0.0.0
         version: link:../utils

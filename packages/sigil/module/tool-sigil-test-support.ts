@@ -1,22 +1,8 @@
+/* eslint-disable unicorn/text-encoding-identifier-case -- Browser test helpers centralize reusable Sigil interactions and glyph group names such as ASCII. */
 import { createValidFontFile } from "./font-test-fixture.js";
-import { expect } from "vitest";
 import { ToolSigil } from "./tool-sigil.js";
 
 const COMPONENT_UPDATE_DELAY_MS = 20;
-
-/** Browser URL API stubs captured for download tests. */
-export type ObjectUrlStubState = Readonly<{
-  createdBlobs: ReadonlyArray<Blob>;
-  restore: () => void;
-  revokedUrls: ReadonlyArray<string>;
-}>;
-
-/** Captured anchor-click state for download tests. */
-export type DownloadClickState = Readonly<{
-  downloads: ReadonlyArray<string>;
-  hrefs: ReadonlyArray<string>;
-  restore: () => void;
-}>;
 
 /** Appends a fresh sigil tool element. */
 export const appendToolSigil = (): ToolSigil => {
@@ -74,6 +60,19 @@ export const waitForElement = <ElementType extends Element>(
   });
 };
 
+const waitForFontProcessing = (
+  shadowRoot: ShadowRoot,
+  characters: string,
+): Promise<Element> => {
+  const [unicode] = characters;
+  const selector =
+    unicode === undefined
+      ? '[role="alert"]'
+      : `input[data-unicode="${unicode}"], [role="alert"]`;
+
+  return waitForElement(shadowRoot, selector);
+};
+
 /** Waits for component microtasks and file parsing to settle in browser tests. */
 export const waitForComponentUpdate = (): Promise<void> =>
   new Promise((resolve) => {
@@ -123,7 +122,7 @@ export const loadCharactersFromTestFont = async (
 
   selectFiles(fileInput, [createValidFontFile("component-test.ttf")]);
   enterCharacters(characterInput, characters);
-  await waitForComponentUpdate();
+  await waitForFontProcessing(shadowRoot, characters);
 };
 
 /** Renames one rendered glyph input. */
@@ -141,6 +140,61 @@ export const renameGlyph = (
   glyphNameInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
 };
 
+/** Selects a staged shared glyph group for one source glyph row. */
+export const selectGlyphGroup = (
+  shadowRoot: ShadowRoot,
+  unicode: string,
+  groupName: string,
+): void => {
+  const groupSelect = requireElement<HTMLSelectElement>(
+    shadowRoot,
+    `select[data-action="glyph-group"][data-unicode="${unicode}"]`,
+  );
+
+  groupSelect.value = groupName;
+  groupSelect.dispatchEvent(new Event("change", { bubbles: true }));
+};
+
+/** Selects a shared glyph mapping for one source glyph row. */
+export const selectMappedGlyph = (
+  shadowRoot: ShadowRoot,
+  unicode: string,
+  glyphKey: string,
+): void => {
+  const glyphSelect = requireElement<HTMLSelectElement>(
+    shadowRoot,
+    `select[data-action="mapped-glyph"][data-unicode="${unicode}"]`,
+  );
+
+  glyphSelect.value = glyphKey;
+  glyphSelect.dispatchEvent(new Event("change", { bubbles: true }));
+};
+
+/** Selects a license for one source glyph row. */
+export const selectLicense = (
+  shadowRoot: ShadowRoot,
+  unicode: string,
+  licenseValue: string,
+): void => {
+  const licenseSelect = requireElement<HTMLSelectElement>(
+    shadowRoot,
+    `select[data-action="license"][data-unicode="${unicode}"]`,
+  );
+
+  licenseSelect.value = licenseValue;
+  licenseSelect.dispatchEvent(new Event("change", { bubbles: true }));
+};
+
+/** Selects the default test mapping and license for one source glyph row. */
+export const selectDefaultMappingAndLicense = (
+  shadowRoot: ShadowRoot,
+  unicode: string,
+): void => {
+  selectGlyphGroup(shadowRoot, unicode, "ASCII");
+  selectMappedGlyph(shadowRoot, unicode, "ASTERISK");
+  selectLicense(shadowRoot, unicode, "MIT");
+};
+
 /** Clicks the component download button. */
 export const clickDownload = (shadowRoot: ShadowRoot): void => {
   requireElement<HTMLButtonElement>(
@@ -155,138 +209,4 @@ export const forceDownloadClick = (shadowRoot: ShadowRoot): void => {
     shadowRoot,
     'button[data-action="download"]',
   ).dispatchEvent(new MouseEvent("click", { bubbles: true }));
-};
-
-/** Stubs object URL creation and revocation. */
-export const stubObjectUrls = (): ObjectUrlStubState => {
-  const createdBlobs: Array<Blob> = [];
-  const revokedUrls: Array<string> = [];
-  const originalCreateObjectURL = URL.createObjectURL;
-  const originalRevokeObjectURL = URL.revokeObjectURL;
-
-  Object.defineProperty(URL, "createObjectURL", {
-    configurable: true,
-    value: (blob: Blob): string => {
-      createdBlobs.push(blob);
-      return "blob:sigil-json";
-    },
-  });
-  Object.defineProperty(URL, "revokeObjectURL", {
-    configurable: true,
-    value: (url: string): void => {
-      revokedUrls.push(url);
-    },
-  });
-
-  return {
-    createdBlobs,
-    restore: (): void => {
-      Object.defineProperty(URL, "createObjectURL", {
-        configurable: true,
-        value: originalCreateObjectURL,
-      });
-      Object.defineProperty(URL, "revokeObjectURL", {
-        configurable: true,
-        value: originalRevokeObjectURL,
-      });
-    },
-    revokedUrls,
-  };
-};
-
-/** Captures clicked anchor download metadata. */
-export const trackDownloadClicks = (): DownloadClickState => {
-  const downloads: Array<string> = [];
-  const hrefs: Array<string> = [];
-  const trackClick = (event: MouseEvent): void => {
-    const { target } = event;
-    if (!(target instanceof HTMLAnchorElement)) {
-      return;
-    }
-
-    downloads.push(target.download);
-    hrefs.push(target.href);
-    event.preventDefault();
-  };
-
-  document.addEventListener("click", trackClick, true);
-
-  return {
-    downloads,
-    hrefs,
-    restore: (): void => {
-      document.removeEventListener("click", trackClick, true);
-    },
-  };
-};
-
-const requireFirstBlob = (blobs: ReadonlyArray<Blob>): Blob => {
-  const [blob] = blobs;
-  if (blob === undefined) {
-    throw new Error("Expected a JSON Blob to be created.");
-  }
-
-  return blob;
-};
-
-/** Expects a download Blob to contain an edited glyph name. */
-export const expectEditedGlyphJsonDownload = async (
-  shadowRoot: ShadowRoot,
-  urlStubs: ObjectUrlStubState,
-): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-  renameGlyph(shadowRoot, "★", "customStar");
-  clickDownload(shadowRoot);
-
-  const blob = requireFirstBlob(urlStubs.createdBlobs);
-  const blobText = await blob.text();
-  expect(blob.type).toBe("application/json");
-  expect(blobText).toContain('"customStar"');
-  expect(blobText).not.toContain('"u2605"');
-};
-
-/** Expects a download click to use the fixed sigil filename. */
-export const expectDeterministicFilenameDownload = async (
-  shadowRoot: ShadowRoot,
-  clickState: DownloadClickState,
-): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-  clickDownload(shadowRoot);
-
-  expect(clickState.downloads).toEqual(["sigil.json"]);
-  expect(clickState.hrefs).toEqual(["blob:sigil-json"]);
-};
-
-/** Expects a download to revoke its temporary object URL. */
-export const expectRevokedObjectUrlDownload = async (
-  shadowRoot: ShadowRoot,
-  urlStubs: ObjectUrlStubState,
-): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-  clickDownload(shadowRoot);
-
-  expect(urlStubs.revokedUrls).toEqual(["blob:sigil-json"]);
-};
-
-/** Expects invalid glyph names to block JSON Blob creation. */
-export const expectInvalidGlyphDownloadBlocked = async (
-  shadowRoot: ShadowRoot,
-  urlStubs: ObjectUrlStubState,
-): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-  renameGlyph(shadowRoot, "★", "");
-  forceDownloadClick(shadowRoot);
-
-  expect(urlStubs.createdBlobs).toEqual([]);
-};
-
-/** Removes the component and restores download-related browser stubs. */
-export const restoreDownloadTest = (
-  element: Element,
-  urlStubs: ObjectUrlStubState,
-  clickState?: DownloadClickState,
-): void => {
-  element.remove();
-  clickState?.restore();
-  urlStubs.restore();
 };

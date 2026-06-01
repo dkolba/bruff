@@ -862,6 +862,12 @@ instead of more component methods.
 
 ---
 
+# Testing Timing
+
+Design render surfaces so browser tests can wait for semantic outcomes instead of sleeping. Expose stable selectors or accessible states for rows, alerts, disabled commands, and focused controls. For focus-preserving updates, update only the affected subregion instead of replacing the focused row, and test immediately after the synchronous event that triggers the render.
+
+---
+
 # Rule of Thumb
 
 A healthy custom element usually mostly contains:

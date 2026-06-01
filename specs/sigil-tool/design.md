@@ -2,22 +2,22 @@
 
 ## Layer assignment
 
-| Module or file                                 | Package         | Layer                                                                                                                   |
-| ---------------------------------------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `packages/sigil/module/tool-sigil.ts`          | `@bruff/sigil`  | Imperative web-component shell: shadow DOM, file input, preview, object URLs, download click wiring.                    |
-| `packages/sigil/module/tool-sigil-state.ts`    | `@bruff/sigil`  | Pure reducer-style state, state transition functions, selectors, and view-model helpers.                                |
-| `packages/sigil/module/tool-sigil-render.ts`   | `@bruff/sigil`  | DOM rendering boundary for the tool shadow root from a view model and handler bundle.                                   |
-| `packages/sigil/module/tool-sigil-bindings.ts` | `@bruff/sigil`  | DOM event-listener binding boundary for root tool controls.                                                             |
+| Module or file                                         | Package         | Layer                                                                                                                   |
+| ------------------------------------------------------ | --------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `packages/sigil/module/tool-sigil.ts`                  | `@bruff/sigil`  | Imperative web-component shell: shadow DOM, file input, preview, object URLs, download click wiring.                    |
+| `packages/sigil/module/tool-sigil-state.ts`            | `@bruff/sigil`  | Pure reducer-style state, state transition functions, selectors, and view-model helpers.                                |
+| `packages/sigil/module/tool-sigil-render.ts`           | `@bruff/sigil`  | DOM rendering boundary for the tool shadow root from a view model and handler bundle.                                   |
+| `packages/sigil/module/tool-sigil-bindings.ts`         | `@bruff/sigil`  | DOM event-listener binding boundary for root tool controls.                                                             |
 | `packages/sigil/module/tool-sigil-preview-resource.ts` | `@bruff/sigil`  | Browser preview-font resource coordinator with load, clear, and disconnect commands.                                    |
-| `packages/sigil/module/register-tool-sigil.ts` | `@bruff/sigil`  | Imperative custom-element registration boundary.                                                                        |
-| `packages/sigil/module/glyph-json.ts`          | `@bruff/sigil`  | Pure data types and JSON serialization shape for extracted glyphs.                                                      |
-| `packages/sigil/module/glyph-name.ts`          | `@bruff/sigil`  | Pure glyph-name defaults and validation.                                                                                |
-| `packages/sigil/module/extract-glyphs.ts`      | `@bruff/sigil`  | Pure-ish transformation over an already parsed `opentype.js` font object and input string; no DOM.                      |
-| `packages/sigil/module/font-file.ts`           | `@bruff/sigil`  | Shell boundary around `File.arrayBuffer()` and `opentype.parse()`, returning `Result` values.                           |
-| `packages/sigil/index.ts`                      | `@bruff/sigil`  | Package entry point; registers `<tool-sigil>` by importing the registration module and exports public types/functions.  |
-| `packages/arcade/dev-tools-router.ts`          | `@bruff/arcade` | Dev-only application-shell router from `location.pathname` to a custom element tag name; excluded from production.      |
-| `packages/arcade/app.ts`                       | `@bruff/arcade` | Imperative app bootstrap: dynamically imports the dev router only in dev mode and imports the game on the default path. |
-| `packages/arcade/index.html`                   | `@bruff/arcade` | Stable host container for route mounting.                                                                               |
+| `packages/sigil/module/register-tool-sigil.ts`         | `@bruff/sigil`  | Imperative custom-element registration boundary.                                                                        |
+| `packages/sigil/module/glyph-json.ts`                  | `@bruff/sigil`  | Pure data types and JSON serialization shape for extracted glyphs.                                                      |
+| `packages/sigil/module/glyph-name.ts`                  | `@bruff/sigil`  | Pure glyph-name defaults and validation.                                                                                |
+| `packages/sigil/module/extract-glyphs.ts`              | `@bruff/sigil`  | Pure-ish transformation over an already parsed `opentype.js` font object and input string; no DOM.                      |
+| `packages/sigil/module/font-file.ts`                   | `@bruff/sigil`  | Shell boundary around `File.arrayBuffer()` and `opentype.parse()`, returning `Result` values.                           |
+| `packages/sigil/index.ts`                              | `@bruff/sigil`  | Package entry point; registers `<tool-sigil>` by importing the registration module and exports public types/functions.  |
+| `packages/arcade/dev-tools-router.ts`                  | `@bruff/arcade` | Dev-only application-shell router from `location.pathname` to a custom element tag name; excluded from production.      |
+| `packages/arcade/app.ts`                               | `@bruff/arcade` | Imperative app bootstrap: dynamically imports the dev router only in dev mode and imports the game on the default path. |
+| `packages/arcade/index.html`                           | `@bruff/arcade` | Stable host container for route mounting.                                                                               |
 
 `@bruff/sigil` is an application tool package, not game logic. DOM APIs are allowed in the web component and file-loading shell modules. Extraction and JSON shaping stay as small testable functions so the browser UI is thin.
 
@@ -151,6 +151,11 @@ The extractor uses `font.charToGlyph(character)` for each distinct code point. F
 
 - **Chosen — gate every asynchronous font parse and preview-font load with a monotonically increasing selection token.** Selecting or clearing a file increments the token. Promise completions apply only when their captured token still matches the current token.
 - **Rejected — compare filenames only.** Users can select two different files with the same name, and parse completion order can still race.
+
+### Preview-resource disconnect
+
+- **Chosen — invalidate the preview resource token on `clear()` and `disconnect()`.** This keeps `ToolSigil` as a small coordinator while ensuring late `FontFace.load()` completions cannot install browser fonts or call back into a disconnected component.
+- **Rejected — rely only on `ToolSigilState` stale-token checks.** State checks can prevent visible state changes, but they run after the preview resource has already had a chance to install a `FontFace` into `document.fonts`.
 
 ### Glyph-name editing focus
 
