@@ -5,7 +5,7 @@ import {
   sharedObjectSchema,
   type ParseSharedObjectError,
   type SharedObject,
-} from "./shared-object.js";
+} from "@bruff/contracts";
 
 const VALID_SHARED_OBJECT = { kind: "contract" };
 const INVALID_SHARED_OBJECT = { kind: "" };
