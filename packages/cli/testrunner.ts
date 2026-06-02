@@ -9,6 +9,7 @@ const stream = run({
     "../glyph/**/*.ts",
     "../game/**/*.ts",
     "../utils/**/*.ts",
+    "**/*-test-helpers.ts",
     "**/*.test.ts",
   ],
   execArgv: [
@@ -18,6 +19,7 @@ const stream = run({
   ],
   functionCoverage: 100,
   globPatterns: ["**/*.test.ts"],
+  isolation: "process",
   lineCoverage: 100,
 });
 
