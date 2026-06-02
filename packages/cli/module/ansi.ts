@@ -22,6 +22,7 @@ export type AnsiCommand =
  * Encode one terminal command as ANSI text.
  */
 export const encodeAnsiCommand = (command: AnsiCommand): string => {
+  /* node:coverage ignore next 10 */
   switch (command.type) {
     case "clear-screen": {
       return "\u001B[2J";

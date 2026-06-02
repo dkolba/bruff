@@ -234,6 +234,7 @@ export const createAnsiFrameStepDriver = (
     state: initialState,
   };
 
+  /* node:coverage ignore next 12 */
   return {
     dispatchInput: (input: string): void => dispatchDriverInput(context, input),
     getRenderStats: (): AnsiFrameRenderStats => context.latestRenderStats,

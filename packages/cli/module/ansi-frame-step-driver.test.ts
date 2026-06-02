@@ -196,6 +196,24 @@ test("renders frames without input while preserving frameIndex", (): void => {
   assert.equal(result.state.frameIndex, zeroFrameCount);
 });
 
+test("exposes state loading, rendering, and stepping methods", (): void => {
+  const driver = createDriver();
+  const state = createHeadlessGame({
+    canvas: explicitCanvas,
+    seed: explicitSeed,
+  });
+
+  driver.loadState(state);
+
+  assert.deepEqual(driver.getState(), state);
+  assert.equal(driver.renderFrame().state.frameIndex, state.frameIndex);
+  assert.deepEqual(driver.stepFrames(zeroFrameCount), {
+    frames: [],
+    state,
+    writeResult: { type: "ok" },
+  });
+});
+
 test("steps movement once then renders later frames only", (): void => {
   const driver = createDriver();
 

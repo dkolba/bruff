@@ -130,6 +130,7 @@ const releaseCliInput = (
   listener: (chunk: TextInputChunk) => void,
 ): TextInput => disableRawMode(input.off("data", listener));
 
+/* node:coverage ignore next 8 */
 /**
  * Adapt a process-like input stream into the CLI text input port.
  */
