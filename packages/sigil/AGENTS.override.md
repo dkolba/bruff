@@ -11,6 +11,7 @@ This package owns the development-only `<tool-sigil>` Web Component used by `@br
 - **SG-2** DOM APIs, `File`, `Blob`, and object URLs are permitted in `tool-sigil.ts` and file-loading shell modules.
 - **SG-3** `opentype.js` is allowed only in this package.
 - **SG-4** `@bruff/glyph` may be imported only by pure catalog projection modules and tests so the browser tool can map source characters to shared glyph identities.
+- **SG-4a** `@bruff/contracts` may be imported only by glyph JSON type bridges, glyph map creation modules, and tests so downloadable payloads are validated against shared contracts.
 
 ## Package-Specific Obligations
 

@@ -50,7 +50,7 @@ These rules ensure maintainability, safety, and developer velocity.
 
 ### 3 — Code Organization
 
-- **O-1 (MUST)** Place code in `packages/utils` if reusable, domain agnostic logic.
+- **O-1 (MUST)** Place reusable, domain-agnostic helper logic in `packages/utils`. Place shared Zod runtime object/type contracts in `packages/contracts`.
 - **O-2 (SHOULD)** Incremental progress over big bangs - Small changes that compile and pass tests
 - **O-3 (SHOULD)** Learning from existing code - Study and plan before implementing
 - **O-4 (SHOULD)** Pragmatic over dogmatic - Adapt to project reality
@@ -219,6 +219,7 @@ The repo is a pnpm monorepo. Package-specific rules auto-load from `packages/<pa
 | `@bruff/arcade`        | E2E host — Vite app + Playwright tests across desktop/mobile browsers                | `packages/arcade/AGENTS.override.md`       |
 | `@bruff/sigil`         | Development-only font glyph extraction, glyph mapping, and license JSON tool         | `packages/sigil/AGENTS.override.md`        |
 | `@bruff/utils`         | Shared utilities — universal root helpers plus explicit DOM subpath services         | `packages/utils/AGENTS.override.md`        |
+| `@bruff/contracts`     | Shared Zod schemas, readonly inferred types, and Result-returning parser helpers     | `packages/contracts/AGENTS.override.md`    |
 | `@bruff/cli`           | Terminal shell spike — ANSI mock renderer with injected stdin/stdout boundaries      | `packages/cli/AGENTS.override.md`          |
 | `@bruff/eslint-config` | Shared ESLint flat config                                                            | (none — config-only package)               |
 

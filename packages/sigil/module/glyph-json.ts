@@ -1,34 +1,12 @@
-/** Extracted glyph bounds in font units. */
-export type SigilGlyphBounds = Readonly<{
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-}>;
+import type { SigilSourceGlyph } from "@bruff/contracts";
 
-/** Extracted source-font glyph data before a game glyph mapping is selected. */
-export type SigilSourceGlyph = Readonly<{
-  unicode: string;
-  advanceWidth: number;
-  unitsPerEm: number;
-  bounds: SigilGlyphBounds;
-  path: string;
-}>;
-
-/** Selected `@bruff/glyph` mapping for one source Unicode character. */
-export type SigilGlyphMapping = Readonly<{
-  groupName: string;
-  glyphKey: string;
-  glyph: string;
-}>;
-
-/** Compact glyph payload suitable for future runtime rendering. */
-export type SigilGlyph = Readonly<
-  SigilSourceGlyph & {
-    mappedGlyph: SigilGlyphMapping;
-    LICENSE: string;
-  }
->;
+export type {
+  SigilGlyph,
+  SigilGlyphBounds,
+  SigilGlyphMap,
+  SigilGlyphMapping,
+  SigilSourceGlyph,
+} from "@bruff/contracts";
 
 /** Extracted glyph before the user-editable name is applied. */
 export type SigilGlyphDraft = Readonly<{
@@ -57,9 +35,6 @@ export type SigilExtractionResult =
       }
     >;
 
-/** Downloadable glyph JSON keyed by user-editable glyph names. */
-export type SigilGlyphMap = Readonly<Record<string, SigilGlyph>>;
-
 /** User-facing extraction failure. */
 export type SigilExtractionError = Readonly<{
   type:
@@ -69,6 +44,7 @@ export type SigilExtractionError = Readonly<{
     | "empty-license-catalog"
     | "empty-input"
     | "invalid-font"
+    | "invalid-glyph-json"
     | "invalid-glyph-name"
     | "missing-license"
     | "missing-glyph"

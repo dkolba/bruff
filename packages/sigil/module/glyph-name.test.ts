@@ -135,6 +135,41 @@ describe("createSigilGlyphMap success", () => {
   });
 });
 
+describe("createSigilGlyphMap contract validation", () => {
+  it("returns an invalid glyph JSON error when the produced map fails the shared contract", () => {
+    const invalidGlyphMapResult = createSigilGlyphMap(
+      [
+        {
+          defaultName: "u2605",
+          glyph: {
+            ...starGlyph,
+            unitsPerEm: Number.POSITIVE_INFINITY,
+          },
+        },
+      ],
+      {},
+      {
+        licensesByUnicode: {
+          "★": "MIT",
+        },
+        mappedGlyphsByUnicode: {
+          "★": starMapping,
+        },
+      },
+    );
+
+    expect(invalidGlyphMapResult).toStrictEqual({
+      error: [
+        {
+          message: "Produced glyph JSON does not match the shared contract.",
+          type: "invalid-glyph-json",
+        },
+      ],
+      type: "error",
+    });
+  });
+});
+
 describe("createSigilGlyphMap errors", () => {
   it("rejects duplicate glyph names", () => {
     const glyphMapResult = createSigilGlyphMap(

@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "composite": true,
+    "paths": {
+      "@bruff/contracts": ["index.ts"],
+      "@/*": ["module/*"]
+    }
+  },
+  "include": ["index.ts", "module/**/**.ts", "vitest.config.ts"],
+  "exclude": ["node_modules", "eslint.config.js"]
+}

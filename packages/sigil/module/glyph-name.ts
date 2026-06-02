@@ -7,6 +7,7 @@ import type {
   SigilGlyphMapping,
   SigilSourceGlyph,
 } from "./glyph-json.js";
+import { parseSigilGlyphMap } from "@bruff/contracts";
 
 const EMPTY_NAME_LENGTH = 0;
 const EMPTY_ERROR_COUNT = 0;
@@ -60,6 +61,11 @@ const invalidGlyphNameError = (glyphName: string): SigilExtractionError => ({
 const duplicateGlyphNameError = (glyphName: string): SigilExtractionError => ({
   message: `Duplicate glyph name "${glyphName}".`,
   type: "duplicate-glyph-name",
+});
+
+const invalidGlyphJsonError = (): SigilExtractionError => ({
+  message: "Produced glyph JSON does not match the shared contract.",
+  type: "invalid-glyph-json",
 });
 
 const glyphNameErrors = (
@@ -141,7 +147,13 @@ export const createSigilGlyphMap = (
     createInitialGlyphMapState(),
   );
 
-  return glyphMapState.errors.length === EMPTY_ERROR_COUNT
-    ? ok(glyphMapState.glyphMap)
-    : error(glyphMapState.errors);
+  if (glyphMapState.errors.length !== EMPTY_ERROR_COUNT) {
+    return error(glyphMapState.errors);
+  }
+
+  const parsedGlyphMap = parseSigilGlyphMap(glyphMapState.glyphMap);
+
+  return parsedGlyphMap.type === "ok"
+    ? ok(parsedGlyphMap.value)
+    : error([invalidGlyphJsonError()]);
 };
