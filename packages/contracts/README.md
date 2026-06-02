@@ -12,10 +12,6 @@ The root export is universal. It is safe for Node.js and browser code, and must 
 
 Use it for shared contract schemas and parser helpers:
 
-- `sharedObjectSchema`
-- `parseSharedObject(input)`
-- `SharedObject`
-- `ParseSharedObjectError`
 - `sigilGlyphBoundsSchema`
 - `sigilSourceGlyphSchema`
 - `sigilGlyphMappingSchema`
@@ -30,16 +26,6 @@ Use it for shared contract schemas and parser helpers:
 - `ParseSigilGlyphMapError`
 
 ## API
-
-### `sharedObjectSchema`
-
-Zod schema for a minimal package-local shared object contract with a non-empty `kind` string.
-
-### `parseSharedObject(input)`
-
-Parses an `unknown` input with `sharedObjectSchema.safeParse()` and returns a `Result<SharedObject, ParseSharedObjectError>` from `@bruff/utils`.
-
-Invalid inputs return an explicit error value with reason `"INVALID_SHARED_OBJECT"` and the Zod issues. Parser helpers in this package do not throw.
 
 ### `sigilGlyphMapSchema`
 
