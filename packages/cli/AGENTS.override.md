@@ -27,6 +27,11 @@ headless frame data without depending on browser packages or game internals.
 - **CL-4 (MUST)** Game integration uses pure headless state functions and the
   terminal adapter in `module/game-frame.ts`; terminal rendering must not depend
   on Canvas render commands.
+- **CL-4a (MUST)** Deterministic terminal frame stepping lives in
+  `module/ansi-frame-step-driver.ts`. Interactive CLI redraws and native
+  frame-step tests should use `createAnsiFrameStepDriver()` rather than
+  duplicating game-step, terminal projection, ANSI encoding, or writer handling
+  in `bin/bruff-cli.ts`.
 - **CL-5 (MUST)** The CLI handles normalised movement keys plus the minimal quit
   shortcuts: `q`, `Q`, and `Ctrl+C`. Do not add resize handling, alternate
   screen mode, mouse reporting, or a timed game loop in this package without a

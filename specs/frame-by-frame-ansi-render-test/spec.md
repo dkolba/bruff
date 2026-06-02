@@ -66,3 +66,18 @@ Enable `@bruff/cli` tests to drive the terminal game deterministically one frame
 - Terminal coordinates stay one-indexed in `TerminalCell` output, while `GameState` grid cells remain zero-indexed.
 - Quit shortcuts release raw mode and pause input without stepping or rendering a new game frame.
 - Tests run under native `node:test` without a real TTY, browser globals, timers, sleeps, or nondeterministic waits.
+
+## Verification
+
+Implemented in `@bruff/cli` with native `node:test` coverage for driver
+creation, cloned state boundaries, input queueing, frame stepping, render-only
+frames, ANSI render artifacts, writer failures, and interactive CLI delegation.
+
+Required package gates:
+
+```sh
+pnpm --filter @bruff/cli run format
+pnpm --filter @bruff/cli run lint
+pnpm --filter @bruff/cli run typecheck
+pnpm --filter @bruff/cli run test
+```

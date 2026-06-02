@@ -36,7 +36,8 @@ The design keeps the functional core intact. `@bruff/game/headless` owns game cr
 | `packages/cli/module/ansi-frame-step-driver.test.ts` | `@bruff/cli` | Native Node tests      | Verifies state loading, input queueing, frame stepping, render-only frames, ANSI output, and writer failures.                 |
 | `packages/cli/module/ansi-frame-step-result.ts`      | `@bruff/cli` | Pure terminal model    | Defines result types for per-frame terminal output and render stats if the type set is large enough to merit a separate file. |
 | `packages/cli/bin/bruff-cli.ts`                      | `@bruff/cli` | Executable Node shell  | Uses the frame-step driver for initial render and movement redraws while preserving injected ports.                           |
-| `packages/cli/bin/bruff-cli.test.ts`                 | `@bruff/cli` | Native Node tests      | Narrows interactive tests to port lifecycle and proves valid input delegates to the shared frame-step path.                   |
+| `packages/cli/bin/bruff-cli.test.ts`                 | `@bruff/cli` | Native Node tests      | Narrows interactive tests to port lifecycle.                                                                                  |
+| `packages/cli/bin/bruff-cli-frame-step.test.ts`      | `@bruff/cli` | Native Node tests      | Proves quit and invalid input do not redraw through the shared frame-step path.                                               |
 | `packages/cli/index.ts`                              | `@bruff/cli` | Public package API     | Exports the driver factory and public result types for package-level tests and future consumers.                              |
 | `packages/cli/README.md`                             | `@bruff/cli` | Package documentation  | Documents the frame-step test workflow and native Node constraints.                                                           |
 
