@@ -1,4 +1,4 @@
-import { type Brand, brand } from "./brand.js";
+import { type Brand, brand } from "./brand.ts";
 import { describe, expect, it } from "vitest";
 
 const SAMPLE_STRING = "abc";
