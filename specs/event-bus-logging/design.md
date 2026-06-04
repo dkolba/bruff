@@ -168,9 +168,9 @@ The `!this.#unsubscribe` guard preserves GE-3 (`connectedCallback` idempotent) f
 | File                                        | Required guidance                                                                                        |
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | `AGENTS.md`                                 | Production logging uses the event bus; direct `console.*` is limited to the console sink and tests.      |
-| `packages/game/AGENTS.override.md`          | `log()` is allowed only from `effects/` or the entry point; pure layers remain no-log.                   |
-| `packages/utils/AGENTS.override.md`         | `@bruff/utils` includes pure helpers plus shell-adjacent browser/logging services.                       |
-| `packages/game-element/AGENTS.override.md`  | `GameElement` owns the `onLog(consoleLogHandler)` subscription lifecycle while connected.                |
+| `packages/game/AGENTS.md`                   | `log()` is allowed only from `effects/` or the entry point; pure layers remain no-log.                   |
+| `packages/utils/AGENTS.md`                  | `@bruff/utils` includes pure helpers plus shell-adjacent browser/logging services.                       |
+| `packages/game-element/AGENTS.md`           | `GameElement` owns the `onLog(consoleLogHandler)` subscription lifecycle while connected.                |
 | `.agents/skills/verify-layers/SKILL.md`     | Layer audits check that pure layers do not import `log()` and production code avoids direct `console.*`. |
 | `.agents/skills/roguelike-feature/SKILL.md` | New shell diagnostics use `log()` from `@bruff/utils`, not direct `console.*` calls.                     |
 

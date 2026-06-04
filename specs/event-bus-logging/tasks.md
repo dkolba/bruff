@@ -23,7 +23,7 @@
 - [x] T21 — Replace direct `console.*` calls with `log()` in `packages/game/lib/effects/entry.ts`, `packages/game/lib/effects/loop.ts`, and `packages/utils/module/canvas/canvas-resize-listener.ts`.
 - [x] T22 — Run the affected `@bruff/utils`, `@bruff/game`, and `@bruff/game-element` format, lint, test, typecheck, and build gates.
 - [x] T23 — Review phase: update `specs/event-bus-logging/spec.md` verification notes after the console migration tests pass.
-- [x] T24 — Audit `AGENTS.md`, `packages/*/AGENTS.override.md`, and `.agents/skills/*/SKILL.md` for stale logging, console, shell, and layer guidance.
-- [x] T25 — Update `AGENTS.md`, `packages/game/AGENTS.override.md`, `packages/utils/AGENTS.override.md`, and `packages/game-element/AGENTS.override.md` with the event-bus logging boundary.
+- [x] T24 — Audit `AGENTS.md`, `packages/*/AGENTS.md`, and `.agents/skills/*/SKILL.md` for stale logging, console, shell, and layer guidance.
+- [x] T25 — Update `AGENTS.md`, `packages/game/AGENTS.md`, `packages/utils/AGENTS.md`, and `packages/game-element/AGENTS.md` with the event-bus logging boundary.
 - [x] T26 — Update `.agents/skills/verify-layers/SKILL.md` and `.agents/skills/roguelike-feature/SKILL.md` so future game work routes shell diagnostics through `log()`.
 - [x] T27 — Review phase: update `specs/event-bus-logging/spec.md` and `specs/event-bus-logging/design.md` to record the contributor-guidance audit.

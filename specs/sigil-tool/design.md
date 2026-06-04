@@ -282,6 +282,6 @@ The `opentype.js` README documents browser file input via `File.arrayBuffer()` f
 ## Documentation updates
 
 - Add `packages/sigil/README.md` describing the tool, JSON output schema, development commands, and unsupported WOFF2/complex-shaping limitations.
-- Add `packages/sigil/AGENTS.override.md` allowing DOM/file/download side effects only in shell modules and keeping extraction functions typed and testable.
+- Add `packages/sigil/AGENTS.md` allowing DOM/file/download side effects only in shell modules and keeping extraction functions typed and testable.
 - Update root `AGENTS.md` workspace map with `@bruff/sigil`.
 - Update `packages/arcade/README.md` to document `/tools` as a development-only tools route and state that production builds exclude it.

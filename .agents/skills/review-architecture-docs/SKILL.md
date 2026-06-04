@@ -1,6 +1,6 @@
 ---
 name: review-architecture-docs
-description: Audit and update durable architecture guidance after a cross-layer implementation, file move, package boundary change, coverage config change, or SDTE feature. Use when Codex needs to reconcile AGENTS.md, package AGENTS.override.md files, local .agents/skills, older specs, dynamic imports, and test or coverage configuration with the architecture that was actually implemented.
+description: Audit and update durable architecture guidance after a cross-layer implementation, file move, package boundary change, coverage config change, or SDTE feature. Use when agent needs to reconcile AGENTS.md, package AGENTS.md files, local .agents/skills, older specs, dynamic imports, and test or coverage configuration with the architecture that was actually implemented.
 ---
 
 # Review Architecture Docs
@@ -22,7 +22,7 @@ Use this after implementation changes the canonical shape of the codebase, espec
 
 2. **Audit durable guidance**
    - Root `AGENTS.md`.
-   - Every `packages/*/AGENTS.override.md`.
+   - Every `packages/*/AGENTS.md`.
    - Every local `.agents/skills/*/SKILL.md`.
    - Older specs that mention moved files, old boundaries, or retired plans.
    - Config files whose paths mirror source structure, such as coverage includes/excludes, lint boundaries, build entry points, and dynamic imports.

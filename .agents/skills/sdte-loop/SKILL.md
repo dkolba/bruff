@@ -108,7 +108,7 @@ After every task is checked off:
 ## Anti-patterns
 
 - **Coarse tasks** — "Build authentication" is a feature, not a task. Decompose until each item is verifiable in isolation.
-- **Imprecise spec** — vague specs cause Codex to fill gaps with assumptions, sometimes incorrectly. Tighten the spec until ambiguities surface as explicit open questions, then resolve them before moving on.
+- **Imprecise spec** — vague specs cause the agent to fill gaps with assumptions, sometimes incorrectly. Tighten the spec until ambiguities surface as explicit open questions, then resolve them before moving on.
 - **Skipped completion tracking** — `tasks.md` is the source of truth. If it disagrees with reality (work done but unchecked, or checked but uncommitted), the workflow has failed and the run is not auditable.
 - **Acceptance written after the fact** — `acceptance.md` written _after_ implementation is theatre. Write it during Spec or Design while the requirements are still fresh.
 - **Big-bang execution** — completing many tasks in one commit destroys the audit trail and makes it hard to revert one without reverting all. One task = one verifiable commit.
