@@ -2,15 +2,15 @@
 
 ## Layer Assignment
 
-| Area               | Files                                                                   | Runtime contract                                                                                            |
-| ------------------ | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| Package metadata   | `packages/contracts/package.json`                                       | Declares `@bruff/contracts`, root export, scripts, and direct `zod` dependency.                             |
-| TypeScript config  | `packages/contracts/tsconfig.json`                                      | Extends `../../tsconfig.base.json`, sets package-local path aliases, and includes source/test/config files. |
-| Lint config        | `packages/contracts/eslint.config.js`                                   | Reuses `@bruff/eslint-config` with the same coverage ignore pattern as other packages.                      |
-| Public root export | `packages/contracts/index.ts`                                           | Re-exports schemas, inferred types, and parser helpers from package modules.                                |
-| Contract modules   | `packages/contracts/module/**/*.ts`                                     | Owns Zod schema definitions, readonly inferred types, and pure helpers.                                     |
-| Tests              | `packages/contracts/module/**/*.test.ts`                                | Verifies parsing behaviour through public exports or package-level module APIs.                             |
-| Documentation      | `packages/contracts/README.md`, `packages/contracts/AGENTS.override.md` | Documents package role, rules, commands, and no-consumer-migration boundary.                                |
+| Area               | Files                                                          | Runtime contract                                                                                            |
+| ------------------ | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Package metadata   | `packages/contracts/package.json`                              | Declares `@bruff/contracts`, root export, scripts, and direct `zod` dependency.                             |
+| TypeScript config  | `packages/contracts/tsconfig.json`                             | Extends `../../tsconfig.base.json`, sets package-local path aliases, and includes source/test/config files. |
+| Lint config        | `packages/contracts/eslint.config.js`                          | Reuses `@bruff/eslint-config` with the same coverage ignore pattern as other packages.                      |
+| Public root export | `packages/contracts/index.ts`                                  | Re-exports schemas, inferred types, and parser helpers from package modules.                                |
+| Contract modules   | `packages/contracts/module/**/*.ts`                            | Owns Zod schema definitions, readonly inferred types, and pure helpers.                                     |
+| Tests              | `packages/contracts/module/**/*.test.ts`                       | Verifies parsing behaviour through public exports or package-level module APIs.                             |
+| Documentation      | `packages/contracts/README.md`, `packages/contracts/AGENTS.md` | Documents package role, rules, commands, and no-consumer-migration boundary.                                |
 
 The contracts package is a universal package. It must not depend on DOM APIs, Canvas APIs, browser globals, shell effects, or game-layer modules.
 
