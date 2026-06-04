@@ -12,3 +12,4 @@ tsconfig.tsbuildinfo
 SCRATCHPAD.md
 packages/arcade/e2e/*.spec.ts-snapshots/*-darwin.png
 .vitest-attachments
+secrets

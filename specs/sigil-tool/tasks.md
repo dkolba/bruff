@@ -4,7 +4,7 @@
 - [x] T2 — Add `packages/sigil/tsconfig.json`, `packages/sigil/eslint.config.js`, and `packages/sigil/vitest.config.ts` using `packages/game-element` as the structural template.
 - [x] T3 — Add placeholder registration test for `<tool-sigil>` in `packages/sigil/module/tool-sigil.test.ts`.
 - [x] T4 — Implement placeholder `ToolSigil` and registration in `packages/sigil/module/tool-sigil.ts`, `packages/sigil/module/register-tool-sigil.ts`, and `packages/sigil/index.ts`.
-- [x] T5 — Add `packages/sigil/README.md` and `packages/sigil/AGENTS.override.md` documenting package role, commands, side-effect boundaries, and font limits.
+- [x] T5 — Add `packages/sigil/README.md` and `packages/sigil/AGENTS.md` documenting package role, commands, side-effect boundaries, and font limits.
 - [x] T6 — Update root `AGENTS.md` workspace map with `@bruff/sigil`.
 - [x] T7 — Add `@bruff/sigil` workspace dependency to `packages/arcade/package.json`.
 - [x] T8 — Add Playwright E2E coverage for dev `/tools`, `/`, and unknown-path fallback mounting the expected custom element in `packages/arcade/e2e/tools-route.spec.ts`.
