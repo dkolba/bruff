@@ -8,7 +8,7 @@
 | `packages/game/vite.config.lib.ts`                     | `@bruff/game`  | Build config          | Builds the browser entry first and emits the headless entry as an additional library entry. |
 | `tsconfig.base.json`                                   | Workspace      | TypeScript config     | Allows `.ts` import specifiers for native Node TypeScript source loading.                   |
 | `packages/utils/index.ts`                              | `@bruff/utils` | Universal export      | Uses `.ts` specifiers so native Node can load shared source from a pnpm workspace symlink.  |
-| `packages/game/AGENTS.override.md`                     | `@bruff/game`  | Architecture guidance | Documents the pure headless facade layer and allowed import direction.                      |
+| `packages/game/AGENTS.md`                              | `@bruff/game`  | Architecture guidance | Documents the pure headless facade layer and allowed import direction.                      |
 | `packages/game/README.md`                              | `@bruff/game`  | Package documentation | Documents browser-primary usage and headless terminal usage.                                |
 | `packages/game/lib/headless/index.ts`                  | `@bruff/game`  | Pure public facade    | Re-exports the DOM-free game API consumed by Node and CLI code.                             |
 | `packages/game/lib/headless/create-headless-game.ts`   | `@bruff/game`  | Pure public facade    | Creates deterministic initial `GameState` from a plain size and seed.                       |
@@ -19,7 +19,7 @@
 | `packages/game/lib/state/create-initial-state.ts`      | `@bruff/game`  | State                 | Continues to accept plain `{ width, height }` data, not a DOM canvas type.                  |
 | `packages/cli/package.json`                            | `@bruff/cli`   | Package metadata      | Adds a workspace dependency on `@bruff/game`.                                               |
 | `.vscode/launch.json`                                  | Workspace      | Debug config          | Launches the CLI with native Node TypeScript flags and the `bruff-source` condition.        |
-| `packages/cli/AGENTS.override.md`                      | `@bruff/cli`   | Architecture guidance | Allows importing only `@bruff/game/headless`, not game internals.                           |
+| `packages/cli/AGENTS.md`                               | `@bruff/cli`   | Architecture guidance | Allows importing only `@bruff/game/headless`, not game internals.                           |
 | `packages/cli/module/game-frame.ts`                    | `@bruff/cli`   | Pure terminal adapter | Converts headless game frame cells into terminal cells.                                     |
 | `packages/cli/bin/bruff-cli.ts`                        | `@bruff/cli`   | Node shell            | Uses injected ports to run the real game frame through the ANSI writer.                     |
 

@@ -11,10 +11,10 @@
 - [x] T9 - Add `projectHeadlessFrame()` in `packages/game/lib/headless/project-headless-frame.ts`
 - [x] T10 - Add public headless facade exports in `packages/game/lib/headless/index.ts`
 - [x] T11 - Update library build entries in `packages/game/vite.config.lib.ts`
-- [x] T12 - Update game package guidance in `packages/game/AGENTS.override.md`
+- [x] T12 - Update game package guidance in `packages/game/AGENTS.md`
 - [x] T13 - Update game usage docs in `packages/game/README.md`
 - [x] T14 - Add CLI dependency on `@bruff/game` in `packages/cli/package.json`
-- [x] T15 - Update CLI package guidance in `packages/cli/AGENTS.override.md`
+- [x] T15 - Update CLI package guidance in `packages/cli/AGENTS.md`
 - [x] T16 - Add game-to-terminal adapter tests in `packages/cli/module/game-frame.test.ts`
 - [x] T17 - Add `gameFrameToTerminalFrame()` in `packages/cli/module/game-frame.ts`
 - [x] T18 - Refactor CLI port tests in `packages/cli/bin/bruff-cli.test.ts`

@@ -37,5 +37,5 @@ Each task is ordered and file-scoped. Follow TDD inside each implementation step
 - [x] T33 — Remove actor `xPos` / `yPos` fields from `Player` and `Enemy`, delete `packages/game/lib/state/migrations.ts` and `packages/game/lib/state/migrations.test.ts`, then update remaining package tests, replay fixtures, replay snapshots, and browser E2E assertions to use grid-only actors.
 - [x] T34 — Update browser E2E state assertions in `packages/arcade/e2e/state-assertions.spec.ts` and `packages/arcade/e2e/replay-checkpoint.spec.ts` to remove any remaining legacy loaded-state scenarios.
 - [x] T35 — Search for actor-state `xPos` / `yPos` references and confirm only render commands, input event coordinates, historical specs, or non-actor pixel concepts remain.
-- [x] T36 — Review `packages/game/README.md`, `packages/game/AGENTS.override.md`, and local skills for stale compatibility-window guidance.
+- [x] T36 — Review `packages/game/README.md`, `packages/game/AGENTS.md`, and local skills for stale compatibility-window guidance.
 - [x] T37 — Run full `pnpm run ok`, reconcile `specs/small-grid-occupancy/spec.md` verification and `specs/small-grid-occupancy/design.md` drift, and fix any remaining failures.

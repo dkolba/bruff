@@ -1,0 +1,74 @@
+# Use an official Node.js runtime
+FROM node:24-slim
+
+# Install global tools (if really needed)
+RUN apt-get update && apt-get install -y git curl jq wget vim fd-find ripgrep && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p -m 755 /etc/apt/keyrings \
+	&& out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+	&& cat $out | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+	&& chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+	&& mkdir -p -m 755 /etc/apt/sources.list.d \
+	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+	&& apt update \
+	&& apt install gh -y
+
+# Setup pnpm + global bin dir
+ENV PNPM_HOME="/pnpm"
+ENV PATH="/pnpm/bin:$PATH"
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+
+# Enable Corepack and prepare pnpm
+RUN corepack enable && corepack prepare pnpm@11.5.1 --activate
+ENV PNPM_HOME=/pnpm
+ENV PATH=/pnpm:$PATH
+
+# Set working directory
+WORKDIR /app
+
+# Copy only dependency files first (better layer caching)
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/arcade/package.json ./packages/arcade/package.json
+COPY packages/cli/package.json ./packages/cli/package.json
+COPY packages/contracts/package.json ./packages/contracts/package.json
+COPY packages/eslint-config/package.json ./packages/eslint-config/package.json
+COPY packages/game/package.json ./packages/game/package.json
+COPY packages/game-element/package.json ./packages/game-element/package.json
+COPY packages/glyph/package.json ./packages/glyph/package.json
+COPY packages/sigil/package.json ./packages/sigil/package.json
+COPY packages/utils/package.json ./packages/utils/package.json
+
+# Install dependencies (frozen lockfile for reproducibility)
+RUN pnpm ci
+
+# Install Playwright system dependencies and browsers
+RUN pnpm dlx playwright install --with-deps
+
+# Copy the rest of the app
+COPY . .
+RUN chown -R node:node /app
+
+# Make the node user own its home directory
+RUN mkdir -p /home/node/.config /home/node/.pi && \
+    chown -R node:node /home/node
+
+# Install Pi Coding Agent
+RUN pnpm add -g --ignore-scripts @earendil-works/pi-coding-agent
+
+USER node
+
+ENV PATH="/home/node/.local/bin:${PATH}"
+
+# Pass agent's git username and email from the outside
+ARG GIT_USER_NAME
+ARG GIT_USER_EMAIL
+
+# Configure git
+RUN git config --global user.name "$GIT_USER_NAME" && \
+    git config --global user.email "$GIT_USER_EMAIL"
+
+# Expose port
+EXPOSE 5173
+
+# Use pnpm to start the app
+CMD ["pnpm", "start", "--host", "0.0.0.0"]

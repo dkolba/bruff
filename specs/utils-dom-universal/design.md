@@ -2,15 +2,15 @@
 
 ## Layer Assignment
 
-| Area | Files | Runtime contract |
-| --- | --- | --- |
-| Universal public export | `packages/utils/index.ts` | Node.js and browser safe. No imports from DOM-only modules. |
-| DOM public export | `packages/utils/dom.ts` | Browser-only utilities that depend on DOM, canvas, resize observer, animation, or browser event APIs. |
-| Universal helpers | `packages/utils/module/fp/**`, `packages/utils/module/math/**`, `packages/utils/module/direction/**`, `packages/utils/module/color/**`, `packages/utils/module/types/**`, `packages/utils/module/event-bus/**` | Pure or environment-agnostic shared helpers. |
-| DOM helpers | `packages/utils/module/canvas/**`, `packages/utils/module/get-shadow-game-root.ts`, `packages/utils/module/animation/**` | Browser shell helpers. |
-| Package metadata | `packages/utils/package.json`, `packages/utils/tsconfig.json` | Declares documented subpath exports and includes new entrypoints/tests. |
-| Consumers | `packages/game/**`, `packages/game-element/**`, `packages/sigil/**` | Imports universal helpers from `@bruff/utils`; imports DOM helpers from `@bruff/utils/dom`. |
-| E2E host config | `packages/arcade/vite.config.ts` | Verifies the DOM subpath follows the same workspace dependency handling as the root utils package. |
+| Area                    | Files                                                                                                                                                                                                          | Runtime contract                                                                                      |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Universal public export | `packages/utils/index.ts`                                                                                                                                                                                      | Node.js and browser safe. No imports from DOM-only modules.                                           |
+| DOM public export       | `packages/utils/dom.ts`                                                                                                                                                                                        | Browser-only utilities that depend on DOM, canvas, resize observer, animation, or browser event APIs. |
+| Universal helpers       | `packages/utils/module/fp/**`, `packages/utils/module/math/**`, `packages/utils/module/direction/**`, `packages/utils/module/color/**`, `packages/utils/module/types/**`, `packages/utils/module/event-bus/**` | Pure or environment-agnostic shared helpers.                                                          |
+| DOM helpers             | `packages/utils/module/canvas/**`, `packages/utils/module/get-shadow-game-root.ts`, `packages/utils/module/animation/**`                                                                                       | Browser shell helpers.                                                                                |
+| Package metadata        | `packages/utils/package.json`, `packages/utils/tsconfig.json`                                                                                                                                                  | Declares documented subpath exports and includes new entrypoints/tests.                               |
+| Consumers               | `packages/game/**`, `packages/game-element/**`, `packages/sigil/**`                                                                                                                                            | Imports universal helpers from `@bruff/utils`; imports DOM helpers from `@bruff/utils/dom`.           |
+| E2E host config         | `packages/arcade/vite.config.ts`                                                                                                                                                                               | Verifies the DOM subpath follows the same workspace dependency handling as the root utils package.    |
 
 `packages/utils` is not split into multiple packages. The split is a package export boundary inside the existing workspace package.
 
@@ -36,7 +36,12 @@ export {
   toResult,
 } from "./module/fp/option.js";
 export { pipe } from "./module/fp/pipe.js";
-export { createPrng, nextId, nextNumber, type PrngState } from "./module/fp/prng.js";
+export {
+  createPrng,
+  nextId,
+  nextNumber,
+  type PrngState,
+} from "./module/fp/prng.js";
 export {
   error,
   type Failure,
@@ -134,23 +139,23 @@ import {
 
 Current known migration targets:
 
-| File | Universal import | DOM import |
-| --- | --- | --- |
-| `packages/game/lib/effects/curtain-up.ts` | `flatMapResult`, `ok`, `pipe`, `Result` | `canvasResizeListener`, `createCanvasResizeObserver`, `getCanvas`, `getCanvasContext`, `getShadowGameRoot` |
-| `packages/game/lib/effects/frame-step-driver.ts` | none | `radiatingBarsBackgroundAnimation` |
-| `packages/game-element/module/game-element.ts` | `onLog` | `consoleLogHandler` |
-| `packages/game-element/module/game-element.test.ts` | `log` | none |
+| File                                                | Universal import                        | DOM import                                                                                                 |
+| --------------------------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `packages/game/lib/effects/curtain-up.ts`           | `flatMapResult`, `ok`, `pipe`, `Result` | `canvasResizeListener`, `createCanvasResizeObserver`, `getCanvas`, `getCanvasContext`, `getShadowGameRoot` |
+| `packages/game/lib/effects/frame-step-driver.ts`    | none                                    | `radiatingBarsBackgroundAnimation`                                                                         |
+| `packages/game-element/module/game-element.ts`      | `onLog`                                 | `consoleLogHandler`                                                                                        |
+| `packages/game-element/module/game-element.test.ts` | `log`                                   | none                                                                                                       |
 
 Tests that mock `@bruff/utils` and use type namespace imports may need explicit mocks for `@bruff/utils/dom` when the code under test imports DOM helpers from the new subpath.
 
 ### Blast Radius by Package
 
-| Package | Source impact | Test/config/doc impact |
-| --- | --- | --- |
-| `@bruff/game` | Split DOM imports in `packages/game/lib/effects/curtain-up.ts` and `packages/game/lib/effects/frame-step-driver.ts`; keep root imports everywhere else. | Update mocks in `packages/game/lib/effects/curtain-up.test.ts` and `packages/game/lib/effects/loop.test.ts`; update `packages/game/AGENTS.override.md` to document `@bruff/utils/dom` as effects-only. |
-| `@bruff/game-element` | Split `packages/game-element/module/game-element.ts` so `onLog` comes from `@bruff/utils` and `consoleLogHandler` comes from `@bruff/utils/dom`. | Keep `packages/game-element/module/game-element.test.ts` importing `log` from the root; update `packages/game-element/AGENTS.override.md` and `packages/game-element/README.md`. |
-| `@bruff/sigil` | No source import migration expected; current imports use `Result`, `ok`, and `error`, which remain universal. | Run package gates to prove browser tool code still resolves the universal root export. |
-| `@bruff/arcade` | No source import migration expected. | Check `packages/arcade/vite.config.ts`; add `@bruff/utils/dom` to `optimizeDeps.exclude` if Vite treats the subpath separately from the linked root package. Run the arcade build or E2E gate if config changes. |
+| Package               | Source impact                                                                                                                                           | Test/config/doc impact                                                                                                                                                                                           |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@bruff/game`         | Split DOM imports in `packages/game/lib/effects/curtain-up.ts` and `packages/game/lib/effects/frame-step-driver.ts`; keep root imports everywhere else. | Update mocks in `packages/game/lib/effects/curtain-up.test.ts` and `packages/game/lib/effects/loop.test.ts`; update `packages/game/AGENTS.md` to document `@bruff/utils/dom` as effects-only.                    |
+| `@bruff/game-element` | Split `packages/game-element/module/game-element.ts` so `onLog` comes from `@bruff/utils` and `consoleLogHandler` comes from `@bruff/utils/dom`.        | Keep `packages/game-element/module/game-element.test.ts` importing `log` from the root; update `packages/game-element/AGENTS.md` and `packages/game-element/README.md`.                                          |
+| `@bruff/sigil`        | No source import migration expected; current imports use `Result`, `ok`, and `error`, which remain universal.                                           | Run package gates to prove browser tool code still resolves the universal root export.                                                                                                                           |
+| `@bruff/arcade`       | No source import migration expected.                                                                                                                    | Check `packages/arcade/vite.config.ts`; add `@bruff/utils/dom` to `optimizeDeps.exclude` if Vite treats the subpath separately from the linked root package. Run the arcade build or E2E gate if config changes. |
 
 ### Universal-only `@bruff/game` Imports
 
