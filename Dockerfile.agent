@@ -2,7 +2,7 @@
 FROM node:24-slim
 
 # Install global tools (if really needed)
-RUN apt-get update && apt-get install -y git curl jq wget vim fd-find ripgrep && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git curl jq wget vim fd-find ripgrep tmux && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p -m 755 /etc/apt/keyrings \
 	&& out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
