@@ -42,7 +42,10 @@ COPY packages/utils/package.json ./packages/utils/package.json
 RUN pnpm ci
 
 # Install Playwright system dependencies and browsers
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+RUN mkdir -p /ms-playwright
 RUN pnpm dlx playwright install --with-deps
+RUN chown -R node:node /ms-playwright
 
 # Copy the rest of the app
 COPY . .
