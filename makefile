@@ -43,7 +43,7 @@ pi: ## Run pi inside container
 	docker exec -it \
 		-e TERM=xterm-256color \
 		bruff-dev-server \
-		pi
+		tmux new-session -s pi-main-session 'pi'
 
 shell: ## Open bash shell inside container
 	docker exec -it \
