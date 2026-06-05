@@ -6,6 +6,8 @@ import {
   selectToolSigilViewModel,
   setToolSigilCharacters,
   setToolSigilGlyphName,
+  setToolSigilLicense,
+  setToolSigilMappedGlyph,
   setToolSigilPreviewFontFamily,
   startToolSigilFontSelection,
   type ToolSigilState,
@@ -17,6 +19,12 @@ import { ok } from "@bruff/utils";
 const STALE_FONT_LOAD_TOKEN = 1;
 const CURRENT_FONT_LOAD_TOKEN = 2;
 const PREVIEW_FONT_FAMILY = "tool-sigil-preview-font-1";
+
+const asteriskMapping = {
+  glyph: "*",
+  glyphKey: "ASTERISK",
+  groupName: "ASCII",
+};
 
 const loadCurrentFontState = (characters: string): ToolSigilState => {
   const selection = startToolSigilFontSelection(
@@ -77,6 +85,25 @@ describe("ToolSigil stale selection validation", () => {
         {
           message: 'Select a LICENSE value for "★".',
           type: "missing-license",
+        },
+      ]),
+    );
+  });
+});
+
+describe("ToolSigil partial selection validation", () => {
+  it("shows selection errors when other completed glyphs satisfy the contract", () => {
+    const selectedState = setToolSigilLicense(
+      setToolSigilMappedGlyph(loadCurrentFontState("★♥"), "★", asteriskMapping),
+      "★",
+      "MIT",
+    );
+
+    expect(selectToolSigilViewModel(selectedState).errors).toEqual(
+      expect.arrayContaining([
+        {
+          message: 'Select a glyph mapping for "♥".',
+          type: "missing-mapped-glyph",
         },
       ]),
     );

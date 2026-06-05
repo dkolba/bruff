@@ -160,9 +160,24 @@ export const selectToolSigilVisibleErrors = (
     ...licenseErrors(state),
   ];
 
+  if (state.drafts.length === EMPTY_COUNT) {
+    return state.errors;
+  }
+
+  if (selectionErrors.length > EMPTY_COUNT) {
+    const visibleNameErrors =
+      nameResult.type === "error"
+        ? nameResult.error.filter(
+            (nameError) => nameError.type !== "invalid-glyph-json",
+          )
+        : [];
+
+    return [...state.errors, ...visibleNameErrors, ...selectionErrors];
+  }
+
   return nameResult.type === "error"
-    ? [...state.errors, ...nameResult.error, ...selectionErrors]
-    : [...state.errors, ...selectionErrors];
+    ? [...state.errors, ...nameResult.error]
+    : state.errors;
 };
 
 /**

@@ -8,46 +8,56 @@ import {
 } from "@bruff/contracts";
 import { type Result } from "@bruff/utils";
 
-const VALID_SIGIL_GLYPH_MAP = {
-  star: {
-    LICENSE: "MIT",
-    advanceWidth: 700,
-    bounds: {
-      x1: 10,
-      x2: 690,
-      y1: 20,
-      y2: 720,
-    },
-    mappedGlyph: {
-      glyph: "@",
-      glyphKey: "AT",
-      groupName: "ASCII",
-    },
-    path: "M0 0L1 1Z",
-    unicode: "★",
-    unitsPerEm: 1000,
+const TEST_ADVANCE_WIDTH = 700;
+const TEST_BOUNDS_X1 = 10;
+const TEST_BOUNDS_X2 = 690;
+const TEST_BOUNDS_Y1 = 20;
+const TEST_BOUNDS_Y2 = 720;
+const TEST_UNITS_PER_EM = 1000;
+
+type TestGlyphEntry = SigilGlyphMap["floor"];
+
+const createGlyphEntry = (
+  unicode: string,
+  unitsPerEm: number,
+): TestGlyphEntry => ({
+  LICENSE: "MIT",
+  advanceWidth: TEST_ADVANCE_WIDTH,
+  bounds: {
+    x1: TEST_BOUNDS_X1,
+    x2: TEST_BOUNDS_X2,
+    y1: TEST_BOUNDS_Y1,
+    y2: TEST_BOUNDS_Y2,
   },
+  mappedGlyph: {
+    glyph: unicode,
+    glyphKey: "AT",
+    groupName: "ASCII",
+  },
+  path: "M0 0L1 1Z",
+  unicode,
+  unitsPerEm,
+});
+
+const VALID_SIGIL_GLYPH_MAP = {
+  door: createGlyphEntry("+", TEST_UNITS_PER_EM),
+  enemy: createGlyphEntry("e", TEST_UNITS_PER_EM),
+  floor: createGlyphEntry(".", TEST_UNITS_PER_EM),
+  player: createGlyphEntry("@", TEST_UNITS_PER_EM),
+  star: createGlyphEntry("★", TEST_UNITS_PER_EM),
+  wall: createGlyphEntry("#", TEST_UNITS_PER_EM),
 };
 
 const INVALID_SIGIL_GLYPH_MAP = {
-  star: {
-    LICENSE: "MIT",
-    advanceWidth: 700,
-    bounds: {
-      x1: 10,
-      x2: 690,
-      y1: 20,
-      y2: 720,
-    },
-    mappedGlyph: {
-      glyph: "@",
-      glyphKey: "AT",
-      groupName: "ASCII",
-    },
-    path: "M0 0L1 1Z",
-    unicode: "★",
-    unitsPerEm: Number.POSITIVE_INFINITY,
-  },
+  ...VALID_SIGIL_GLYPH_MAP,
+  floor: createGlyphEntry(".", Number.POSITIVE_INFINITY),
+};
+
+const MISSING_REQUIRED_SIGIL_GLYPH_MAP = {
+  door: createGlyphEntry("+", TEST_UNITS_PER_EM),
+  enemy: createGlyphEntry("e", TEST_UNITS_PER_EM),
+  floor: createGlyphEntry(".", TEST_UNITS_PER_EM),
+  player: createGlyphEntry("@", TEST_UNITS_PER_EM),
 };
 
 describe("sigilGlyphMapSchema", () => {
@@ -56,6 +66,22 @@ describe("sigilGlyphMapSchema", () => {
       data: VALID_SIGIL_GLYPH_MAP,
       success: true,
     });
+  });
+
+  it("requires core gameplay glyph names while allowing extra glyphs", () => {
+    const parsedGlyphMap = sigilGlyphMapSchema.safeParse(
+      MISSING_REQUIRED_SIGIL_GLYPH_MAP,
+    );
+
+    expect(parsedGlyphMap.success).toBe(false);
+    if (parsedGlyphMap.success) {
+      return;
+    }
+    expect(parsedGlyphMap.error.issues).toEqual([
+      expect.objectContaining({
+        path: ["wall"],
+      }),
+    ]);
   });
 });
 
@@ -75,7 +101,7 @@ describe("parseSigilGlyphMap", () => {
       error: {
         issues: [
           expect.objectContaining({
-            path: ["star", "unitsPerEm"],
+            path: ["floor", "unitsPerEm"],
           }),
         ],
         reason: "INVALID_SIGIL_GLYPH_MAP",

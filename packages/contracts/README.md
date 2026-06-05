@@ -12,6 +12,14 @@ The root export is universal. It is safe for Node.js and browser code, and must 
 
 Use it for shared contract schemas and parser helpers:
 
+- `broughlikeTerrainSchema`
+- `broughlikeMapSchema`
+- `parseBroughlikeMap(input)`
+- `BroughlikeTerrain`
+- `BroughlikeMap`
+- `ParseBroughlikeMapError`
+- `requiredSigilGlyphNames`
+- `RequiredSigilGlyphName`
 - `sigilGlyphBoundsSchema`
 - `sigilSourceGlyphSchema`
 - `sigilGlyphMappingSchema`
@@ -27,9 +35,19 @@ Use it for shared contract schemas and parser helpers:
 
 ## API
 
+### `broughlikeMapSchema`
+
+Zod schema for future small broughlike map JSON. Version `1` maps are compact rectangular grids up to 7×7 whose terrain values are `"floor"`, `"wall"`, or `"door"`.
+
+### `parseBroughlikeMap(input)`
+
+Parses an `unknown` input with `broughlikeMapSchema.safeParse()` and returns a `Result<BroughlikeMap, ParseBroughlikeMapError>` from `@bruff/utils`.
+
+Invalid inputs return an explicit error value with reason `"INVALID_BROUGHLIKE_MAP"` and the Zod issues.
+
 ### `sigilGlyphMapSchema`
 
-Zod schema for downloadable Sigil glyph JSON keyed by editable glyph names. Each value contains source glyph metrics, bounds, SVG path data, selected `@bruff/glyph` mapping, and exact `"LICENSE"` value.
+Zod schema for downloadable Sigil glyph JSON keyed by editable glyph names. Each value contains source glyph metrics, bounds, SVG path data, selected `@bruff/glyph` mapping, and exact `"LICENSE"` value. The keys `floor`, `wall`, `door`, `player`, and `enemy` are required; additional glyph keys are allowed.
 
 ### `parseSigilGlyphMap(input)`
 

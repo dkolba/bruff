@@ -28,6 +28,8 @@ The downloadable JSON is keyed by editable glyph names. Each entry stores the so
 
 The shared payload contract lives in `@bruff/contracts`. `@bruff/sigil` re-exports the contract-owned payload types from `module/glyph-json.ts` and validates completed glyph maps with `parseSigilGlyphMap()` before download.
 
+Downloadable glyph maps must include `floor`, `wall`, `door`, `player`, and `enemy` glyph keys. Users may add additional glyph keys, but the shared contract rejects downloads that remove or rename any required key.
+
 The generated `mappedGlyph` value records:
 
 - `groupName`

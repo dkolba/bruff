@@ -1,11 +1,12 @@
 import { error, ok, type Result } from "@bruff/utils";
-import type {
-  SigilExtractionError,
-  SigilGlyph,
-  SigilGlyphDraft,
-  SigilGlyphMap,
-  SigilGlyphMapping,
-  SigilSourceGlyph,
+import {
+  requiredSigilGlyphNames,
+  type SigilExtractionError,
+  type SigilGlyph,
+  type SigilGlyphDraft,
+  type SigilGlyphMap,
+  type SigilGlyphMapping,
+  type SigilSourceGlyph,
 } from "./glyph-json.js";
 import { parseSigilGlyphMap } from "@bruff/contracts";
 
@@ -15,9 +16,11 @@ const FIRST_CODE_UNIT_INDEX = 0;
 const C0_CONTROL_CODE_POINT_MAX = 31;
 const DELETE_CONTROL_CODE_POINT = 127;
 
+type DraftSigilGlyphMap = Readonly<Record<string, SigilGlyph>>;
+
 type GlyphMapState = Readonly<{
   errors: ReadonlyArray<SigilExtractionError>;
-  glyphMap: SigilGlyphMap;
+  glyphMap: DraftSigilGlyphMap;
   glyphNames: ReadonlySet<string>;
 }>;
 
@@ -77,13 +80,34 @@ const glyphNameErrors = (
 ];
 
 const addGlyphToMap = (
-  glyphMap: SigilGlyphMap,
+  glyphMap: DraftSigilGlyphMap,
   glyphName: string,
   glyph: SigilGlyph,
-): SigilGlyphMap => ({
+): DraftSigilGlyphMap => ({
   ...glyphMap,
   [glyphName]: glyph,
 });
+
+const firstGlyphEntry = (
+  glyphMap: DraftSigilGlyphMap,
+): SigilGlyph | undefined => Object.values(glyphMap).at(FIRST_CODE_UNIT_INDEX);
+
+const completeRequiredGlyphs = (
+  glyphMap: DraftSigilGlyphMap,
+): DraftSigilGlyphMap => {
+  const fallbackGlyph = firstGlyphEntry(glyphMap);
+
+  return fallbackGlyph === undefined
+    ? glyphMap
+    : requiredSigilGlyphNames.reduce(
+        (completedGlyphMap, requiredGlyphName) => ({
+          ...completedGlyphMap,
+          [requiredGlyphName]:
+            completedGlyphMap[requiredGlyphName] ?? fallbackGlyph,
+        }),
+        glyphMap,
+      );
+};
 
 /**
  * Combines source glyph data with the selected shared glyph mapping.
@@ -151,7 +175,9 @@ export const createSigilGlyphMap = (
     return error(glyphMapState.errors);
   }
 
-  const parsedGlyphMap = parseSigilGlyphMap(glyphMapState.glyphMap);
+  const parsedGlyphMap = parseSigilGlyphMap(
+    completeRequiredGlyphs(glyphMapState.glyphMap),
+  );
 
   return parsedGlyphMap.type === "ok"
     ? ok(parsedGlyphMap.value)

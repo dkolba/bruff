@@ -3,22 +3,22 @@
 This package contains the core game logic. The rules below apply to every file under `packages/game/`. Universal coding rules (FP, Result/Option error handling, naming, etc.) live in `.AGENTS.md`; the rules here are the package-specific extensions.
 
 - **Language**: TypeScript with TSDoc annotations.
-- **Dependencies**: `@bruff/utils` and `@bruff/game-element` only — no external runtime deps (per A-22).
+- **Dependencies**: `@bruff/utils`, `@bruff/contracts`, and `@bruff/game-element` only — no external runtime deps (per A-22).
 
 ## Layer Structure
 
 Code must live in the correct layer. Dependencies flow strictly inward — later layers may depend on earlier ones but inner layers must never import outer layers, and no circular dependencies are allowed.
 
-`@bruff/utils` imports are allowed where they provide shared pure helpers. The `log()` event-bus helper is shell-only: use it from `effects/` or the entry point, never from `core/`, `state/`, `input/`, or `render/`. `@bruff/utils/dom` imports are browser-shell utilities and are allowed only from `effects/` or tests for effects-layer code.
+`@bruff/utils` imports are allowed where they provide shared pure helpers. `@bruff/contracts` imports are allowed only for shared runtime schemas, parser helpers, and inferred readonly types that cross package boundaries; do not use contracts for game-internal shapes. The `log()` event-bus helper is shell-only: use it from `effects/` or the entry point, never from `core/`, `state/`, `input/`, or `render/`. `@bruff/utils/dom` imports are browser-shell utilities and are allowed only from `effects/` or tests for effects-layer code.
 
-| Layer    | Location                      | May import from                                                        |
-| -------- | ----------------------------- | ---------------------------------------------------------------------- |
-| Core     | `packages/game/lib/core/`     | Nothing except shared `@bruff/utils` types/helpers                     |
-| State    | `packages/game/lib/state/`    | `core/`, shared `@bruff/utils` helpers                                 |
-| Input    | `packages/game/lib/input/`    | `core/`, `state/`, shared `@bruff/utils` helpers                       |
-| Render   | `packages/game/lib/render/`   | `core/`, `state/`, shared `@bruff/utils` helpers                       |
-| Headless | `packages/game/lib/headless/` | Pure public facade over `core/`, `state/`, `input/`, and `render/`     |
-| Effects  | `packages/game/lib/effects/`  | Shell wiring over inner layers, `@bruff/utils`, and `@bruff/utils/dom` |
+| Layer    | Location                      | May import from                                                           |
+| -------- | ----------------------------- | ------------------------------------------------------------------------- |
+| Core     | `packages/game/lib/core/`     | Nothing except shared `@bruff/utils` types/helpers                        |
+| State    | `packages/game/lib/state/`    | `core/`, shared `@bruff/utils` helpers, shared `@bruff/contracts` parsers |
+| Input    | `packages/game/lib/input/`    | `core/`, `state/`, shared `@bruff/utils` helpers                          |
+| Render   | `packages/game/lib/render/`   | `core/`, `state/`, shared `@bruff/utils` helpers                          |
+| Headless | `packages/game/lib/headless/` | Pure public facade over `core/`, `state/`, `input/`, and `render/`        |
+| Effects  | `packages/game/lib/effects/`  | Shell wiring over inner layers, `@bruff/utils`, and `@bruff/utils/dom`    |
 
 `lib/headless/` is the only DOM-free public game facade for Node consumers.
 It may import `core/`, `state/`, `input/`, and `render/`, but it must not

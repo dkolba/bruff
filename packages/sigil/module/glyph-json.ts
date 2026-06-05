@@ -1,6 +1,9 @@
 import type { SigilSourceGlyph } from "@bruff/contracts";
 
+export { requiredSigilGlyphNames } from "@bruff/contracts";
+
 export type {
+  RequiredSigilGlyphName,
   SigilGlyph,
   SigilGlyphBounds,
   SigilGlyphMap,

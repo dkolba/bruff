@@ -65,10 +65,17 @@ const expectDownloadedAsteriskGlyph = (state: ToolSigilState): void => {
   if (glyphMapResult.type === "error") {
     return;
   }
-  expect(Object.keys(glyphMapResult.value)).toStrictEqual(["u2605"]);
+  expect(Object.keys(glyphMapResult.value)).toStrictEqual([
+    "door",
+    "enemy",
+    "floor",
+    "player",
+    "wall",
+    "u2605",
+  ]);
   expect(
     Object.values(glyphMapResult.value).map((glyph) => glyph.unicode),
-  ).toStrictEqual(["★"]);
+  ).toStrictEqual(["★", "★", "★", "★", "★", "★"]);
   // eslint-disable-next-line dot-notation -- TS requires bracket access for index-signature glyph maps.
   expect(glyphMapResult.value["u2605"]).toMatchObject({
     LICENSE: "MIT",
