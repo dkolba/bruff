@@ -146,6 +146,12 @@ const selectedRequiredDrafts = (
   );
 };
 
+const invalidRequiredGlyphSelectionCount = (state: ToolSigilState): number =>
+  requiredGlyphSelectionViews(
+    state.characters,
+    state.requiredGlyphSelections,
+  ).filter((selection) => !selection.isValid).length;
+
 const requiredNamesByUnicode = (
   state: ToolSigilState,
 ): Readonly<Record<string, string>> =>
@@ -244,6 +250,7 @@ export const selectToolSigilDownloadDisabled = (
   mappedGlyphErrors(state).length > EMPTY_COUNT ||
   licenseErrors(state).length > EMPTY_COUNT ||
   catalogErrors(state).length > EMPTY_COUNT ||
+  invalidRequiredGlyphSelectionCount(state) > EMPTY_COUNT ||
   state.drafts.length === EMPTY_COUNT;
 
 /**

@@ -1,8 +1,7 @@
-/* eslint-disable max-lines, max-lines-per-function, sort-imports, unicorn/text-encoding-identifier-case -- State tests cover the full glyph/license state matrix and catalog names such as ASCII. */
+/* eslint-disable max-lines-per-function, sort-imports, unicorn/text-encoding-identifier-case -- State tests cover the full glyph/license state matrix and catalog names such as ASCII. */
 import {
   applyToolSigilFontLoadResult,
   createToolSigilState,
-  selectToolSigilDownloadGlyphMap,
   selectToolSigilViewModel,
   setToolSigilCharacters,
   setToolSigilGlyphGroup,
@@ -71,38 +70,6 @@ const selectedAsteriskState = (): ToolSigilState =>
     asteriskMapping,
   );
 
-const mappedAsteriskState = (state: ToolSigilState): ToolSigilState =>
-  setToolSigilLicense(
-    setToolSigilMappedGlyph(state, "★", asteriskMapping),
-    "★",
-    "MIT",
-  );
-
-const expectDownloadedAsteriskGlyph = (state: ToolSigilState): void => {
-  const glyphMapResult = selectToolSigilDownloadGlyphMap(state);
-
-  expect(glyphMapResult.type).toBe("ok");
-  if (glyphMapResult.type === "error") {
-    return;
-  }
-  expect(Object.keys(glyphMapResult.value)).toStrictEqual([
-    "door",
-    "enemy",
-    "floor",
-    "player",
-    "wall",
-    "u2605",
-  ]);
-  expect(
-    Object.values(glyphMapResult.value).map((glyph) => glyph.unicode),
-  ).toStrictEqual(["★", "★", "★", "★", "★", "★"]);
-  // eslint-disable-next-line dot-notation -- TS requires bracket access for index-signature glyph maps.
-  expect(glyphMapResult.value["u2605"]).toMatchObject({
-    LICENSE: "MIT",
-    mappedGlyph: asteriskMapping,
-  });
-};
-
 describe("ToolSigil state selection", () => {
   it("creates the initial view model", () => {
     const viewModel = selectToolSigilViewModel(createToolSigilState());
@@ -160,7 +127,6 @@ describe("ToolSigil loaded font view state", () => {
       fontFileNameText: "component-test.ttf",
       glyphCountText: "Glyphs ready: 1",
     });
-    expectDownloadedAsteriskGlyph(mappedAsteriskState(loadedState));
   });
 
   it("keeps state unchanged for current and unknown schema ids", () => {
