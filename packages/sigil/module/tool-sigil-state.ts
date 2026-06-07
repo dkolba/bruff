@@ -12,15 +12,18 @@ import {
   SIGIL_GLYPH_GROUPS,
   type SigilGlyphGroupName,
 } from "./glyph-catalog.js";
-import type { SigilExtractionError, SigilGlyphMapping } from "./glyph-json.js";
+import type {
+  RequiredSigilGlyphName,
+  SigilExtractionError,
+  SigilGlyphMapping,
+} from "./glyph-json.js";
 import type {
   ToolSigilFontSelection,
   ToolSigilState,
 } from "./tool-sigil-state-types.js";
-import { extractSigilGlyphs } from "./extract-glyphs.js";
 import type { Font } from "opentype.js";
 import { OSI_LICENSE_OPTIONS } from "./osi-license-catalog.js";
-import { completeMissingDrafts } from "./tool-sigil-missing-drafts.js";
+import { extractDrafts } from "./tool-sigil-extract-drafts.js";
 import { defaultRequiredGlyphSelections } from "./tool-sigil-required-glyph-selection.js";
 import type { Result } from "@bruff/utils";
 export {
@@ -44,25 +47,6 @@ const schemaOptionById = (
   const schemaOption = findSigilSchemaOption(SIGIL_SCHEMA_OPTIONS, schemaId);
 
   return schemaOption.type === "some" ? schemaOption.value : undefined;
-};
-
-const extractDrafts = (
-  font: Font | undefined,
-  characters: string,
-): Pick<ToolSigilState, "drafts" | "errors"> => {
-  if (font === undefined) {
-    return {
-      drafts: [],
-      errors: [],
-    };
-  }
-
-  const extractionReport = extractSigilGlyphs(font, characters);
-
-  return {
-    drafts: completeMissingDrafts(font, characters, extractionReport.drafts),
-    errors: extractionReport.errors,
-  };
 };
 
 /** Creates the initial empty state for the sigil tool. */
@@ -135,6 +119,26 @@ export const setToolSigilCharacters = (
  * @param schemaId - Concrete schema id selected by the user
  * @returns Updated tool state, or unchanged state for the current or unknown id
  */
+/**
+ * Selects a source character for one required contract glyph.
+ *
+ * @param state - Current tool state
+ * @param name - Required contract glyph name
+ * @param unicode - Selected source character
+ * @returns Updated tool state
+ */
+export const setToolSigilRequiredGlyphCharacter = (
+  state: ToolSigilState,
+  name: RequiredSigilGlyphName,
+  unicode: string,
+): ToolSigilState => ({
+  ...state,
+  contractIssues: [],
+  requiredGlyphSelections: state.requiredGlyphSelections.map((selection) =>
+    selection.name === name ? { ...selection, unicode } : selection,
+  ),
+});
+
 export const setToolSigilSchema = (
   state: ToolSigilState,
   schemaId: SigilSchemaId,

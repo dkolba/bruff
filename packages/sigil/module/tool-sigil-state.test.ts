@@ -8,6 +8,7 @@ import {
   setToolSigilGlyphGroup,
   setToolSigilLicense,
   setToolSigilMappedGlyph,
+  setToolSigilRequiredGlyphCharacter,
   setToolSigilSchema,
   startToolSigilFontSelection,
   type ToolSigilState,
@@ -219,6 +220,19 @@ describe("ToolSigil schema selection view state", () => {
       name: "floor",
       options: [{ label: "#", unicode: "#" }],
       selectedUnicode: ".",
+    });
+  });
+
+  it("updates a required glyph source character selection", () => {
+    const state = setToolSigilRequiredGlyphCharacter(
+      createToolSigilState(),
+      "floor",
+      "#",
+    );
+
+    expect(state.requiredGlyphSelections).toContainEqual({
+      name: "floor",
+      unicode: "#",
     });
   });
 
