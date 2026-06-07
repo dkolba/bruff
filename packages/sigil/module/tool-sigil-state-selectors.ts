@@ -131,6 +131,31 @@ const licenseErrors = (
     .map((draft) => createMissingLicenseError(draft));
 };
 
+const selectedRequiredCharacters = (
+  state: ToolSigilState,
+): ReadonlySet<string> =>
+  new Set(state.requiredGlyphSelections.map((selection) => selection.unicode));
+
+const selectedRequiredDrafts = (
+  state: ToolSigilState,
+): ReadonlyArray<SigilGlyphDraft> => {
+  const requiredCharacters = selectedRequiredCharacters(state);
+
+  return state.drafts.filter((draft) =>
+    requiredCharacters.has(draft.glyph.unicode),
+  );
+};
+
+const requiredNamesByUnicode = (
+  state: ToolSigilState,
+): Readonly<Record<string, string>> =>
+  Object.fromEntries(
+    state.requiredGlyphSelections.map((selection) => [
+      selection.unicode,
+      selection.name,
+    ]),
+  );
+
 const catalogErrors = (
   state: ToolSigilState,
 ): ReadonlyArray<SigilExtractionError> => [
@@ -153,10 +178,14 @@ const catalogErrors = (
 export const selectToolSigilVisibleErrors = (
   state: ToolSigilState,
 ): ReadonlyArray<SigilExtractionError> => {
-  const nameResult = createSigilGlyphMap(state.drafts, state.namesByUnicode, {
-    licensesByUnicode: selectedLicensesByUnicode(state),
-    mappedGlyphsByUnicode: state.selectedGlyphsByUnicode,
-  });
+  const nameResult = createSigilGlyphMap(
+    selectedRequiredDrafts(state),
+    requiredNamesByUnicode(state),
+    {
+      licensesByUnicode: selectedLicensesByUnicode(state),
+      mappedGlyphsByUnicode: state.selectedGlyphsByUnicode,
+    },
+  );
   const selectionErrors = [
     ...catalogErrors(state),
     ...mappedGlyphErrors(state),
@@ -192,10 +221,14 @@ export const selectToolSigilVisibleErrors = (
 export const selectToolSigilDownloadGlyphMap = (
   state: ToolSigilState,
 ): Result<SigilGlyphMap, ReadonlyArray<SigilExtractionError>> =>
-  createSigilGlyphMap(state.drafts, state.namesByUnicode, {
-    licensesByUnicode: selectedLicensesByUnicode(state),
-    mappedGlyphsByUnicode: state.selectedGlyphsByUnicode,
-  });
+  createSigilGlyphMap(
+    selectedRequiredDrafts(state),
+    requiredNamesByUnicode(state),
+    {
+      licensesByUnicode: selectedLicensesByUnicode(state),
+      mappedGlyphsByUnicode: state.selectedGlyphsByUnicode,
+    },
+  );
 
 /**
  * Selects whether the JSON download command should be disabled.

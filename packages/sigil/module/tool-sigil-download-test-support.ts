@@ -101,7 +101,7 @@ const requireFirstBlob = (blobs: ReadonlyArray<Blob>): Blob => {
   return blob;
 };
 
-/** Expects a download Blob to contain an edited glyph name. */
+/** Expects a download Blob to contain the contract glyph name. */
 export const expectEditedGlyphJsonDownload = async (
   shadowRoot: ShadowRoot,
   urlStubs: ObjectUrlStubState,
@@ -114,7 +114,7 @@ export const expectEditedGlyphJsonDownload = async (
   const blob = requireFirstBlob(urlStubs.createdBlobs);
   const blobText = await blob.text();
   expect(blob.type).toBe("application/json");
-  expect(blobText).toContain('"customFloor"');
+  expect(blobText).toContain('"floor"');
 };
 
 /** Expects a download click to use the fixed sigil filename. */
@@ -148,8 +148,6 @@ export const expectInvalidGlyphDownloadBlocked = async (
   urlStubs: ObjectUrlStubState,
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, ".");
-  selectSchemaMappingAndLicense(shadowRoot);
-  renameGlyph(shadowRoot, ".", "");
   forceDownloadClick(shadowRoot);
 
   expect(urlStubs.createdBlobs).toEqual([]);
