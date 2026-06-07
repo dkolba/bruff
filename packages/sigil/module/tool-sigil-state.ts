@@ -14,6 +14,7 @@ import {
   DEFAULT_SIGIL_SCHEMA_ID,
   findSigilSchemaOption,
   SIGIL_SCHEMA_OPTIONS,
+  type SigilSchemaId,
   type SigilSchemaOption,
 } from "./sigil-schema-catalog.js";
 import type { Result } from "@bruff/utils";
@@ -32,11 +33,10 @@ export type {
 const INITIAL_FONT_LOAD_TOKEN = 0;
 const NEXT_FONT_LOAD_TOKEN_OFFSET = 1;
 
-const selectedSchemaOption = (): SigilSchemaOption | undefined => {
-  const schemaOption = findSigilSchemaOption(
-    SIGIL_SCHEMA_OPTIONS,
-    DEFAULT_SIGIL_SCHEMA_ID,
-  );
+const schemaOptionById = (
+  schemaId: SigilSchemaId,
+): SigilSchemaOption | undefined => {
+  const schemaOption = findSigilSchemaOption(SIGIL_SCHEMA_OPTIONS, schemaId);
 
   return schemaOption.type === "some" ? schemaOption.value : undefined;
 };
@@ -73,7 +73,7 @@ const extractDrafts = (
 
 /** Creates the initial empty state for the sigil tool. */
 export const createToolSigilState = (): ToolSigilState => {
-  const schemaOption = selectedSchemaOption();
+  const schemaOption = schemaOptionById(DEFAULT_SIGIL_SCHEMA_ID);
 
   return {
     characters: schemaCharacters(schemaOption),
@@ -137,6 +137,37 @@ export const setToolSigilCharacters = (
   characters,
   ...extractDrafts(state.font, characters),
 });
+
+/**
+ * Selects a concrete contract schema and re-extracts glyphs for its characters.
+ *
+ * @param state - Current tool state
+ * @param schemaId - Concrete schema id selected by the user
+ * @returns Updated tool state, or unchanged state for the current or unknown id
+ */
+export const setToolSigilSchema = (
+  state: ToolSigilState,
+  schemaId: SigilSchemaId,
+): ToolSigilState => {
+  if (schemaId === state.selectedSchemaId) {
+    return state;
+  }
+
+  const schemaOption = schemaOptionById(schemaId);
+  if (schemaOption === undefined) {
+    return state;
+  }
+
+  const characters = schemaCharacters(schemaOption);
+
+  return {
+    ...state,
+    characters,
+    namesByUnicode: schemaNamesByUnicode(schemaOption),
+    selectedSchemaId: schemaId,
+    ...extractDrafts(state.font, characters),
+  };
+};
 
 /**
  * Stores a user-edited glyph name by source Unicode character.

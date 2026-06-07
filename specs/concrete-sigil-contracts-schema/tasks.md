@@ -5,7 +5,7 @@
 - [x] T3 — Add `selectedSchemaId` and `schemaOptions` fields to `ToolSigilState` and `ToolSigilViewModel` in `packages/sigil/module/tool-sigil-state-types.ts`
 - [x] T4 — Initialize `ToolSigilState` from `DEFAULT_SIGIL_SCHEMA_ID` in `packages/sigil/module/tool-sigil-state.ts`
 - [x] T5 — Add state tests for initial selected schema, derived characters, and prefilled required glyph names in `packages/sigil/module/tool-sigil-state.test.ts`
-- [ ] T6 — Implement `setToolSigilSchema` in `packages/sigil/module/tool-sigil-state.ts`
+- [x] T6 — Implement `setToolSigilSchema` in `packages/sigil/module/tool-sigil-state.ts`
 - [ ] T7 — Add state tests for schema selection re-extraction with the current font in `packages/sigil/module/tool-sigil-state.test.ts`
 - [ ] T8 — Project schema selector fields from `selectToolSigilViewModel` in `packages/sigil/module/tool-sigil-state-selectors.ts`
 - [ ] T9 — Replace the `Characters` textarea with a schema select in `packages/sigil/module/tool-sigil-template.ts`
