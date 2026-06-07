@@ -11,11 +11,11 @@ import { describe, expect, it } from "vitest";
 const FIRST_SCHEMA_OPTION_INDEX = 0;
 
 const EXPECTED_SIGIL_GLYPH_MAP_REQUIRED_GLYPHS = [
-  { name: "floor", unicode: "." },
-  { name: "wall", unicode: "#" },
-  { name: "door", unicode: "+" },
-  { name: "player", unicode: "@" },
-  { name: "enemy", unicode: "e" },
+  { defaultUnicode: ".", name: "floor", unicode: "." },
+  { defaultUnicode: "#", name: "wall", unicode: "#" },
+  { defaultUnicode: "+", name: "door", unicode: "+" },
+  { defaultUnicode: "@", name: "player", unicode: "@" },
+  { defaultUnicode: "e", name: "enemy", unicode: "e" },
 ];
 
 describe("SIGIL_SCHEMA_OPTIONS", () => {
@@ -23,6 +23,7 @@ describe("SIGIL_SCHEMA_OPTIONS", () => {
     expect(DEFAULT_SIGIL_SCHEMA_ID).toBe(SIGIL_GLYPH_MAP_SCHEMA_ID);
     expect(SIGIL_SCHEMA_OPTIONS).toStrictEqual([
       {
+        defaultCharacters: ".#+@e",
         id: SIGIL_GLYPH_MAP_SCHEMA_ID,
         label: "SigilGlyphMap",
         requiredGlyphs: EXPECTED_SIGIL_GLYPH_MAP_REQUIRED_GLYPHS,

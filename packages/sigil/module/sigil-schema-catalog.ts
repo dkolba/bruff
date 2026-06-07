@@ -6,12 +6,14 @@ export type SigilSchemaId = Brand<string, "SigilSchemaId">;
 
 /** One required glyph entry within a schema preset. */
 export type SigilSchemaGlyph = Readonly<{
+  defaultUnicode: string;
   name: RequiredSigilGlyphName;
   unicode: string;
 }>;
 
 /** One schema preset selectable in the sigil tool. */
 export type SigilSchemaOption = Readonly<{
+  defaultCharacters: string;
   id: SigilSchemaId;
   label: string;
   requiredGlyphs: ReadonlyArray<SigilSchemaGlyph>;
@@ -27,14 +29,15 @@ export const DEFAULT_SIGIL_SCHEMA_ID: SigilSchemaId = SIGIL_GLYPH_MAP_SCHEMA_ID;
 /** Concrete schema presets available in the sigil tool. */
 export const SIGIL_SCHEMA_OPTIONS: ReadonlyArray<SigilSchemaOption> = [
   {
+    defaultCharacters: ".#+@e",
     id: SIGIL_GLYPH_MAP_SCHEMA_ID,
     label: "SigilGlyphMap",
     requiredGlyphs: [
-      { name: "floor", unicode: "." },
-      { name: "wall", unicode: "#" },
-      { name: "door", unicode: "+" },
-      { name: "player", unicode: "@" },
-      { name: "enemy", unicode: "e" },
+      { defaultUnicode: ".", name: "floor", unicode: "." },
+      { defaultUnicode: "#", name: "wall", unicode: "#" },
+      { defaultUnicode: "+", name: "door", unicode: "+" },
+      { defaultUnicode: "@", name: "player", unicode: "@" },
+      { defaultUnicode: "e", name: "enemy", unicode: "e" },
     ],
   },
 ];
@@ -63,8 +66,7 @@ export const findSigilSchemaOption = (
  */
 export const sigilSchemaCharacters = (
   schemaOption: SigilSchemaOption | undefined,
-): string =>
-  schemaOption?.requiredGlyphs.map((glyph) => glyph.unicode).join("") ?? "";
+): string => schemaOption?.defaultCharacters ?? "";
 
 /**
  * Builds default glyph names keyed by source Unicode character.
