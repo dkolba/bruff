@@ -44,3 +44,12 @@ Resolved before design:
 - Changing the selected schema after a font is loaded re-extracts glyphs for the new schema characters.
 - Re-selecting the current schema is idempotent and does not clear valid mapped glyph or license choices for unchanged source characters.
 - The selector remains keyboard-accessible and labeled.
+
+## Verification
+
+- Verified the textarea is removed and the schema select is present with `SigilGlyphMap` preselected via `tool-sigil.test.ts`, `tool-sigil-render.test.ts`, and `tool-sigil-bindings.test.ts`.
+- Verified `SigilGlyphMap` derives the source character order `".#+@e"` and prefilled names for `floor`, `wall`, `door`, `player`, and `enemy` via `sigil-schema-catalog.test.ts` and `tool-sigil-state.test.ts`.
+- Verified schema changes flow through `<tool-sigil>` bindings and coordinator state with component, binding, and state tests.
+- Verified unsupported or missing schema characters continue to surface typed missing-glyph errors with `tool-sigil-error.test.ts`.
+- Verified downloads still validate through the shared `SigilGlyphMap` contract and include mapped glyph plus `"LICENSE"` fields with `tool-sigil-download.test.ts` and regression tests.
+- Gates run for `@bruff/sigil`: `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run typecheck`, `pnpm --filter @bruff/sigil run test:chromium`, `pnpm --filter @bruff/sigil run test:firefox`, and `pnpm --filter @bruff/sigil run test:webkit`.

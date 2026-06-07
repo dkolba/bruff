@@ -10,7 +10,8 @@
 | `packages/sigil/module/tool-sigil-state-selectors.ts` | Pure projection | Projects schema selector state for rendering and preserves validation semantics. |
 | `packages/sigil/module/tool-sigil-template.ts` | Web component shell template | Replaces the textarea markup with a labeled select. |
 | `packages/sigil/module/tool-sigil-bindings.ts` | Web component shell bindings | Replaces textarea input handling with schema select change handling. |
-| `packages/sigil/module/tool-sigil-render.ts` | Web component shell render | Renders selected schema and glyph rows with required names. |
+| `packages/sigil/module/tool-sigil-render.ts` | Web component shell render | Renders glyph rows with required names and delegates schema selector rendering. |
+| `packages/sigil/module/tool-sigil-schema-render.ts` | Web component shell render | Renders selected schema options into the schema select. |
 | `packages/sigil/module/tool-sigil.ts` | Web component coordinator | Wires schema change events into pure state transitions. |
 
 ## Public API surface
@@ -97,6 +98,7 @@ No `GameState`, action, replay, or migration changes are required.
 - `packages/sigil/module/tool-sigil-state.ts` already owns pure initialization, character updates, and font-load extraction.
 - `packages/sigil/module/extract-glyphs.ts` remains the only extraction function and continues to accept a string of source characters.
 - `packages/sigil/module/tool-sigil-render.ts` already renders row names from `namesByUnicode` before falling back to draft names.
+- `packages/sigil/module/tool-sigil-schema-render.ts` owns schema selector DOM option replacement so `tool-sigil-render.ts` stays under the package line limit.
 - `packages/sigil/module/tool-sigil-bindings.ts` already routes select `change` events for glyph group, mapped glyph, and license controls.
 - `packages/sigil/module/tool-sigil.test.ts`, `tool-sigil-state.test.ts`, `tool-sigil-bindings.test.ts`, and `tool-sigil-render.test.ts` cover the changed component, state, binding, and render behaviour.
 

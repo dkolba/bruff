@@ -89,15 +89,6 @@ export const selectFiles = (
   fileInput.dispatchEvent(new Event("change", { bubbles: true }));
 };
 
-/** Enters characters into the component textarea. */
-export const enterCharacters = (
-  characterInput: HTMLTextAreaElement,
-  characters: string,
-): void => {
-  characterInput.value = characters;
-  characterInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
-};
-
 /** Loads the test font for the selected schema. */
 export const loadCharactersFromTestFont = async (
   shadowRoot: ShadowRoot,
