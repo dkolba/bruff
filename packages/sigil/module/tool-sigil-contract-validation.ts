@@ -25,3 +25,13 @@ export const validateToolSigilGlyphMap = (
         path: issuePath(issue.path),
       }));
 };
+
+/**
+ * Checks whether shared contract validation returned any issue.
+ *
+ * @param issues - Path-aware shared contract issues
+ * @returns True when at least one issue exists
+ */
+export const hasToolSigilContractIssues = (
+  issues: ReadonlyArray<ToolSigilContractIssue>,
+): boolean => issues.length > EMPTY_PATH_LENGTH;

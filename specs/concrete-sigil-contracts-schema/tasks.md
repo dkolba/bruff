@@ -32,7 +32,7 @@
 - [x] T30 — Add state tests for required glyph select changes in `packages/sigil/module/tool-sigil-state.test.ts`
 - [x] T31 — Implement `setToolSigilRequiredGlyphCharacter` in `packages/sigil/module/tool-sigil-state.ts`
 - [x] T32 — Add contract validation tests in `packages/sigil/module/tool-sigil-contract-validation.test.ts`
-- [ ] T33 — Implement contract validation in `packages/sigil/module/tool-sigil-contract-validation.ts`
+- [x] T33 — Implement contract validation in `packages/sigil/module/tool-sigil-contract-validation.ts`
 - [ ] T34 — Add download projection tests for selected required glyph characters in `packages/sigil/module/tool-sigil-download.test.ts`
 - [ ] T35 — Build exported `SigilGlyphMap` from required glyph selections in `packages/sigil/module/tool-sigil-state-selectors.ts`
 - [ ] T36 — Add template tests for restored textarea and required glyph selects in `packages/sigil/module/tool-sigil-render.test.ts`
