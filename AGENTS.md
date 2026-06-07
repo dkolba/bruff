@@ -60,7 +60,7 @@ These rules ensure maintainability, safety, and developer velocity.
 - **O-8 (MUST)** If you need to explain it, it's too complex
 - **O-9 (MUST)** DRY — eliminate duplication via abstraction once the same logic appears in three places (Rule of Three). Two near-identical blocks may stay until the third confirms the pattern.
 - **O-10 (MUST)** KISS — choose the boring, obvious approach. Cleverness is a defect; if a colleague has to ask "why is it like this?", simplify.
-- **O-11 (MUST)** Keep files ≤ 300 lines, and target ~200 lines where practical (Small Files Principle). Files larger than this almost always hide a missing module boundary (in rare cases, ask for permission to create larger files). Don't remove comments or annotations to satisfy "File has too many lines" linting rule.
+- **O-11 (MUST)** Keep files ≤ 300 lines, and target ~200 lines where practical (Small Files Principle). Files larger than this almost always hide a missing module boundary (in rare cases, ask for permission to create larger files). Don't remove comments or TsDoc annotations to satisfy "File has too many lines" linting rule.
 - **O-12 (MUST)** One responsibility per file (extends O-6 from per-function to per-file). The file's name is its contract — if you can't pick a precise name, the file does too much.
 
 #### Technical Standards
