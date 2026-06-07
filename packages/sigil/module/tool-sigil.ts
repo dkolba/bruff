@@ -5,11 +5,13 @@ import {
   selectToolSigilDownloadDisabled,
   selectToolSigilDownloadGlyphMap,
   selectToolSigilViewModel,
+  setToolSigilCharacters,
   setToolSigilGlyphGroup,
   setToolSigilGlyphName,
   setToolSigilLicense,
   setToolSigilMappedGlyph,
   setToolSigilPreviewFontFamily,
+  setToolSigilRequiredGlyphCharacter,
   setToolSigilSchema,
   startToolSigilFontSelection,
   type ToolSigilState,
@@ -56,6 +58,9 @@ export class ToolSigil extends HTMLElement {
 
     if (this.#disconnectControls === undefined) {
       this.#disconnectControls = connectToolSigilControls(shadowRoot, {
+        onCharactersInput: (characters) => {
+          this.#handleCharactersInput(characters);
+        },
         onDownloadClick: () => {
           this.#handleDownloadClick();
         },
@@ -73,6 +78,9 @@ export class ToolSigil extends HTMLElement {
         },
         onMappedGlyphChange: (unicode, mapping) => {
           this.#handleMappedGlyphChange(unicode, mapping);
+        },
+        onRequiredGlyphCharacterChange: (glyphName, unicode) => {
+          this.#handleRequiredGlyphCharacterChange(glyphName, unicode);
         },
         onSchemaChange: (schemaId) => {
           this.#handleSchemaChange(schemaId);
@@ -127,6 +135,23 @@ export class ToolSigil extends HTMLElement {
       this.#ensureShadowRoot(),
       selectToolSigilViewModel(this.#state),
     );
+  }
+
+  #handleCharactersInput(characters: string): void {
+    this.#state = setToolSigilCharacters(this.#state, characters);
+    this.#renderState();
+  }
+
+  #handleRequiredGlyphCharacterChange(
+    glyphName: string,
+    unicode: string,
+  ): void {
+    this.#state = setToolSigilRequiredGlyphCharacter(
+      this.#state,
+      glyphName,
+      unicode,
+    );
+    this.#renderState();
   }
 
   #handleSchemaChange(schemaId: string): void {

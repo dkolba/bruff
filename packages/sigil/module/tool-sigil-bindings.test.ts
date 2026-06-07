@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/text-encoding-identifier-case -- Delegation tests cover grouped glyph names such as ASCII in one DOM fixture. */
+/* eslint-disable max-lines-per-function, max-statements, unicorn/text-encoding-identifier-case -- Delegation tests cover grouped glyph names such as ASCII in one DOM fixture. */
 import {
   connectToolSigilControls,
   type DisconnectToolSigilControls,
@@ -21,6 +21,8 @@ const createBindingShadowRoot = (): ShadowRoot => {
   shadowRoot.innerHTML = `
     <input name="font-file" type="file">
     <select name="schema"></select>
+    <textarea name="characters"></textarea>
+    <div data-state="required-glyph-selections"></div>
     <div data-state="glyph-list"></div>
     <button type="button" data-action="download">Download JSON</button>
   `;
@@ -72,12 +74,14 @@ const appendGlyphInput = (
 const createToolSigilHandlers = (
   handlers: Partial<ToolSigilControlHandlers> = {},
 ): ToolSigilControlHandlers => ({
+  onCharactersInput: vi.fn(),
   onDownloadClick: vi.fn(),
   onFontFileSelected: vi.fn(),
   onGlyphGroupChange: vi.fn(),
   onGlyphNameInput: vi.fn(),
   onLicenseChange: vi.fn(),
   onMappedGlyphChange: vi.fn(),
+  onRequiredGlyphCharacterChange: vi.fn(),
   onSchemaChange: vi.fn(),
   ...handlers,
 });
@@ -127,7 +131,49 @@ describe("connectToolSigilControls setup", () => {
     schemaSelect.dispatchEvent(new Event("change"));
 
     expect(onSchemaChange).toHaveBeenCalledWith("SigilGlyphMap");
-    expect(shadowRoot.querySelector('textarea[name="characters"]')).toBeNull();
+
+    disconnect();
+  });
+
+  it("delegates textarea input events", () => {
+    const onCharactersInput = vi.fn();
+    const shadowRoot = createBindingShadowRoot();
+    const textarea = requireElement<HTMLTextAreaElement>(
+      shadowRoot,
+      'textarea[name="characters"]',
+    );
+    textarea.value = ".#";
+    const disconnect = connectToolSigilControls(
+      shadowRoot,
+      createToolSigilHandlers({ onCharactersInput }),
+    );
+
+    textarea.dispatchEvent(new InputEvent("input"));
+
+    expect(onCharactersInput).toHaveBeenCalledWith(".#");
+
+    disconnect();
+  });
+
+  it("delegates required glyph character select changes", () => {
+    const onRequiredGlyphCharacterChange = vi.fn();
+    const shadowRoot = createBindingShadowRoot();
+    const container = requireElement(
+      shadowRoot,
+      '[data-state="required-glyph-selections"]',
+    );
+    const select = appendSelect(container, "required-glyph-character", null);
+    Object.assign(select.dataset, { glyphName: "floor" });
+    select.append(new Option("#", "#"));
+    select.value = "#";
+    const disconnect = connectToolSigilControls(
+      shadowRoot,
+      createToolSigilHandlers({ onRequiredGlyphCharacterChange }),
+    );
+
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(onRequiredGlyphCharacterChange).toHaveBeenCalledWith("floor", "#");
 
     disconnect();
   });

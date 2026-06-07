@@ -12,11 +12,7 @@ import {
   SIGIL_GLYPH_GROUPS,
   type SigilGlyphGroupName,
 } from "./glyph-catalog.js";
-import type {
-  RequiredSigilGlyphName,
-  SigilExtractionError,
-  SigilGlyphMapping,
-} from "./glyph-json.js";
+import type { SigilExtractionError, SigilGlyphMapping } from "./glyph-json.js";
 import type {
   ToolSigilFontSelection,
   ToolSigilState,
@@ -121,7 +117,7 @@ export const setToolSigilCharacters = (
  */
 export const setToolSigilRequiredGlyphCharacter = (
   state: ToolSigilState,
-  name: RequiredSigilGlyphName,
+  name: string,
   unicode: string,
 ): ToolSigilState => {
   const currentSelection = state.requiredGlyphSelections.find(
