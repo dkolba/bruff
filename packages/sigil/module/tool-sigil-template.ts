@@ -118,6 +118,11 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
       Schema
       <select name="schema"></select>
     </label>
+    <label>
+      Characters
+      <textarea name="characters" rows="2"></textarea>
+    </label>
+    <div data-state="required-glyph-selections"></div>
     <p data-state="summary" aria-live="polite">Glyphs ready: 0</p>
     <div data-state="glyph-list"></div>
     <div data-state="errors"></div>
