@@ -60,18 +60,10 @@ export const waitForElement = <ElementType extends Element>(
   });
 };
 
-const waitForFontProcessing = (
+const waitForSchemaFontProcessing = (
   shadowRoot: ShadowRoot,
-  characters: string,
-): Promise<Element> => {
-  const [unicode] = characters;
-  const selector =
-    unicode === undefined
-      ? '[role="alert"]'
-      : `input[data-unicode="${unicode}"], [role="alert"]`;
-
-  return waitForElement(shadowRoot, selector);
-};
+): Promise<Element> =>
+  waitForElement(shadowRoot, 'input[data-unicode="."], [role="alert"]');
 
 /** Waits for component microtasks and file parsing to settle in browser tests. */
 export const waitForComponentUpdate = (): Promise<void> =>
@@ -106,23 +98,18 @@ export const enterCharacters = (
   characterInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
 };
 
-/** Loads the test font and enters characters. */
+/** Loads the test font for the selected schema. */
 export const loadCharactersFromTestFont = async (
   shadowRoot: ShadowRoot,
-  characters: string,
+  _characters: string,
 ): Promise<void> => {
   const fileInput = requireElement<HTMLInputElement>(
     shadowRoot,
     'input[type="file"][name="font-file"]',
   );
-  const characterInput = requireElement<HTMLTextAreaElement>(
-    shadowRoot,
-    'textarea[name="characters"]',
-  );
 
   selectFiles(fileInput, [createValidFontFile("component-test.ttf")]);
-  enterCharacters(characterInput, characters);
-  await waitForFontProcessing(shadowRoot, characters);
+  await waitForSchemaFontProcessing(shadowRoot);
 };
 
 /** Renames one rendered glyph input. */
