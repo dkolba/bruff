@@ -118,19 +118,13 @@ export const startToolSigilFontSelection = (
   };
 };
 
-/**
- * Updates the requested characters and re-extracts glyphs when a font exists.
- *
- * @param state - Current tool state
- * @param characters - User-entered characters
- * @returns Updated tool state
- */
 export const setToolSigilCharacters = (
   state: ToolSigilState,
   characters: string,
 ): ToolSigilState => ({
   ...state,
   characters,
+  contractIssues: [],
   ...extractDrafts(state.font, characters),
 });
 
