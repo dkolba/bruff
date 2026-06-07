@@ -8,11 +8,12 @@ import {
   setToolSigilGlyphGroup,
   setToolSigilLicense,
   setToolSigilMappedGlyph,
+  setToolSigilSchema,
   startToolSigilFontSelection,
   type ToolSigilState,
 } from "./tool-sigil-state.js";
 import { describe, expect, it } from "vitest";
-import { error, ok } from "@bruff/utils";
+import { brand, error, ok } from "@bruff/utils";
 import { createTestFont } from "./font-test-fixture.js";
 import type { SigilExtractionError } from "./glyph-json.js";
 import {
@@ -138,6 +139,31 @@ describe("ToolSigil loaded font view state", () => {
       glyphCountText: "Glyphs ready: 1",
     });
     expectDownloadedAsteriskGlyph(mappedAsteriskState(loadedState));
+  });
+
+  it("re-extracts current font glyphs when selecting a schema", () => {
+    const loadedState = loadCurrentFontState("★");
+    const schemaState = setToolSigilSchema(
+      {
+        ...loadedState,
+        selectedSchemaId: brand<"SigilSchemaId">("OtherSchema"),
+      },
+      DEFAULT_SIGIL_SCHEMA_ID,
+    );
+
+    expect(schemaState).toMatchObject({
+      characters: SIGIL_GLYPH_MAP_CHARACTERS,
+      drafts: [],
+      namesByUnicode: SIGIL_GLYPH_MAP_NAMES_BY_UNICODE,
+      selectedSchemaId: DEFAULT_SIGIL_SCHEMA_ID,
+    });
+    expect(schemaState.errors.map((stateError) => stateError.message)).toEqual([
+      'Missing glyph for ".".',
+      'Missing glyph for "#".',
+      'Missing glyph for "+".',
+      'Missing glyph for "@".',
+      'Missing glyph for "e".',
+    ]);
   });
 });
 
