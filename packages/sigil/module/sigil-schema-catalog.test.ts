@@ -30,6 +30,15 @@ describe("SIGIL_SCHEMA_OPTIONS", () => {
     ]);
   });
 
+  it("provides default textarea characters and required glyph defaults", () => {
+    const schemaOption = SIGIL_SCHEMA_OPTIONS[FIRST_SCHEMA_OPTION_INDEX];
+
+    expect(sigilSchemaCharacters(schemaOption)).toBe(".#+@e");
+    expect(schemaOption?.requiredGlyphs).toStrictEqual(
+      EXPECTED_SIGIL_GLYPH_MAP_REQUIRED_GLYPHS,
+    );
+  });
+
   it("finds a schema option by id", () => {
     expect(
       findSigilSchemaOption(SIGIL_SCHEMA_OPTIONS, SIGIL_GLYPH_MAP_SCHEMA_ID),
