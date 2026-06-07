@@ -1,4 +1,4 @@
-/* eslint-disable sort-imports, unicorn/text-encoding-identifier-case -- State tests cover the full glyph/license state matrix and catalog names such as ASCII. */
+/* eslint-disable max-lines, max-lines-per-function, sort-imports, unicorn/text-encoding-identifier-case -- State tests cover the full glyph/license state matrix and catalog names such as ASCII. */
 import {
   applyToolSigilFontLoadResult,
   createToolSigilState,
@@ -19,6 +19,7 @@ import {
 } from "./sigil-schema-catalog.js";
 import { createTestFont, createWallOnlyTestFont } from "./font-test-fixture.js";
 import type { SigilExtractionError } from "./glyph-json.js";
+import { requiredGlyphSelectionViews } from "./tool-sigil-required-glyph-selection.js";
 import { describe, expect, it } from "vitest";
 
 const EMPTY_COUNT = 0;
@@ -205,6 +206,22 @@ describe("ToolSigil schema partial font view state", () => {
 });
 
 describe("ToolSigil schema selection view state", () => {
+  it("marks required glyph selections invalid after character removal", () => {
+    const state = setToolSigilCharacters(createToolSigilState(), "#");
+
+    expect(
+      requiredGlyphSelectionViews(
+        state.characters,
+        state.requiredGlyphSelections,
+      ),
+    ).toContainEqual({
+      isValid: false,
+      name: "floor",
+      options: [{ label: "#", unicode: "#" }],
+      selectedUnicode: ".",
+    });
+  });
+
   it("preserves valid required glyph selections when textarea changes", () => {
     const state = setToolSigilCharacters(createToolSigilState(), ".#+@ex");
 
