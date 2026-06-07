@@ -11,7 +11,7 @@
 - [x] T9 — Replace the `Characters` textarea with a schema select in `packages/sigil/module/tool-sigil-template.ts`
 - [x] T10 — Update control bindings to query the schema select and emit `onSchemaChange` from `packages/sigil/module/tool-sigil-bindings.ts`
 - [x] T11 — Update binding tests for schema select changes and removed textarea input in `packages/sigil/module/tool-sigil-bindings.test.ts`
-- [ ] T12 — Render schema select options and selected value in `packages/sigil/module/tool-sigil-render.ts`
+- [x] T12 — Render schema select options and selected value in `packages/sigil/module/tool-sigil-render.ts`
 - [ ] T13 — Update render tests for the preselected `SigilGlyphMap` selector and absent textarea in `packages/sigil/module/tool-sigil-render.test.ts`
 - [ ] T14 — Wire `onSchemaChange` into `ToolSigil` and remove character input handling in `packages/sigil/module/tool-sigil.ts`
 - [ ] T15 — Update component regression tests for initial `SigilGlyphMap` selection and required glyph row names in `packages/sigil/module/tool-sigil.test.ts` and `packages/sigil/module/tool-sigil-regression.test.ts`

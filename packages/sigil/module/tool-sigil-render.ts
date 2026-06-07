@@ -190,6 +190,23 @@ const renderErrors = (
     ?.replaceChildren(...createErrorElements(viewModel.errors));
 };
 
+const renderSchemaSelect = (
+  shadowRoot: ShadowRoot,
+  viewModel: ToolSigilViewModel,
+): void => {
+  const schemaSelect = shadowRoot.querySelector<HTMLSelectElement>(
+    'select[name="schema"]',
+  );
+  schemaSelect?.replaceChildren(
+    ...viewModel.schemaOptions.map(
+      (schemaOption) => new Option(schemaOption.label, schemaOption.id),
+    ),
+  );
+  if (schemaSelect !== null) {
+    schemaSelect.value = viewModel.selectedSchemaId;
+  }
+};
+
 /**
  * Renders validation-only regions without replacing focused glyph inputs.
  *
@@ -278,6 +295,7 @@ export const renderToolSigil = (
   shadowRoot: ShadowRoot,
   viewModel: ToolSigilViewModel,
 ): void => {
+  renderSchemaSelect(shadowRoot, viewModel);
   replaceText(
     shadowRoot.querySelector('[data-state="font-file-name"]'),
     viewModel.fontFileNameText,
