@@ -202,6 +202,7 @@ export const renderToolSigilValidation = (
   shadowRoot: ShadowRoot,
   viewModel: ToolSigilViewModel,
 ): void => {
+  renderRequiredGlyphSelections(shadowRoot, viewModel.requiredGlyphSelections);
   renderErrors(shadowRoot, viewModel);
   renderDownloadButton(shadowRoot, viewModel);
 };

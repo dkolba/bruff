@@ -38,7 +38,7 @@
 - [x] T36 — Add template tests for restored textarea and required glyph selects in `packages/sigil/module/tool-sigil-render.test.ts`
 - [x] T37 — Restore textarea and add required glyph select markup in `packages/sigil/module/tool-sigil-template.ts`
 - [x] T38 — Add required glyph render tests in `packages/sigil/module/tool-sigil-required-glyph-render.test.ts`
-- [ ] T39 — Render required glyph selects in `packages/sigil/module/tool-sigil-required-glyph-render.ts` and `packages/sigil/module/tool-sigil-render.ts`
+- [x] T39 — Render required glyph selects in `packages/sigil/module/tool-sigil-required-glyph-render.ts` and `packages/sigil/module/tool-sigil-render.ts`
 - [ ] T40 — Add binding tests for textarea input and required glyph select changes in `packages/sigil/module/tool-sigil-bindings.test.ts`
 - [ ] T41 — Wire textarea and required glyph select bindings in `packages/sigil/module/tool-sigil-bindings.ts`
 - [ ] T42 — Add coordinator tests for textarea and required glyph changes in `packages/sigil/module/tool-sigil.test.ts`
