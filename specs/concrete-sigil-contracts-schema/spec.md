@@ -66,3 +66,12 @@ Resolved before design:
 - Changing the selected schema after a font is loaded re-evaluates textarea candidates, required glyph selections, extraction, and contract validation for the new schema.
 - Re-selecting the current schema is idempotent and does not clear valid required glyph selections, mapped glyph choices, or license choices when their source characters still exist in the textarea.
 - The textarea, schema selector, and required glyph selects remain keyboard-accessible and labeled.
+
+## Verification
+
+- Verified the restored `Characters` textarea, preselected `SigilGlyphMap` schema selector, and required glyph source-character selects with `tool-sigil-render.test.ts`, `tool-sigil-required-glyph-render.test.ts`, `tool-sigil-bindings.test.ts`, and `tool-sigil.test.ts`.
+- Verified textarea edits update distinct required glyph character options and invalid selection state with `tool-sigil-required-glyph-selection.test.ts`, `tool-sigil-state.test.ts`, and component tests.
+- Verified uploaded fonts extract typed textarea characters while required `floor`, `wall`, `door`, `player`, and `enemy` rows remain visible with missing selected glyph errors via `tool-sigil-state.test.ts`, `tool-sigil-error.test.ts`, and regression tests.
+- Verified JSON export is built from selected required glyph characters and omits unselected typed glyphs with `tool-sigil-download.test.ts` and `tool-sigil-regression.test.ts`.
+- Verified exact shared-contract validation reasons are surfaced for invalid produced glyph JSON with `glyph-name.test.ts`, `tool-sigil-contract-validation.test.ts`, and `tool-sigil-error.test.ts`.
+- Verified `@bruff/sigil` gates passed: `pnpm --filter @bruff/sigil run format`, `lint`, `typecheck`, `test:chromium`, `test:firefox`, and `test:webkit`.
