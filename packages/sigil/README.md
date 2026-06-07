@@ -2,7 +2,7 @@
 
 Development-only browser tool for extracting selected glyphs from a local font into compact JSON. The package registers `<tool-sigil>` for the arcade `/tools` dev route; production arcade builds must not import this package.
 
-The tool starts from the selected concrete schema preset, extracts that schema's source characters, and maps each extracted row to one glyph from `@bruff/glyph` and one OSI license value before download. Rows use a staged picker: choose a glyph group first, then choose one glyph from that group rather than scanning the full shared glyph catalog.
+The tool starts from the selected concrete schema preset, restores the preset character textarea, and lets each required contract glyph choose one typed source character before download. Each extracted row maps to one glyph from `@bruff/glyph` and one OSI license value. Rows use a staged picker: choose a glyph group first, then choose one glyph from that group rather than scanning the full shared glyph catalog.
 
 ## Development
 
@@ -28,7 +28,7 @@ The downloadable JSON is keyed by editable glyph names. Each entry stores the so
 
 The shared payload contract lives in `@bruff/contracts`. `@bruff/sigil` re-exports the contract-owned payload types from `module/glyph-json.ts` and validates completed glyph maps with `parseSigilGlyphMap()` before download.
 
-Downloadable glyph maps must include `floor`, `wall`, `door`, `player`, and `enemy` glyph keys. The current tool preset pre-fills those required names from the selected `SigilGlyphMap` schema.
+Downloadable glyph maps must include `floor`, `wall`, `door`, `player`, and `enemy` glyph keys. The current tool preset pre-fills the textarea with `".#+@e"` and preselects one typed character for each required `SigilGlyphMap` key. Typed characters that are not selected by a required contract glyph can be previewed but are omitted from the exported `SigilGlyphMap` JSON.
 
 The generated `mappedGlyph` value records:
 
