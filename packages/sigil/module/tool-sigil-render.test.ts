@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/text-encoding-identifier-case -- Render tests use small literal view models for glyph catalog UI states. */
+/* eslint-disable max-lines-per-function, unicorn/text-encoding-identifier-case -- Render tests use small literal view models for glyph catalog UI states. */
 import {
   DEFAULT_SIGIL_SCHEMA_ID,
   SIGIL_SCHEMA_OPTIONS,
@@ -44,7 +44,14 @@ const viewModel = (
   licenseOptions: [],
   namesByUnicode: {},
   previewFontFamily: "",
-  requiredGlyphSelections: [],
+  requiredGlyphSelections: [
+    {
+      isValid: true,
+      name: "floor",
+      options: [{ label: ".", unicode: "." }],
+      selectedUnicode: ".",
+    },
+  ],
   schemaOptions: SIGIL_SCHEMA_OPTIONS,
   selectedGlyphsByUnicode: {},
   selectedLicensesByUnicode: {},
@@ -59,6 +66,8 @@ const createRenderShadowRoot = (): ShadowRoot => {
   shadowRoot.innerHTML = `
     <p data-state="font-file-name"></p>
     <select name="schema"></select>
+    <textarea name="characters"></textarea>
+    <div data-state="required-glyph-selections"></div>
     <p data-state="summary"></p>
     <div data-state="glyph-list"></div>
     <div data-state="errors"></div>
@@ -98,7 +107,7 @@ const glyphCatalogViewModel = (): Pick<
 });
 
 describe("renderToolSigil", () => {
-  it("renders the preselected schema selector without a textarea", () => {
+  it("renders the preselected schema selector with textarea mappings", () => {
     const shadowRoot = createRenderShadowRoot();
 
     renderToolSigil(shadowRoot, viewModel());
@@ -111,7 +120,18 @@ describe("renderToolSigil", () => {
     expect([...schemaSelect.options].map((option) => option.text)).toEqual([
       "SigilGlyphMap",
     ]);
-    expect(shadowRoot.querySelector('textarea[name="characters"]')).toBeNull();
+    expect(
+      requireElement<HTMLTextAreaElement>(
+        shadowRoot,
+        'textarea[name="characters"]',
+      ).value,
+    ).toBe(".#+@e");
+    expect(
+      requireElement<HTMLSelectElement>(
+        shadowRoot,
+        'select[data-action="required-glyph-character"][data-glyph-name="floor"]',
+      ).value,
+    ).toBe(".");
   });
 
   it("skips missing optional schema select", () => {

@@ -1,6 +1,7 @@
 import { appendText } from "./dom-text.js";
 import { createErrorElements } from "./error-elements.js";
 import { createGlyphPreview } from "./glyph-preview.js";
+import { renderRequiredGlyphSelections } from "./tool-sigil-required-glyph-render.js";
 import { renderToolSigilSchemaSelect } from "./tool-sigil-schema-render.js";
 import type { SigilGlyphDraft } from "./glyph-json.js";
 import type { SigilGlyphOption } from "./glyph-catalog.js";
@@ -280,6 +281,13 @@ export const renderToolSigil = (
   viewModel: ToolSigilViewModel,
 ): void => {
   renderToolSigilSchemaSelect(shadowRoot, viewModel);
+  const charactersTextarea = shadowRoot.querySelector<HTMLTextAreaElement>(
+    'textarea[name="characters"]',
+  );
+  if (charactersTextarea !== null) {
+    charactersTextarea.value = viewModel.characters;
+  }
+  renderRequiredGlyphSelections(shadowRoot, viewModel.requiredGlyphSelections);
   replaceText(
     shadowRoot.querySelector('[data-state="font-file-name"]'),
     viewModel.fontFileNameText,
