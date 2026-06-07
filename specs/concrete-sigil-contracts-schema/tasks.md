@@ -8,7 +8,7 @@
 - [x] T6 — Implement `setToolSigilSchema` in `packages/sigil/module/tool-sigil-state.ts`
 - [x] T7 — Add state tests for schema selection re-extraction with the current font in `packages/sigil/module/tool-sigil-state.test.ts`
 - [x] T8 — Project schema selector fields from `selectToolSigilViewModel` in `packages/sigil/module/tool-sigil-state-selectors.ts`
-- [ ] T9 — Replace the `Characters` textarea with a schema select in `packages/sigil/module/tool-sigil-template.ts`
+- [x] T9 — Replace the `Characters` textarea with a schema select in `packages/sigil/module/tool-sigil-template.ts`
 - [ ] T10 — Update control bindings to query the schema select and emit `onSchemaChange` from `packages/sigil/module/tool-sigil-bindings.ts`
 - [ ] T11 — Update binding tests for schema select changes and removed textarea input in `packages/sigil/module/tool-sigil-bindings.test.ts`
 - [ ] T12 — Render schema select options and selected value in `packages/sigil/module/tool-sigil-render.ts`

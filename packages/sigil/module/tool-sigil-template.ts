@@ -68,11 +68,6 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
     background: Canvas;
   }
 
-  textarea {
-    min-height: 6rem;
-    resize: vertical;
-  }
-
   button {
     justify-self: start;
     cursor: pointer;
@@ -120,8 +115,8 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
     </label>
     <p data-state="font-file-name">No font selected</p>
     <label>
-      Characters
-      <textarea name="characters" spellcheck="false"></textarea>
+      Schema
+      <select name="schema"></select>
     </label>
     <p data-state="summary" aria-live="polite">Glyphs ready: 0</p>
     <div data-state="glyph-list"></div>
