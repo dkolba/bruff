@@ -3,11 +3,20 @@ import {
   appendToolSigil,
   requireElement,
   requireShadowRoot,
+  selectDefaultMappingAndLicense,
   selectFiles,
   waitForElement,
 } from "./tool-sigil-test-support.js";
 import { describe, expect, it } from "vitest";
 import { createMissingStarFontFile } from "./font-test-fixture.js";
+
+const REQUIRED_SCHEMA_UNICODES = [".", "#", "+", "@", "e"];
+
+const selectSchemaMappingAndLicense = (shadowRoot: ShadowRoot): void => {
+  REQUIRED_SCHEMA_UNICODES.map((unicode) =>
+    selectDefaultMappingAndLicense(shadowRoot, unicode),
+  );
+};
 
 const expectAlertText = async (
   shadowRoot: ShadowRoot,
@@ -51,6 +60,26 @@ describe("ToolSigil missing glyph error state", () => {
     selectFiles(fileInput, [createMissingStarFontFile("missing.ttf")]);
 
     await expectAlertText(shadowRoot, 'Missing glyph for ".".');
+
+    element.remove();
+  });
+
+  it("shows exact contract validation reasons", async () => {
+    const element = appendToolSigil();
+    const shadowRoot = requireShadowRoot(element);
+    const fileInput = requireElement<HTMLInputElement>(
+      shadowRoot,
+      'input[type="file"][name="font-file"]',
+    );
+
+    selectFiles(fileInput, [createMissingStarFontFile("missing.ttf")]);
+    await waitForElement<HTMLElement>(shadowRoot, '[role="alert"]');
+    selectSchemaMappingAndLicense(shadowRoot);
+
+    await expectAlertText(
+      shadowRoot,
+      "Produced glyph JSON does not match the shared contract at floor.path: Too small: expected string to have >=1 characters",
+    );
 
     element.remove();
   });

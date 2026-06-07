@@ -66,8 +66,14 @@ const duplicateGlyphNameError = (glyphName: string): SigilExtractionError => ({
   type: "duplicate-glyph-name",
 });
 
-const invalidGlyphJsonError = (): SigilExtractionError => ({
-  message: "Produced glyph JSON does not match the shared contract.",
+const issuePath = (path: ReadonlyArray<PropertyKey>): string =>
+  path.map(String).join(".");
+
+const invalidGlyphJsonError = (
+  path: ReadonlyArray<PropertyKey>,
+  message: string,
+): SigilExtractionError => ({
+  message: `Produced glyph JSON does not match the shared contract at ${issuePath(path)}: ${message}`,
   type: "invalid-glyph-json",
 });
 
@@ -181,5 +187,9 @@ export const createSigilGlyphMap = (
 
   return parsedGlyphMap.type === "ok"
     ? ok(parsedGlyphMap.value)
-    : error([invalidGlyphJsonError()]);
+    : error(
+        parsedGlyphMap.error.issues.map((issue) =>
+          invalidGlyphJsonError(issue.path, issue.message),
+        ),
+      );
 };
