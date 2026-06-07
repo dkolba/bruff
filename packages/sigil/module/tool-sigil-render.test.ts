@@ -54,6 +54,7 @@ const createRenderShadowRoot = (): ShadowRoot => {
   const shadowRoot = host.attachShadow({ mode: "open" });
   shadowRoot.innerHTML = `
     <p data-state="font-file-name"></p>
+    <select name="schema"></select>
     <p data-state="summary"></p>
     <div data-state="glyph-list"></div>
     <div data-state="errors"></div>
@@ -93,6 +94,22 @@ const glyphCatalogViewModel = (): Pick<
 });
 
 describe("renderToolSigil", () => {
+  it("renders the preselected schema selector without a textarea", () => {
+    const shadowRoot = createRenderShadowRoot();
+
+    renderToolSigil(shadowRoot, viewModel());
+
+    const schemaSelect = requireElement<HTMLSelectElement>(
+      shadowRoot,
+      'select[name="schema"]',
+    );
+    expect(schemaSelect.value).toBe("SigilGlyphMap");
+    expect([...schemaSelect.options].map((option) => option.text)).toEqual([
+      "SigilGlyphMap",
+    ]);
+    expect(shadowRoot.querySelector('textarea[name="characters"]')).toBeNull();
+  });
+
   it("renders empty catalog selection fallbacks", () => {
     const shadowRoot = createRenderShadowRoot();
 
