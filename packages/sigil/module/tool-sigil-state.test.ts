@@ -22,6 +22,7 @@ import type { SigilExtractionError } from "./glyph-json.js";
 import { describe, expect, it } from "vitest";
 
 const EMPTY_COUNT = 0;
+const FIRST_SCHEMA_OPTION_INDEX = 0;
 
 const SIGIL_GLYPH_MAP_CHARACTERS = ".#+@e";
 
@@ -120,6 +121,19 @@ describe("ToolSigil state selection", () => {
     });
     expect(viewModel.glyphGroups.length).toBeGreaterThan(EMPTY_COUNT);
     expect(viewModel.licenseOptions.length).toBeGreaterThan(EMPTY_COUNT);
+  });
+
+  it("exposes required glyph defaults from the selected schema", () => {
+    expect(
+      createToolSigilState().schemaOptions[FIRST_SCHEMA_OPTION_INDEX]
+        ?.requiredGlyphs,
+    ).toStrictEqual([
+      { defaultUnicode: ".", name: "floor", unicode: "." },
+      { defaultUnicode: "#", name: "wall", unicode: "#" },
+      { defaultUnicode: "+", name: "door", unicode: "+" },
+      { defaultUnicode: "@", name: "player", unicode: "@" },
+      { defaultUnicode: "e", name: "enemy", unicode: "e" },
+    ]);
   });
 
   it("derives extraction characters from the selected schema", () => {

@@ -19,7 +19,7 @@
 - [x] T17 — Add `completeMissingDrafts` in `packages/sigil/module/tool-sigil-missing-drafts.ts` and state coverage so every required schema row renders when uploaded fonts miss characters
 - [x] T18 — Add catalog tests for default textarea characters and required glyph defaults in `packages/sigil/module/sigil-schema-catalog.test.ts`
 - [x] T19 — Extend schema catalog defaults in `packages/sigil/module/sigil-schema-catalog.ts`
-- [ ] T20 — Add required glyph selection type tests in `packages/sigil/module/tool-sigil-state.test.ts`
+- [x] T20 — Add required glyph selection type tests in `packages/sigil/module/tool-sigil-state.test.ts`
 - [ ] T21 — Add `requiredGlyphSelections` and `contractIssues` state fields in `packages/sigil/module/tool-sigil-state-types.ts`
 - [ ] T22 — Add character option derivation tests in `packages/sigil/module/tool-sigil-required-glyph-selection.test.ts`
 - [ ] T23 — Implement character option derivation in `packages/sigil/module/tool-sigil-required-glyph-selection.ts`
