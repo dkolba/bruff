@@ -183,13 +183,26 @@ const renderDownloadButton = (
   downloadButton?.toggleAttribute("disabled", viewModel.downloadDisabled);
 };
 
+const contractIssueErrors = (
+  viewModel: ToolSigilViewModel,
+): ToolSigilViewModel["errors"] =>
+  viewModel.contractIssues.map((issue) => ({
+    message: `${issue.path}: ${issue.message}`,
+    type: "invalid-glyph-json",
+  }));
+
 const renderErrors = (
   shadowRoot: ShadowRoot,
   viewModel: ToolSigilViewModel,
 ): void => {
   shadowRoot
     .querySelector('[data-state="errors"]')
-    ?.replaceChildren(...createErrorElements(viewModel.errors));
+    ?.replaceChildren(
+      ...createErrorElements([
+        ...viewModel.errors,
+        ...contractIssueErrors(viewModel),
+      ]),
+    );
 };
 
 /**
