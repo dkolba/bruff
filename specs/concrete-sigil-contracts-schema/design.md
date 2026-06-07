@@ -6,7 +6,8 @@
 | --- | --- | --- |
 | `packages/sigil/module/sigil-schema-catalog.ts` | Pure catalog | Defines available concrete schema presets and default selection. |
 | `packages/sigil/module/tool-sigil-state-types.ts` | Pure state types | Adds selected schema id and schema options to `ToolSigilState` and `ToolSigilViewModel`. |
-| `packages/sigil/module/tool-sigil-state.ts` | Pure state transitions | Initializes the selected schema, derives characters and required names from the selected schema, and handles schema changes. |
+| `packages/sigil/module/tool-sigil-state.ts` | Pure state transitions | Initializes the selected schema, derives characters and required names from the selected schema, completes missing schema rows after extraction, and handles schema changes. |
+| `packages/sigil/module/tool-sigil-missing-drafts.ts` | Pure projection helper | Creates renderable placeholder drafts for requested schema characters that the uploaded font cannot extract. |
 | `packages/sigil/module/tool-sigil-state-selectors.ts` | Pure projection | Projects schema selector state for rendering and preserves validation semantics. |
 | `packages/sigil/module/tool-sigil-template.ts` | Web component shell template | Replaces the textarea markup with a labeled select. |
 | `packages/sigil/module/tool-sigil-bindings.ts` | Web component shell bindings | Replaces textarea input handling with schema select change handling. |
@@ -96,6 +97,7 @@ No `GameState`, action, replay, or migration changes are required.
 - `packages/contracts/module/sigil-glyph-json.ts` provides `requiredSigilGlyphNames`, `RequiredSigilGlyphName`, and the `SigilGlyphMap` contract shape.
 - `packages/sigil/module/glyph-json.ts` already re-exports contract glyph names and types for sigil modules.
 - `packages/sigil/module/tool-sigil-state.ts` already owns pure initialization, character updates, and font-load extraction.
+- `packages/sigil/module/tool-sigil-missing-drafts.ts` completes the renderable draft list after extraction so every requested schema character has a row, while the original extraction errors remain visible.
 - `packages/sigil/module/extract-glyphs.ts` remains the only extraction function and continues to accept a string of source characters.
 - `packages/sigil/module/tool-sigil-render.ts` already renders row names from `namesByUnicode` before falling back to draft names.
 - `packages/sigil/module/tool-sigil-schema-render.ts` owns schema selector DOM option replacement so `tool-sigil-render.ts` stays under the package line limit.
@@ -113,7 +115,9 @@ selected schema -> characters + namesByUnicode
         |
 font load -> extractSigilGlyphs(font, characters)
         |
-ToolSigilViewModel -> selector + required glyph rows
+completeMissingDrafts(font, characters, drafts)
+        |
+ToolSigilViewModel -> selector + all required glyph rows
         |
 select change -> setToolSigilSchema() -> re-extract with current font
 ```
@@ -125,6 +129,7 @@ select change -> setToolSigilSchema() -> re-extract with current font
 Pros:
 
 - Keeps extraction unchanged by deriving the existing character string from schema metadata.
+- Keeps every schema row visible by completing missing extraction drafts at the state boundary instead of weakening extraction error semantics.
 - Keeps the Web Component shell thin and delegates schema decisions to pure state/catalog modules.
 - Allows future schemas to be added by appending catalog entries.
 
@@ -159,6 +164,7 @@ Cons:
 - Add pure catalog tests for the default `SigilGlyphMap` option and its required glyph mapping.
 - Add state tests proving initial state selects `SigilGlyphMap`, derives `".#+@e"`, and preloads `namesByUnicode`.
 - Add state tests proving schema selection re-extracts using the current font when present.
+- Add state tests proving partial fonts still render every required schema row and keep missing-glyph errors visible.
 - Update binding tests to assert schema select changes call `onSchemaChange` and textarea input handling is absent.
 - Update render/component tests to assert no textarea is present and the schema selector is labeled and preselected.
 - Run `pnpm --filter @bruff/sigil run format`, `lint`, `typecheck`, and targeted browser tests while implementing; run broader repo `pnpm run ok` before final completion if available.

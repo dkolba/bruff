@@ -18,6 +18,7 @@ Update the `@bruff/sigil` browser tool so glyph extraction starts from a concret
   - `enemy` uses `e`
 - The extracted glyph rows use the required contract names as their initial names instead of names inferred from the character.
 - Unsupported characters remain visible as typed extraction errors when the uploaded font or extractor cannot produce a glyph for them.
+- Every required schema glyph row is displayed after a font upload, even when the font lacks one or more required characters.
 
 ## Out of scope
 
@@ -39,7 +40,7 @@ Resolved before design:
 ## Edge cases
 
 - A user connects `<tool-sigil>` with no font selected: the selector shows `SigilGlyphMap`, the summary remains zero ready glyphs, and no extraction errors are shown until a font is loaded.
-- A font lacks one or more required characters: rows are created only for successfully extracted glyphs and typed extraction errors describe missing or unsupported glyphs.
+- A font lacks one or more required characters: rows are still created for every required schema glyph, missing glyph rows keep the required names visible, and typed extraction errors describe missing or unsupported glyphs.
 - More than one required glyph uses the same source character in a future schema: duplicate source characters must not produce ambiguous row state.
 - Changing the selected schema after a font is loaded re-extracts glyphs for the new schema characters.
 - Re-selecting the current schema is idempotent and does not clear valid mapped glyph or license choices for unchanged source characters.
@@ -51,5 +52,6 @@ Resolved before design:
 - Verified `SigilGlyphMap` derives the source character order `".#+@e"` and prefilled names for `floor`, `wall`, `door`, `player`, and `enemy` via `sigil-schema-catalog.test.ts` and `tool-sigil-state.test.ts`.
 - Verified schema changes flow through `<tool-sigil>` bindings and coordinator state with component, binding, and state tests.
 - Verified unsupported or missing schema characters continue to surface typed missing-glyph errors with `tool-sigil-error.test.ts`.
+- Verified partial fonts still render every `SigilGlyphMap` schema row with prefilled names via `tool-sigil-state.test.ts` and `tool-sigil-missing-drafts.ts`.
 - Verified downloads still validate through the shared `SigilGlyphMap` contract and include mapped glyph plus `"LICENSE"` fields with `tool-sigil-download.test.ts` and regression tests.
 - Gates run for `@bruff/sigil`: `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run typecheck`, `pnpm --filter @bruff/sigil run test:chromium`, `pnpm --filter @bruff/sigil run test:firefox`, and `pnpm --filter @bruff/sigil run test:webkit`.
