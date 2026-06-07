@@ -13,6 +13,6 @@
 - [x] T11 — Update binding tests for schema select changes and removed textarea input in `packages/sigil/module/tool-sigil-bindings.test.ts`
 - [x] T12 — Render schema select options and selected value in `packages/sigil/module/tool-sigil-render.ts`
 - [x] T13 — Update render tests for the preselected `SigilGlyphMap` selector and absent textarea in `packages/sigil/module/tool-sigil-render.test.ts`
-- [ ] T14 — Wire `onSchemaChange` into `ToolSigil` and remove character input handling in `packages/sigil/module/tool-sigil.ts`
+- [x] T14 — Wire `onSchemaChange` into `ToolSigil` and remove character input handling in `packages/sigil/module/tool-sigil.ts`
 - [ ] T15 — Update component regression tests for initial `SigilGlyphMap` selection and required glyph row names in `packages/sigil/module/tool-sigil.test.ts` and `packages/sigil/module/tool-sigil-regression.test.ts`
 - [ ] T16 — Run `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run typecheck`, and affected `@bruff/sigil` browser tests
