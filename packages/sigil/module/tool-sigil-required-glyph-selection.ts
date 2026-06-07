@@ -42,6 +42,11 @@ export const defaultRequiredGlyphSelections = (
  * @param selections - Current required glyph selections
  * @returns Render-ready required glyph selection views
  */
+const hasRequiredGlyphSelectionCharacter = (
+  options: ReadonlyArray<RequiredGlyphCharacterOption>,
+  unicode: string,
+): boolean => options.some((option) => option.unicode === unicode);
+
 export const requiredGlyphSelectionViews = (
   characters: string,
   selections: ReadonlyArray<RequiredGlyphSelection>,
@@ -49,7 +54,7 @@ export const requiredGlyphSelectionViews = (
   const options = requiredGlyphCharacterOptions(characters);
 
   return selections.map((selection) => ({
-    isValid: options.some((option) => option.unicode === selection.unicode),
+    isValid: hasRequiredGlyphSelectionCharacter(options, selection.unicode),
     name: selection.name,
     options,
     selectedUnicode: selection.unicode,
