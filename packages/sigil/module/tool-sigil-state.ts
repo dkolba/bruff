@@ -236,6 +236,14 @@ export const setToolSigilMappedGlyph = (
   },
 });
 
+/**
+ * Selects a license for one source character and memorizes it for new rows.
+ *
+ * @param state - Current tool state
+ * @param unicode - Source glyph Unicode character
+ * @param licenseValue - Machine-readable selected license value
+ * @returns Updated tool state
+ */
 export const setToolSigilLicense = (
   state: ToolSigilState,
   unicode: string,
@@ -249,6 +257,14 @@ export const setToolSigilLicense = (
   },
 });
 
+/**
+ * Applies a parsed font result when it belongs to the current load token.
+ *
+ * @param state - Current tool state
+ * @param fontLoadToken - Token captured when the async font load started
+ * @param fontResult - Parsed font or typed loading errors
+ * @returns Updated state, or the unchanged state for stale results
+ */
 export const applyToolSigilFontLoadResult = (
   state: ToolSigilState,
   fontLoadToken: number,
@@ -274,6 +290,14 @@ export const applyToolSigilFontLoadResult = (
   };
 };
 
+/**
+ * Applies the preview font family when it belongs to the current load token.
+ *
+ * @param state - Current tool state
+ * @param fontLoadToken - Token captured when preview loading started
+ * @param previewFontFamily - Browser font family installed for previews
+ * @returns Updated state, or the unchanged state for stale results
+ */
 export const setToolSigilPreviewFontFamily = (
   state: ToolSigilState,
   fontLoadToken: number,
@@ -286,6 +310,13 @@ export const setToolSigilPreviewFontFamily = (
       }
     : state;
 
+/**
+ * Clears the preview font family when the load token is current.
+ *
+ * @param state - Current tool state
+ * @param fontLoadToken - Token captured when preview loading started
+ * @returns Updated state, or the unchanged state for stale results
+ */
 export const clearToolSigilPreviewFontFamily = (
   state: ToolSigilState,
   fontLoadToken: number,
