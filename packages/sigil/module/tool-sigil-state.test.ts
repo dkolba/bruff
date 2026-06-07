@@ -15,8 +15,22 @@ import { describe, expect, it } from "vitest";
 import { error, ok } from "@bruff/utils";
 import { createTestFont } from "./font-test-fixture.js";
 import type { SigilExtractionError } from "./glyph-json.js";
+import {
+  DEFAULT_SIGIL_SCHEMA_ID,
+  SIGIL_SCHEMA_OPTIONS,
+} from "./sigil-schema-catalog.js";
 
 const EMPTY_COUNT = 0;
+
+const SIGIL_GLYPH_MAP_CHARACTERS = ".#+@e";
+
+const SIGIL_GLYPH_MAP_NAMES_BY_UNICODE = {
+  "#": "wall",
+  "+": "door",
+  ".": "floor",
+  "@": "player",
+  e: "enemy",
+};
 
 const invalidFontErrors: ReadonlyArray<SigilExtractionError> = [
   {
@@ -93,14 +107,24 @@ describe("ToolSigil state selection", () => {
       errors: [],
       fontFileNameText: "No font selected",
       glyphCountText: "Glyphs ready: 0",
-      namesByUnicode: {},
+      namesByUnicode: SIGIL_GLYPH_MAP_NAMES_BY_UNICODE,
       previewFontFamily: "",
+      schemaOptions: SIGIL_SCHEMA_OPTIONS,
       selectedGlyphsByUnicode: {},
       selectedLicensesByUnicode: {},
+      selectedSchemaId: DEFAULT_SIGIL_SCHEMA_ID,
       stagedGlyphGroupsByUnicode: {},
     });
     expect(viewModel.glyphGroups.length).toBeGreaterThan(EMPTY_COUNT);
     expect(viewModel.licenseOptions.length).toBeGreaterThan(EMPTY_COUNT);
+  });
+
+  it("derives extraction characters from the selected schema", () => {
+    expect(createToolSigilState()).toMatchObject({
+      characters: SIGIL_GLYPH_MAP_CHARACTERS,
+      namesByUnicode: SIGIL_GLYPH_MAP_NAMES_BY_UNICODE,
+      selectedSchemaId: DEFAULT_SIGIL_SCHEMA_ID,
+    });
   });
 });
 
