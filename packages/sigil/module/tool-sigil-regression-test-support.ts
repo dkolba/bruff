@@ -17,9 +17,23 @@ import {
 import { expect } from "vitest";
 import type { ToolSigil } from "./tool-sigil.js";
 
+const BLOCKED_DOWNLOAD_BLOB_COUNT = 0;
 const DOWNLOADED_BLOB_COUNT = 1;
 const PREVIEW_FONT_FAMILY_PREFIX = "tool-sigil-preview-font";
 const REQUIRED_SCHEMA_UNICODES = [".", "#", "+", "@", "e"];
+
+const selectRequiredGlyphCharacter = (
+  shadowRoot: ShadowRoot,
+  glyphName: string,
+  unicode: string,
+): void => {
+  const select = requireElement<HTMLSelectElement>(
+    shadowRoot,
+    `select[data-action="required-glyph-character"][data-glyph-name="${glyphName}"]`,
+  );
+  select.value = unicode;
+  select.dispatchEvent(new Event("change", { bubbles: true }));
+};
 
 type CreatedBlobState = Readonly<{
   createdBlobs: ReadonlyArray<Blob>;
@@ -184,10 +198,24 @@ export const expectPartialGlyphJsonDownload = async (
   renameGlyph(shadowRoot, ".", "customFloor");
   clickDownload(shadowRoot);
 
+  expect(urlStubs.createdBlobs).toHaveLength(BLOCKED_DOWNLOAD_BLOB_COUNT);
+};
+
+export const expectTypedCharacterSelectionDownload = async (
+  shadowRoot: ShadowRoot,
+  urlStubs: CreatedBlobState,
+): Promise<void> => {
+  await loadCharactersFromTestFont(shadowRoot, ".#+@e★");
+  selectRequiredGlyphCharacter(shadowRoot, "floor", "★");
+  [...REQUIRED_SCHEMA_UNICODES, "★"].map((unicode) =>
+    selectDefaultMappingAndLicense(shadowRoot, unicode),
+  );
+  clickDownload(shadowRoot);
+
   const blobText = await requirePartialExtractionBlob(urlStubs).text();
   expect(urlStubs.createdBlobs).toHaveLength(DOWNLOADED_BLOB_COUNT);
-  expect(blobText).toContain('"customFloor"');
-  expect(blobText).toContain('"wall"');
+  expect(blobText).toContain('"floor"');
+  expect(blobText).toContain('"unicode": "★"');
 };
 
 export const expectUploadedFontPreview = async (

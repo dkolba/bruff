@@ -94,15 +94,18 @@ export const loadCharactersFromTestFont = async (
   shadowRoot: ShadowRoot,
   characters: string,
 ): Promise<void> => {
-  const schemaCharacters = characters;
+  const textarea = requireElement<HTMLTextAreaElement>(
+    shadowRoot,
+    'textarea[name="characters"]',
+  );
   const fileInput = requireElement<HTMLInputElement>(
     shadowRoot,
     'input[type="file"][name="font-file"]',
   );
 
-  if (schemaCharacters === "") {
-    await waitForComponentUpdate();
-  }
+  textarea.value = characters;
+  textarea.dispatchEvent(new InputEvent("input", { bubbles: true }));
+  await waitForComponentUpdate();
 
   selectFiles(fileInput, [createValidFontFile("component-test.ttf")]);
   await waitForSchemaFontProcessing(shadowRoot);

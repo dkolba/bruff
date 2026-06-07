@@ -20,7 +20,10 @@ import type {
 import type { Font } from "opentype.js";
 import { OSI_LICENSE_OPTIONS } from "./osi-license-catalog.js";
 import { extractDrafts } from "./tool-sigil-extract-drafts.js";
-import { defaultRequiredGlyphSelections } from "./tool-sigil-required-glyph-selection.js";
+import {
+  defaultRequiredGlyphSelections,
+  selectedRequiredGlyphCharacters,
+} from "./tool-sigil-required-glyph-selection.js";
 import type { Result } from "@bruff/utils";
 export {
   selectToolSigilDownloadDisabled,
@@ -98,6 +101,16 @@ export const startToolSigilFontSelection = (
   };
 };
 
+const extractionCharacters = (
+  characters: string,
+  state: ToolSigilState,
+): string =>
+  [
+    ...new Set(
+      `${characters}${selectedRequiredGlyphCharacters(state.requiredGlyphSelections)}`,
+    ),
+  ].join("");
+
 export const setToolSigilCharacters = (
   state: ToolSigilState,
   characters: string,
@@ -105,16 +118,9 @@ export const setToolSigilCharacters = (
   ...state,
   characters,
   contractIssues: [],
-  ...extractDrafts(state.font, characters),
+  ...extractDrafts(state.font, extractionCharacters(characters, state)),
 });
 
-/**
- * Selects a concrete contract schema and re-extracts glyphs for its characters.
- *
- * @param state - Current tool state
- * @param schemaId - Concrete schema id selected by the user
- * @returns Updated tool state, or unchanged state for the current or unknown id
- */
 export const setToolSigilRequiredGlyphCharacter = (
   state: ToolSigilState,
   name: string,
@@ -128,11 +134,17 @@ export const setToolSigilRequiredGlyphCharacter = (
     return state;
   }
 
-  return {
-    ...state,
-    contractIssues: [],
-    requiredGlyphSelections: state.requiredGlyphSelections.map((selection) =>
+  const requiredGlyphSelections = state.requiredGlyphSelections.map(
+    (selection) =>
       selection.name === name ? { ...selection, unicode } : selection,
+  );
+  const nextState = { ...state, contractIssues: [], requiredGlyphSelections };
+
+  return {
+    ...nextState,
+    ...extractDrafts(
+      state.font,
+      extractionCharacters(state.characters, nextState),
     ),
   };
 };
@@ -157,18 +169,10 @@ export const setToolSigilSchema = (
     characters,
     namesByUnicode: sigilSchemaNamesByUnicode(schemaOption),
     selectedSchemaId: schemaId,
-    ...extractDrafts(state.font, characters),
+    ...extractDrafts(state.font, extractionCharacters(characters, state)),
   };
 };
 
-/**
- * Stores a user-edited glyph name by source Unicode character.
- *
- * @param state - Current tool state
- * @param unicode - Source glyph Unicode character
- * @param glyphName - User-entered glyph name
- * @returns Updated tool state
- */
 export const setToolSigilGlyphName = (
   state: ToolSigilState,
   unicode: string,
@@ -181,14 +185,6 @@ export const setToolSigilGlyphName = (
   },
 });
 
-/**
- * Selects a staged `@bruff/glyph` group for one source character.
- *
- * @param state - Current tool state
- * @param unicode - Source glyph Unicode character
- * @param groupName - Selected glyph catalog group
- * @returns Updated tool state
- */
 export const setToolSigilGlyphGroup = (
   state: ToolSigilState,
   unicode: string,
@@ -284,7 +280,10 @@ export const applyToolSigilFontLoadResult = (
   return {
     ...state,
     font: fontResult.value,
-    ...extractDrafts(fontResult.value, state.characters),
+    ...extractDrafts(
+      fontResult.value,
+      extractionCharacters(state.characters, state),
+    ),
   };
 };
 

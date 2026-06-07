@@ -4,6 +4,7 @@ import {
   expectNewerFontSelectionToWin,
   expectPartialGlyphJsonDownload,
   expectRejectedStalePreviewLoadIgnored,
+  expectTypedCharacterSelectionDownload,
   expectUploadedFontPreview,
 } from "./tool-sigil-regression-test-support.js";
 import { describe, it } from "vitest";
@@ -19,6 +20,19 @@ describe("ToolSigil partial extraction state", () => {
 
     try {
       await expectPartialGlyphJsonDownload(shadowRoot, urlStubs);
+    } finally {
+      restoreDownloadTest(element, urlStubs);
+    }
+  });
+});
+
+describe("ToolSigil typed character selection export", () => {
+  it("exports the character selected for a required contract glyph", async () => {
+    const urlStubs = stubObjectUrls();
+    const { element, shadowRoot } = appendToolSigilWithShadowRoot();
+
+    try {
+      await expectTypedCharacterSelectionDownload(shadowRoot, urlStubs);
     } finally {
       restoreDownloadTest(element, urlStubs);
     }
