@@ -205,6 +205,18 @@ describe("ToolSigil schema partial font view state", () => {
 });
 
 describe("ToolSigil schema selection view state", () => {
+  it("preserves valid required glyph selections when textarea changes", () => {
+    const state = setToolSigilCharacters(createToolSigilState(), ".#+@ex");
+
+    expect(state.requiredGlyphSelections).toStrictEqual([
+      { name: "floor", unicode: "." },
+      { name: "wall", unicode: "#" },
+      { name: "door", unicode: "+" },
+      { name: "player", unicode: "@" },
+      { name: "enemy", unicode: "e" },
+    ]);
+  });
+
   it("re-extracts current font glyphs when selecting a schema", () => {
     const loadedState = loadCurrentFontState("★");
     const schemaState = setToolSigilSchema(
