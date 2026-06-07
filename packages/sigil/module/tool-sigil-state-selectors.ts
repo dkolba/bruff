@@ -219,6 +219,7 @@ export const selectToolSigilDownloadDisabled = (
 export const selectToolSigilViewModel = (
   state: ToolSigilState,
 ): ToolSigilViewModel => ({
+  contractIssues: state.contractIssues,
   downloadDisabled: selectToolSigilDownloadDisabled(state),
   drafts: state.drafts,
   errors: selectToolSigilVisibleErrors(state),
@@ -228,6 +229,7 @@ export const selectToolSigilViewModel = (
   licenseOptions: state.licenseOptions,
   namesByUnicode: state.namesByUnicode,
   previewFontFamily: state.previewFontFamily,
+  requiredGlyphSelections: [],
   schemaOptions: state.schemaOptions,
   selectedGlyphsByUnicode: state.selectedGlyphsByUnicode,
   selectedLicensesByUnicode: selectedLicensesByUnicode(state),

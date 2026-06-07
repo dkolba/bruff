@@ -1,4 +1,5 @@
 import type {
+  RequiredSigilGlyphName,
   SigilExtractionError,
   SigilGlyphDraft,
   SigilGlyphMapping,
@@ -11,9 +12,36 @@ import type {
 import type { Font } from "opentype.js";
 import type { SigilLicenseOption } from "./osi-license-catalog.js";
 
+/** Selected textarea character for one required contract glyph. */
+export type RequiredGlyphSelection = Readonly<{
+  name: RequiredSigilGlyphName;
+  unicode: string;
+}>;
+
+/** One select option derived from the textarea. */
+export type RequiredGlyphCharacterOption = Readonly<{
+  label: string;
+  unicode: string;
+}>;
+
+/** Render-ready state for one required glyph source-character select. */
+export type RequiredGlyphSelectionView = Readonly<{
+  isValid: boolean;
+  name: RequiredSigilGlyphName;
+  options: ReadonlyArray<RequiredGlyphCharacterOption>;
+  selectedUnicode: string;
+}>;
+
+/** User-visible contract validation issue. */
+export type ToolSigilContractIssue = Readonly<{
+  message: string;
+  path: string;
+}>;
+
 /** Immutable state owned by the `<tool-sigil>` coordinator. */
 export type ToolSigilState = Readonly<{
   characters: string;
+  contractIssues: ReadonlyArray<ToolSigilContractIssue>;
   drafts: ReadonlyArray<SigilGlyphDraft>;
   errors: ReadonlyArray<SigilExtractionError>;
   font: Font | undefined;
@@ -21,6 +49,7 @@ export type ToolSigilState = Readonly<{
   fontLoadToken: number;
   namesByUnicode: Readonly<Record<string, string>>;
   previewFontFamily: string;
+  requiredGlyphSelections: ReadonlyArray<RequiredGlyphSelection>;
   schemaOptions: ReadonlyArray<SigilSchemaOption>;
   selectedSchemaId: SigilSchemaId;
   stagedGlyphGroupsByUnicode: Readonly<Record<string, SigilGlyphGroupName>>;
@@ -39,6 +68,7 @@ export type ToolSigilFontSelection = Readonly<{
 
 /** Render-ready projection of `ToolSigilState`. */
 export type ToolSigilViewModel = Readonly<{
+  contractIssues: ReadonlyArray<ToolSigilContractIssue>;
   downloadDisabled: boolean;
   drafts: ReadonlyArray<SigilGlyphDraft>;
   errors: ReadonlyArray<SigilExtractionError>;
@@ -48,6 +78,7 @@ export type ToolSigilViewModel = Readonly<{
   licenseOptions: ReadonlyArray<SigilLicenseOption>;
   namesByUnicode: Readonly<Record<string, string>>;
   previewFontFamily: string;
+  requiredGlyphSelections: ReadonlyArray<RequiredGlyphSelectionView>;
   schemaOptions: ReadonlyArray<SigilSchemaOption>;
   selectedSchemaId: SigilSchemaId;
   stagedGlyphGroupsByUnicode: Readonly<Record<string, SigilGlyphGroupName>>;

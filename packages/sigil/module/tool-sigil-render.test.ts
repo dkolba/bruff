@@ -17,6 +17,7 @@ const EMPTY_CATALOG_MAPPED_GLYPH_OPTION_COUNT = 1;
 const viewModel = (
   override: Partial<ToolSigilViewModel> = {},
 ): ToolSigilViewModel => ({
+  contractIssues: [],
   downloadDisabled: true,
   drafts: [
     {
@@ -42,6 +43,7 @@ const viewModel = (
   licenseOptions: [],
   namesByUnicode: {},
   previewFontFamily: "",
+  requiredGlyphSelections: [],
   schemaOptions: SIGIL_SCHEMA_OPTIONS,
   selectedGlyphsByUnicode: {},
   selectedLicensesByUnicode: {},

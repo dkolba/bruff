@@ -71,6 +71,7 @@ export const createToolSigilState = (): ToolSigilState => {
 
   return {
     characters: sigilSchemaCharacters(schemaOption),
+    contractIssues: [],
     drafts: [],
     errors: [],
     font: undefined,
@@ -81,6 +82,7 @@ export const createToolSigilState = (): ToolSigilState => {
     licenseOptions: OSI_LICENSE_OPTIONS,
     namesByUnicode: sigilSchemaNamesByUnicode(schemaOption),
     previewFontFamily: "",
+    requiredGlyphSelections: [],
     schemaOptions: SIGIL_SCHEMA_OPTIONS,
     selectedGlyphsByUnicode: {},
     selectedLicensesByUnicode: {},
