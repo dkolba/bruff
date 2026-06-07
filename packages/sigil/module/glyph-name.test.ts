@@ -12,6 +12,10 @@ const GLYPH_ADVANCE_WIDTH = 600;
 const HEART_ADVANCE_WIDTH = 500;
 const UNITS_PER_EM = 1000;
 const ENEMY_UNICODE = "e";
+const PLAYER_UNICODE = "@";
+const FLOOR_UNICODE = ".";
+const WALL_UNICODE = "#";
+const DOOR_UNICODE = "+";
 
 const createSourceGlyph = (
   unicode: string,
@@ -30,10 +34,10 @@ const createSourceGlyph = (
 });
 
 const starGlyph = createSourceGlyph("★", "M0 0L600 0Z");
-const floorGlyph = createSourceGlyph(".", "M0 0L1 0Z");
-const wallGlyph = createSourceGlyph("#", "M0 0L2 0Z");
-const doorGlyph = createSourceGlyph("+", "M0 0L3 0Z");
-const playerGlyph = createSourceGlyph("@", "M0 0L4 0Z");
+const floorGlyph = createSourceGlyph(FLOOR_UNICODE, "M0 0L1 0Z");
+const wallGlyph = createSourceGlyph(WALL_UNICODE, "M0 0L2 0Z");
+const doorGlyph = createSourceGlyph(DOOR_UNICODE, "M0 0L3 0Z");
+const playerGlyph = createSourceGlyph(PLAYER_UNICODE, "M0 0L4 0Z");
 const enemyGlyph = createSourceGlyph(ENEMY_UNICODE, "M0 0L5 0Z");
 const heartGlyph = {
   ...createSourceGlyph("♥", "M0 0L500 0Z"),
@@ -69,25 +73,25 @@ const heartMapping = {
 };
 
 const floorMapping = {
-  glyph: ".",
+  glyph: FLOOR_UNICODE,
   glyphKey: "FULL_STOP",
   groupName: "ASCII",
 };
 
 const wallMapping = {
-  glyph: "#",
+  glyph: WALL_UNICODE,
   glyphKey: "NUMBER_SIGN",
   groupName: "ASCII",
 };
 
 const doorMapping = {
-  glyph: "+",
+  glyph: DOOR_UNICODE,
   glyphKey: "PLUS_SIGN",
   groupName: "ASCII",
 };
 
 const playerMapping = {
-  glyph: "@",
+  glyph: PLAYER_UNICODE,
   glyphKey: "AT",
   groupName: "ASCII",
 };
@@ -99,21 +103,21 @@ const enemyMapping = {
 };
 
 const mappedGlyphsByUnicode = {
-  "#": wallMapping,
-  "+": doorMapping,
-  ".": floorMapping,
-  "@": playerMapping,
+  [DOOR_UNICODE]: doorMapping,
   [ENEMY_UNICODE]: enemyMapping,
+  [FLOOR_UNICODE]: floorMapping,
+  [PLAYER_UNICODE]: playerMapping,
+  [WALL_UNICODE]: wallMapping,
   "★": starMapping,
   "♥": heartMapping,
 };
 
 const licensesByUnicode = {
-  "#": "MIT",
-  "+": "MIT",
-  ".": "MIT",
-  "@": "MIT",
+  [DOOR_UNICODE]: "MIT",
   [ENEMY_UNICODE]: "MIT",
+  [FLOOR_UNICODE]: "MIT",
+  [PLAYER_UNICODE]: "MIT",
+  [WALL_UNICODE]: "MIT",
   "★": "MIT",
   "♥": "OFL-1.1",
 };
@@ -229,7 +233,7 @@ describe("createSigilGlyphMap required glyph validation", () => {
     const glyphMapResult = createSigilGlyphMap(
       glyphDrafts,
       {
-        "#": "custom-wall",
+        [WALL_UNICODE]: "custom-wall",
       },
       { licensesByUnicode, mappedGlyphsByUnicode },
     );
