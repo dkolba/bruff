@@ -1,7 +1,7 @@
 # Concrete Sigil Contracts Schema Tasks
 
 - [x] T1 — Add `SigilSchemaId`, `SigilSchemaGlyph`, `SigilSchemaOption`, `SIGIL_GLYPH_MAP_SCHEMA_ID`, `DEFAULT_SIGIL_SCHEMA_ID`, `SIGIL_SCHEMA_OPTIONS`, and `findSigilSchemaOption` to `packages/sigil/module/sigil-schema-catalog.ts`
-- [ ] T2 — Add catalog tests for the `SigilGlyphMap` option in `packages/sigil/module/sigil-schema-catalog.test.ts`
+- [x] T2 — Add catalog tests for the `SigilGlyphMap` option in `packages/sigil/module/sigil-schema-catalog.test.ts`
 - [ ] T3 — Add `selectedSchemaId` and `schemaOptions` fields to `ToolSigilState` and `ToolSigilViewModel` in `packages/sigil/module/tool-sigil-state-types.ts`
 - [ ] T4 — Initialize `ToolSigilState` from `DEFAULT_SIGIL_SCHEMA_ID` in `packages/sigil/module/tool-sigil-state.ts`
 - [ ] T5 — Add state tests for initial selected schema, derived characters, and prefilled required glyph names in `packages/sigil/module/tool-sigil-state.test.ts`
