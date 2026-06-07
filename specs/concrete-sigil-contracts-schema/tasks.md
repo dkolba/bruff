@@ -28,7 +28,7 @@
 - [x] T26 — Add state tests for textarea edits preserving valid required glyph selections in `packages/sigil/module/tool-sigil-state.test.ts`
 - [x] T27 — Update `setToolSigilCharacters` in `packages/sigil/module/tool-sigil-state.ts`
 - [x] T28 — Add state tests for invalid required glyph selections after character removal in `packages/sigil/module/tool-sigil-state.test.ts`
-- [ ] T29 — Project required glyph selection validity in `packages/sigil/module/tool-sigil-state-selectors.ts`
+- [x] T29 — Project required glyph selection validity in `packages/sigil/module/tool-sigil-state-selectors.ts`
 - [ ] T30 — Add state tests for required glyph select changes in `packages/sigil/module/tool-sigil-state.test.ts`
 - [ ] T31 — Implement `setToolSigilRequiredGlyphCharacter` in `packages/sigil/module/tool-sigil-state.ts`
 - [ ] T32 — Add contract validation tests in `packages/sigil/module/tool-sigil-contract-validation.test.ts`
