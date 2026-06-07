@@ -42,7 +42,7 @@
 - [x] T40 — Add binding tests for textarea input and required glyph select changes in `packages/sigil/module/tool-sigil-bindings.test.ts`
 - [x] T41 — Wire textarea and required glyph select bindings in `packages/sigil/module/tool-sigil-bindings.ts`
 - [x] T42 — Add coordinator tests for textarea and required glyph changes in `packages/sigil/module/tool-sigil.test.ts`
-- [ ] T43 — Wire textarea and required glyph handlers in `packages/sigil/module/tool-sigil.ts`
+- [x] T43 — Wire textarea and required glyph handlers in `packages/sigil/module/tool-sigil.ts`
 - [ ] T44 — Add error display tests for exact contract reasons in `packages/sigil/module/tool-sigil-error.test.ts`
 - [ ] T45 — Render exact contract validation reasons in `packages/sigil/module/tool-sigil-render.ts`
 - [ ] T46 — Add component regression tests for typed character selection export flow in `packages/sigil/module/tool-sigil-regression.test.ts`
