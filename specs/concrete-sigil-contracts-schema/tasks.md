@@ -47,4 +47,4 @@
 - [x] T45 — Render exact contract validation reasons in `packages/sigil/module/tool-sigil-render.ts`
 - [x] T46 — Add component regression tests for typed character selection export flow in `packages/sigil/module/tool-sigil-regression.test.ts`
 - [x] T47 — Update package guidance for textarea-driven schema mappings in `packages/sigil/README.md`
-- [ ] T48 — Run `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run typecheck`, `pnpm --filter @bruff/sigil run test:chromium`, `pnpm --filter @bruff/sigil run test:firefox`, and `pnpm --filter @bruff/sigil run test:webkit`
+- [x] T48 — Run `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run typecheck`, `pnpm --filter @bruff/sigil run test:chromium`, `pnpm --filter @bruff/sigil run test:firefox`, and `pnpm --filter @bruff/sigil run test:webkit`
