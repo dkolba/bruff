@@ -142,10 +142,6 @@ describe("ToolSigil glyph name state", () => {
           type: "missing-glyph",
         },
         {
-          message: 'Invalid glyph name "".',
-          type: "invalid-glyph-name",
-        },
-        {
           message: 'Select a glyph mapping for "★".',
           type: "missing-mapped-glyph",
         },

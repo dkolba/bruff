@@ -135,6 +135,21 @@ describe("connectToolSigilControls setup", () => {
     disconnect();
   });
 
+  it("ignores textarea input events without textarea targets", () => {
+    const onCharactersInput = vi.fn();
+    const shadowRoot = createBindingShadowRoot();
+    const disconnect = connectToolSigilControls(
+      shadowRoot,
+      createToolSigilHandlers({ onCharactersInput }),
+    );
+
+    shadowRoot.dispatchEvent(new InputEvent("input", { bubbles: true }));
+
+    expect(onCharactersInput).not.toHaveBeenCalled();
+
+    disconnect();
+  });
+
   it("delegates textarea input events", () => {
     const onCharactersInput = vi.fn();
     const shadowRoot = createBindingShadowRoot();
@@ -151,6 +166,46 @@ describe("connectToolSigilControls setup", () => {
     textarea.dispatchEvent(new InputEvent("input"));
 
     expect(onCharactersInput).toHaveBeenCalledWith(".#");
+
+    disconnect();
+  });
+
+  it("ignores required glyph changes without select targets", () => {
+    const onRequiredGlyphCharacterChange = vi.fn();
+    const shadowRoot = createBindingShadowRoot();
+    const container = requireElement(
+      shadowRoot,
+      '[data-state="required-glyph-selections"]',
+    );
+    const disconnect = connectToolSigilControls(
+      shadowRoot,
+      createToolSigilHandlers({ onRequiredGlyphCharacterChange }),
+    );
+
+    container.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(onRequiredGlyphCharacterChange).not.toHaveBeenCalled();
+
+    disconnect();
+  });
+
+  it("ignores required glyph selects with unrelated actions", () => {
+    const onRequiredGlyphCharacterChange = vi.fn();
+    const shadowRoot = createBindingShadowRoot();
+    const container = requireElement(
+      shadowRoot,
+      '[data-state="required-glyph-selections"]',
+    );
+    const select = appendSelect(container, "glyph-group", null);
+    Object.assign(select.dataset, { glyphName: "floor" });
+    const disconnect = connectToolSigilControls(
+      shadowRoot,
+      createToolSigilHandlers({ onRequiredGlyphCharacterChange }),
+    );
+
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(onRequiredGlyphCharacterChange).not.toHaveBeenCalled();
 
     disconnect();
   });

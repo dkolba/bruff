@@ -125,7 +125,7 @@ describe("ToolSigil loaded font view state", () => {
     expect(selectToolSigilViewModel(loadedState)).toMatchObject({
       downloadDisabled: true,
       fontFileNameText: "component-test.ttf",
-      glyphCountText: "Glyphs ready: 1",
+      glyphCountText: "Glyphs ready: 6",
     });
   });
 
@@ -187,6 +187,12 @@ describe("ToolSigil schema selection view state", () => {
       options: [{ label: "#", unicode: "#" }],
       selectedUnicode: ".",
     });
+  });
+
+  it("keeps state unchanged when required glyph selection is unchanged", () => {
+    const state = createToolSigilState();
+
+    expect(setToolSigilRequiredGlyphCharacter(state, "floor", ".")).toBe(state);
   });
 
   it("updates a required glyph source character selection", () => {
@@ -321,6 +327,11 @@ describe("ToolSigil license state", () => {
     expect(
       selectToolSigilViewModel(loadedState).selectedLicensesByUnicode,
     ).toStrictEqual({
+      "#": "MIT",
+      "+": "MIT",
+      ".": "MIT",
+      "@": "MIT",
+      [ENEMY_UNICODE]: "MIT",
       "♥": "MIT",
     });
   });

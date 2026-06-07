@@ -1,5 +1,8 @@
 /* eslint-disable sort-imports, unicorn/text-encoding-identifier-case -- Contract validation fixtures use shared glyph group names such as ASCII. */
-import { validateToolSigilGlyphMap } from "./tool-sigil-contract-validation.js";
+import {
+  hasToolSigilContractIssues,
+  validateToolSigilGlyphMap,
+} from "./tool-sigil-contract-validation.js";
 import { describe, expect, it } from "vitest";
 /* eslint-enable sort-imports */
 
@@ -33,6 +36,19 @@ const validGlyphMap = {
 };
 
 describe("validateToolSigilGlyphMap", () => {
+  it("returns no issues for valid glyph maps", () => {
+    expect(validateToolSigilGlyphMap(validGlyphMap)).toStrictEqual([]);
+  });
+
+  it("returns root paths for non-object glyph maps", () => {
+    expect(validateToolSigilGlyphMap(null)).toStrictEqual([
+      {
+        message: "Invalid input: expected object, received null",
+        path: "$",
+      },
+    ]);
+  });
+
   it("returns exact paths and reasons for invalid glyph map combinations", () => {
     expect(validateToolSigilGlyphMap({})).toEqual(
       expect.arrayContaining([
@@ -59,5 +75,14 @@ describe("validateToolSigilGlyphMap", () => {
         path: "floor.path",
       },
     ]);
+  });
+});
+
+describe("hasToolSigilContractIssues", () => {
+  it("detects empty and populated issue lists", () => {
+    expect(hasToolSigilContractIssues([])).toBe(false);
+    expect(hasToolSigilContractIssues([{ message: "m", path: "p" }])).toBe(
+      true,
+    );
   });
 });

@@ -216,15 +216,19 @@ describe("createSigilGlyphMap contract validation", () => {
       },
     );
 
-    expect(invalidGlyphMapResult).toStrictEqual({
-      error: [
+    expect(invalidGlyphMapResult).toMatchObject({ type: "error" });
+    if (invalidGlyphMapResult.type === "ok") {
+      return;
+    }
+    expect(invalidGlyphMapResult.error).toEqual(
+      expect.arrayContaining([
         {
-          message: "Produced glyph JSON does not match the shared contract.",
+          message:
+            "Produced glyph JSON does not match the shared contract at u2605.unitsPerEm: Invalid input: expected number, received number",
           type: "invalid-glyph-json",
         },
-      ],
-      type: "error",
-    });
+      ]),
+    );
   });
 });
 

@@ -106,7 +106,7 @@ export const expectEditedGlyphJsonDownload = async (
   shadowRoot: ShadowRoot,
   urlStubs: ObjectUrlStubState,
 ): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, ".");
+  await loadCharactersFromTestFont(shadowRoot, ".#+@e");
   selectSchemaMappingAndLicense(shadowRoot);
   renameGlyph(shadowRoot, ".", "customFloor");
   clickDownload(shadowRoot);
@@ -122,7 +122,7 @@ export const expectDeterministicFilenameDownload = async (
   shadowRoot: ShadowRoot,
   clickState: DownloadClickState,
 ): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, ".");
+  await loadCharactersFromTestFont(shadowRoot, ".#+@e");
   selectSchemaMappingAndLicense(shadowRoot);
   clickDownload(shadowRoot);
 
@@ -135,7 +135,7 @@ export const expectRevokedObjectUrlDownload = async (
   shadowRoot: ShadowRoot,
   urlStubs: ObjectUrlStubState,
 ): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, ".");
+  await loadCharactersFromTestFont(shadowRoot, ".#+@e");
   selectSchemaMappingAndLicense(shadowRoot);
   clickDownload(shadowRoot);
 
@@ -147,7 +147,7 @@ export const expectInvalidGlyphDownloadBlocked = async (
   shadowRoot: ShadowRoot,
   urlStubs: ObjectUrlStubState,
 ): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, ".");
+  await loadCharactersFromTestFont(shadowRoot, ".#+@e");
   forceDownloadClick(shadowRoot);
 
   expect(urlStubs.createdBlobs).toEqual([]);

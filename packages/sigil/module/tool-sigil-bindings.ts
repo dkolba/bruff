@@ -7,15 +7,11 @@ const isGlyphNameInput = (
   target: EventTarget | null,
 ): target is HTMLInputElement => target instanceof HTMLInputElement;
 
-const isCharactersTextarea = (
-  target: EventTarget | null,
-): target is HTMLTextAreaElement => target instanceof HTMLTextAreaElement;
-
 const isSelect = (target: EventTarget | null): target is HTMLSelectElement =>
   target instanceof HTMLSelectElement;
 
 type ToolSigilControls = Readonly<{
-  charactersTextarea: HTMLTextAreaElement | null;
+  charactersTextarea: HTMLTextAreaElement;
   downloadButton: HTMLButtonElement | null;
   fileInput: HTMLInputElement | null;
   glyphList: Element | null;
@@ -58,9 +54,10 @@ export type ToolSigilControlHandlers = Readonly<{
 export type DisconnectToolSigilControls = () => void;
 
 const queryToolSigilControls = (shadowRoot: ShadowRoot): ToolSigilControls => ({
-  charactersTextarea: shadowRoot.querySelector<HTMLTextAreaElement>(
-    'textarea[name="characters"]',
-  ),
+  charactersTextarea:
+    shadowRoot.querySelector<HTMLTextAreaElement>(
+      'textarea[name="characters"]',
+    ) ?? document.createElement("textarea"),
   downloadButton: shadowRoot.querySelector<HTMLButtonElement>(
     'button[data-action="download"]',
   ),
@@ -133,10 +130,8 @@ const createToolSigilEventHandlers = (
   controls: ToolSigilControls,
   handlers: ToolSigilControlHandlers,
 ): ToolSigilEventHandlers => ({
-  handleCharactersInput: (event: Event): void => {
-    if (isCharactersTextarea(event.target)) {
-      handlers.onCharactersInput(event.target.value);
-    }
+  handleCharactersInput: (): void => {
+    handlers.onCharactersInput(controls.charactersTextarea.value);
   },
   handleDownloadClick: (): void => {
     handlers.onDownloadClick();
@@ -187,7 +182,7 @@ const addToolSigilEventListeners = (
     "change",
     eventHandlers.handleFileChange,
   );
-  controls.charactersTextarea?.addEventListener(
+  controls.charactersTextarea.addEventListener(
     "input",
     eventHandlers.handleCharactersInput,
   );
@@ -221,7 +216,7 @@ const removeToolSigilEventListeners = (
     "change",
     eventHandlers.handleFileChange,
   );
-  controls.charactersTextarea?.removeEventListener(
+  controls.charactersTextarea.removeEventListener(
     "input",
     eventHandlers.handleCharactersInput,
   );

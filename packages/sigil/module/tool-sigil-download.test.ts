@@ -72,7 +72,7 @@ const expectDownloadedSourceGlyphJson = async (
   shadowRoot: ShadowRoot,
   createdBlobs: ReadonlyArray<Blob>,
 ): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, ".");
+  await loadCharactersFromTestFont(shadowRoot, ".#+@e");
   selectSchemaMappingAndLicense(shadowRoot);
   clickDownload(shadowRoot);
 

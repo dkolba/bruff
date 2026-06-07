@@ -25,6 +25,12 @@ describe("requiredGlyphCharacterOptions", () => {
 });
 
 describe("defaultRequiredGlyphSelections", () => {
+  it("returns no selections without a schema", () => {
+    const schemaOption = undefined;
+
+    expect(defaultRequiredGlyphSelections(schemaOption)).toStrictEqual([]);
+  });
+
   it("creates selections from schema glyph defaults", () => {
     expect(defaultRequiredGlyphSelections(defaultSchemaOption)).toStrictEqual([
       { name: "floor", unicode: "." },

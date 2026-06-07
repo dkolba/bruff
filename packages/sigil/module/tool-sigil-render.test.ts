@@ -143,6 +143,21 @@ describe("renderToolSigil", () => {
     expect(shadowRoot.childElementCount).toBe(EMPTY_CHILD_COUNT);
   });
 
+  it("renders contract issue messages", () => {
+    const shadowRoot = createRenderShadowRoot();
+
+    renderToolSigil(
+      shadowRoot,
+      viewModel({
+        contractIssues: [{ message: "bad field", path: "floor.path" }],
+      }),
+    );
+
+    expect(
+      requireElement<HTMLElement>(shadowRoot, '[role="alert"]').textContent,
+    ).toContain("floor.path: bad field");
+  });
+
   it("renders empty catalog selection fallbacks", () => {
     const shadowRoot = createRenderShadowRoot();
 
