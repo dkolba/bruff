@@ -2,56 +2,67 @@
 
 ## Goal
 
-Update the `@bruff/sigil` browser tool so glyph extraction starts from a concrete shared contract schema instead of a free-form character textarea. The first available schema option is the shared `SigilGlyphMap` contract, preselected when `<tool-sigil>` loads, with its required glyph names prefilled to the source characters needed by the game map.
+Update the `@bruff/sigil` browser tool so `SigilGlyphMap` remains the selected shared contract schema, while users can type the source characters available for extraction and explicitly choose exactly one typed character for each required contract glyph: `floor`, `wall`, `door`, `player`, and `enemy`.
 
 ## User-visible behaviour
 
-- The free-form `Characters` textarea is removed from `<tool-sigil>`.
-- A schema selector replaces it in the form.
-- The selector initially contains one option: `SigilGlyphMap`.
+- The `Characters` textarea is present in `<tool-sigil>` again.
+- The textarea is prefilled with the default source characters for `SigilGlyphMap`: `".#+@e"`.
+- The schema selector remains present and initially contains one option: `SigilGlyphMap`.
 - `SigilGlyphMap` is selected when the custom element is initially connected.
-- Selecting `SigilGlyphMap` requests the required source characters for its required glyph names:
-  - `floor` uses `.`
-  - `wall` uses `#`
-  - `door` uses `+`
-  - `player` uses `@`
-  - `enemy` uses `e`
-- The extracted glyph rows use the required contract names as their initial names instead of names inferred from the character.
-- Unsupported characters remain visible as typed extraction errors when the uploaded font or extractor cannot produce a glyph for them.
-- Every required schema glyph row is displayed after a font upload, even when the font lacks one or more required characters.
+- The tool displays one source-character select for each required `SigilGlyphMap` glyph:
+  - `floor`
+  - `wall`
+  - `door`
+  - `player`
+  - `enemy`
+- Each required glyph select lists the distinct characters currently typed in the `Characters` textarea.
+- Each required glyph select has exactly one selected character whenever at least one typed character is available.
+- The initial required glyph selections are prefilled as:
+  - `floor` selects `.`
+  - `wall` selects `#`
+  - `door` selects `+`
+  - `player` selects `@`
+  - `enemy` selects `e`
+- Editing the textarea updates the available options in every required glyph select.
+- Uploading a font extracts glyphs for the typed textarea characters.
+- Every required `SigilGlyphMap` row remains visible after a font upload, even when the uploaded font lacks one or more selected characters.
+- Unsupported or missing selected characters remain visible as typed extraction errors when the uploaded font or extractor cannot produce a glyph for them.
+- The JSON export uses the selected character for each required contract glyph name.
+- If the generated JSON does not satisfy the shared `SigilGlyphMap` contract, the UI displays the exact validation reason for each failing contract path or field.
+- If an individual produced glyph does not satisfy the shared glyph contract, the UI displays the exact validation reason for that glyph path or field.
+- Download remains disabled while any selected character is missing, unsupported, incomplete, unmapped, unlicensed, duplicated in a way that violates the contract, or contract-invalid.
 
 ## Out of scope
 
 - Adding schemas beyond `SigilGlyphMap`.
 - Changing the `@bruff/contracts` `SigilGlyphMap` runtime schema.
 - Adding support for currently unsupported source characters.
-- Changing `@bruff/glyph` catalog groups or glyph choices.
+- Changing the `@bruff/glyph` catalog groups or glyph choices.
 - Auto-selecting mapped glyphs or licenses.
 - Changing the downloaded JSON filename or download side effects.
+- Exporting glyphs that are typed in the textarea but not selected by a required `SigilGlyphMap` glyph select.
 
 ## Open questions
 
 Resolved before design:
 
-- The request mentions `SigilGlyphMapSigilGlyphMap`; this spec treats that as the existing shared `SigilGlyphMap` contract and uses `SigilGlyphMap` as the user-facing option label.
-- The schema catalog starts with a single option but must be modeled so future schemas can be added without reintroducing free-form input.
-- Required names are applied as row names, while source characters continue to drive extraction and preview.
+- The request mentions the existing prefilled glyphs `wall`, `floor`, `door`, `player`, and `enemy`; this spec treats those as the required keys of the existing shared `SigilGlyphMap` contract.
+- The schema selector remains because the tool is still schema-driven, but the textarea is reintroduced as the user-editable candidate character list for the selected schema.
+- Duplicate typed characters are deduplicated in the per-glyph selects so each select option corresponds to one character, not one textarea position.
+- When a textarea edit removes a character currently selected by a required glyph select, that select becomes invalid until the user chooses one of the remaining typed characters or restores the removed character.
+- Whitespace typed into the textarea is treated as a candidate character like any other character unless existing extraction rules reject it.
+- Exact contract reasons are the validation issues returned by the shared contract parser, displayed with enough path context for the user to identify the failing required glyph or field.
 
 ## Edge cases
 
-- A user connects `<tool-sigil>` with no font selected: the selector shows `SigilGlyphMap`, the summary remains zero ready glyphs, and no extraction errors are shown until a font is loaded.
-- A font lacks one or more required characters: rows are still created for every required schema glyph, missing glyph rows keep the required names visible, and typed extraction errors describe missing or unsupported glyphs.
-- More than one required glyph uses the same source character in a future schema: duplicate source characters must not produce ambiguous row state.
-- Changing the selected schema after a font is loaded re-extracts glyphs for the new schema characters.
-- Re-selecting the current schema is idempotent and does not clear valid mapped glyph or license choices for unchanged source characters.
-- The selector remains keyboard-accessible and labeled.
-
-## Verification
-
-- Verified the textarea is removed and the schema select is present with `SigilGlyphMap` preselected via `tool-sigil.test.ts`, `tool-sigil-render.test.ts`, and `tool-sigil-bindings.test.ts`.
-- Verified `SigilGlyphMap` derives the source character order `".#+@e"` and prefilled names for `floor`, `wall`, `door`, `player`, and `enemy` via `sigil-schema-catalog.test.ts` and `tool-sigil-state.test.ts`.
-- Verified schema changes flow through `<tool-sigil>` bindings and coordinator state with component, binding, and state tests.
-- Verified unsupported or missing schema characters continue to surface typed missing-glyph errors with `tool-sigil-error.test.ts`.
-- Verified partial fonts still render every `SigilGlyphMap` schema row with prefilled names via `tool-sigil-state.test.ts` and `tool-sigil-missing-drafts.ts`.
-- Verified downloads still validate through the shared `SigilGlyphMap` contract and include mapped glyph plus `"LICENSE"` fields with `tool-sigil-download.test.ts` and regression tests.
-- Gates run for `@bruff/sigil`: `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run typecheck`, `pnpm --filter @bruff/sigil run test:chromium`, `pnpm --filter @bruff/sigil run test:firefox`, and `pnpm --filter @bruff/sigil run test:webkit`.
+- A user connects `<tool-sigil>` with no font selected: the selector shows `SigilGlyphMap`, the textarea shows `".#+@e"`, each required glyph select has its default character selected, the summary remains zero ready glyphs, and no extraction errors are shown until a font is loaded.
+- A user clears the textarea: each required glyph select has no valid option, every required glyph is reported as missing a selected source character, and download is disabled.
+- A user types only one character: every required glyph select offers that character, but using it for multiple contract glyphs must still validate against the shared contract before download is enabled.
+- A user types duplicate characters: each duplicated character appears once in each required glyph select.
+- A user removes a selected character from the textarea: the affected required glyph select is marked invalid, its required glyph row remains visible, and download is disabled until a valid typed character is selected.
+- A font lacks one or more selected characters: rows remain visible for every required schema glyph, missing glyph rows keep the required names visible, and typed extraction errors describe missing or unsupported glyphs.
+- A typed character is not selected by any required glyph select: it may be extracted for preview, but it is not included in the exported `SigilGlyphMap` JSON.
+- Changing the selected schema after a font is loaded re-evaluates textarea candidates, required glyph selections, extraction, and contract validation for the new schema.
+- Re-selecting the current schema is idempotent and does not clear valid required glyph selections, mapped glyph choices, or license choices when their source characters still exist in the textarea.
+- The textarea, schema selector, and required glyph selects remain keyboard-accessible and labeled.
