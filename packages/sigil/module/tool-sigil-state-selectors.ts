@@ -219,6 +219,7 @@ export const selectToolSigilDownloadDisabled = (
 export const selectToolSigilViewModel = (
   state: ToolSigilState,
 ): ToolSigilViewModel => ({
+  characters: state.characters,
   contractIssues: state.contractIssues,
   downloadDisabled: selectToolSigilDownloadDisabled(state),
   drafts: state.drafts,

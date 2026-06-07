@@ -24,7 +24,7 @@
 - [x] T22 — Add character option derivation tests in `packages/sigil/module/tool-sigil-required-glyph-selection.test.ts`
 - [x] T23 — Implement character option derivation in `packages/sigil/module/tool-sigil-required-glyph-selection.ts`
 - [x] T24 — Add state tests for restored textarea initialization in `packages/sigil/module/tool-sigil-state.test.ts`
-- [ ] T25 — Restore textarea initialization in `packages/sigil/module/tool-sigil-state.ts`
+- [x] T25 — Restore textarea initialization in `packages/sigil/module/tool-sigil-state.ts`
 - [ ] T26 — Add state tests for textarea edits preserving valid required glyph selections in `packages/sigil/module/tool-sigil-state.test.ts`
 - [ ] T27 — Update `setToolSigilCharacters` in `packages/sigil/module/tool-sigil-state.ts`
 - [ ] T28 — Add state tests for invalid required glyph selections after character removal in `packages/sigil/module/tool-sigil-state.test.ts`

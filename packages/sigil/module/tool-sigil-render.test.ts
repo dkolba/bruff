@@ -17,6 +17,7 @@ const EMPTY_CATALOG_MAPPED_GLYPH_OPTION_COUNT = 1;
 const viewModel = (
   override: Partial<ToolSigilViewModel> = {},
 ): ToolSigilViewModel => ({
+  characters: ".#+@e",
   contractIssues: [],
   downloadDisabled: true,
   drafts: [

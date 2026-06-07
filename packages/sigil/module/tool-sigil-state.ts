@@ -21,8 +21,8 @@ import { extractSigilGlyphs } from "./extract-glyphs.js";
 import type { Font } from "opentype.js";
 import { OSI_LICENSE_OPTIONS } from "./osi-license-catalog.js";
 import { completeMissingDrafts } from "./tool-sigil-missing-drafts.js";
+import { defaultRequiredGlyphSelections } from "./tool-sigil-required-glyph-selection.js";
 import type { Result } from "@bruff/utils";
-/* eslint-enable sort-imports */
 export {
   selectToolSigilDownloadDisabled,
   selectToolSigilDownloadGlyphMap,
@@ -82,7 +82,7 @@ export const createToolSigilState = (): ToolSigilState => {
     licenseOptions: OSI_LICENSE_OPTIONS,
     namesByUnicode: sigilSchemaNamesByUnicode(schemaOption),
     previewFontFamily: "",
-    requiredGlyphSelections: [],
+    requiredGlyphSelections: defaultRequiredGlyphSelections(schemaOption),
     schemaOptions: SIGIL_SCHEMA_OPTIONS,
     selectedGlyphsByUnicode: {},
     selectedLicensesByUnicode: {},

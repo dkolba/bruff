@@ -68,6 +68,7 @@ export type ToolSigilFontSelection = Readonly<{
 
 /** Render-ready projection of `ToolSigilState`. */
 export type ToolSigilViewModel = Readonly<{
+  characters: string;
   contractIssues: ReadonlyArray<ToolSigilContractIssue>;
   downloadDisabled: boolean;
   drafts: ReadonlyArray<SigilGlyphDraft>;
