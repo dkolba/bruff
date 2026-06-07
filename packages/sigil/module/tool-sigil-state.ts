@@ -119,25 +119,27 @@ export const setToolSigilCharacters = (
  * @param schemaId - Concrete schema id selected by the user
  * @returns Updated tool state, or unchanged state for the current or unknown id
  */
-/**
- * Selects a source character for one required contract glyph.
- *
- * @param state - Current tool state
- * @param name - Required contract glyph name
- * @param unicode - Selected source character
- * @returns Updated tool state
- */
 export const setToolSigilRequiredGlyphCharacter = (
   state: ToolSigilState,
   name: RequiredSigilGlyphName,
   unicode: string,
-): ToolSigilState => ({
-  ...state,
-  contractIssues: [],
-  requiredGlyphSelections: state.requiredGlyphSelections.map((selection) =>
-    selection.name === name ? { ...selection, unicode } : selection,
-  ),
-});
+): ToolSigilState => {
+  const currentSelection = state.requiredGlyphSelections.find(
+    (selection) => selection.name === name,
+  );
+
+  if (currentSelection?.unicode === unicode) {
+    return state;
+  }
+
+  return {
+    ...state,
+    contractIssues: [],
+    requiredGlyphSelections: state.requiredGlyphSelections.map((selection) =>
+      selection.name === name ? { ...selection, unicode } : selection,
+    ),
+  };
+};
 
 export const setToolSigilSchema = (
   state: ToolSigilState,
