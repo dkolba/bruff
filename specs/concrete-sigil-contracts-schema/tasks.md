@@ -41,7 +41,7 @@
 - [x] T39 — Render required glyph selects in `packages/sigil/module/tool-sigil-required-glyph-render.ts` and `packages/sigil/module/tool-sigil-render.ts`
 - [x] T40 — Add binding tests for textarea input and required glyph select changes in `packages/sigil/module/tool-sigil-bindings.test.ts`
 - [x] T41 — Wire textarea and required glyph select bindings in `packages/sigil/module/tool-sigil-bindings.ts`
-- [ ] T42 — Add coordinator tests for textarea and required glyph changes in `packages/sigil/module/tool-sigil.test.ts`
+- [x] T42 — Add coordinator tests for textarea and required glyph changes in `packages/sigil/module/tool-sigil.test.ts`
 - [ ] T43 — Wire textarea and required glyph handlers in `packages/sigil/module/tool-sigil.ts`
 - [ ] T44 — Add error display tests for exact contract reasons in `packages/sigil/module/tool-sigil-error.test.ts`
 - [ ] T45 — Render exact contract validation reasons in `packages/sigil/module/tool-sigil-render.ts`

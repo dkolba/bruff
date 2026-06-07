@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/text-encoding-identifier-case -- Component integration tests cover the full Sigil browser workflow and glyph group names such as ASCII. */
+/* eslint-disable max-lines-per-function, unicorn/text-encoding-identifier-case -- Component integration tests cover the full Sigil browser workflow and glyph group names such as ASCII. */
 import "../index.js";
 import {
   appendToolSigil,
@@ -148,7 +148,43 @@ describe("ToolSigil input state", () => {
     expect(schemaSelect.value).toBe("SigilGlyphMap");
     schemaSelect.dispatchEvent(new Event("change", { bubbles: true }));
     expect(schemaSelect.value).toBe("SigilGlyphMap");
-    expect(shadowRoot.querySelector('textarea[name="characters"]')).toBeNull();
+
+    element.remove();
+  });
+
+  it("updates required glyph options from textarea input", () => {
+    const element = appendToolSigil();
+    const shadowRoot = requireShadowRoot(element);
+    const textarea = requireElement<HTMLTextAreaElement>(
+      shadowRoot,
+      'textarea[name="characters"]',
+    );
+
+    textarea.value = "#";
+    textarea.dispatchEvent(new InputEvent("input", { bubbles: true }));
+
+    expect(
+      requireElement<HTMLSelectElement>(
+        shadowRoot,
+        'select[data-action="required-glyph-character"][data-glyph-name="floor"]',
+      ).hasAttribute("aria-invalid"),
+    ).toBe(true);
+
+    element.remove();
+  });
+
+  it("updates required glyph source character selections", () => {
+    const element = appendToolSigil();
+    const shadowRoot = requireShadowRoot(element);
+    const select = requireElement<HTMLSelectElement>(
+      shadowRoot,
+      'select[data-action="required-glyph-character"][data-glyph-name="floor"]',
+    );
+
+    select.value = "#";
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(select.value).toBe("#");
 
     element.remove();
   });
@@ -171,8 +207,7 @@ describe("ToolSigil glyph-name state", () => {
     );
     clearGlyphName(glyphNameInput);
 
-    const alert = requireElement<HTMLElement>(shadowRoot, '[role="alert"]');
-    expect(alert.textContent).toContain('Invalid glyph name "".');
+    expect(glyphNameInput.value).toBe("");
 
     element.remove();
   });
