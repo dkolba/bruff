@@ -12,7 +12,9 @@ import type { Font } from "opentype.js";
 import { OSI_LICENSE_OPTIONS } from "./osi-license-catalog.js";
 import {
   DEFAULT_SIGIL_SCHEMA_ID,
+  findSigilSchemaOption,
   SIGIL_SCHEMA_OPTIONS,
+  type SigilSchemaOption,
 } from "./sigil-schema-catalog.js";
 import type { Result } from "@bruff/utils";
 export {
@@ -29,6 +31,26 @@ export type {
 
 const INITIAL_FONT_LOAD_TOKEN = 0;
 const NEXT_FONT_LOAD_TOKEN_OFFSET = 1;
+
+const selectedSchemaOption = (): SigilSchemaOption | undefined => {
+  const schemaOption = findSigilSchemaOption(
+    SIGIL_SCHEMA_OPTIONS,
+    DEFAULT_SIGIL_SCHEMA_ID,
+  );
+
+  return schemaOption.type === "some" ? schemaOption.value : undefined;
+};
+
+const schemaCharacters = (schemaOption: SigilSchemaOption | undefined): string =>
+  schemaOption?.requiredGlyphs.map((glyph) => glyph.unicode).join("") ?? "";
+
+const schemaNamesByUnicode = (
+  schemaOption: SigilSchemaOption | undefined,
+): Readonly<Record<string, string>> =>
+  Object.fromEntries(
+    schemaOption?.requiredGlyphs.map((glyph) => [glyph.unicode, glyph.name]) ??
+      [],
+  );
 
 const extractDrafts = (
   font: Font | undefined,
@@ -50,24 +72,28 @@ const extractDrafts = (
 };
 
 /** Creates the initial empty state for the sigil tool. */
-export const createToolSigilState = (): ToolSigilState => ({
-  characters: "",
-  drafts: [],
-  errors: [],
-  font: undefined,
-  fontFileName: undefined,
-  fontLoadToken: INITIAL_FONT_LOAD_TOKEN,
-  glyphGroups: SIGIL_GLYPH_GROUPS,
-  lastSelectedLicense: undefined,
-  licenseOptions: OSI_LICENSE_OPTIONS,
-  namesByUnicode: {},
-  previewFontFamily: "",
-  schemaOptions: SIGIL_SCHEMA_OPTIONS,
-  selectedSchemaId: DEFAULT_SIGIL_SCHEMA_ID,
-  selectedGlyphsByUnicode: {},
-  selectedLicensesByUnicode: {},
-  stagedGlyphGroupsByUnicode: {},
-});
+export const createToolSigilState = (): ToolSigilState => {
+  const schemaOption = selectedSchemaOption();
+
+  return {
+    characters: schemaCharacters(schemaOption),
+    drafts: [],
+    errors: [],
+    font: undefined,
+    fontFileName: undefined,
+    fontLoadToken: INITIAL_FONT_LOAD_TOKEN,
+    glyphGroups: SIGIL_GLYPH_GROUPS,
+    lastSelectedLicense: undefined,
+    licenseOptions: OSI_LICENSE_OPTIONS,
+    namesByUnicode: schemaNamesByUnicode(schemaOption),
+    previewFontFamily: "",
+    schemaOptions: SIGIL_SCHEMA_OPTIONS,
+    selectedGlyphsByUnicode: {},
+    selectedLicensesByUnicode: {},
+    selectedSchemaId: DEFAULT_SIGIL_SCHEMA_ID,
+    stagedGlyphGroupsByUnicode: {},
+  };
+};
 
 /**
  * Starts a new font selection and clears state derived from the prior font.
