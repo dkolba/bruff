@@ -204,6 +204,7 @@ export const selectToolSigilDownloadDisabled = (
   state: ToolSigilState,
 ): boolean =>
   selectToolSigilDownloadGlyphMap(state).type === "error" ||
+  state.errors.length > EMPTY_COUNT ||
   mappedGlyphErrors(state).length > EMPTY_COUNT ||
   licenseErrors(state).length > EMPTY_COUNT ||
   catalogErrors(state).length > EMPTY_COUNT ||

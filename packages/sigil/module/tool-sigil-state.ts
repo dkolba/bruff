@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports -- Existing state module groups imports by pure schema/catalog dependencies before shell-facing state exports. */
 import {
   DEFAULT_SIGIL_SCHEMA_ID,
   findSigilSchemaOption,
@@ -19,7 +20,9 @@ import type {
 import { extractSigilGlyphs } from "./extract-glyphs.js";
 import type { Font } from "opentype.js";
 import { OSI_LICENSE_OPTIONS } from "./osi-license-catalog.js";
+import { completeMissingDrafts } from "./tool-sigil-missing-drafts.js";
 import type { Result } from "@bruff/utils";
+/* eslint-enable sort-imports */
 export {
   selectToolSigilDownloadDisabled,
   selectToolSigilDownloadGlyphMap,
@@ -57,7 +60,7 @@ const extractDrafts = (
   const extractionReport = extractSigilGlyphs(font, characters);
 
   return {
-    drafts: extractionReport.drafts,
+    drafts: completeMissingDrafts(font, characters, extractionReport.drafts),
     errors: extractionReport.errors,
   };
 };

@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/text-encoding-identifier-case -- State tests cover the full glyph/license state matrix and catalog names such as ASCII. */
+/* eslint-disable sort-imports, unicorn/text-encoding-identifier-case -- State tests cover the full glyph/license state matrix and catalog names such as ASCII. */
 import {
   applyToolSigilFontLoadResult,
   createToolSigilState,
@@ -17,9 +17,9 @@ import {
   DEFAULT_SIGIL_SCHEMA_ID,
   SIGIL_SCHEMA_OPTIONS,
 } from "./sigil-schema-catalog.js";
-import { describe, expect, it } from "vitest";
-import { createTestFont } from "./font-test-fixture.js";
+import { createTestFont, createWallOnlyTestFont } from "./font-test-fixture.js";
 import type { SigilExtractionError } from "./glyph-json.js";
+import { describe, expect, it } from "vitest";
 
 const EMPTY_COUNT = 0;
 
@@ -151,7 +151,42 @@ describe("ToolSigil loaded font view state", () => {
       state,
     );
   });
+});
 
+describe("ToolSigil schema partial font view state", () => {
+  it("pre-fills every schema row when only one glyph exists in the font", () => {
+    const selection = startToolSigilFontSelection(
+      createToolSigilState(),
+      "wall-only.ttf",
+    );
+    const loadedState = applyToolSigilFontLoadResult(
+      selection.state,
+      selection.fontLoadToken,
+      ok(createWallOnlyTestFont()),
+    );
+
+    expect(loadedState.drafts.map((draft) => draft.glyph.unicode)).toEqual([
+      ".",
+      "#",
+      "+",
+      "@",
+      "e",
+    ]);
+    expect(selectToolSigilViewModel(loadedState)).toMatchObject({
+      downloadDisabled: true,
+      glyphCountText: "Glyphs ready: 5",
+      namesByUnicode: SIGIL_GLYPH_MAP_NAMES_BY_UNICODE,
+    });
+    expect(loadedState.errors.map((stateError) => stateError.message)).toEqual([
+      'Missing glyph for ".".',
+      'Missing glyph for "+".',
+      'Missing glyph for "@".',
+      'Missing glyph for "e".',
+    ]);
+  });
+});
+
+describe("ToolSigil schema selection view state", () => {
   it("re-extracts current font glyphs when selecting a schema", () => {
     const loadedState = loadCurrentFontState("★");
     const schemaState = setToolSigilSchema(
