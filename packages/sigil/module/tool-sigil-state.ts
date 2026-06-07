@@ -10,6 +10,10 @@ import type {
 import { extractSigilGlyphs } from "./extract-glyphs.js";
 import type { Font } from "opentype.js";
 import { OSI_LICENSE_OPTIONS } from "./osi-license-catalog.js";
+import {
+  DEFAULT_SIGIL_SCHEMA_ID,
+  SIGIL_SCHEMA_OPTIONS,
+} from "./sigil-schema-catalog.js";
 import type { Result } from "@bruff/utils";
 export {
   selectToolSigilDownloadDisabled,
@@ -58,6 +62,8 @@ export const createToolSigilState = (): ToolSigilState => ({
   licenseOptions: OSI_LICENSE_OPTIONS,
   namesByUnicode: {},
   previewFontFamily: "",
+  schemaOptions: SIGIL_SCHEMA_OPTIONS,
+  selectedSchemaId: DEFAULT_SIGIL_SCHEMA_ID,
   selectedGlyphsByUnicode: {},
   selectedLicensesByUnicode: {},
   stagedGlyphGroupsByUnicode: {},

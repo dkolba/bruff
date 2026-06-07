@@ -6,6 +6,10 @@ import {
 } from "./tool-sigil-render.js";
 import { requireElement } from "./tool-sigil-test-support.js";
 import type { ToolSigilViewModel } from "./tool-sigil-state.js";
+import {
+  DEFAULT_SIGIL_SCHEMA_ID,
+  SIGIL_SCHEMA_OPTIONS,
+} from "./sigil-schema-catalog.js";
 
 const EMPTY_CATALOG_MAPPED_GLYPH_OPTION_COUNT = 1;
 
@@ -37,7 +41,9 @@ const viewModel = (
   licenseOptions: [],
   namesByUnicode: {},
   previewFontFamily: "",
+  schemaOptions: SIGIL_SCHEMA_OPTIONS,
   selectedGlyphsByUnicode: {},
+  selectedSchemaId: DEFAULT_SIGIL_SCHEMA_ID,
   selectedLicensesByUnicode: {},
   stagedGlyphGroupsByUnicode: {},
   ...override,
