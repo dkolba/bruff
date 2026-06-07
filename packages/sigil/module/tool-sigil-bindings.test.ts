@@ -96,7 +96,7 @@ const connectBindingShadowRoot = (
 };
 
 describe("connectToolSigilControls setup", () => {
-  it("connects without the optional characters textarea", () => {
+  it("connects without optional controls", () => {
     const host = document.createElement("div");
     const shadowRoot = host.attachShadow({ mode: "open" });
 
@@ -106,6 +106,28 @@ describe("connectToolSigilControls setup", () => {
     );
 
     expect(shadowRoot.childElementCount).toBe(EMPTY_CHILD_COUNT);
+
+    disconnect();
+  });
+
+  it("delegates schema select changes", () => {
+    const onSchemaChange = vi.fn();
+    const shadowRoot = createBindingShadowRoot();
+    const schemaSelect = requireElement<HTMLSelectElement>(
+      shadowRoot,
+      'select[name="schema"]',
+    );
+    schemaSelect.append(new Option("SigilGlyphMap", "SigilGlyphMap"));
+    schemaSelect.value = "SigilGlyphMap";
+    const disconnect = connectToolSigilControls(
+      shadowRoot,
+      createToolSigilHandlers({ onSchemaChange }),
+    );
+
+    schemaSelect.dispatchEvent(new Event("change"));
+
+    expect(onSchemaChange).toHaveBeenCalledWith("SigilGlyphMap");
+    expect(shadowRoot.querySelector('textarea[name="characters"]')).toBeNull();
 
     disconnect();
   });
