@@ -12,25 +12,27 @@ import {
   startToolSigilFontSelection,
   type ToolSigilState,
 } from "./tool-sigil-state.js";
-import { describe, expect, it } from "vitest";
 import { brand, error, ok } from "@bruff/utils";
-import { createTestFont } from "./font-test-fixture.js";
-import type { SigilExtractionError } from "./glyph-json.js";
 import {
   DEFAULT_SIGIL_SCHEMA_ID,
   SIGIL_SCHEMA_OPTIONS,
 } from "./sigil-schema-catalog.js";
+import { describe, expect, it } from "vitest";
+import { createTestFont } from "./font-test-fixture.js";
+import type { SigilExtractionError } from "./glyph-json.js";
 
 const EMPTY_COUNT = 0;
 
 const SIGIL_GLYPH_MAP_CHARACTERS = ".#+@e";
+
+const ENEMY_UNICODE = "e";
 
 const SIGIL_GLYPH_MAP_NAMES_BY_UNICODE = {
   "#": "wall",
   "+": "door",
   ".": "floor",
   "@": "player",
-  e: "enemy",
+  [ENEMY_UNICODE]: "enemy",
 };
 
 const invalidFontErrors: ReadonlyArray<SigilExtractionError> = [
@@ -141,6 +143,15 @@ describe("ToolSigil loaded font view state", () => {
     expectDownloadedAsteriskGlyph(mappedAsteriskState(loadedState));
   });
 
+  it("keeps state unchanged for current and unknown schema ids", () => {
+    const state = createToolSigilState();
+
+    expect(setToolSigilSchema(state, DEFAULT_SIGIL_SCHEMA_ID)).toBe(state);
+    expect(setToolSigilSchema(state, brand<"SigilSchemaId">("Unknown"))).toBe(
+      state,
+    );
+  });
+
   it("re-extracts current font glyphs when selecting a schema", () => {
     const loadedState = loadCurrentFontState("★");
     const schemaState = setToolSigilSchema(
@@ -153,17 +164,17 @@ describe("ToolSigil loaded font view state", () => {
 
     expect(schemaState).toMatchObject({
       characters: SIGIL_GLYPH_MAP_CHARACTERS,
-      drafts: [],
       namesByUnicode: SIGIL_GLYPH_MAP_NAMES_BY_UNICODE,
       selectedSchemaId: DEFAULT_SIGIL_SCHEMA_ID,
     });
-    expect(schemaState.errors.map((stateError) => stateError.message)).toEqual([
-      'Missing glyph for ".".',
-      'Missing glyph for "#".',
-      'Missing glyph for "+".',
-      'Missing glyph for "@".',
-      'Missing glyph for "e".',
+    expect(schemaState.drafts.map((draft) => draft.glyph.unicode)).toEqual([
+      ".",
+      "#",
+      "+",
+      "@",
+      "e",
     ]);
+    expect(schemaState.errors).toEqual([]);
   });
 });
 

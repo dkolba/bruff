@@ -1,4 +1,8 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- Render tests use small literal view models for glyph catalog UI states. */
+import {
+  DEFAULT_SIGIL_SCHEMA_ID,
+  SIGIL_SCHEMA_OPTIONS,
+} from "./sigil-schema-catalog.js";
 import { describe, expect, it } from "vitest";
 import {
   renderToolSigil,
@@ -6,11 +10,8 @@ import {
 } from "./tool-sigil-render.js";
 import { requireElement } from "./tool-sigil-test-support.js";
 import type { ToolSigilViewModel } from "./tool-sigil-state.js";
-import {
-  DEFAULT_SIGIL_SCHEMA_ID,
-  SIGIL_SCHEMA_OPTIONS,
-} from "./sigil-schema-catalog.js";
 
+const EMPTY_CHILD_COUNT = 0;
 const EMPTY_CATALOG_MAPPED_GLYPH_OPTION_COUNT = 1;
 
 const viewModel = (
@@ -43,8 +44,8 @@ const viewModel = (
   previewFontFamily: "",
   schemaOptions: SIGIL_SCHEMA_OPTIONS,
   selectedGlyphsByUnicode: {},
-  selectedSchemaId: DEFAULT_SIGIL_SCHEMA_ID,
   selectedLicensesByUnicode: {},
+  selectedSchemaId: DEFAULT_SIGIL_SCHEMA_ID,
   stagedGlyphGroupsByUnicode: {},
   ...override,
 });
@@ -108,6 +109,15 @@ describe("renderToolSigil", () => {
       "SigilGlyphMap",
     ]);
     expect(shadowRoot.querySelector('textarea[name="characters"]')).toBeNull();
+  });
+
+  it("skips missing optional schema select", () => {
+    const host = document.createElement("div");
+    const shadowRoot = host.attachShadow({ mode: "open" });
+
+    renderToolSigil(shadowRoot, viewModel());
+
+    expect(shadowRoot.childElementCount).toBe(EMPTY_CHILD_COUNT);
   });
 
   it("renders empty catalog selection fallbacks", () => {

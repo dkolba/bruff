@@ -14,7 +14,7 @@ type ToolSigilControls = Readonly<{
   downloadButton: HTMLButtonElement | null;
   fileInput: HTMLInputElement | null;
   glyphList: Element | null;
-  schemaSelect: HTMLSelectElement | null;
+  schemaSelect: HTMLSelectElement;
 }>;
 
 type ToolSigilEventHandlers = Readonly<{
@@ -55,9 +55,9 @@ const queryToolSigilControls = (shadowRoot: ShadowRoot): ToolSigilControls => ({
     'input[type="file"][name="font-file"]',
   ),
   glyphList: shadowRoot.querySelector('[data-state="glyph-list"]'),
-  schemaSelect: shadowRoot.querySelector<HTMLSelectElement>(
-    'select[name="schema"]',
-  ),
+  schemaSelect:
+    shadowRoot.querySelector<HTMLSelectElement>('select[name="schema"]') ??
+    document.createElement("select"),
 });
 
 const readGlyphSelectChange = (
@@ -123,9 +123,6 @@ const createToolSigilEventHandlers = (
   handleFileChange: (): void => {
     handlers.onFontFileSelected(controls.fileInput?.files?.[FIRST_FILE_INDEX]);
   },
-  handleSchemaChange: (): void => {
-    handlers.onSchemaChange(controls.schemaSelect?.value ?? "");
-  },
   handleGlyphNameInput: (event: Event): void => {
     if (!isGlyphNameInput(event.target)) {
       return;
@@ -146,6 +143,9 @@ const createToolSigilEventHandlers = (
 
     dispatchGlyphSelectChange(handlers, selection);
   },
+  handleSchemaChange: (): void => {
+    handlers.onSchemaChange(controls.schemaSelect.value);
+  },
 });
 
 const addToolSigilEventListeners = (
@@ -156,7 +156,7 @@ const addToolSigilEventListeners = (
     "change",
     eventHandlers.handleFileChange,
   );
-  controls.schemaSelect?.addEventListener(
+  controls.schemaSelect.addEventListener(
     "change",
     eventHandlers.handleSchemaChange,
   );
@@ -182,7 +182,7 @@ const removeToolSigilEventListeners = (
     "change",
     eventHandlers.handleFileChange,
   );
-  controls.schemaSelect?.removeEventListener(
+  controls.schemaSelect.removeEventListener(
     "change",
     eventHandlers.handleSchemaChange,
   );

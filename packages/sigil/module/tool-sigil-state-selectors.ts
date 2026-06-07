@@ -229,7 +229,7 @@ export const selectToolSigilViewModel = (
   previewFontFamily: state.previewFontFamily,
   schemaOptions: state.schemaOptions,
   selectedGlyphsByUnicode: state.selectedGlyphsByUnicode,
-  selectedSchemaId: state.selectedSchemaId,
   selectedLicensesByUnicode: selectedLicensesByUnicode(state),
+  selectedSchemaId: state.selectedSchemaId,
   stagedGlyphGroupsByUnicode: stagedGlyphGroupsByUnicode(state),
 });

@@ -4,9 +4,12 @@ import type {
   SigilGlyphMapping,
 } from "./glyph-json.js";
 import type { SigilGlyphGroup, SigilGlyphGroupName } from "./glyph-catalog.js";
+import type {
+  SigilSchemaId,
+  SigilSchemaOption,
+} from "./sigil-schema-catalog.js";
 import type { Font } from "opentype.js";
 import type { SigilLicenseOption } from "./osi-license-catalog.js";
-import type { SigilSchemaId, SigilSchemaOption } from "./sigil-schema-catalog.js";
 
 /** Immutable state owned by the `<tool-sigil>` coordinator. */
 export type ToolSigilState = Readonly<{

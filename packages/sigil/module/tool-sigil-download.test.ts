@@ -17,8 +17,16 @@ import {
   trackDownloadClicks,
 } from "./tool-sigil-download-test-support.js";
 
+const REQUIRED_SCHEMA_UNICODES = [".", "#", "+", "@", "e"];
+
+const selectSchemaMappingAndLicense = (shadowRoot: ShadowRoot): void => {
+  REQUIRED_SCHEMA_UNICODES.map((unicode) =>
+    selectDefaultMappingAndLicense(shadowRoot, unicode),
+  );
+};
+
 const expectSourceGlyphJson = (blobText: string): void => {
-  expect(blobText).toContain('"unicode": "★"');
+  expect(blobText).toContain('"unicode": "."');
   expect(blobText).toContain('"mappedGlyph"');
   expect(blobText).toContain('"groupName": "ASCII"');
   expect(blobText).toContain('"glyphKey": "ASTERISK"');
@@ -29,8 +37,8 @@ const expectDownloadedSourceGlyphJson = async (
   shadowRoot: ShadowRoot,
   createdBlobs: ReadonlyArray<Blob>,
 ): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-  selectDefaultMappingAndLicense(shadowRoot, "★");
+  await loadCharactersFromTestFont(shadowRoot, ".");
+  selectSchemaMappingAndLicense(shadowRoot);
   clickDownload(shadowRoot);
 
   const [blob] = createdBlobs;

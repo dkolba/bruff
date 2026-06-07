@@ -16,6 +16,14 @@ import { createValidFontFile } from "./font-test-fixture.js";
 import { registerToolSigil } from "./register-tool-sigil.js";
 import { ToolSigil } from "./tool-sigil.js";
 
+const EXPECTED_REQUIRED_GLYPH_NAMES = [
+  "floor",
+  "wall",
+  "door",
+  "player",
+  "enemy",
+];
+
 const selectedOptionValues = (
   select: HTMLSelectElement,
 ): ReadonlyArray<string> => [...select.options].map((option) => option.value);
@@ -33,6 +41,18 @@ const expectInitialGlyphMappingOptions = (shadowRoot: ShadowRoot): void => {
   expect(selectedOptionValues(groupSelect)).toContain("ASCII");
   expect(selectedOptionValues(glyphSelect)).toContain("ASTERISK");
 };
+
+const clearGlyphName = (glyphNameInput: HTMLInputElement): void => {
+  glyphNameInput.value = "";
+  glyphNameInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
+};
+
+const renderedGlyphNames = (shadowRoot: ShadowRoot): ReadonlyArray<string> =>
+  [
+    ...shadowRoot.querySelectorAll<HTMLInputElement>(
+      '[data-state="glyph-list"] input',
+    ),
+  ].map((input) => input.value);
 
 const expectBoxGlyphMappingOptions = (shadowRoot: ShadowRoot): void => {
   const glyphSelect = requireElement<HTMLSelectElement>(
@@ -126,6 +146,8 @@ describe("ToolSigil input state", () => {
     );
 
     expect(schemaSelect.value).toBe("SigilGlyphMap");
+    schemaSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(schemaSelect.value).toBe("SigilGlyphMap");
     expect(shadowRoot.querySelector('textarea[name="characters"]')).toBeNull();
 
     element.remove();
@@ -144,15 +166,10 @@ describe("ToolSigil glyph-name state", () => {
       'input[data-unicode="."]',
     );
     expect(glyphNameInput.value).toBe("floor");
-    expect(
-      [
-        ...shadowRoot.querySelectorAll<HTMLInputElement>(
-          '[data-state="glyph-list"] input',
-        ),
-      ].map((input) => input.value),
-    ).toEqual(["floor", "wall", "door", "player", "enemy"]);
-    glyphNameInput.value = "";
-    glyphNameInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
+    expect(renderedGlyphNames(shadowRoot)).toEqual(
+      EXPECTED_REQUIRED_GLYPH_NAMES,
+    );
+    clearGlyphName(glyphNameInput);
 
     const alert = requireElement<HTMLElement>(shadowRoot, '[role="alert"]');
     expect(alert.textContent).toContain('Invalid glyph name "".');

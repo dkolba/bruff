@@ -1,4 +1,13 @@
 import {
+  DEFAULT_SIGIL_SCHEMA_ID,
+  findSigilSchemaOption,
+  SIGIL_SCHEMA_OPTIONS,
+  sigilSchemaCharacters,
+  type SigilSchemaId,
+  sigilSchemaNamesByUnicode,
+  type SigilSchemaOption,
+} from "./sigil-schema-catalog.js";
+import {
   SIGIL_GLYPH_GROUPS,
   type SigilGlyphGroupName,
 } from "./glyph-catalog.js";
@@ -10,13 +19,6 @@ import type {
 import { extractSigilGlyphs } from "./extract-glyphs.js";
 import type { Font } from "opentype.js";
 import { OSI_LICENSE_OPTIONS } from "./osi-license-catalog.js";
-import {
-  DEFAULT_SIGIL_SCHEMA_ID,
-  findSigilSchemaOption,
-  SIGIL_SCHEMA_OPTIONS,
-  type SigilSchemaId,
-  type SigilSchemaOption,
-} from "./sigil-schema-catalog.js";
 import type { Result } from "@bruff/utils";
 export {
   selectToolSigilDownloadDisabled,
@@ -40,17 +42,6 @@ const schemaOptionById = (
 
   return schemaOption.type === "some" ? schemaOption.value : undefined;
 };
-
-const schemaCharacters = (schemaOption: SigilSchemaOption | undefined): string =>
-  schemaOption?.requiredGlyphs.map((glyph) => glyph.unicode).join("") ?? "";
-
-const schemaNamesByUnicode = (
-  schemaOption: SigilSchemaOption | undefined,
-): Readonly<Record<string, string>> =>
-  Object.fromEntries(
-    schemaOption?.requiredGlyphs.map((glyph) => [glyph.unicode, glyph.name]) ??
-      [],
-  );
 
 const extractDrafts = (
   font: Font | undefined,
@@ -76,7 +67,7 @@ export const createToolSigilState = (): ToolSigilState => {
   const schemaOption = schemaOptionById(DEFAULT_SIGIL_SCHEMA_ID);
 
   return {
-    characters: schemaCharacters(schemaOption),
+    characters: sigilSchemaCharacters(schemaOption),
     drafts: [],
     errors: [],
     font: undefined,
@@ -85,7 +76,7 @@ export const createToolSigilState = (): ToolSigilState => {
     glyphGroups: SIGIL_GLYPH_GROUPS,
     lastSelectedLicense: undefined,
     licenseOptions: OSI_LICENSE_OPTIONS,
-    namesByUnicode: schemaNamesByUnicode(schemaOption),
+    namesByUnicode: sigilSchemaNamesByUnicode(schemaOption),
     previewFontFamily: "",
     schemaOptions: SIGIL_SCHEMA_OPTIONS,
     selectedGlyphsByUnicode: {},
@@ -158,12 +149,12 @@ export const setToolSigilSchema = (
     return state;
   }
 
-  const characters = schemaCharacters(schemaOption);
+  const characters = sigilSchemaCharacters(schemaOption);
 
   return {
     ...state,
     characters,
-    namesByUnicode: schemaNamesByUnicode(schemaOption),
+    namesByUnicode: sigilSchemaNamesByUnicode(schemaOption),
     selectedSchemaId: schemaId,
     ...extractDrafts(state.font, characters),
   };
@@ -242,14 +233,6 @@ export const setToolSigilMappedGlyph = (
   },
 });
 
-/**
- * Selects a license for one source character and memorizes it for new rows.
- *
- * @param state - Current tool state
- * @param unicode - Source glyph Unicode character
- * @param licenseValue - Machine-readable selected license value
- * @returns Updated tool state
- */
 export const setToolSigilLicense = (
   state: ToolSigilState,
   unicode: string,
@@ -263,14 +246,6 @@ export const setToolSigilLicense = (
   },
 });
 
-/**
- * Applies a parsed font result when it belongs to the current load token.
- *
- * @param state - Current tool state
- * @param fontLoadToken - Token captured when the async font load started
- * @param fontResult - Parsed font or typed loading errors
- * @returns Updated state, or the unchanged state for stale results
- */
 export const applyToolSigilFontLoadResult = (
   state: ToolSigilState,
   fontLoadToken: number,
@@ -296,14 +271,6 @@ export const applyToolSigilFontLoadResult = (
   };
 };
 
-/**
- * Applies the preview font family when it belongs to the current load token.
- *
- * @param state - Current tool state
- * @param fontLoadToken - Token captured when preview loading started
- * @param previewFontFamily - Browser font family installed for previews
- * @returns Updated state, or the unchanged state for stale results
- */
 export const setToolSigilPreviewFontFamily = (
   state: ToolSigilState,
   fontLoadToken: number,
@@ -316,13 +283,6 @@ export const setToolSigilPreviewFontFamily = (
       }
     : state;
 
-/**
- * Clears the preview font family when the load token is current.
- *
- * @param state - Current tool state
- * @param fontLoadToken - Token captured when preview loading started
- * @returns Updated state, or the unchanged state for stale results
- */
 export const clearToolSigilPreviewFontFamily = (
   state: ToolSigilState,
   fontLoadToken: number,

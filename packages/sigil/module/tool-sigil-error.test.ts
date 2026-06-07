@@ -1,13 +1,13 @@
 import "../index.js";
 import {
   appendToolSigil,
-  loadCharactersFromTestFont,
   requireElement,
   requireShadowRoot,
   selectFiles,
   waitForElement,
 } from "./tool-sigil-test-support.js";
 import { describe, expect, it } from "vitest";
+import { createMissingStarFontFile } from "./font-test-fixture.js";
 
 const expectAlertText = async (
   shadowRoot: ShadowRoot,
@@ -43,9 +43,14 @@ describe("ToolSigil missing glyph error state", () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
 
-    await loadCharactersFromTestFont(shadowRoot, "?");
+    const fileInput = requireElement<HTMLInputElement>(
+      shadowRoot,
+      'input[type="file"][name="font-file"]',
+    );
 
-    await expectAlertText(shadowRoot, 'Missing glyph for "?".');
+    selectFiles(fileInput, [createMissingStarFontFile("missing.ttf")]);
+
+    await expectAlertText(shadowRoot, 'Missing glyph for ".".');
 
     element.remove();
   });

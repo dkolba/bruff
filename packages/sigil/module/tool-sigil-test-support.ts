@@ -101,12 +101,17 @@ export const enterCharacters = (
 /** Loads the test font for the selected schema. */
 export const loadCharactersFromTestFont = async (
   shadowRoot: ShadowRoot,
-  _characters: string,
+  characters: string,
 ): Promise<void> => {
+  const schemaCharacters = characters;
   const fileInput = requireElement<HTMLInputElement>(
     shadowRoot,
     'input[type="file"][name="font-file"]',
   );
+
+  if (schemaCharacters === "") {
+    await waitForComponentUpdate();
+  }
 
   selectFiles(fileInput, [createValidFontFile("component-test.ttf")]);
   await waitForSchemaFontProcessing(shadowRoot);

@@ -27,11 +27,11 @@ import {
   renderToolSigilSelection,
   renderToolSigilValidation,
 } from "./tool-sigil-render.js";
+import { brand } from "@bruff/utils";
 import { loadSigilFontFile } from "./font-file.js";
 import type { SigilGlyphMapping } from "./glyph-json.js";
 import { TOOL_SIGIL_TEMPLATE } from "./tool-sigil-template.js";
 import { triggerJsonDownload } from "./glyph-download.js";
-import { brand } from "@bruff/utils";
 
 /**
  * Development-only web component for extracting glyph JSON from uploaded fonts.

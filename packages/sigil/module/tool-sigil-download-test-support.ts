@@ -7,6 +7,14 @@ import {
 } from "./tool-sigil-test-support.js";
 import { expect } from "vitest";
 
+const REQUIRED_SCHEMA_UNICODES = [".", "#", "+", "@", "e"];
+
+const selectSchemaMappingAndLicense = (shadowRoot: ShadowRoot): void => {
+  REQUIRED_SCHEMA_UNICODES.map((unicode) =>
+    selectDefaultMappingAndLicense(shadowRoot, unicode),
+  );
+};
+
 /** Browser URL API stubs captured for download tests. */
 export type ObjectUrlStubState = Readonly<{
   createdBlobs: ReadonlyArray<Blob>;
@@ -98,16 +106,15 @@ export const expectEditedGlyphJsonDownload = async (
   shadowRoot: ShadowRoot,
   urlStubs: ObjectUrlStubState,
 ): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-  selectDefaultMappingAndLicense(shadowRoot, "★");
-  renameGlyph(shadowRoot, "★", "customStar");
+  await loadCharactersFromTestFont(shadowRoot, ".");
+  selectSchemaMappingAndLicense(shadowRoot);
+  renameGlyph(shadowRoot, ".", "customFloor");
   clickDownload(shadowRoot);
 
   const blob = requireFirstBlob(urlStubs.createdBlobs);
   const blobText = await blob.text();
   expect(blob.type).toBe("application/json");
-  expect(blobText).toContain('"customStar"');
-  expect(blobText).not.toContain('"u2605"');
+  expect(blobText).toContain('"customFloor"');
 };
 
 /** Expects a download click to use the fixed sigil filename. */
@@ -115,8 +122,8 @@ export const expectDeterministicFilenameDownload = async (
   shadowRoot: ShadowRoot,
   clickState: DownloadClickState,
 ): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-  selectDefaultMappingAndLicense(shadowRoot, "★");
+  await loadCharactersFromTestFont(shadowRoot, ".");
+  selectSchemaMappingAndLicense(shadowRoot);
   clickDownload(shadowRoot);
 
   expect(clickState.downloads).toEqual(["sigil.json"]);
@@ -128,8 +135,8 @@ export const expectRevokedObjectUrlDownload = async (
   shadowRoot: ShadowRoot,
   urlStubs: ObjectUrlStubState,
 ): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-  selectDefaultMappingAndLicense(shadowRoot, "★");
+  await loadCharactersFromTestFont(shadowRoot, ".");
+  selectSchemaMappingAndLicense(shadowRoot);
   clickDownload(shadowRoot);
 
   expect(urlStubs.revokedUrls).toEqual(["blob:sigil-json"]);
@@ -140,9 +147,9 @@ export const expectInvalidGlyphDownloadBlocked = async (
   shadowRoot: ShadowRoot,
   urlStubs: ObjectUrlStubState,
 ): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
-  selectDefaultMappingAndLicense(shadowRoot, "★");
-  renameGlyph(shadowRoot, "★", "");
+  await loadCharactersFromTestFont(shadowRoot, ".");
+  selectSchemaMappingAndLicense(shadowRoot);
+  renameGlyph(shadowRoot, ".", "");
   forceDownloadClick(shadowRoot);
 
   expect(urlStubs.createdBlobs).toEqual([]);

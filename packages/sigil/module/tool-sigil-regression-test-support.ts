@@ -178,9 +178,9 @@ export const expectPartialGlyphJsonDownload = async (
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, ".");
   await expectFloorGlyphRow(shadowRoot);
-  REQUIRED_SCHEMA_UNICODES.forEach((unicode) => {
-    selectDefaultMappingAndLicense(shadowRoot, unicode);
-  });
+  REQUIRED_SCHEMA_UNICODES.map((unicode) =>
+    selectDefaultMappingAndLicense(shadowRoot, unicode),
+  );
   renameGlyph(shadowRoot, ".", "customFloor");
   clickDownload(shadowRoot);
 

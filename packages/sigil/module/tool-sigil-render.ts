@@ -1,6 +1,7 @@
 import { appendText } from "./dom-text.js";
 import { createErrorElements } from "./error-elements.js";
 import { createGlyphPreview } from "./glyph-preview.js";
+import { renderToolSigilSchemaSelect } from "./tool-sigil-schema-render.js";
 import type { SigilGlyphDraft } from "./glyph-json.js";
 import type { SigilGlyphOption } from "./glyph-catalog.js";
 import type { ToolSigilViewModel } from "./tool-sigil-state.js";
@@ -190,23 +191,6 @@ const renderErrors = (
     ?.replaceChildren(...createErrorElements(viewModel.errors));
 };
 
-const renderSchemaSelect = (
-  shadowRoot: ShadowRoot,
-  viewModel: ToolSigilViewModel,
-): void => {
-  const schemaSelect = shadowRoot.querySelector<HTMLSelectElement>(
-    'select[name="schema"]',
-  );
-  schemaSelect?.replaceChildren(
-    ...viewModel.schemaOptions.map(
-      (schemaOption) => new Option(schemaOption.label, schemaOption.id),
-    ),
-  );
-  if (schemaSelect !== null) {
-    schemaSelect.value = viewModel.selectedSchemaId;
-  }
-};
-
 /**
  * Renders validation-only regions without replacing focused glyph inputs.
  *
@@ -295,7 +279,7 @@ export const renderToolSigil = (
   shadowRoot: ShadowRoot,
   viewModel: ToolSigilViewModel,
 ): void => {
-  renderSchemaSelect(shadowRoot, viewModel);
+  renderToolSigilSchemaSelect(shadowRoot, viewModel);
   replaceText(
     shadowRoot.querySelector('[data-state="font-file-name"]'),
     viewModel.fontFileNameText,

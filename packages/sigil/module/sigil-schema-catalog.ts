@@ -1,5 +1,5 @@
+import { brand, type Brand, none, type Option, some } from "@bruff/utils";
 import type { RequiredSigilGlyphName } from "./glyph-json.js";
-import { brand, none, some, type Brand, type Option } from "@bruff/utils";
 
 /** Stable id for a concrete sigil contract schema preset. */
 export type SigilSchemaId = Brand<string, "SigilSchemaId">;
@@ -54,3 +54,28 @@ export const findSigilSchemaOption = (
 
   return schemaOption === undefined ? none : some(schemaOption);
 };
+
+/**
+ * Builds the source character string for a schema option.
+ *
+ * @param schemaOption - Concrete schema option
+ * @returns Source characters in schema order
+ */
+export const sigilSchemaCharacters = (
+  schemaOption: SigilSchemaOption | undefined,
+): string =>
+  schemaOption?.requiredGlyphs.map((glyph) => glyph.unicode).join("") ?? "";
+
+/**
+ * Builds default glyph names keyed by source Unicode character.
+ *
+ * @param schemaOption - Concrete schema option
+ * @returns Required glyph names keyed by source character
+ */
+export const sigilSchemaNamesByUnicode = (
+  schemaOption: SigilSchemaOption | undefined,
+): Readonly<Record<string, string>> =>
+  Object.fromEntries(
+    schemaOption?.requiredGlyphs.map((glyph) => [glyph.unicode, glyph.name]) ??
+      [],
+  );
