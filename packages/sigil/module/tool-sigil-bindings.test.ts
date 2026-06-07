@@ -20,7 +20,7 @@ const createBindingShadowRoot = (): ShadowRoot => {
   const shadowRoot = host.attachShadow({ mode: "open" });
   shadowRoot.innerHTML = `
     <input name="font-file" type="file">
-    <textarea name="characters"></textarea>
+    <select name="schema"></select>
     <div data-state="glyph-list"></div>
     <button type="button" data-action="download">Download JSON</button>
   `;
@@ -72,13 +72,13 @@ const appendGlyphInput = (
 const createToolSigilHandlers = (
   handlers: Partial<ToolSigilControlHandlers> = {},
 ): ToolSigilControlHandlers => ({
-  onCharactersInput: vi.fn(),
   onDownloadClick: vi.fn(),
   onFontFileSelected: vi.fn(),
   onGlyphGroupChange: vi.fn(),
   onGlyphNameInput: vi.fn(),
   onLicenseChange: vi.fn(),
   onMappedGlyphChange: vi.fn(),
+  onSchemaChange: vi.fn(),
   ...handlers,
 });
 

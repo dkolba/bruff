@@ -5,12 +5,12 @@ import {
   selectToolSigilDownloadDisabled,
   selectToolSigilDownloadGlyphMap,
   selectToolSigilViewModel,
-  setToolSigilCharacters,
   setToolSigilGlyphGroup,
   setToolSigilGlyphName,
   setToolSigilLicense,
   setToolSigilMappedGlyph,
   setToolSigilPreviewFontFamily,
+  setToolSigilSchema,
   startToolSigilFontSelection,
   type ToolSigilState,
 } from "./tool-sigil-state.js";
@@ -31,6 +31,7 @@ import { loadSigilFontFile } from "./font-file.js";
 import type { SigilGlyphMapping } from "./glyph-json.js";
 import { TOOL_SIGIL_TEMPLATE } from "./tool-sigil-template.js";
 import { triggerJsonDownload } from "./glyph-download.js";
+import { brand } from "@bruff/utils";
 
 /**
  * Development-only web component for extracting glyph JSON from uploaded fonts.
@@ -55,9 +56,6 @@ export class ToolSigil extends HTMLElement {
 
     if (this.#disconnectControls === undefined) {
       this.#disconnectControls = connectToolSigilControls(shadowRoot, {
-        onCharactersInput: (characters) => {
-          this.#handleCharactersInput(characters);
-        },
         onDownloadClick: () => {
           this.#handleDownloadClick();
         },
@@ -75,6 +73,9 @@ export class ToolSigil extends HTMLElement {
         },
         onMappedGlyphChange: (unicode, mapping) => {
           this.#handleMappedGlyphChange(unicode, mapping);
+        },
+        onSchemaChange: (schemaId) => {
+          this.#handleSchemaChange(schemaId);
         },
       });
     }
@@ -128,8 +129,11 @@ export class ToolSigil extends HTMLElement {
     );
   }
 
-  #handleCharactersInput(characters: string): void {
-    this.#state = setToolSigilCharacters(this.#state, characters);
+  #handleSchemaChange(schemaId: string): void {
+    this.#state = setToolSigilSchema(
+      this.#state,
+      brand<"SigilSchemaId">(schemaId),
+    );
     this.#renderState();
   }
 
