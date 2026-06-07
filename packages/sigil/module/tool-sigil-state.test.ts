@@ -136,6 +136,10 @@ describe("ToolSigil state selection", () => {
     ]);
   });
 
+  it("restores the default textarea value on initialization", () => {
+    expect(createToolSigilState().characters).toBe(SIGIL_GLYPH_MAP_CHARACTERS);
+  });
+
   it("derives extraction characters from the selected schema", () => {
     expect(createToolSigilState()).toMatchObject({
       characters: SIGIL_GLYPH_MAP_CHARACTERS,
