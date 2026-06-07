@@ -169,8 +169,8 @@ const createToolSigilEventHandlers = (
       return;
     }
 
-    const { glyphName } = event.target.dataset;
-    if (glyphName !== undefined) {
+    const { action, glyphName } = event.target.dataset;
+    if (action === "required-glyph-character" && glyphName !== undefined) {
       handlers.onRequiredGlyphCharacterChange(glyphName, event.target.value);
     }
   },
