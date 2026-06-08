@@ -1,4 +1,3 @@
-/* eslint-disable sort-imports -- Selector imports keep catalog, state, and helper dependencies grouped. */
 import {
   findSigilGlyphOption,
   type SigilGlyphGroup,
@@ -14,11 +13,10 @@ import {
   type ToolSigilState,
   type ToolSigilViewModel,
 } from "./tool-sigil-state-types.js";
-import { requiredGlyphSelectionViews } from "./tool-sigil-required-glyph-selection.js";
 import { createSigilGlyphMap } from "./glyph-name.js";
+import { requiredGlyphSelectionViews } from "./tool-sigil-required-glyph-selection.js";
 import type { Result } from "@bruff/utils";
 import type { SigilLicenseOption } from "./osi-license-catalog.js";
-/* eslint-enable sort-imports */
 
 const EMPTY_COUNT = 0;
 const FIRST_GLYPH_GROUP_INDEX = 0;
