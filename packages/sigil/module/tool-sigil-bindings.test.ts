@@ -1,4 +1,4 @@
-/* eslint-disable max-lines-per-function, max-statements, unicorn/text-encoding-identifier-case -- Delegation tests cover grouped glyph names such as ASCII in one DOM fixture. */
+/* eslint-disable unicorn/text-encoding-identifier-case -- Delegation tests cover grouped glyph names such as ASCII in one DOM fixture. */
 import {
   connectToolSigilControls,
   type DisconnectToolSigilControls,
@@ -12,8 +12,14 @@ type ConnectedBindingShadowRoot = Readonly<{
   glyphList: Element;
 }>;
 
+type RequiredGlyphCharacterChangeFixture = Readonly<{
+  disconnect: DisconnectToolSigilControls;
+  select: HTMLSelectElement;
+}>;
+
 const EMPTY_CHILD_COUNT = 0;
 const GLYPH_LIST_SELECTOR = '[data-state="glyph-list"]';
+const REQUIRED_GLYPH_SELECTOR = '[data-state="required-glyph-selections"]';
 
 const createBindingShadowRoot = (): ShadowRoot => {
   const host = document.createElement("div");
@@ -99,6 +105,23 @@ const connectBindingShadowRoot = (
   return { disconnect, glyphList };
 };
 
+const connectRequiredGlyphCharacterChange = (
+  onRequiredGlyphCharacterChange: ToolSigilControlHandlers["onRequiredGlyphCharacterChange"],
+): RequiredGlyphCharacterChangeFixture => {
+  const shadowRoot = createBindingShadowRoot();
+  const container = requireElement(shadowRoot, REQUIRED_GLYPH_SELECTOR);
+  const select = appendSelect(container, "required-glyph-character", null);
+  Object.assign(select.dataset, { glyphName: "floor" });
+  select.append(new Option("#", "#"));
+  select.value = "#";
+  const disconnect = connectToolSigilControls(
+    shadowRoot,
+    createToolSigilHandlers({ onRequiredGlyphCharacterChange }),
+  );
+
+  return { disconnect, select };
+};
+
 describe("connectToolSigilControls setup", () => {
   it("connects without optional controls", () => {
     const host = document.createElement("div");
@@ -134,7 +157,9 @@ describe("connectToolSigilControls setup", () => {
 
     disconnect();
   });
+});
 
+describe("connectToolSigilControls text input delegation", () => {
   it("ignores textarea input events without textarea targets", () => {
     const onCharactersInput = vi.fn();
     const shadowRoot = createBindingShadowRoot();
@@ -169,14 +194,13 @@ describe("connectToolSigilControls setup", () => {
 
     disconnect();
   });
+});
 
+describe("connectToolSigilControls required glyph delegation", () => {
   it("ignores required glyph changes without select targets", () => {
     const onRequiredGlyphCharacterChange = vi.fn();
     const shadowRoot = createBindingShadowRoot();
-    const container = requireElement(
-      shadowRoot,
-      '[data-state="required-glyph-selections"]',
-    );
+    const container = requireElement(shadowRoot, REQUIRED_GLYPH_SELECTOR);
     const disconnect = connectToolSigilControls(
       shadowRoot,
       createToolSigilHandlers({ onRequiredGlyphCharacterChange }),
@@ -192,10 +216,7 @@ describe("connectToolSigilControls setup", () => {
   it("ignores required glyph selects with unrelated actions", () => {
     const onRequiredGlyphCharacterChange = vi.fn();
     const shadowRoot = createBindingShadowRoot();
-    const container = requireElement(
-      shadowRoot,
-      '[data-state="required-glyph-selections"]',
-    );
+    const container = requireElement(shadowRoot, REQUIRED_GLYPH_SELECTOR);
     const select = appendSelect(container, "glyph-group", null);
     Object.assign(select.dataset, { glyphName: "floor" });
     const disconnect = connectToolSigilControls(
@@ -212,18 +233,8 @@ describe("connectToolSigilControls setup", () => {
 
   it("delegates required glyph character select changes", () => {
     const onRequiredGlyphCharacterChange = vi.fn();
-    const shadowRoot = createBindingShadowRoot();
-    const container = requireElement(
-      shadowRoot,
-      '[data-state="required-glyph-selections"]',
-    );
-    const select = appendSelect(container, "required-glyph-character", null);
-    Object.assign(select.dataset, { glyphName: "floor" });
-    select.append(new Option("#", "#"));
-    select.value = "#";
-    const disconnect = connectToolSigilControls(
-      shadowRoot,
-      createToolSigilHandlers({ onRequiredGlyphCharacterChange }),
+    const { disconnect, select } = connectRequiredGlyphCharacterChange(
+      onRequiredGlyphCharacterChange,
     );
 
     select.dispatchEvent(new Event("change", { bubbles: true }));
