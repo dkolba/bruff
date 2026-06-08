@@ -1,4 +1,4 @@
-/* eslint-disable max-lines-per-function, unicorn/text-encoding-identifier-case -- Component integration tests cover the full Sigil browser workflow and glyph group names such as ASCII. */
+/* eslint-disable unicorn/text-encoding-identifier-case -- Component integration tests cover the full Sigil browser workflow and glyph group names such as ASCII. */
 import "../index.js";
 import {
   appendToolSigil,
@@ -104,7 +104,7 @@ describe("ToolSigil placeholder", () => {
   });
 });
 
-describe("ToolSigil input state", () => {
+describe("ToolSigil font input state", () => {
   it("shows the selected font file", async () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
@@ -136,7 +136,9 @@ describe("ToolSigil input state", () => {
 
     element.remove();
   });
+});
 
+describe("ToolSigil schema input state", () => {
   it("preselects the SigilGlyphMap schema", () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
@@ -151,7 +153,9 @@ describe("ToolSigil input state", () => {
 
     element.remove();
   });
+});
 
+describe("ToolSigil required glyph input state", () => {
   it("updates required glyph options from textarea input", () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
