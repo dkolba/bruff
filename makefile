@@ -32,6 +32,8 @@ ssh-keygen: ## Generate new SSH key-pair
 
 build: ## Build Docker image
 	docker build \
+		--no-cache \
+		--pull \
 		--build-arg GIT_USER_NAME="$(GIT_USER_NAME)" \
 		--build-arg GIT_USER_EMAIL="$(GIT_USER_EMAIL)" \
 		-t $(IMAGE) \
