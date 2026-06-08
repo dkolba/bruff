@@ -1,4 +1,4 @@
-/* eslint-disable max-lines-per-function, unicorn/text-encoding-identifier-case -- Render tests use small literal view models for glyph catalog UI states. */
+/* eslint-disable unicorn/text-encoding-identifier-case -- Render tests use small literal view models for glyph catalog UI states. */
 import {
   DEFAULT_SIGIL_SCHEMA_ID,
   SIGIL_SCHEMA_OPTIONS,
@@ -142,7 +142,9 @@ describe("renderToolSigil", () => {
 
     expect(shadowRoot.childElementCount).toBe(EMPTY_CHILD_COUNT);
   });
+});
 
+describe("renderToolSigil validation and catalog fallbacks", () => {
   it("renders contract issue messages", () => {
     const shadowRoot = createRenderShadowRoot();
 

@@ -1,8 +1,6 @@
-/* eslint-disable sort-imports -- Render tests keep subject and test support imports before vitest. */
+import { describe, expect, it } from "vitest";
 import { renderRequiredGlyphSelections } from "./tool-sigil-required-glyph-render.js";
 import { requireElement } from "./tool-sigil-test-support.js";
-import { describe, expect, it } from "vitest";
-/* eslint-enable sort-imports */
 
 const createShadowRoot = (): ShadowRoot => {
   const host = document.createElement("div");
