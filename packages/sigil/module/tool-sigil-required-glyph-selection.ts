@@ -1,11 +1,9 @@
-/* eslint-disable sort-imports -- Helper imports keep schema and state types grouped by source. */
-import type { SigilSchemaOption } from "./sigil-schema-catalog.js";
 import type {
   RequiredGlyphCharacterOption,
   RequiredGlyphSelection,
   RequiredGlyphSelectionView,
 } from "./tool-sigil-state-types.js";
-/* eslint-enable sort-imports */
+import type { SigilSchemaOption } from "./sigil-schema-catalog.js";
 
 /**
  * Creates one option for each distinct typed character.

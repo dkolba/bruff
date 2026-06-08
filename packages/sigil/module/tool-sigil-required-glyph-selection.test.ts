@@ -1,5 +1,3 @@
-/* eslint-disable sort-imports -- Test imports keep source modules before vitest. */
-import { SIGIL_SCHEMA_OPTIONS } from "./sigil-schema-catalog.js";
 import {
   defaultRequiredGlyphSelections,
   requiredGlyphCharacterOptions,
@@ -7,7 +5,7 @@ import {
   selectedRequiredGlyphCharacters,
 } from "./tool-sigil-required-glyph-selection.js";
 import { describe, expect, it } from "vitest";
-/* eslint-enable sort-imports */
+import { SIGIL_SCHEMA_OPTIONS } from "./sigil-schema-catalog.js";
 
 const FIRST_SCHEMA_OPTION_INDEX = 0;
 
