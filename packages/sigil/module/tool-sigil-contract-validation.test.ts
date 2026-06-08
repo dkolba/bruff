@@ -1,10 +1,9 @@
-/* eslint-disable sort-imports, unicorn/text-encoding-identifier-case -- Contract validation fixtures use shared glyph group names such as ASCII. */
+/* eslint-disable unicorn/text-encoding-identifier-case -- Contract validation fixtures use shared glyph group names such as ASCII. */
+import { describe, expect, it } from "vitest";
 import {
   hasToolSigilContractIssues,
   validateToolSigilGlyphMap,
 } from "./tool-sigil-contract-validation.js";
-import { describe, expect, it } from "vitest";
-/* eslint-enable sort-imports */
 
 const validMappedGlyph = {
   glyph: "#",
