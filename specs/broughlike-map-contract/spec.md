@@ -9,7 +9,8 @@ Add shared runtime contracts for future compact broughlike maps and tighten the 
 - `@bruff/contracts` exports a small broughlike map contract with terrain values for floor, wall, and door.
 - The map contract validates unknown JSON as a rectangular, compact map payload and returns typed `Result` values instead of throwing.
 - `@bruff/contracts` requires Sigil glyph maps to include `floor`, `wall`, `door`, `player`, and `enemy` entries.
-- `@bruff/sigil` continues to allow additional user-named glyphs beyond the required keys.
+- `@bruff/sigil` keeps `floor`, `wall`, `door`, `player`, and `enemy` as stable top-level export keys.
+- `@bruff/sigil` includes edited `glyph-name-...` row names as each required glyph object's `name` field.
 - `@bruff/sigil` rejects downloads that omit any required glyph key through the shared contract validation path.
 - `@bruff/game` package policy allows `@bruff/contracts` as a runtime dependency for future replay fixture and shared headless API contracts.
 - No map editor package, arcade route, game state change, replay fixture migration, or CLI import is added in this slice.
@@ -32,5 +33,6 @@ None. The first pass uses exact required Sigil keys `floor`, `wall`, `door`, `pl
 - Map parsing rejects zero-sized maps and maps that exceed the small-board maximum.
 - Map parsing rejects unknown terrain values.
 - Map parsing rejects width and height values that do not match the row data.
-- Sigil glyph maps with all required keys and extra keys remain valid.
+- Sigil glyph maps with all required keys and glyph `name` fields remain valid.
+- Sigil glyph maps with edited row names remain valid when the required keys stay present and the edited row names are stored inside glyph objects.
 - Sigil glyph maps missing one or more required keys fail validation with typed Zod issues.

@@ -36,6 +36,7 @@ export type SigilGlyphBounds = Readonly<{
 
 /** Compact glyph payload suitable for future runtime rendering. */
 export type SigilGlyph = Readonly<{
+  name: string;
   unicode: string;
   advanceWidth: number;
   unitsPerEm: number;
@@ -43,7 +44,7 @@ export type SigilGlyph = Readonly<{
   path: string;
 }>;
 
-/** Downloadable glyph JSON keyed by user-editable glyph names. */
+/** Downloadable glyph JSON keyed by stable glyph names. */
 export type SigilGlyphMap = Readonly<Record<string, SigilGlyph>>;
 
 /** Extracted glyph before the user-editable name is applied. */
@@ -116,7 +117,7 @@ Component composition keeps the public element API stable while adding internal 
    ├── editable names + preview ◄── SigilExtractionReport
    │                                      │
    │                                      ▼
-   ├── current names ──────────────► createSigilGlyphMap()
+   ├── current names ──────────────► createSigilGlyphMap() as entry name fields
    │
    ▼
 Blob(JSON.stringify(map, null, 2)) ──► object URL ──► download link click
@@ -132,7 +133,7 @@ download click -> selector -> glyph-download command
 
 The extractor uses `font.charToGlyph(character)` for each distinct code point. For each glyph it calls `glyph.getPath(0, 0, font.unitsPerEm)` and serializes the result with `path.toPathData(2)`. Bounds are captured with `glyph.getBoundingBox()`. `font.unitsPerEm` is preserved in every glyph entry so later canvas rendering can scale with `size / unitsPerEm` and flip the Y axis at draw time.
 
-`extractSigilGlyphs` returns a `SigilExtractionReport`, not the final JSON object. Missing glyphs are non-fatal report errors: the report keeps every successfully extracted draft and carries missing-glyph errors beside them. Empty input reports an empty draft list plus an empty-input error. The web component owns the editable name form state and download availability. `createSigilGlyphMap` validates the current names, rejects empty/control-character/duplicate names, and then creates the final JSON object in the same order as the drafts. Name validation is Unicode-permissive: printable emoji and symbols are valid JSON object keys and must be preserved exactly.
+`extractSigilGlyphs` returns a `SigilExtractionReport`, not the final JSON object. Missing glyphs are non-fatal report errors: the report keeps every successfully extracted draft and carries missing-glyph errors beside them. Empty input reports an empty draft list plus an empty-input error. The web component owns the editable name form state and download availability. `createSigilGlyphMap` validates the current names, rejects empty/control-character/duplicate names, and then creates the final JSON object in the same order as the drafts. Name validation is Unicode-permissive: printable emoji and symbols are valid entry `name` values and must be preserved exactly.
 
 ## Review follow-up design
 
@@ -243,10 +244,10 @@ The `opentype.js` README documents browser file input via `File.arrayBuffer()` f
 - **Chosen — direct `HTMLElement`.** The sigil tool needs form controls and download behaviour, not a full-viewport game canvas or HUD.
 - **Rejected — extend `GameElement`.** It would inherit game-specific markup and responsibilities, violating the "one responsibility per file/package" guidance.
 
-### Glyph names and JSON keys
+### Glyph names and JSON fields
 
-- **Chosen — editable Unicode names with deterministic defaults (`u2605`).** Gives the user meaningful keys such as `star`, `⭐`, and `heart★` while preserving a stable no-typing path.
-- **Rejected — deterministic code point keys only.** Simpler, but produces less useful assets and no longer matches the required editable glyph-name workflow.
+- **Chosen — editable Unicode names with deterministic defaults (`u2605`) stored in glyph `name` fields.** Gives the user meaningful names such as `star`, `⭐`, and `heart★` while preserving stable top-level keys and a no-typing path.
+- **Rejected — deterministic code point names only.** Simpler, but produces less useful assets and no longer matches the required editable glyph-name workflow.
 - **Rejected — ASCII identifier names only.** Easier to consume as dot-property names in code, but it blocks the requested emoji and symbol names. Consumers can use bracket access for symbolic keys.
 - **Rejected — raw character keys.** Compact, but hard to inspect for whitespace and some symbols, and awkward for downstream imports.
 

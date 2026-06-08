@@ -47,7 +47,7 @@ Invalid inputs return an explicit error value with reason `"INVALID_BROUGHLIKE_M
 
 ### `sigilGlyphMapSchema`
 
-Zod schema for downloadable Sigil glyph JSON keyed by editable glyph names. Each value contains source glyph metrics, bounds, SVG path data, selected `@bruff/glyph` mapping, and exact `"LICENSE"` value. The keys `floor`, `wall`, `door`, `player`, and `enemy` are required; additional glyph keys are allowed.
+Zod schema for downloadable Sigil glyph JSON keyed by required glyph names. Each value contains the editable display `name`, source glyph metrics, bounds, SVG path data, selected `@bruff/glyph` mapping, and exact `"LICENSE"` value. The keys `floor`, `wall`, `door`, `player`, and `enemy` are required; additional glyph keys are allowed.
 
 ### `parseSigilGlyphMap(input)`
 

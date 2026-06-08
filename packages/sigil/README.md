@@ -24,7 +24,7 @@ pnpm run test:watch
 
 ## JSON Output
 
-The downloadable JSON is keyed by editable glyph names. Each entry stores the source Unicode character, selected `@bruff/glyph` mapping, exact `"LICENSE"` value, `advanceWidth`, `unitsPerEm`, glyph bounds, and SVG path data generated at `font.unitsPerEm`.
+The downloadable JSON is keyed by required glyph names such as `floor`, `wall`, `door`, `player`, and `enemy`. Each entry stores the editable row `name`, source Unicode character, selected `@bruff/glyph` mapping, exact `"LICENSE"` value, `advanceWidth`, `unitsPerEm`, glyph bounds, and SVG path data generated at `font.unitsPerEm`.
 
 The shared payload contract lives in `@bruff/contracts`. `@bruff/sigil` re-exports the contract-owned payload types from `module/glyph-json.ts` and validates completed glyph maps with `parseSigilGlyphMap()` before download.
 

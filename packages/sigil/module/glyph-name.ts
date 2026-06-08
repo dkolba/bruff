@@ -24,10 +24,18 @@ type GlyphMapState = Readonly<{
   glyphNames: ReadonlySet<string>;
 }>;
 
-/** Mapping and license selections keyed by source Unicode character. */
+type CreateSigilGlyphInput = Readonly<{
+  license: string;
+  mappedGlyph: SigilGlyphMapping;
+  name: string;
+  sourceGlyph: SigilSourceGlyph;
+}>;
+
+/** Mapping, license, and required-name selections keyed by source Unicode character. */
 export type SigilGlyphMapSelection = Readonly<{
   licensesByUnicode: Readonly<Record<string, string>>;
   mappedGlyphsByUnicode: Readonly<Record<string, SigilGlyphMapping>>;
+  requiredNamesByUnicode?: Readonly<Record<string, string>>;
 }>;
 
 const createInitialGlyphMapState = (): GlyphMapState => ({
@@ -94,6 +102,11 @@ const addGlyphToMap = (
   [glyphName]: glyph,
 });
 
+const outputGlyphName = (
+  glyphName: string,
+  requiredGlyphName: string | undefined,
+): string => requiredGlyphName ?? glyphName;
+
 const firstGlyphEntry = (
   glyphMap: DraftSigilGlyphMap,
 ): SigilGlyph | undefined => Object.values(glyphMap).at(FIRST_CODE_UNIT_INDEX);
@@ -123,14 +136,16 @@ const completeRequiredGlyphs = (
  * @param license - Selected machine-readable license value
  * @returns Downloadable sigil glyph payload
  */
-export const createSigilGlyph = (
-  sourceGlyph: SigilSourceGlyph,
-  mappedGlyph: SigilGlyphMapping,
-  license: string,
-): SigilGlyph => ({
+export const createSigilGlyph = ({
+  license,
+  mappedGlyph,
+  name,
+  sourceGlyph,
+}: CreateSigilGlyphInput): SigilGlyph => ({
   ...sourceGlyph,
   LICENSE: license,
   mappedGlyph,
+  name,
 });
 
 const applyGlyphDraft =
@@ -144,6 +159,8 @@ const applyGlyphDraft =
     const hasErrors = errors.length !== EMPTY_ERROR_COUNT;
     const glyphMapping = selection.mappedGlyphsByUnicode[draft.glyph.unicode];
     const license = selection.licensesByUnicode[draft.glyph.unicode];
+    const requiredGlyphName =
+      selection.requiredNamesByUnicode?.[draft.glyph.unicode];
 
     return {
       errors: [...state.errors, ...errors],
@@ -152,8 +169,13 @@ const applyGlyphDraft =
           ? state.glyphMap
           : addGlyphToMap(
               state.glyphMap,
-              glyphName,
-              createSigilGlyph(draft.glyph, glyphMapping, license),
+              outputGlyphName(glyphName, requiredGlyphName),
+              createSigilGlyph({
+                license,
+                mappedGlyph: glyphMapping,
+                name: glyphName,
+                sourceGlyph: draft.glyph,
+              }),
             ),
       glyphNames: new Set([...state.glyphNames, glyphName]),
     };

@@ -72,6 +72,7 @@ export type SigilGlyphMapping = Readonly<
 export const sigilGlyphSchema = sigilSourceGlyphSchema.extend({
   LICENSE: z.string().min(MIN_TEXT_LENGTH),
   mappedGlyph: sigilGlyphMappingSchema,
+  name: z.string().min(MIN_TEXT_LENGTH),
 });
 
 /**

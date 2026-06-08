@@ -28,7 +28,8 @@ Update the `@bruff/sigil` browser tool so `SigilGlyphMap` remains the selected s
 - Uploading a font extracts glyphs for the typed textarea characters.
 - Every required `SigilGlyphMap` row remains visible after a font upload, even when the uploaded font lacks one or more selected characters.
 - Unsupported or missing selected characters remain visible as typed extraction errors when the uploaded font or extractor cannot produce a glyph for them.
-- The JSON export uses the selected character for each required contract glyph name.
+- The JSON export uses the selected character for each required contract glyph name by default.
+- Editing a row's `glyph-name-...` input is reflected in the exported JSON as that required glyph object's `name` field.
 - If the generated JSON does not satisfy the shared `SigilGlyphMap` contract, the UI displays the exact validation reason for each failing contract path or field.
 - If an individual produced glyph does not satisfy the shared glyph contract, the UI displays the exact validation reason for that glyph path or field.
 - Download remains disabled while any selected character is missing, unsupported, incomplete, unmapped, unlicensed, duplicated in a way that violates the contract, or contract-invalid.
@@ -42,6 +43,7 @@ Update the `@bruff/sigil` browser tool so `SigilGlyphMap` remains the selected s
 - Auto-selecting mapped glyphs or licenses.
 - Changing the downloaded JSON filename or download side effects.
 - Exporting glyphs that are typed in the textarea but not selected by a required `SigilGlyphMap` glyph select.
+- Renaming top-level required keys in the exported JSON; `door`, `floor`, `wall`, `player`, and `enemy` remain the top-level keys.
 
 ## Open questions
 
@@ -63,6 +65,7 @@ Resolved before design:
 - A user removes a selected character from the textarea: the affected required glyph select is marked invalid, its required glyph row remains visible, and download is disabled until a valid typed character is selected.
 - A font lacks one or more selected characters: rows remain visible for every required schema glyph, missing glyph rows keep the required names visible, and typed extraction errors describe missing or unsupported glyphs.
 - A typed character is not selected by any required glyph select: it may be extracted for preview, but it is not included in the exported `SigilGlyphMap` JSON.
+- A selected row's glyph-name input is edited: the exported JSON keeps the required top-level key and stores the edited value in that glyph object's `name` field.
 - Changing the selected schema after a font is loaded re-evaluates textarea candidates, required glyph selections, extraction, and contract validation for the new schema.
 - Re-selecting the current schema is idempotent and does not clear valid required glyph selections, mapped glyph choices, or license choices when their source characters still exist in the textarea.
 - The textarea, schema selector, and required glyph selects remain keyboard-accessible and labeled.
@@ -72,6 +75,6 @@ Resolved before design:
 - Verified the restored `Characters` textarea, preselected `SigilGlyphMap` schema selector, and required glyph source-character selects with `tool-sigil-render.test.ts`, `tool-sigil-required-glyph-render.test.ts`, `tool-sigil-bindings.test.ts`, and `tool-sigil.test.ts`.
 - Verified textarea edits update distinct required glyph character options and invalid selection state with `tool-sigil-required-glyph-selection.test.ts`, `tool-sigil-state.test.ts`, and component tests.
 - Verified uploaded fonts extract typed textarea characters while required `floor`, `wall`, `door`, `player`, and `enemy` rows remain visible with missing selected glyph errors via `tool-sigil-state.test.ts`, `tool-sigil-error.test.ts`, and regression tests.
-- Verified JSON export is built from selected required glyph characters and omits unselected typed glyphs with `tool-sigil-download.test.ts` and `tool-sigil-regression.test.ts`.
+- Verified JSON export is built from selected required glyph characters, stores edited `glyph-name-...` values in glyph `name` fields, keeps required top-level keys, and omits unselected typed glyphs with `tool-sigil-download.test.ts` and `tool-sigil-regression.test.ts`.
 - Verified exact shared-contract validation reasons are surfaced for invalid produced glyph JSON with `glyph-name.test.ts`, `tool-sigil-contract-validation.test.ts`, and `tool-sigil-error.test.ts`.
 - Verified `@bruff/sigil` gates passed: `pnpm --filter @bruff/sigil run format`, `lint`, `typecheck`, `test:chromium`, `test:firefox`, and `test:webkit`.

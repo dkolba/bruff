@@ -1,9 +1,5 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- Tests assert @bruff/glyph catalog group names such as ASCII. */
-import {
-  createSigilGlyph,
-  createSigilGlyphMap,
-  isValidGlyphName,
-} from "./glyph-name.js";
+import { createSigilGlyphMap, isValidGlyphName } from "./glyph-name.js";
 import { describe, expect, it } from "vitest";
 import type { SigilSourceGlyph } from "./glyph-json.js";
 
@@ -162,14 +158,12 @@ describe("createSigilGlyphMap success", () => {
     if (glyphMapResult.type === "error") {
       return;
     }
+    expect(Object.keys(glyphMapResult.value).toSorted().join(",")).toBe(
+      "door,enemy,floor,player,star,u2665,wall",
+    );
     expect(glyphMapResult.value).toMatchObject({
-      door: createSigilGlyph(doorGlyph, doorMapping, "MIT"),
-      enemy: createSigilGlyph(enemyGlyph, enemyMapping, "MIT"),
-      floor: createSigilGlyph(floorGlyph, floorMapping, "MIT"),
-      player: createSigilGlyph(playerGlyph, playerMapping, "MIT"),
-      star: createSigilGlyph(starGlyph, starMapping, "MIT"),
-      u2665: createSigilGlyph(heartGlyph, heartMapping, "OFL-1.1"),
-      wall: createSigilGlyph(wallGlyph, wallMapping, "MIT"),
+      star: { name: "star" },
+      u2665: { name: "u2665" },
     });
   });
 
@@ -233,25 +227,31 @@ describe("createSigilGlyphMap contract validation", () => {
 });
 
 describe("createSigilGlyphMap required glyph validation", () => {
-  it("restores required glyph names through the shared contract", () => {
+  it("stores edited names inside required glyph entries", () => {
     const glyphMapResult = createSigilGlyphMap(
       glyphDrafts,
       {
         [WALL_UNICODE]: "custom-wall",
       },
-      { licensesByUnicode, mappedGlyphsByUnicode },
+      {
+        licensesByUnicode,
+        mappedGlyphsByUnicode,
+        requiredNamesByUnicode: {
+          [WALL_UNICODE]: "wall",
+        },
+      },
     );
 
     expect(glyphMapResult.type).toBe("ok");
     if (glyphMapResult.type === "error") {
       return;
     }
-    expect(glyphMapResult.value.wall).toStrictEqual(
-      createSigilGlyph(floorGlyph, floorMapping, "MIT"),
-    );
-    expect(glyphMapResult.value["custom-wall"]).toStrictEqual(
-      createSigilGlyph(wallGlyph, wallMapping, "MIT"),
-    );
+    expect(glyphMapResult.value.wall).toMatchObject({
+      mappedGlyph: wallMapping,
+      name: "custom-wall",
+      unicode: WALL_UNICODE,
+    });
+    expect(glyphMapResult.value["custom-wall"]).toBeUndefined();
   });
 });
 

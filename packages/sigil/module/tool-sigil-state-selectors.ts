@@ -160,6 +160,13 @@ const requiredNamesByUnicode = (
     ]),
   );
 
+const outputNamesByUnicode = (
+  state: ToolSigilState,
+): Readonly<Record<string, string>> => ({
+  ...requiredNamesByUnicode(state),
+  ...state.namesByUnicode,
+});
+
 const catalogErrors = (
   state: ToolSigilState,
 ): ReadonlyArray<SigilExtractionError> => [
@@ -184,10 +191,11 @@ export const selectToolSigilVisibleErrors = (
 ): ReadonlyArray<SigilExtractionError> => {
   const nameResult = createSigilGlyphMap(
     selectedRequiredDrafts(state),
-    requiredNamesByUnicode(state),
+    outputNamesByUnicode(state),
     {
       licensesByUnicode: selectedLicensesByUnicode(state),
       mappedGlyphsByUnicode: state.selectedGlyphsByUnicode,
+      requiredNamesByUnicode: requiredNamesByUnicode(state),
     },
   );
   const selectionErrors = [
@@ -227,10 +235,11 @@ export const selectToolSigilDownloadGlyphMap = (
 ): Result<SigilGlyphMap, ReadonlyArray<SigilExtractionError>> =>
   createSigilGlyphMap(
     selectedRequiredDrafts(state),
-    requiredNamesByUnicode(state),
+    outputNamesByUnicode(state),
     {
       licensesByUnicode: selectedLicensesByUnicode(state),
       mappedGlyphsByUnicode: state.selectedGlyphsByUnicode,
+      requiredNamesByUnicode: requiredNamesByUnicode(state),
     },
   );
 

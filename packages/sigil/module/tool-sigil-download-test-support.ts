@@ -115,6 +115,8 @@ export const expectEditedGlyphJsonDownload = async (
   const blobText = await blob.text();
   expect(blob.type).toBe("application/json");
   expect(blobText).toContain('"floor"');
+  expect(blobText).toContain('"name": "customFloor"');
+  expect(blobText).not.toContain('"customFloor":');
 };
 
 /** Expects a download click to use the fixed sigil filename. */

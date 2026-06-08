@@ -11,3 +11,6 @@
 - [x] T9 — Update documentation in `packages/contracts/README.md` and `packages/sigil/README.md`
 - [x] T10 — Run `pnpm --filter @bruff/contracts run typecheck` and `pnpm --filter @bruff/sigil run typecheck`
 - [x] T11 — Run `pnpm --filter @bruff/contracts run test:chromium` and `pnpm --filter @bruff/sigil run test:chromium`
+- [x] T12 — Document edited Sigil row-name export behaviour in `specs/broughlike-map-contract/spec.md` and `specs/broughlike-map-contract/design.md`
+- [x] T13 — Add required per-glyph `name` field coverage in `packages/contracts/module/sigil-glyph-json.test.ts`
+- [x] T14 — Require per-glyph `name` values in `packages/contracts/module/sigil-glyph-json.ts`

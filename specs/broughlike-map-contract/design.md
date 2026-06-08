@@ -2,16 +2,16 @@
 
 ## Layer assignment
 
-| Area | Files | Responsibility |
-| --- | --- | --- |
-| Contracts | `packages/contracts/module/broughlike-map-json.ts` | Zod schema, readonly inferred types, parse helper for compact map JSON. |
-| Contracts | `packages/contracts/module/broughlike-map-json.test.ts` | Contract tests for valid maps and parse failures. |
-| Contracts | `packages/contracts/module/sigil-glyph-json.ts` | Require the core glyph keys while preserving arbitrary additional glyph entries. |
-| Contracts | `packages/contracts/module/sigil-glyph-json.test.ts` | Contract tests for required glyph keys and extra glyph acceptance. |
-| Contracts | `packages/contracts/index.ts`, `packages/contracts/README.md` | Public exports and documentation. |
-| Sigil | `packages/sigil/module/glyph-name.test.ts` | Verify Sigil output satisfies required keys and rejects omissions. |
-| Sigil | `packages/sigil/README.md` | Document required downloadable glyph names. |
-| Game policy | `packages/game/AGENTS.md` | Allow future `@bruff/game` contract adoption without changing game code now. |
+| Area        | Files                                                         | Responsibility                                                                    |
+| ----------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Contracts   | `packages/contracts/module/broughlike-map-json.ts`            | Zod schema, readonly inferred types, parse helper for compact map JSON.           |
+| Contracts   | `packages/contracts/module/broughlike-map-json.test.ts`       | Contract tests for valid maps and parse failures.                                 |
+| Contracts   | `packages/contracts/module/sigil-glyph-json.ts`               | Require the core glyph keys and the per-glyph display `name` field.               |
+| Contracts   | `packages/contracts/module/sigil-glyph-json.test.ts`          | Contract tests for required glyph keys, glyph `name`, and extra glyph acceptance. |
+| Contracts   | `packages/contracts/index.ts`, `packages/contracts/README.md` | Public exports and documentation.                                                 |
+| Sigil       | `packages/sigil/module/glyph-name.test.ts`                    | Verify Sigil output satisfies required keys and rejects omissions.                |
+| Sigil       | `packages/sigil/README.md`                                    | Document required downloadable glyph names.                                       |
+| Game policy | `packages/game/AGENTS.md`                                     | Allow future `@bruff/game` contract adoption without changing game code now.      |
 
 ## Public API surface
 
@@ -33,12 +33,19 @@ export type ParseBroughlikeMapError = Readonly<{
 }>;
 ```
 
-`SigilGlyphMap` becomes a readonly record with required keys:
+`SigilGlyphMap` becomes a readonly record with required keys. Each `SigilGlyph` entry carries a `name` field for the user-edited row name while the map keeps stable top-level contract keys:
 
 ```ts
-export type RequiredSigilGlyphName = "floor" | "wall" | "door" | "player" | "enemy";
+export type RequiredSigilGlyphName =
+  | "floor"
+  | "wall"
+  | "door"
+  | "player"
+  | "enemy";
 export const requiredSigilGlyphNames: ReadonlyArray<RequiredSigilGlyphName>;
-export type SigilGlyphMap = Readonly<Record<RequiredSigilGlyphName, SigilGlyph> & Record<string, SigilGlyph>>;
+export type SigilGlyphMap = Readonly<
+  Record<RequiredSigilGlyphName, SigilGlyph> & Record<string, SigilGlyph>
+>;
 ```
 
 ## Data shape changes
@@ -64,7 +71,7 @@ unknown JSON
   v
 Result<BroughlikeMap, ParseBroughlikeMapError>
 
-Sigil drafts + user names
+Sigil drafts + required top-level keys + edited glyph names
   |
   v
 @bruff/sigil createSigilGlyphMap
@@ -109,11 +116,11 @@ Pros:
 
 - Guarantees consumers can rely on core glyphs.
 - Keeps enforcement at the package boundary where downloads are validated.
-- Still permits arbitrary extra glyphs.
+- Keeps user-edited row names inside each glyph object's `name` field without changing top-level keys.
 
 Cons:
 
-- Existing ad-hoc Sigil exports must include required names before validation succeeds.
+- Existing ad-hoc Sigil exports must include required top-level keys and per-glyph `name` values before validation succeeds.
 
 ### Alternative: enforce required keys only in Sigil UI
 
@@ -128,11 +135,12 @@ Cons:
 
 ## Reuse map
 
-| Existing file | Reuse |
-| --- | --- |
-| `packages/contracts/module/sigil-glyph-json.ts` | Zod contract and non-throwing parse helper pattern. |
-| `packages/contracts/module/sigil-glyph-json.test.ts` | Browser contract test style. |
-| `packages/sigil/module/glyph-name.ts` | Existing Sigil contract-validation bridge. |
-| `packages/sigil/module/glyph-name.test.ts` | Sigil glyph map construction coverage. |
-| `packages/contracts/AGENTS.md` | Package boundary and contract rules. |
-| `packages/sigil/AGENTS.md` | Allowed Sigil imports from contracts. |
+| Existing file                                         | Reuse                                                                         |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `packages/contracts/module/sigil-glyph-json.ts`       | Zod contract and non-throwing parse helper pattern.                           |
+| `packages/contracts/module/sigil-glyph-json.test.ts`  | Browser contract test style.                                                  |
+| `packages/sigil/module/glyph-name.ts`                 | Existing Sigil contract-validation bridge.                                    |
+| `packages/sigil/module/tool-sigil-state-selectors.ts` | Passes required top-level keys and edited row names into download projection. |
+| `packages/sigil/module/glyph-name.test.ts`            | Sigil glyph map construction coverage.                                        |
+| `packages/contracts/AGENTS.md`                        | Package boundary and contract rules.                                          |
+| `packages/sigil/AGENTS.md`                            | Allowed Sigil imports from contracts.                                         |

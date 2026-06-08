@@ -35,15 +35,15 @@ ParseSigilGlyphMapError;
 
 ## Data Shape Changes
 
-No JSON shape change. Ownership changes from `@bruff/sigil` type declarations to `@bruff/contracts` schemas and inferred readonly types.
+Ownership changes from `@bruff/sigil` type declarations to `@bruff/contracts` schemas and inferred readonly types. Current glyph entries include a user-editable `name` field, while top-level keys remain stable contract keys such as `floor`, `wall`, `door`, `player`, and `enemy`.
 
 ## Data Flow
 
 ```txt
 @bruff/sigil font extraction
   -> SigilSourceGlyph drafts
-  -> createSigilGlyph()
-  -> SigilGlyphMap
+  -> createSigilGlyph() with editable entry name
+  -> SigilGlyphMap with stable top-level keys
   -> parseSigilGlyphMap()
   -> download JSON
 ```

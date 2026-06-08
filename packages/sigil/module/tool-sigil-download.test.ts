@@ -65,6 +65,7 @@ const expectSourceGlyphJson = (blobText: string): void => {
   expect(blobText).toContain('"groupName": "ASCII"');
   expect(blobText).toContain('"glyphKey": "ASTERISK"');
   expect(blobText).toContain('"LICENSE": "MIT"');
+  expect(blobText).toContain('"name": "floor"');
 };
 
 const expectDownloadedSourceGlyphJson = async (

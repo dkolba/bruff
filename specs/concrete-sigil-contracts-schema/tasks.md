@@ -48,3 +48,8 @@
 - [x] T46 — Add component regression tests for typed character selection export flow in `packages/sigil/module/tool-sigil-regression.test.ts`
 - [x] T47 — Update package guidance for textarea-driven schema mappings in `packages/sigil/README.md`
 - [x] T48 — Run `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run typecheck`, `pnpm --filter @bruff/sigil run test:chromium`, `pnpm --filter @bruff/sigil run test:firefox`, and `pnpm --filter @bruff/sigil run test:webkit`
+- [x] T49 — Add download coverage for edited `glyph-name-...` JSON `name` fields in `packages/sigil/module/tool-sigil-download-test-support.ts`
+- [x] T50 — Preserve required top-level keys while passing edited row names into download projection in `packages/sigil/module/tool-sigil-state-selectors.ts`
+- [x] T51 — Update schema documentation in `specs/concrete-sigil-contracts-schema/spec.md` and `specs/concrete-sigil-contracts-schema/design.md`
+- [x] T52 — Add required Sigil glyph `name` contract coverage in `packages/contracts/module/sigil-glyph-json.test.ts` and `packages/sigil/module/tool-sigil-contract-validation.test.ts`
+- [x] T53 — Add the required glyph `name` field in `packages/contracts/module/sigil-glyph-json.ts` and `packages/sigil/module/glyph-name.ts`

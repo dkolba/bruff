@@ -21,6 +21,7 @@ const validGlyph = {
     y2: 1000,
   },
   mappedGlyph: validMappedGlyph,
+  name: "wall",
   path: "M0 0L600 0Z",
   unicode: "#",
   unitsPerEm: 1000,

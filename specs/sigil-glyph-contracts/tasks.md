@@ -6,3 +6,4 @@
 - [x] T6 — Validate produced glyph maps through `parseSigilGlyphMap` in `packages/sigil/module/glyph-name.ts`.
 - [x] T7 — Update `packages/contracts/README.md`, `packages/contracts/AGENTS.md`, and `packages/sigil/README.md` for the new contract boundary.
 - [x] T8 — Review `specs/sigil-glyph-contracts/spec.md` and `specs/sigil-glyph-contracts/design.md`, then record final verification.
+- [x] T9 — Document stable top-level keys and per-entry editable `name` values in `specs/sigil-glyph-contracts/spec.md` and `specs/sigil-glyph-contracts/design.md`.

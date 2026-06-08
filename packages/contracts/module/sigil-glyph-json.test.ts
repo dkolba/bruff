@@ -34,6 +34,7 @@ const createGlyphEntry = (
     glyphKey: "AT",
     groupName: "ASCII",
   },
+  name: unicode,
   path: "M0 0L1 1Z",
   unicode,
   unitsPerEm,
@@ -66,6 +67,26 @@ describe("sigilGlyphMapSchema", () => {
       data: VALID_SIGIL_GLYPH_MAP,
       success: true,
     });
+  });
+
+  it("requires a display name inside each glyph entry", () => {
+    const parsedGlyphMap = sigilGlyphMapSchema.safeParse({
+      ...VALID_SIGIL_GLYPH_MAP,
+      floor: {
+        ...createGlyphEntry(".", TEST_UNITS_PER_EM),
+        name: undefined,
+      },
+    });
+
+    expect(parsedGlyphMap.success).toBe(false);
+    if (parsedGlyphMap.success) {
+      return;
+    }
+    expect(parsedGlyphMap.error.issues).toEqual([
+      expect.objectContaining({
+        path: ["floor", "name"],
+      }),
+    ]);
   });
 
   it("requires core gameplay glyph names while allowing extra glyphs", () => {
