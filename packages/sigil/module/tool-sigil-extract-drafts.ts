@@ -1,9 +1,7 @@
-/* eslint-disable sort-imports -- Extraction helper groups runtime and type dependencies by role. */
-import { extractSigilGlyphs } from "./extract-glyphs.js";
 import { completeMissingDrafts } from "./tool-sigil-missing-drafts.js";
+import { extractSigilGlyphs } from "./extract-glyphs.js";
 import type { Font } from "opentype.js";
 import type { ToolSigilState } from "./tool-sigil-state-types.js";
-/* eslint-enable sort-imports */
 
 /**
  * Extracts renderable drafts for requested characters.
