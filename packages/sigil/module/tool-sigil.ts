@@ -15,7 +15,7 @@ import {
   setToolSigilSchema,
   startToolSigilFontSelection,
   type ToolSigilState,
-} from "./tool-sigil-state.js";
+} from "./state/tool-sigil-state.js";
 import {
   connectToolSigilControls,
   type DisconnectToolSigilControls,

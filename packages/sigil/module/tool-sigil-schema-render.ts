@@ -1,4 +1,4 @@
-import type { ToolSigilViewModel } from "./tool-sigil-state.js";
+import type { ToolSigilViewModel } from "./state/tool-sigil-state.js";
 
 /**
  * Renders the schema selector options and selected value.

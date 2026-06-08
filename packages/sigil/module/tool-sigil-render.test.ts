@@ -9,7 +9,7 @@ import {
   renderToolSigilSelection,
 } from "./tool-sigil-render.js";
 import { requireElement } from "./tool-sigil-test-support.js";
-import type { ToolSigilViewModel } from "./tool-sigil-state.js";
+import type { ToolSigilViewModel } from "./state/tool-sigil-state.js";
 
 const EMPTY_CHILD_COUNT = 0;
 const EMPTY_CATALOG_MAPPED_GLYPH_OPTION_COUNT = 1;

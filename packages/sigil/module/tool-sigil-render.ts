@@ -5,7 +5,7 @@ import { renderRequiredGlyphSelections } from "./tool-sigil-required-glyph-rende
 import { renderToolSigilSchemaSelect } from "./tool-sigil-schema-render.js";
 import type { SigilGlyphDraft } from "./glyph-json.js";
 import type { SigilGlyphOption } from "./glyph-catalog.js";
-import type { ToolSigilViewModel } from "./tool-sigil-state.js";
+import type { ToolSigilViewModel } from "./state/tool-sigil-state.js";
 
 const textInputName = (unicode: string): string => `glyph-name-${unicode}`;
 const glyphGroupSelectName = (unicode: string): string =>

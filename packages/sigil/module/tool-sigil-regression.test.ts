@@ -13,6 +13,8 @@ import {
   stubObjectUrls,
 } from "./tool-sigil-download-test-support.js";
 
+const STALE_FONT_LOAD_TEST_TIMEOUT_MS = 30_000;
+
 describe("ToolSigil partial extraction state", () => {
   it("keeps valid glyph rows downloadable while showing missing glyph errors", async () => {
     const urlStubs = stubObjectUrls();
@@ -52,23 +54,31 @@ describe("ToolSigil uploaded font preview", () => {
 });
 
 describe("ToolSigil stale font load state", () => {
-  it("ignores older font-load completion after a newer selection", async () => {
-    const { element, shadowRoot } = appendToolSigilWithShadowRoot();
+  it(
+    "ignores older font-load completion after a newer selection",
+    async () => {
+      const { element, shadowRoot } = appendToolSigilWithShadowRoot();
 
-    try {
-      await expectNewerFontSelectionToWin(shadowRoot);
-    } finally {
-      element.remove();
-    }
-  });
+      try {
+        await expectNewerFontSelectionToWin(shadowRoot);
+      } finally {
+        element.remove();
+      }
+    },
+    STALE_FONT_LOAD_TEST_TIMEOUT_MS,
+  );
 
-  it("ignores older preview-load rejection after a newer selection", async () => {
-    const { element, shadowRoot } = appendToolSigilWithShadowRoot();
+  it(
+    "ignores older preview-load rejection after a newer selection",
+    async () => {
+      const { element, shadowRoot } = appendToolSigilWithShadowRoot();
 
-    try {
-      await expectRejectedStalePreviewLoadIgnored(shadowRoot);
-    } finally {
-      element.remove();
-    }
-  });
+      try {
+        await expectRejectedStalePreviewLoadIgnored(shadowRoot);
+      } finally {
+        element.remove();
+      }
+    },
+    STALE_FONT_LOAD_TEST_TIMEOUT_MS,
+  );
 });

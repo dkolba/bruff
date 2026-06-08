@@ -11,7 +11,7 @@ import {
   setToolSigilPreviewFontFamily,
   startToolSigilFontSelection,
   type ToolSigilState,
-} from "./tool-sigil-state.js";
+} from "./state/tool-sigil-state.js";
 import { describe, expect, it } from "vitest";
 import { createTestFont } from "./font-test-fixture.js";
 import { ok } from "@bruff/utils";

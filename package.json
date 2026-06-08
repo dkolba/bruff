@@ -29,7 +29,7 @@
     "lint": "pnpm -r --parallel run lint",
     "ok": "node scripts/ok.js",
     "start": "pnpm --filter @bruff/arcade run dev",
-    "test": "pnpm -r --parallel run test",
+    "test": "pnpm -r --workspace-concurrency=1 run test",
     "typecheck": "pnpm -r --parallel run typecheck"
   },
   "devDependencies": {
