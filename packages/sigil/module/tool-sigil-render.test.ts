@@ -1,17 +1,24 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- Render tests use small literal view models for glyph catalog UI states. */
+import {
+  DEFAULT_SIGIL_SCHEMA_ID,
+  SIGIL_SCHEMA_OPTIONS,
+} from "./sigil-schema-catalog.js";
 import { describe, expect, it } from "vitest";
 import {
   renderToolSigil,
   renderToolSigilSelection,
 } from "./tool-sigil-render.js";
 import { requireElement } from "./tool-sigil-test-support.js";
-import type { ToolSigilViewModel } from "./tool-sigil-state.js";
+import type { ToolSigilViewModel } from "./state/tool-sigil-state.js";
 
+const EMPTY_CHILD_COUNT = 0;
 const EMPTY_CATALOG_MAPPED_GLYPH_OPTION_COUNT = 1;
 
 const viewModel = (
   override: Partial<ToolSigilViewModel> = {},
 ): ToolSigilViewModel => ({
+  characters: ".#+@e",
+  contractIssues: [],
   downloadDisabled: true,
   drafts: [
     {
@@ -37,8 +44,18 @@ const viewModel = (
   licenseOptions: [],
   namesByUnicode: {},
   previewFontFamily: "",
+  requiredGlyphSelections: [
+    {
+      isValid: true,
+      name: "floor",
+      options: [{ label: ".", unicode: "." }],
+      selectedUnicode: ".",
+    },
+  ],
+  schemaOptions: SIGIL_SCHEMA_OPTIONS,
   selectedGlyphsByUnicode: {},
   selectedLicensesByUnicode: {},
+  selectedSchemaId: DEFAULT_SIGIL_SCHEMA_ID,
   stagedGlyphGroupsByUnicode: {},
   ...override,
 });
@@ -48,6 +65,9 @@ const createRenderShadowRoot = (): ShadowRoot => {
   const shadowRoot = host.attachShadow({ mode: "open" });
   shadowRoot.innerHTML = `
     <p data-state="font-file-name"></p>
+    <select name="schema"></select>
+    <textarea name="characters"></textarea>
+    <div data-state="required-glyph-selections"></div>
     <p data-state="summary"></p>
     <div data-state="glyph-list"></div>
     <div data-state="errors"></div>
@@ -87,6 +107,59 @@ const glyphCatalogViewModel = (): Pick<
 });
 
 describe("renderToolSigil", () => {
+  it("renders the preselected schema selector with textarea mappings", () => {
+    const shadowRoot = createRenderShadowRoot();
+
+    renderToolSigil(shadowRoot, viewModel());
+
+    const schemaSelect = requireElement<HTMLSelectElement>(
+      shadowRoot,
+      'select[name="schema"]',
+    );
+    expect(schemaSelect.value).toBe("SigilGlyphMap");
+    expect([...schemaSelect.options].map((option) => option.text)).toEqual([
+      "SigilGlyphMap",
+    ]);
+    expect(
+      requireElement<HTMLTextAreaElement>(
+        shadowRoot,
+        'textarea[name="characters"]',
+      ).value,
+    ).toBe(".#+@e");
+    expect(
+      requireElement<HTMLSelectElement>(
+        shadowRoot,
+        'select[data-action="required-glyph-character"][data-glyph-name="floor"]',
+      ).value,
+    ).toBe(".");
+  });
+
+  it("skips missing optional schema select", () => {
+    const host = document.createElement("div");
+    const shadowRoot = host.attachShadow({ mode: "open" });
+
+    renderToolSigil(shadowRoot, viewModel());
+
+    expect(shadowRoot.childElementCount).toBe(EMPTY_CHILD_COUNT);
+  });
+});
+
+describe("renderToolSigil validation and catalog fallbacks", () => {
+  it("renders contract issue messages", () => {
+    const shadowRoot = createRenderShadowRoot();
+
+    renderToolSigil(
+      shadowRoot,
+      viewModel({
+        contractIssues: [{ message: "bad field", path: "floor.path" }],
+      }),
+    );
+
+    expect(
+      requireElement<HTMLElement>(shadowRoot, '[role="alert"]').textContent,
+    ).toContain("floor.path: bad field");
+  });
+
   it("renders empty catalog selection fallbacks", () => {
     const shadowRoot = createRenderShadowRoot();
 

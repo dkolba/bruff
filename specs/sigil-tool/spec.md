@@ -21,7 +21,7 @@ The `<tool-sigil>` web component must remain a small plain Web Component coordin
 - Each glyph-name field is prefilled with a deterministic code point name such as `u2605`.
 - The user can edit glyph names before downloading.
 - The tool exposes a clear download action only when a font is loaded, at least one character has been entered, and every included glyph has a valid unique name.
-- Activating the download action creates a JSON file containing one entry per distinct typed Unicode code point, keyed by the current user-editable glyph name.
+- Activating the download action creates a JSON file containing entries keyed by stable glyph keys; the current user-editable glyph name is stored in each entry's `name` field.
 - Each JSON entry includes the original character, its `advanceWidth`, the font `unitsPerEm`, the glyph bounds, and SVG path data generated at `font.unitsPerEm`.
 - The generated JSON is suitable for later runtime use without shipping `opentype.js` or the original font file.
 - Missing glyphs are reported in the UI and excluded from the downloadable JSON.
@@ -47,7 +47,7 @@ The `<tool-sigil>` web component must remain a small plain Web Component coordin
 - Editing, subsetting, or saving a new font file.
 - Adding authenticated or persistent storage for uploaded fonts or extracted JSON.
 - Exposing the sigil tool in production, even behind a hidden route.
-- Changing the exported JSON shape during component composition refactors.
+- Changing the exported JSON shape during component composition refactors, except for later schema-driven contract updates recorded in newer Sigil contract specs.
 - Changing the arcade dev route that hosts the tool during component composition refactors.
 
 ## Open questions (resolved)
@@ -68,10 +68,10 @@ The `<tool-sigil>` web component must remain a small plain Web Component coordin
   A: The requested user experience is browser-based file upload, preview, and JSON download, so the first implementation extracts in the browser with `opentype.parse(await file.arrayBuffer())`. The JSON schema follows the recommended build-time output so a future Node extractor can share it.
 
 - **Q: How are JSON object keys generated?**  
-  A: Each distinct character gets an editable glyph-name field. The default is a deterministic lowercase Unicode key: `u` plus the code point in hexadecimal, joined with `_` only if a later version supports multi-code-point sequences. Example: `★` defaults to `u2605`, and the user may rename it to `star` before downloading.
+  A: Each distinct character gets an editable glyph-name field. The default is a deterministic lowercase Unicode key: `u` plus the code point in hexadecimal, joined with `_` only if a later version supports multi-code-point sequences. Example: `★` defaults to `u2605`, and the user may rename it to `star` before downloading. Newer schema-driven exports keep required top-level keys stable and store the edited value in each glyph entry's `name` field.
 
 - **Q: What names are valid?**  
-  A: Glyph names must be non-empty after trimming, unique within the current export, and contain no Unicode control characters. Names may use printable Unicode characters, including emoji and symbols such as `⭐`, `★`, `♥`, `star★`, `heart-fill`, and `check_2`. JSON keys are strings, so the tool should preserve these names exactly in the downloaded JSON.
+  A: Glyph names must be non-empty after trimming, unique within the current export, and contain no Unicode control characters. Names may use printable Unicode characters, including emoji and symbols such as `⭐`, `★`, `♥`, `star★`, `heart-fill`, and `check_2`. The tool preserves these names exactly in each downloaded glyph entry's `name` field.
 
 - **Q: How should repeated characters be handled?**  
   A: Deduplicate by code point while preserving first-seen order. Repeating `★★` produces one `u2605` entry.

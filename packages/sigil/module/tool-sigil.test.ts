@@ -2,7 +2,6 @@
 import "../index.js";
 import {
   appendToolSigil,
-  enterCharacters,
   loadCharactersFromTestFont,
   requireElement,
   requireShadowRoot,
@@ -17,6 +16,14 @@ import { createValidFontFile } from "./font-test-fixture.js";
 import { registerToolSigil } from "./register-tool-sigil.js";
 import { ToolSigil } from "./tool-sigil.js";
 
+const EXPECTED_REQUIRED_GLYPH_NAMES = [
+  "floor",
+  "wall",
+  "door",
+  "player",
+  "enemy",
+];
+
 const selectedOptionValues = (
   select: HTMLSelectElement,
 ): ReadonlyArray<string> => [...select.options].map((option) => option.value);
@@ -24,21 +31,33 @@ const selectedOptionValues = (
 const expectInitialGlyphMappingOptions = (shadowRoot: ShadowRoot): void => {
   const groupSelect = requireElement<HTMLSelectElement>(
     shadowRoot,
-    'select[data-action="glyph-group"][data-unicode="★"]',
+    'select[data-action="glyph-group"][data-unicode="."]',
   );
   const glyphSelect = requireElement<HTMLSelectElement>(
     shadowRoot,
-    'select[data-action="mapped-glyph"][data-unicode="★"]',
+    'select[data-action="mapped-glyph"][data-unicode="."]',
   );
 
   expect(selectedOptionValues(groupSelect)).toContain("ASCII");
   expect(selectedOptionValues(glyphSelect)).toContain("ASTERISK");
 };
 
+const clearGlyphName = (glyphNameInput: HTMLInputElement): void => {
+  glyphNameInput.value = "";
+  glyphNameInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
+};
+
+const renderedGlyphNames = (shadowRoot: ShadowRoot): ReadonlyArray<string> =>
+  [
+    ...shadowRoot.querySelectorAll<HTMLInputElement>(
+      '[data-state="glyph-list"] input',
+    ),
+  ].map((input) => input.value);
+
 const expectBoxGlyphMappingOptions = (shadowRoot: ShadowRoot): void => {
   const glyphSelect = requireElement<HTMLSelectElement>(
     shadowRoot,
-    'select[data-action="mapped-glyph"][data-unicode="★"]',
+    'select[data-action="mapped-glyph"][data-unicode="."]',
   );
 
   expect(selectedOptionValues(glyphSelect)).toContain("H");
@@ -85,7 +104,7 @@ describe("ToolSigil placeholder", () => {
   });
 });
 
-describe("ToolSigil input state", () => {
+describe("ToolSigil font input state", () => {
   it("shows the selected font file", async () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
@@ -117,18 +136,59 @@ describe("ToolSigil input state", () => {
 
     element.remove();
   });
+});
 
-  it("keeps character input state", () => {
+describe("ToolSigil schema input state", () => {
+  it("preselects the SigilGlyphMap schema", () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
-    const characterInput = requireElement<HTMLTextAreaElement>(
+    const schemaSelect = requireElement<HTMLSelectElement>(
+      shadowRoot,
+      'select[name="schema"]',
+    );
+
+    expect(schemaSelect.value).toBe("SigilGlyphMap");
+    schemaSelect.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(schemaSelect.value).toBe("SigilGlyphMap");
+
+    element.remove();
+  });
+});
+
+describe("ToolSigil required glyph input state", () => {
+  it("updates required glyph options from textarea input", () => {
+    const element = appendToolSigil();
+    const shadowRoot = requireShadowRoot(element);
+    const textarea = requireElement<HTMLTextAreaElement>(
       shadowRoot,
       'textarea[name="characters"]',
     );
 
-    enterCharacters(characterInput, "★");
+    textarea.value = "#";
+    textarea.dispatchEvent(new InputEvent("input", { bubbles: true }));
 
-    expect(characterInput.value).toBe("★");
+    expect(
+      requireElement<HTMLSelectElement>(
+        shadowRoot,
+        'select[data-action="required-glyph-character"][data-glyph-name="floor"]',
+      ).hasAttribute("aria-invalid"),
+    ).toBe(true);
+
+    element.remove();
+  });
+
+  it("updates required glyph source character selections", () => {
+    const element = appendToolSigil();
+    const shadowRoot = requireShadowRoot(element);
+    const select = requireElement<HTMLSelectElement>(
+      shadowRoot,
+      'select[data-action="required-glyph-character"][data-glyph-name="floor"]',
+    );
+
+    select.value = "#";
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(select.value).toBe("#");
 
     element.remove();
   });
@@ -139,18 +199,19 @@ describe("ToolSigil glyph-name state", () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
 
-    await loadCharactersFromTestFont(shadowRoot, "★");
+    await loadCharactersFromTestFont(shadowRoot, ".");
 
     const glyphNameInput = requireElement<HTMLInputElement>(
       shadowRoot,
-      'input[data-unicode="★"]',
+      'input[data-unicode="."]',
     );
-    expect(glyphNameInput.value).toBe("u2605");
-    glyphNameInput.value = "";
-    glyphNameInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
+    expect(glyphNameInput.value).toBe("floor");
+    expect(renderedGlyphNames(shadowRoot)).toEqual(
+      EXPECTED_REQUIRED_GLYPH_NAMES,
+    );
+    clearGlyphName(glyphNameInput);
 
-    const alert = requireElement<HTMLElement>(shadowRoot, '[role="alert"]');
-    expect(alert.textContent).toContain('Invalid glyph name "".');
+    expect(glyphNameInput.value).toBe("");
 
     element.remove();
   });
@@ -161,9 +222,9 @@ describe("ToolSigil glyph mapping state", () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
 
-    await loadCharactersFromTestFont(shadowRoot, "★");
+    await loadCharactersFromTestFont(shadowRoot, ".");
     expectInitialGlyphMappingOptions(shadowRoot);
-    selectGlyphGroup(shadowRoot, "★", "BOX");
+    selectGlyphGroup(shadowRoot, ".", "BOX");
     expectBoxGlyphMappingOptions(shadowRoot);
 
     element.remove();
@@ -175,16 +236,16 @@ describe("ToolSigil license option state", () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
 
-    await loadCharactersFromTestFont(shadowRoot, "★");
+    await loadCharactersFromTestFont(shadowRoot, ".");
 
     const licenseSelect = requireElement<HTMLSelectElement>(
       shadowRoot,
-      'select[data-action="license"][data-unicode="★"]',
+      'select[data-action="license"][data-unicode="."]',
     );
     expect([...licenseSelect.options].map((option) => option.value)).toEqual(
       expect.arrayContaining(["Apache-2.0", "MIT", "OFL-1.1"]),
     );
-    selectLicense(shadowRoot, "★", "MIT");
+    selectLicense(shadowRoot, ".", "MIT");
     expect(licenseSelect.value).toBe("MIT");
 
     element.remove();
@@ -196,17 +257,17 @@ describe("ToolSigil optional license control state", () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
 
-    await loadCharactersFromTestFont(shadowRoot, "★");
+    await loadCharactersFromTestFont(shadowRoot, ".");
     requireElement<HTMLSelectElement>(
       shadowRoot,
-      'select[data-action="mapped-glyph"][data-unicode="★"]',
+      'select[data-action="mapped-glyph"][data-unicode="."]',
     ).remove();
-    selectLicense(shadowRoot, "★", "MIT");
+    selectLicense(shadowRoot, ".", "MIT");
 
     expect(
       requireElement<HTMLSelectElement>(
         shadowRoot,
-        'select[data-action="license"][data-unicode="★"]',
+        'select[data-action="license"][data-unicode="."]',
       ).value,
     ).toBe("MIT");
 
@@ -219,14 +280,14 @@ describe("ToolSigil license default state", () => {
     const element = appendToolSigil();
     const shadowRoot = requireShadowRoot(element);
 
-    await loadCharactersFromTestFont(shadowRoot, "★");
-    selectLicense(shadowRoot, "★", "MIT");
-    await loadCharactersFromTestFont(shadowRoot, "♥");
+    await loadCharactersFromTestFont(shadowRoot, ".");
+    selectLicense(shadowRoot, ".", "MIT");
+    await loadCharactersFromTestFont(shadowRoot, ".");
 
     expect(
       requireElement<HTMLSelectElement>(
         shadowRoot,
-        'select[data-action="license"][data-unicode="♥"]',
+        'select[data-action="license"][data-unicode="."]',
       ).value,
     ).toBe("MIT");
 
@@ -256,14 +317,14 @@ describe("ToolSigil output state", () => {
       'button[data-action="download"]',
     );
 
-    await loadCharactersFromTestFont(shadowRoot, "★");
+    await loadCharactersFromTestFont(shadowRoot, ".");
     expect(downloadButton.disabled).toBe(true);
 
-    selectMappedGlyph(shadowRoot, "★", "ASTERISK");
+    selectMappedGlyph(shadowRoot, ".", "ASTERISK");
     expect(downloadButton.disabled).toBe(true);
 
-    selectLicense(shadowRoot, "★", "MIT");
-    expect(downloadButton.disabled).toBe(false);
+    selectLicense(shadowRoot, ".", "MIT");
+    expect(downloadButton.disabled).toBe(true);
 
     element.remove();
   });

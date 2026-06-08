@@ -12,15 +12,23 @@ type ConnectedBindingShadowRoot = Readonly<{
   glyphList: Element;
 }>;
 
+type RequiredGlyphCharacterChangeFixture = Readonly<{
+  disconnect: DisconnectToolSigilControls;
+  select: HTMLSelectElement;
+}>;
+
 const EMPTY_CHILD_COUNT = 0;
 const GLYPH_LIST_SELECTOR = '[data-state="glyph-list"]';
+const REQUIRED_GLYPH_SELECTOR = '[data-state="required-glyph-selections"]';
 
 const createBindingShadowRoot = (): ShadowRoot => {
   const host = document.createElement("div");
   const shadowRoot = host.attachShadow({ mode: "open" });
   shadowRoot.innerHTML = `
     <input name="font-file" type="file">
+    <select name="schema"></select>
     <textarea name="characters"></textarea>
+    <div data-state="required-glyph-selections"></div>
     <div data-state="glyph-list"></div>
     <button type="button" data-action="download">Download JSON</button>
   `;
@@ -79,6 +87,8 @@ const createToolSigilHandlers = (
   onGlyphNameInput: vi.fn(),
   onLicenseChange: vi.fn(),
   onMappedGlyphChange: vi.fn(),
+  onRequiredGlyphCharacterChange: vi.fn(),
+  onSchemaChange: vi.fn(),
   ...handlers,
 });
 
@@ -95,8 +105,25 @@ const connectBindingShadowRoot = (
   return { disconnect, glyphList };
 };
 
+const connectRequiredGlyphCharacterChange = (
+  onRequiredGlyphCharacterChange: ToolSigilControlHandlers["onRequiredGlyphCharacterChange"],
+): RequiredGlyphCharacterChangeFixture => {
+  const shadowRoot = createBindingShadowRoot();
+  const container = requireElement(shadowRoot, REQUIRED_GLYPH_SELECTOR);
+  const select = appendSelect(container, "required-glyph-character", null);
+  Object.assign(select.dataset, { glyphName: "floor" });
+  select.append(new Option("#", "#"));
+  select.value = "#";
+  const disconnect = connectToolSigilControls(
+    shadowRoot,
+    createToolSigilHandlers({ onRequiredGlyphCharacterChange }),
+  );
+
+  return { disconnect, select };
+};
+
 describe("connectToolSigilControls setup", () => {
-  it("connects without the optional characters textarea", () => {
+  it("connects without optional controls", () => {
     const host = document.createElement("div");
     const shadowRoot = host.attachShadow({ mode: "open" });
 
@@ -106,6 +133,113 @@ describe("connectToolSigilControls setup", () => {
     );
 
     expect(shadowRoot.childElementCount).toBe(EMPTY_CHILD_COUNT);
+
+    disconnect();
+  });
+
+  it("delegates schema select changes", () => {
+    const onSchemaChange = vi.fn();
+    const shadowRoot = createBindingShadowRoot();
+    const schemaSelect = requireElement<HTMLSelectElement>(
+      shadowRoot,
+      'select[name="schema"]',
+    );
+    schemaSelect.append(new Option("SigilGlyphMap", "SigilGlyphMap"));
+    schemaSelect.value = "SigilGlyphMap";
+    const disconnect = connectToolSigilControls(
+      shadowRoot,
+      createToolSigilHandlers({ onSchemaChange }),
+    );
+
+    schemaSelect.dispatchEvent(new Event("change"));
+
+    expect(onSchemaChange).toHaveBeenCalledWith("SigilGlyphMap");
+
+    disconnect();
+  });
+});
+
+describe("connectToolSigilControls text input delegation", () => {
+  it("ignores textarea input events without textarea targets", () => {
+    const onCharactersInput = vi.fn();
+    const shadowRoot = createBindingShadowRoot();
+    const disconnect = connectToolSigilControls(
+      shadowRoot,
+      createToolSigilHandlers({ onCharactersInput }),
+    );
+
+    shadowRoot.dispatchEvent(new InputEvent("input", { bubbles: true }));
+
+    expect(onCharactersInput).not.toHaveBeenCalled();
+
+    disconnect();
+  });
+
+  it("delegates textarea input events", () => {
+    const onCharactersInput = vi.fn();
+    const shadowRoot = createBindingShadowRoot();
+    const textarea = requireElement<HTMLTextAreaElement>(
+      shadowRoot,
+      'textarea[name="characters"]',
+    );
+    textarea.value = ".#";
+    const disconnect = connectToolSigilControls(
+      shadowRoot,
+      createToolSigilHandlers({ onCharactersInput }),
+    );
+
+    textarea.dispatchEvent(new InputEvent("input"));
+
+    expect(onCharactersInput).toHaveBeenCalledWith(".#");
+
+    disconnect();
+  });
+});
+
+describe("connectToolSigilControls required glyph delegation", () => {
+  it("ignores required glyph changes without select targets", () => {
+    const onRequiredGlyphCharacterChange = vi.fn();
+    const shadowRoot = createBindingShadowRoot();
+    const container = requireElement(shadowRoot, REQUIRED_GLYPH_SELECTOR);
+    const disconnect = connectToolSigilControls(
+      shadowRoot,
+      createToolSigilHandlers({ onRequiredGlyphCharacterChange }),
+    );
+
+    container.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(onRequiredGlyphCharacterChange).not.toHaveBeenCalled();
+
+    disconnect();
+  });
+
+  it("ignores required glyph selects with unrelated actions", () => {
+    const onRequiredGlyphCharacterChange = vi.fn();
+    const shadowRoot = createBindingShadowRoot();
+    const container = requireElement(shadowRoot, REQUIRED_GLYPH_SELECTOR);
+    const select = appendSelect(container, "glyph-group", null);
+    Object.assign(select.dataset, { glyphName: "floor" });
+    const disconnect = connectToolSigilControls(
+      shadowRoot,
+      createToolSigilHandlers({ onRequiredGlyphCharacterChange }),
+    );
+
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(onRequiredGlyphCharacterChange).not.toHaveBeenCalled();
+
+    disconnect();
+  });
+
+  it("delegates required glyph character select changes", () => {
+    const onRequiredGlyphCharacterChange = vi.fn();
+    const { disconnect, select } = connectRequiredGlyphCharacterChange(
+      onRequiredGlyphCharacterChange,
+    );
+
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(onRequiredGlyphCharacterChange).toHaveBeenCalledWith("floor", "#");
 
     disconnect();
   });

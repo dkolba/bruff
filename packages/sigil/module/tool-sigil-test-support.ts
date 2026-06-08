@@ -60,18 +60,10 @@ export const waitForElement = <ElementType extends Element>(
   });
 };
 
-const waitForFontProcessing = (
+const waitForSchemaFontProcessing = (
   shadowRoot: ShadowRoot,
-  characters: string,
-): Promise<Element> => {
-  const [unicode] = characters;
-  const selector =
-    unicode === undefined
-      ? '[role="alert"]'
-      : `input[data-unicode="${unicode}"], [role="alert"]`;
-
-  return waitForElement(shadowRoot, selector);
-};
+): Promise<Element> =>
+  waitForElement(shadowRoot, 'input[data-unicode="."], [role="alert"]');
 
 /** Waits for component microtasks and file parsing to settle in browser tests. */
 export const waitForComponentUpdate = (): Promise<void> =>
@@ -97,32 +89,26 @@ export const selectFiles = (
   fileInput.dispatchEvent(new Event("change", { bubbles: true }));
 };
 
-/** Enters characters into the component textarea. */
-export const enterCharacters = (
-  characterInput: HTMLTextAreaElement,
-  characters: string,
-): void => {
-  characterInput.value = characters;
-  characterInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
-};
-
-/** Loads the test font and enters characters. */
+/** Loads the test font for the selected schema. */
 export const loadCharactersFromTestFont = async (
   shadowRoot: ShadowRoot,
   characters: string,
 ): Promise<void> => {
+  const textarea = requireElement<HTMLTextAreaElement>(
+    shadowRoot,
+    'textarea[name="characters"]',
+  );
   const fileInput = requireElement<HTMLInputElement>(
     shadowRoot,
     'input[type="file"][name="font-file"]',
   );
-  const characterInput = requireElement<HTMLTextAreaElement>(
-    shadowRoot,
-    'textarea[name="characters"]',
-  );
+
+  textarea.value = characters;
+  textarea.dispatchEvent(new InputEvent("input", { bubbles: true }));
+  await waitForComponentUpdate();
 
   selectFiles(fileInput, [createValidFontFile("component-test.ttf")]);
-  enterCharacters(characterInput, characters);
-  await waitForFontProcessing(shadowRoot, characters);
+  await waitForSchemaFontProcessing(shadowRoot);
 };
 
 /** Renames one rendered glyph input. */

@@ -46,3 +46,4 @@
 - [x] T44 — Add and wire render, binding, and preview resource modules through `packages/sigil/module/tool-sigil.ts`.
 - [x] T45 — Verify `@bruff/sigil` checks and record verification in `specs/sigil-tool/acceptance.md`.
 - [x] T46 — Add preview-resource disconnect regression coverage and invalidate pending preview-font loads when `clear()` or `disconnect()` runs.
+- [x] T47 — Document stable top-level JSON keys and editable per-entry `name` values in `specs/sigil-tool/spec.md` and `specs/sigil-tool/design.md`.

@@ -1,0 +1,55 @@
+# Concrete Sigil Contracts Schema Tasks
+
+- [x] T1 — Add `SigilSchemaId`, `SigilSchemaGlyph`, `SigilSchemaOption`, `SIGIL_GLYPH_MAP_SCHEMA_ID`, `DEFAULT_SIGIL_SCHEMA_ID`, `SIGIL_SCHEMA_OPTIONS`, and `findSigilSchemaOption` to `packages/sigil/module/sigil-schema-catalog.ts`
+- [x] T2 — Add catalog tests for the `SigilGlyphMap` option in `packages/sigil/module/sigil-schema-catalog.test.ts`
+- [x] T3 — Add `selectedSchemaId` and `schemaOptions` fields to `ToolSigilState` and `ToolSigilViewModel` in `packages/sigil/module/tool-sigil-state-types.ts`
+- [x] T4 — Initialize `ToolSigilState` from `DEFAULT_SIGIL_SCHEMA_ID` in `packages/sigil/module/tool-sigil-state.ts`
+- [x] T5 — Add state tests for initial selected schema, derived characters, and prefilled required glyph names in `packages/sigil/module/tool-sigil-state.test.ts`
+- [x] T6 — Implement `setToolSigilSchema` in `packages/sigil/module/tool-sigil-state.ts`
+- [x] T7 — Add state tests for schema selection re-extraction with the current font in `packages/sigil/module/tool-sigil-state.test.ts`
+- [x] T8 — Project schema selector fields from `selectToolSigilViewModel` in `packages/sigil/module/tool-sigil-state-selectors.ts`
+- [x] T9 — Replace the `Characters` textarea with a schema select in `packages/sigil/module/tool-sigil-template.ts`
+- [x] T10 — Update control bindings to query the schema select and emit `onSchemaChange` from `packages/sigil/module/tool-sigil-bindings.ts`
+- [x] T11 — Update binding tests for schema select changes and removed textarea input in `packages/sigil/module/tool-sigil-bindings.test.ts`
+- [x] T12 — Render schema select options and selected value in `packages/sigil/module/tool-sigil-render.ts`
+- [x] T13 — Update render tests for the preselected `SigilGlyphMap` selector in `packages/sigil/module/tool-sigil-render.test.ts`
+- [x] T14 — Wire `onSchemaChange` into `ToolSigil` and remove character input handling in `packages/sigil/module/tool-sigil.ts`
+- [x] T15 — Update component regression tests for initial `SigilGlyphMap` selection and required glyph row names in `packages/sigil/module/tool-sigil.test.ts` and `packages/sigil/module/tool-sigil-regression.test.ts`
+- [x] T16 — Run `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run typecheck`, and affected `@bruff/sigil` browser tests
+- [x] T17 — Add `completeMissingDrafts` in `packages/sigil/module/tool-sigil-missing-drafts.ts` and state coverage so every required schema row renders when uploaded fonts miss characters
+- [x] T18 — Add catalog tests for default textarea characters and required glyph defaults in `packages/sigil/module/sigil-schema-catalog.test.ts`
+- [x] T19 — Extend schema catalog defaults in `packages/sigil/module/sigil-schema-catalog.ts`
+- [x] T20 — Add required glyph selection type tests in `packages/sigil/module/tool-sigil-state.test.ts`
+- [x] T21 — Add `requiredGlyphSelections` and `contractIssues` state fields in `packages/sigil/module/tool-sigil-state-types.ts`
+- [x] T22 — Add character option derivation tests in `packages/sigil/module/tool-sigil-required-glyph-selection.test.ts`
+- [x] T23 — Implement character option derivation in `packages/sigil/module/tool-sigil-required-glyph-selection.ts`
+- [x] T24 — Add state tests for restored textarea initialization in `packages/sigil/module/tool-sigil-state.test.ts`
+- [x] T25 — Restore textarea initialization in `packages/sigil/module/tool-sigil-state.ts`
+- [x] T26 — Add state tests for textarea edits preserving valid required glyph selections in `packages/sigil/module/tool-sigil-state.test.ts`
+- [x] T27 — Update `setToolSigilCharacters` in `packages/sigil/module/tool-sigil-state.ts`
+- [x] T28 — Add state tests for invalid required glyph selections after character removal in `packages/sigil/module/tool-sigil-state.test.ts`
+- [x] T29 — Project required glyph selection validity in `packages/sigil/module/tool-sigil-state-selectors.ts`
+- [x] T30 — Add state tests for required glyph select changes in `packages/sigil/module/tool-sigil-state.test.ts`
+- [x] T31 — Implement `setToolSigilRequiredGlyphCharacter` in `packages/sigil/module/tool-sigil-state.ts`
+- [x] T32 — Add contract validation tests in `packages/sigil/module/tool-sigil-contract-validation.test.ts`
+- [x] T33 — Implement contract validation in `packages/sigil/module/tool-sigil-contract-validation.ts`
+- [x] T34 — Add download projection tests for selected required glyph characters in `packages/sigil/module/tool-sigil-download.test.ts`
+- [x] T35 — Build exported `SigilGlyphMap` from required glyph selections in `packages/sigil/module/tool-sigil-state-selectors.ts`
+- [x] T36 — Add template tests for restored textarea and required glyph selects in `packages/sigil/module/tool-sigil-render.test.ts`
+- [x] T37 — Restore textarea and add required glyph select markup in `packages/sigil/module/tool-sigil-template.ts`
+- [x] T38 — Add required glyph render tests in `packages/sigil/module/tool-sigil-required-glyph-render.test.ts`
+- [x] T39 — Render required glyph selects in `packages/sigil/module/tool-sigil-required-glyph-render.ts` and `packages/sigil/module/tool-sigil-render.ts`
+- [x] T40 — Add binding tests for textarea input and required glyph select changes in `packages/sigil/module/tool-sigil-bindings.test.ts`
+- [x] T41 — Wire textarea and required glyph select bindings in `packages/sigil/module/tool-sigil-bindings.ts`
+- [x] T42 — Add coordinator tests for textarea and required glyph changes in `packages/sigil/module/tool-sigil.test.ts`
+- [x] T43 — Wire textarea and required glyph handlers in `packages/sigil/module/tool-sigil.ts`
+- [x] T44 — Add error display tests for exact contract reasons in `packages/sigil/module/tool-sigil-error.test.ts`
+- [x] T45 — Render exact contract validation reasons in `packages/sigil/module/tool-sigil-render.ts`
+- [x] T46 — Add component regression tests for typed character selection export flow in `packages/sigil/module/tool-sigil-regression.test.ts`
+- [x] T47 — Update package guidance for textarea-driven schema mappings in `packages/sigil/README.md`
+- [x] T48 — Run `pnpm --filter @bruff/sigil run format`, `pnpm --filter @bruff/sigil run lint`, `pnpm --filter @bruff/sigil run typecheck`, `pnpm --filter @bruff/sigil run test:chromium`, `pnpm --filter @bruff/sigil run test:firefox`, and `pnpm --filter @bruff/sigil run test:webkit`
+- [x] T49 — Add download coverage for edited `glyph-name-...` JSON `name` fields in `packages/sigil/module/tool-sigil-download-test-support.ts`
+- [x] T50 — Preserve required top-level keys while passing edited row names into download projection in `packages/sigil/module/tool-sigil-state-selectors.ts`
+- [x] T51 — Update schema documentation in `specs/concrete-sigil-contracts-schema/spec.md` and `specs/concrete-sigil-contracts-schema/design.md`
+- [x] T52 — Add required Sigil glyph `name` contract coverage in `packages/contracts/module/sigil-glyph-json.test.ts` and `packages/sigil/module/tool-sigil-contract-validation.test.ts`
+- [x] T53 — Add the required glyph `name` field in `packages/contracts/module/sigil-glyph-json.ts` and `packages/sigil/module/glyph-name.ts`

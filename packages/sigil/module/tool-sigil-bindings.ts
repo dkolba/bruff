@@ -10,24 +10,23 @@ const isGlyphNameInput = (
 const isSelect = (target: EventTarget | null): target is HTMLSelectElement =>
   target instanceof HTMLSelectElement;
 
-const queryCharacterInput = (shadowRoot: ShadowRoot): HTMLTextAreaElement =>
-  shadowRoot.querySelector<HTMLTextAreaElement>(
-    'textarea[name="characters"]',
-  ) ?? document.createElement("textarea");
-
 type ToolSigilControls = Readonly<{
-  characterInput: HTMLTextAreaElement;
+  charactersTextarea: HTMLTextAreaElement;
   downloadButton: HTMLButtonElement | null;
   fileInput: HTMLInputElement | null;
   glyphList: Element | null;
+  requiredGlyphSelections: Element | null;
+  schemaSelect: HTMLSelectElement;
 }>;
 
 type ToolSigilEventHandlers = Readonly<{
-  handleCharactersInput: () => void;
+  handleCharactersInput: (event: Event) => void;
   handleDownloadClick: () => void;
   handleFileChange: () => void;
   handleGlyphNameInput: (event: Event) => void;
   handleGlyphSelectChange: (event: Event) => void;
+  handleRequiredGlyphChange: (event: Event) => void;
+  handleSchemaChange: () => void;
 }>;
 
 type GlyphSelectChange = Readonly<{
@@ -47,13 +46,18 @@ export type ToolSigilControlHandlers = Readonly<{
   onGlyphNameInput: (unicode: string, glyphName: string) => void;
   onLicenseChange: (unicode: string, licenseValue: string) => void;
   onMappedGlyphChange: (unicode: string, mapping: SigilGlyphMapping) => void;
+  onRequiredGlyphCharacterChange: (glyphName: string, unicode: string) => void;
+  onSchemaChange: (schemaId: string) => void;
 }>;
 
 /** Disconnects DOM listeners owned by a connected sigil control binding. */
 export type DisconnectToolSigilControls = () => void;
 
 const queryToolSigilControls = (shadowRoot: ShadowRoot): ToolSigilControls => ({
-  characterInput: queryCharacterInput(shadowRoot),
+  charactersTextarea:
+    shadowRoot.querySelector<HTMLTextAreaElement>(
+      'textarea[name="characters"]',
+    ) ?? document.createElement("textarea"),
   downloadButton: shadowRoot.querySelector<HTMLButtonElement>(
     'button[data-action="download"]',
   ),
@@ -61,6 +65,12 @@ const queryToolSigilControls = (shadowRoot: ShadowRoot): ToolSigilControls => ({
     'input[type="file"][name="font-file"]',
   ),
   glyphList: shadowRoot.querySelector('[data-state="glyph-list"]'),
+  requiredGlyphSelections: shadowRoot.querySelector(
+    '[data-state="required-glyph-selections"]',
+  ),
+  schemaSelect:
+    shadowRoot.querySelector<HTMLSelectElement>('select[name="schema"]') ??
+    document.createElement("select"),
 });
 
 const readGlyphSelectChange = (
@@ -121,7 +131,7 @@ const createToolSigilEventHandlers = (
   handlers: ToolSigilControlHandlers,
 ): ToolSigilEventHandlers => ({
   handleCharactersInput: (): void => {
-    handlers.onCharactersInput(controls.characterInput.value);
+    handlers.onCharactersInput(controls.charactersTextarea.value);
   },
   handleDownloadClick: (): void => {
     handlers.onDownloadClick();
@@ -149,6 +159,19 @@ const createToolSigilEventHandlers = (
 
     dispatchGlyphSelectChange(handlers, selection);
   },
+  handleRequiredGlyphChange: (event: Event): void => {
+    if (!isSelect(event.target)) {
+      return;
+    }
+
+    const { action, glyphName } = event.target.dataset;
+    if (action === "required-glyph-character" && glyphName !== undefined) {
+      handlers.onRequiredGlyphCharacterChange(glyphName, event.target.value);
+    }
+  },
+  handleSchemaChange: (): void => {
+    handlers.onSchemaChange(controls.schemaSelect.value);
+  },
 });
 
 const addToolSigilEventListeners = (
@@ -159,9 +182,17 @@ const addToolSigilEventListeners = (
     "change",
     eventHandlers.handleFileChange,
   );
-  controls.characterInput.addEventListener(
+  controls.charactersTextarea.addEventListener(
     "input",
     eventHandlers.handleCharactersInput,
+  );
+  controls.schemaSelect.addEventListener(
+    "change",
+    eventHandlers.handleSchemaChange,
+  );
+  controls.requiredGlyphSelections?.addEventListener(
+    "change",
+    eventHandlers.handleRequiredGlyphChange,
   );
   controls.glyphList?.addEventListener(
     "input",
@@ -185,9 +216,17 @@ const removeToolSigilEventListeners = (
     "change",
     eventHandlers.handleFileChange,
   );
-  controls.characterInput.removeEventListener(
+  controls.charactersTextarea.removeEventListener(
     "input",
     eventHandlers.handleCharactersInput,
+  );
+  controls.schemaSelect.removeEventListener(
+    "change",
+    eventHandlers.handleSchemaChange,
+  );
+  controls.requiredGlyphSelections?.removeEventListener(
+    "change",
+    eventHandlers.handleRequiredGlyphChange,
   );
   controls.glyphList?.removeEventListener(
     "input",

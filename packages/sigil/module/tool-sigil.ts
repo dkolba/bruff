@@ -11,9 +11,11 @@ import {
   setToolSigilLicense,
   setToolSigilMappedGlyph,
   setToolSigilPreviewFontFamily,
+  setToolSigilRequiredGlyphCharacter,
+  setToolSigilSchema,
   startToolSigilFontSelection,
   type ToolSigilState,
-} from "./tool-sigil-state.js";
+} from "./state/tool-sigil-state.js";
 import {
   connectToolSigilControls,
   type DisconnectToolSigilControls,
@@ -27,6 +29,7 @@ import {
   renderToolSigilSelection,
   renderToolSigilValidation,
 } from "./tool-sigil-render.js";
+import { brand } from "@bruff/utils";
 import { loadSigilFontFile } from "./font-file.js";
 import type { SigilGlyphMapping } from "./glyph-json.js";
 import { TOOL_SIGIL_TEMPLATE } from "./tool-sigil-template.js";
@@ -75,6 +78,12 @@ export class ToolSigil extends HTMLElement {
         },
         onMappedGlyphChange: (unicode, mapping) => {
           this.#handleMappedGlyphChange(unicode, mapping);
+        },
+        onRequiredGlyphCharacterChange: (glyphName, unicode) => {
+          this.#handleRequiredGlyphCharacterChange(glyphName, unicode);
+        },
+        onSchemaChange: (schemaId) => {
+          this.#handleSchemaChange(schemaId);
         },
       });
     }
@@ -130,6 +139,26 @@ export class ToolSigil extends HTMLElement {
 
   #handleCharactersInput(characters: string): void {
     this.#state = setToolSigilCharacters(this.#state, characters);
+    this.#renderState();
+  }
+
+  #handleRequiredGlyphCharacterChange(
+    glyphName: string,
+    unicode: string,
+  ): void {
+    this.#state = setToolSigilRequiredGlyphCharacter(
+      this.#state,
+      glyphName,
+      unicode,
+    );
+    this.#renderState();
+  }
+
+  #handleSchemaChange(schemaId: string): void {
+    this.#state = setToolSigilSchema(
+      this.#state,
+      brand<"SigilSchemaId">(schemaId),
+    );
     this.#renderState();
   }
 

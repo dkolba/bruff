@@ -4,6 +4,22 @@ import { error, ok, type Result } from "@bruff/utils";
 const MIN_TEXT_LENGTH = 1;
 
 /**
+ * Required glyph names for core broughlike map rendering.
+ */
+export const requiredSigilGlyphNames = [
+  "floor",
+  "wall",
+  "door",
+  "player",
+  "enemy",
+] as const;
+
+/**
+ * Required Sigil glyph keys used by core broughlike maps.
+ */
+export type RequiredSigilGlyphName = (typeof requiredSigilGlyphNames)[number];
+
+/**
  * Runtime schema for extracted glyph bounds in font units.
  */
 export const sigilGlyphBoundsSchema = z.object({
@@ -56,6 +72,7 @@ export type SigilGlyphMapping = Readonly<
 export const sigilGlyphSchema = sigilSourceGlyphSchema.extend({
   LICENSE: z.string().min(MIN_TEXT_LENGTH),
   mappedGlyph: sigilGlyphMappingSchema,
+  name: z.string().min(MIN_TEXT_LENGTH),
 });
 
 /**
@@ -66,12 +83,22 @@ export type SigilGlyph = Readonly<z.infer<typeof sigilGlyphSchema>>;
 /**
  * Runtime schema for downloadable Sigil glyph JSON keyed by glyph name.
  */
-export const sigilGlyphMapSchema = z.record(z.string(), sigilGlyphSchema);
+export const sigilGlyphMapSchema = z
+  .object({
+    door: sigilGlyphSchema,
+    enemy: sigilGlyphSchema,
+    floor: sigilGlyphSchema,
+    player: sigilGlyphSchema,
+    wall: sigilGlyphSchema,
+  })
+  .catchall(sigilGlyphSchema);
 
 /**
  * Readonly TypeScript type inferred from {@link sigilGlyphMapSchema}.
  */
-export type SigilGlyphMap = Readonly<Record<string, SigilGlyph>>;
+export type SigilGlyphMap = Readonly<
+  Record<RequiredSigilGlyphName, SigilGlyph> & Record<string, SigilGlyph>
+>;
 
 /**
  * Structured parse failure for {@link parseSigilGlyphMap}.

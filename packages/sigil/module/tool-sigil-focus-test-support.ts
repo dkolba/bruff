@@ -16,21 +16,21 @@ const enterGlyphNameText = (
   glyphNameInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
 };
 
-const loadMappedAsteriskRow = async (shadowRoot: ShadowRoot): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
+const loadMappedFloorRow = async (shadowRoot: ShadowRoot): Promise<void> => {
+  await loadCharactersFromTestFont(shadowRoot, ".");
   await waitForElement(
     shadowRoot,
-    'select[data-action="glyph-group"][data-unicode="★"]',
+    'select[data-action="glyph-group"][data-unicode="."]',
   );
   await waitForElement(
     shadowRoot,
-    'select[data-action="mapped-glyph"][data-unicode="★"]',
+    'select[data-action="mapped-glyph"][data-unicode="."]',
   );
   await waitForElement(
     shadowRoot,
-    'select[data-action="license"][data-unicode="★"]',
+    'select[data-action="license"][data-unicode="."]',
   );
-  selectDefaultMappingAndLicense(shadowRoot, "★");
+  selectDefaultMappingAndLicense(shadowRoot, ".");
 };
 
 const enterFocusedGlyphNameText = (
@@ -46,10 +46,10 @@ const enterFocusedGlyphNameText = (
 export const expectGlyphNameInputFocusPreserved = async (
   shadowRoot: ShadowRoot,
 ): Promise<void> => {
-  await loadMappedAsteriskRow(shadowRoot);
+  await loadMappedFloorRow(shadowRoot);
   const glyphNameInput = await waitForElement<HTMLInputElement>(
     shadowRoot,
-    'input[data-unicode="★"]',
+    'input[data-unicode="."]',
   );
   glyphNameInput.focus();
   expect(shadowRoot.activeElement).toBe(glyphNameInput);
@@ -62,11 +62,11 @@ export const expectGlyphNameInputFocusPreserved = async (
 export const expectGlyphSelectFocusPreserved = async (
   shadowRoot: ShadowRoot,
 ): Promise<void> => {
-  await loadCharactersFromTestFont(shadowRoot, "★");
+  await loadCharactersFromTestFont(shadowRoot, ".");
 
   const groupSelect = await waitForElement<HTMLSelectElement>(
     shadowRoot,
-    'select[data-action="glyph-group"][data-unicode="★"]',
+    'select[data-action="glyph-group"][data-unicode="."]',
   );
   groupSelect.focus();
   expect(shadowRoot.activeElement).toBe(groupSelect);
@@ -78,7 +78,7 @@ export const expectGlyphSelectFocusPreserved = async (
 
   const mappedGlyphSelect = requireElement<HTMLSelectElement>(
     shadowRoot,
-    'select[data-action="mapped-glyph"][data-unicode="★"]',
+    'select[data-action="mapped-glyph"][data-unicode="."]',
   );
   expect(mappedGlyphSelect.options.length).toBeGreaterThan(
     MINIMUM_SELECT_OPTION_COUNT,

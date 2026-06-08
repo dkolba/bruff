@@ -1,9 +1,11 @@
 import { appendText } from "./dom-text.js";
 import { createErrorElements } from "./error-elements.js";
 import { createGlyphPreview } from "./glyph-preview.js";
+import { renderRequiredGlyphSelections } from "./tool-sigil-required-glyph-render.js";
+import { renderToolSigilSchemaSelect } from "./tool-sigil-schema-render.js";
 import type { SigilGlyphDraft } from "./glyph-json.js";
 import type { SigilGlyphOption } from "./glyph-catalog.js";
-import type { ToolSigilViewModel } from "./tool-sigil-state.js";
+import type { ToolSigilViewModel } from "./state/tool-sigil-state.js";
 
 const textInputName = (unicode: string): string => `glyph-name-${unicode}`;
 const glyphGroupSelectName = (unicode: string): string =>
@@ -181,13 +183,26 @@ const renderDownloadButton = (
   downloadButton?.toggleAttribute("disabled", viewModel.downloadDisabled);
 };
 
+const contractIssueErrors = (
+  viewModel: ToolSigilViewModel,
+): ToolSigilViewModel["errors"] =>
+  viewModel.contractIssues.map((issue) => ({
+    message: `${issue.path}: ${issue.message}`,
+    type: "invalid-glyph-json",
+  }));
+
 const renderErrors = (
   shadowRoot: ShadowRoot,
   viewModel: ToolSigilViewModel,
 ): void => {
   shadowRoot
     .querySelector('[data-state="errors"]')
-    ?.replaceChildren(...createErrorElements(viewModel.errors));
+    ?.replaceChildren(
+      ...createErrorElements([
+        ...viewModel.errors,
+        ...contractIssueErrors(viewModel),
+      ]),
+    );
 };
 
 /**
@@ -200,6 +215,7 @@ export const renderToolSigilValidation = (
   shadowRoot: ShadowRoot,
   viewModel: ToolSigilViewModel,
 ): void => {
+  renderRequiredGlyphSelections(shadowRoot, viewModel.requiredGlyphSelections);
   renderErrors(shadowRoot, viewModel);
   renderDownloadButton(shadowRoot, viewModel);
 };
@@ -278,6 +294,14 @@ export const renderToolSigil = (
   shadowRoot: ShadowRoot,
   viewModel: ToolSigilViewModel,
 ): void => {
+  renderToolSigilSchemaSelect(shadowRoot, viewModel);
+  const charactersTextarea = shadowRoot.querySelector<HTMLTextAreaElement>(
+    'textarea[name="characters"]',
+  );
+  if (charactersTextarea !== null) {
+    charactersTextarea.value = viewModel.characters;
+  }
+  renderRequiredGlyphSelections(shadowRoot, viewModel.requiredGlyphSelections);
   replaceText(
     shadowRoot.querySelector('[data-state="font-file-name"]'),
     viewModel.fontFileNameText,

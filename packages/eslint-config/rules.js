@@ -75,6 +75,7 @@ export const overrideRulesEslint = {
       ignorePattern: "(?:c8|node:coverage) ignore",
     },
   ],
+  "max-lines": ["error", { skipBlankLines: true }],
 };
 
 /**

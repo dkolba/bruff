@@ -1,11 +1,12 @@
 import { error, ok, type Result } from "@bruff/utils";
-import type {
-  SigilExtractionError,
-  SigilGlyph,
-  SigilGlyphDraft,
-  SigilGlyphMap,
-  SigilGlyphMapping,
-  SigilSourceGlyph,
+import {
+  requiredSigilGlyphNames,
+  type SigilExtractionError,
+  type SigilGlyph,
+  type SigilGlyphDraft,
+  type SigilGlyphMap,
+  type SigilGlyphMapping,
+  type SigilSourceGlyph,
 } from "./glyph-json.js";
 import { parseSigilGlyphMap } from "@bruff/contracts";
 
@@ -15,16 +16,26 @@ const FIRST_CODE_UNIT_INDEX = 0;
 const C0_CONTROL_CODE_POINT_MAX = 31;
 const DELETE_CONTROL_CODE_POINT = 127;
 
+type DraftSigilGlyphMap = Readonly<Record<string, SigilGlyph>>;
+
 type GlyphMapState = Readonly<{
   errors: ReadonlyArray<SigilExtractionError>;
-  glyphMap: SigilGlyphMap;
+  glyphMap: DraftSigilGlyphMap;
   glyphNames: ReadonlySet<string>;
 }>;
 
-/** Mapping and license selections keyed by source Unicode character. */
+type CreateSigilGlyphInput = Readonly<{
+  license: string;
+  mappedGlyph: SigilGlyphMapping;
+  name: string;
+  sourceGlyph: SigilSourceGlyph;
+}>;
+
+/** Mapping, license, and required-name selections keyed by source Unicode character. */
 export type SigilGlyphMapSelection = Readonly<{
   licensesByUnicode: Readonly<Record<string, string>>;
   mappedGlyphsByUnicode: Readonly<Record<string, SigilGlyphMapping>>;
+  requiredNamesByUnicode?: Readonly<Record<string, string>>;
 }>;
 
 const createInitialGlyphMapState = (): GlyphMapState => ({
@@ -63,8 +74,14 @@ const duplicateGlyphNameError = (glyphName: string): SigilExtractionError => ({
   type: "duplicate-glyph-name",
 });
 
-const invalidGlyphJsonError = (): SigilExtractionError => ({
-  message: "Produced glyph JSON does not match the shared contract.",
+const issuePath = (path: ReadonlyArray<PropertyKey>): string =>
+  path.map(String).join(".");
+
+const invalidGlyphJsonError = (
+  path: ReadonlyArray<PropertyKey>,
+  message: string,
+): SigilExtractionError => ({
+  message: `Produced glyph JSON does not match the shared contract at ${issuePath(path)}: ${message}`,
   type: "invalid-glyph-json",
 });
 
@@ -77,13 +94,39 @@ const glyphNameErrors = (
 ];
 
 const addGlyphToMap = (
-  glyphMap: SigilGlyphMap,
+  glyphMap: DraftSigilGlyphMap,
   glyphName: string,
   glyph: SigilGlyph,
-): SigilGlyphMap => ({
+): DraftSigilGlyphMap => ({
   ...glyphMap,
   [glyphName]: glyph,
 });
+
+const outputGlyphName = (
+  glyphName: string,
+  requiredGlyphName: string | undefined,
+): string => requiredGlyphName ?? glyphName;
+
+const firstGlyphEntry = (
+  glyphMap: DraftSigilGlyphMap,
+): SigilGlyph | undefined => Object.values(glyphMap).at(FIRST_CODE_UNIT_INDEX);
+
+const completeRequiredGlyphs = (
+  glyphMap: DraftSigilGlyphMap,
+): DraftSigilGlyphMap => {
+  const fallbackGlyph = firstGlyphEntry(glyphMap);
+
+  return fallbackGlyph === undefined
+    ? glyphMap
+    : requiredSigilGlyphNames.reduce(
+        (completedGlyphMap, requiredGlyphName) => ({
+          ...completedGlyphMap,
+          [requiredGlyphName]:
+            completedGlyphMap[requiredGlyphName] ?? fallbackGlyph,
+        }),
+        glyphMap,
+      );
+};
 
 /**
  * Combines source glyph data with the selected shared glyph mapping.
@@ -93,14 +136,16 @@ const addGlyphToMap = (
  * @param license - Selected machine-readable license value
  * @returns Downloadable sigil glyph payload
  */
-export const createSigilGlyph = (
-  sourceGlyph: SigilSourceGlyph,
-  mappedGlyph: SigilGlyphMapping,
-  license: string,
-): SigilGlyph => ({
+export const createSigilGlyph = ({
+  license,
+  mappedGlyph,
+  name,
+  sourceGlyph,
+}: CreateSigilGlyphInput): SigilGlyph => ({
   ...sourceGlyph,
   LICENSE: license,
   mappedGlyph,
+  name,
 });
 
 const applyGlyphDraft =
@@ -114,6 +159,8 @@ const applyGlyphDraft =
     const hasErrors = errors.length !== EMPTY_ERROR_COUNT;
     const glyphMapping = selection.mappedGlyphsByUnicode[draft.glyph.unicode];
     const license = selection.licensesByUnicode[draft.glyph.unicode];
+    const requiredGlyphName =
+      selection.requiredNamesByUnicode?.[draft.glyph.unicode];
 
     return {
       errors: [...state.errors, ...errors],
@@ -122,8 +169,13 @@ const applyGlyphDraft =
           ? state.glyphMap
           : addGlyphToMap(
               state.glyphMap,
-              glyphName,
-              createSigilGlyph(draft.glyph, glyphMapping, license),
+              outputGlyphName(glyphName, requiredGlyphName),
+              createSigilGlyph({
+                license,
+                mappedGlyph: glyphMapping,
+                name: glyphName,
+                sourceGlyph: draft.glyph,
+              }),
             ),
       glyphNames: new Set([...state.glyphNames, glyphName]),
     };
@@ -151,9 +203,15 @@ export const createSigilGlyphMap = (
     return error(glyphMapState.errors);
   }
 
-  const parsedGlyphMap = parseSigilGlyphMap(glyphMapState.glyphMap);
+  const parsedGlyphMap = parseSigilGlyphMap(
+    completeRequiredGlyphs(glyphMapState.glyphMap),
+  );
 
   return parsedGlyphMap.type === "ok"
     ? ok(parsedGlyphMap.value)
-    : error([invalidGlyphJsonError()]);
+    : error(
+        parsedGlyphMap.error.issues.map((issue) =>
+          invalidGlyphJsonError(issue.path, issue.message),
+        ),
+      );
 };
