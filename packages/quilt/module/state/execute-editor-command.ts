@@ -1,13 +1,13 @@
-import type {
-  EditorCommand,
-  PaintTileChange,
-} from "../commands/editor-command.ts";
 import {
   chunkCoordinateKey,
   getChunkCoordinate,
   setTile,
   type TileMapData,
 } from "../model/tile-map-data.ts";
+import type {
+  EditorCommand,
+  PaintTileChange,
+} from "../commands/editor-command.ts";
 import type { QuiltState } from "./quilt-state.ts";
 
 const LAST_ITEM_OFFSET = 1;

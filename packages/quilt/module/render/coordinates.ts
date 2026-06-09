@@ -1,5 +1,5 @@
-import type { TileCoordinate } from "../model/tile-map-data.ts";
 import type { QuiltCamera } from "../state/quilt-state.ts";
+import type { TileCoordinate } from "../model/tile-map-data.ts";
 
 /** Screen-space coordinate in CSS pixels. */
 export type ScreenCoordinate = Readonly<{

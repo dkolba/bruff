@@ -1,5 +1,5 @@
-import type { Locator, Page } from "@playwright/test";
 import { expect, test } from "./base-fixtures.js";
+import type { Locator, Page } from "@playwright/test";
 
 const MOUNTED_COUNT = 1;
 const CLICK_OFFSET = 20;

@@ -67,8 +67,7 @@ export const overrideRulesEslint = {
     { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
   ],
   "one-var": "off",
-  // "sort-imports": ["error", { ignoreCase: true }],
-  "sort-imports": "off",
+  "sort-imports": ["error", { ignoreCase: true }],
   "capitalized-comments": [
     "error",
     "always",

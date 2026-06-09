@@ -1,10 +1,10 @@
 import {
+  type ChunkCoordinate,
   doorTileId,
   getTile,
-  wallTileId,
-  type ChunkCoordinate,
   type TileCoordinate,
   type TileId,
+  wallTileId,
 } from "../model/tile-map-data.ts";
 import type { QuiltState } from "../state/quilt-state.ts";
 

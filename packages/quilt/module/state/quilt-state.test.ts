@@ -1,5 +1,5 @@
-import { describe, expect, test } from "vitest";
 import { createTileMapData, wallTileId } from "../model/tile-map-data.ts";
+import { describe, expect, test } from "vitest";
 import { createQuiltState } from "./quilt-state.ts";
 
 describe("quilt state", () => {

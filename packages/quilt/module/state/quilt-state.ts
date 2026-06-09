@@ -1,11 +1,11 @@
-import type { EditorCommand } from "../commands/editor-command.ts";
 import {
-  wallTileId,
   type TileCoordinate,
   type TileId,
   type TileLayerId,
   type TileMapData,
+  wallTileId,
 } from "../model/tile-map-data.ts";
+import type { EditorCommand } from "../commands/editor-command.ts";
 
 const DEFAULT_CAMERA_WORLD_X = 0;
 const DEFAULT_CAMERA_WORLD_Y = 0;

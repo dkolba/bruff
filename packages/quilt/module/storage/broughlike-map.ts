@@ -1,8 +1,7 @@
-import { error, ok, type Result } from "@bruff/utils";
 import {
-  parseBroughlikeMap,
   type BroughlikeMap,
   type BroughlikeTerrain,
+  parseBroughlikeMap,
   type ParseBroughlikeMapError,
 } from "@bruff/contracts";
 import {
@@ -11,10 +10,11 @@ import {
   floorTileId,
   getTile,
   setTile,
-  wallTileId,
   type TileId,
   type TileMapData,
+  wallTileId,
 } from "../model/tile-map-data.ts";
+import { error, ok, type Result } from "@bruff/utils";
 
 const BROUGHLIKE_MAP_VERSION = 1;
 const FIRST_ROW_INDEX = 0;

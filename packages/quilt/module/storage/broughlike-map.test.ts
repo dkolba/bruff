@@ -1,5 +1,3 @@
-import { describe, expect, test } from "vitest";
-import { isError, isOk } from "@bruff/utils";
 import {
   createTileMapData,
   doorTileId,
@@ -7,6 +5,8 @@ import {
   setTile,
   wallTileId,
 } from "../model/tile-map-data.ts";
+import { describe, expect, test } from "vitest";
+import { isError, isOk } from "@bruff/utils";
 import {
   parseBroughlikeMapData,
   serializeBroughlikeMapData,

@@ -1,4 +1,3 @@
-import { describe, expect, test } from "vitest";
 import {
   chunkCoordinateKey,
   createTileMapData,
@@ -9,6 +8,7 @@ import {
   tileCoordinateToChunkIndex,
   wallTileId,
 } from "./tile-map-data.ts";
+import { describe, expect, test } from "vitest";
 
 const defaultChunkSize = 32;
 const nextChunkTileX = 33;

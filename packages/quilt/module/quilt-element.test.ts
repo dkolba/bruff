@@ -1,11 +1,11 @@
 import { describe, expect, test } from "vitest";
-import { createTileMapData } from "./model/tile-map-data.ts";
 import {
   getQuiltMapData,
   QuiltElement,
   registerQuiltElement,
   setQuiltMapData,
 } from "./quilt-element.ts";
+import { createTileMapData } from "./model/tile-map-data.ts";
 
 const appendElement = (): Element => {
   registerQuiltElement();

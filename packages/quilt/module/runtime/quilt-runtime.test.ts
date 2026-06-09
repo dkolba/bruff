@@ -6,8 +6,8 @@ import {
   wallTileId,
 } from "../model/tile-map-data.ts";
 import { describe, expect, test } from "vitest";
-import { createQuiltState } from "../state/quilt-state.ts";
 import { createQuiltRuntime } from "./quilt-runtime.ts";
+import { createQuiltState } from "../state/quilt-state.ts";
 
 const paintedTileCoordinate = { tileX: 1, tileY: 1 };
 
