@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function, max-statements -- Command execution tests assert complete state transitions. */
 import { describe, expect, test } from "vitest";
 import { createPaintTilesCommand } from "../commands/editor-command.ts";
 import {

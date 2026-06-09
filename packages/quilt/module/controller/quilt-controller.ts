@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function -- Controller factory keeps pointer wiring closure-local and testable. */
 import { createPaintTilesCommand } from "../commands/editor-command.ts";
 import { floorTileId, getTile } from "../model/tile-map-data.ts";
 import { screenToTileCoordinate } from "../render/coordinates.ts";
@@ -57,9 +56,10 @@ export const createQuiltController = (
 
     currentState = executeEditorCommand(currentState, command);
     input.onStateChange(currentState);
-    // eslint-disable-next-line dot-notation -- TypeScript requires bracket access for DOMStringMap with noPropertyAccessFromIndexSignature.
-    input.overlayCanvas.dataset["quiltPaintedTile"] =
-      `${tileCoordinate.tileX}:${tileCoordinate.tileY}`;
+    input.overlayCanvas.setAttribute(
+      "data-quilt-painted-tile",
+      `${tileCoordinate.tileX}:${tileCoordinate.tileY}`,
+    );
   };
   const disconnect = (): void => {
     input.overlayCanvas.removeEventListener("pointerdown", handlePointerDown);

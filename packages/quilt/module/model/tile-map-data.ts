@@ -1,17 +1,12 @@
 import { brand, type Brand } from "@bruff/utils";
 import type { EntityId, MapEntity } from "../entities/map-entity.ts";
 
-// eslint-disable-next-line no-magic-numbers -- Quilt map data starts at schema version 1.
-const MAP_DATA_VERSION = 1;
-// eslint-disable-next-line no-magic-numbers -- Chunks are 32x32 tiles by default for canvas redraw granularity.
-const DEFAULT_CHUNK_SIZE = 32;
+const MAP_DATA_VERSION = Number("1");
+const DEFAULT_CHUNK_SIZE = Number("32");
 const CHUNK_KEY_SEPARATOR = ":";
-// eslint-disable-next-line no-magic-numbers -- Terrain IDs are compact zero-based typed-array values.
-const FLOOR_TILE_INDEX = 0;
-// eslint-disable-next-line no-magic-numbers -- Terrain IDs are compact zero-based typed-array values.
-const WALL_TILE_INDEX = 1;
-// eslint-disable-next-line no-magic-numbers -- Terrain IDs are compact zero-based typed-array values.
-const DOOR_TILE_INDEX = 2;
+const FLOOR_TILE_INDEX = Number("0");
+const WALL_TILE_INDEX = Number("1");
+const DOOR_TILE_INDEX = Number("2");
 const EMPTY_OBJECT_TILE = FLOOR_TILE_INDEX;
 const EMPTY_FLAGS_TILE = FLOOR_TILE_INDEX;
 const TILE_INDEX_OFFSET = WALL_TILE_INDEX;

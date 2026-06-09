@@ -1,4 +1,3 @@
-/* eslint-disable id-length, max-params -- Canvas APIs conventionally use x/y parameters, mutable style state, and four-number rect calls. */
 import type { OverlayDrawPlan, TerrainDrawPlan } from "./map-draw-plan.ts";
 
 const CANVAS_ORIGIN = 0;

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function, no-magic-numbers -- Element lifecycle tests assert complete custom element behaviour. */
 import { describe, expect, test } from "vitest";
 import { createTileMapData } from "./model/tile-map-data.ts";
 import {

@@ -1,4 +1,3 @@
-/* eslint-disable id-length, max-params, no-magic-numbers -- Tests use compact canvas x/y command examples. */
 import { describe, expect, test } from "vitest";
 import {
   executeOverlayDrawPlan,

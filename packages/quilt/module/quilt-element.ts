@@ -1,4 +1,3 @@
-/* eslint-disable capitalized-comments, no-use-before-define, wc/no-exports-with-element -- Quilt intentionally exports registration and data helpers beside the custom element. */
 import { createTileMapData, type TileMapData } from "./model/tile-map-data.ts";
 import {
   createQuiltRuntime,

@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function, no-magic-numbers, sort-keys -- Tests use compact runtime examples. */
-import { describe, expect, test } from "vitest";
 import {
   createTileMapData,
   floorTileId,
@@ -7,6 +5,7 @@ import {
   setTile,
   wallTileId,
 } from "../model/tile-map-data.ts";
+import { describe, expect, test } from "vitest";
 import { createQuiltState } from "../state/quilt-state.ts";
 import { createQuiltRuntime } from "./quilt-runtime.ts";
 

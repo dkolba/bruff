@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function, no-magic-numbers -- Tests use compact numeric examples for chunk math. */
 import { describe, expect, test } from "vitest";
 import {
   chunkCoordinateKey,

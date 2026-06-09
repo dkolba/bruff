@@ -1,4 +1,3 @@
-/* eslint-disable id-length, no-use-before-define -- Canvas draw command fields conventionally use x/y, and public projections read top-down. */
 import {
   doorTileId,
   getTile,

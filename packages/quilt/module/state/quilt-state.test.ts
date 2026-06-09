@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers -- Tests use compact camera and map dimensions. */
 import { describe, expect, test } from "vitest";
 import { createTileMapData, wallTileId } from "../model/tile-map-data.ts";
 import { createQuiltState } from "./quilt-state.ts";

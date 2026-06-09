@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function, no-magic-numbers, sort-keys -- Tests use compact pointer coordinate examples. */
-import { describe, expect, test } from "vitest";
 import {
   createTileMapData,
   floorTileId,
@@ -7,8 +5,9 @@ import {
   setTile,
   wallTileId,
 } from "../model/tile-map-data.ts";
-import { createQuiltState } from "../state/quilt-state.ts";
+import { describe, expect, test } from "vitest";
 import { createQuiltController } from "./quilt-controller.ts";
+import { createQuiltState } from "../state/quilt-state.ts";
 
 const createPointerEvent = (): PointerEvent =>
   new PointerEvent("pointerdown", { clientX: 20, clientY: 20 });
@@ -36,8 +35,7 @@ describe("quilt controller", () => {
         "terrain",
       ),
     ).toBe(wallTileId);
-    // eslint-disable-next-line dot-notation -- TypeScript requires bracket access for DOMStringMap with noPropertyAccessFromIndexSignature.
-    expect(overlayCanvas.dataset["quiltPaintedTile"]).toBe("1:1");
+    expect(overlayCanvas.getAttribute("data-quilt-painted-tile")).toBe("1:1");
     expect(changedStates).toStrictEqual([controller.getState()]);
   });
 

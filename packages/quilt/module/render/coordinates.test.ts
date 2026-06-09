@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers -- Tests use compact coordinate examples. */
 import { describe, expect, test } from "vitest";
 import {
   screenToTileCoordinate,

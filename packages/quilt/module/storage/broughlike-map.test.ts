@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function -- Storage tests assert full round-trip examples. */
 import { describe, expect, test } from "vitest";
 import { isError, isOk } from "@bruff/utils";
 import {

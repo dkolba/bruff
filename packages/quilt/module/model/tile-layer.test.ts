@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function, no-magic-numbers -- Tests use compact typed-array layer examples. */
 import { describe, expect, test } from "vitest";
 import { floorTileId, wallTileId } from "./tile-map-data.ts";
 import { readTileLayer, writeTileLayer } from "./tile-layer.ts";

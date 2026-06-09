@@ -1,4 +1,3 @@
-/* eslint-disable capitalized-comments -- v8 coverage ignore comments are lowercase directives. */
 import { createQuiltController } from "../controller/quilt-controller.ts";
 import {
   floorTileId,

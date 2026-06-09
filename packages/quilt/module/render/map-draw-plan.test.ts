@@ -1,4 +1,3 @@
-/* eslint-disable id-length, max-lines-per-function, no-magic-numbers -- Tests use compact rendering examples and canvas x/y fields. */
 import { describe, expect, test } from "vitest";
 import {
   createTileMapData,
