@@ -175,6 +175,11 @@ const layerImportRestrictions = [
 ];
 
 const typescriptConfig = tseslint.config(
+  {
+    linterOptions: {
+      reportUnusedDisableDirectives: false,
+    },
+  },
   // General
   // @ts-ignore
   eslintTypescriptConfig,

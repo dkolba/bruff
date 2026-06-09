@@ -17,10 +17,10 @@ This package hosts `<bruff-game>` in a Vite-served page so the game can be exerc
 ## Package-specific allowances
 
 - **AR-7** DOM access and full-page navigation are allowed — this is the application shell.
-- **AR-8** The package may import `@bruff/game` and rely on its side-effecting registration of the `<bruff-game>` custom element. `@bruff/sigil` may be imported only from the development-only router loaded behind `import.meta.env.DEV`.
+- **AR-8** The package may import `@bruff/game` and rely on its side-effecting registration of the `<bruff-game>` custom element. `@bruff/sigil` and `@bruff/quilt` may be imported only from the development-only router loaded behind `import.meta.env.DEV`.
 
 ## Package-specific obligations
 
 - **AR-9 (MUST)** No game logic lives here. The arcade only mounts the component, runs the tests, and reports coverage.
 - **AR-10 (MUST)** Vite production build (`pnpm run build:site`) emits to `site/` with sourcemaps enabled and source contents excluded from those sourcemaps.
-- **AR-11 (MUST)** Production build checks must ensure emitted assets do not contain `__bruffTestApi`, `tool-sigil`, `@bruff/sigil`, `opentype`, or `dev-tools-router`.
+- **AR-11 (MUST)** Production build checks must ensure emitted assets do not contain `__bruffTestApi`, `tool-sigil`, `@bruff/sigil`, `opentype`, `dev-tools-router`, `tool-quilt`, `@bruff/quilt`, or `/tools-map`.

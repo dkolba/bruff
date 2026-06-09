@@ -2,7 +2,7 @@
 
 ## Goal
 
-Add shared runtime contracts for future compact broughlike maps and tighten the existing Sigil glyph-map contract so every downloadable glyph map contains the core glyphs needed by a small tactics board: floor, wall, door, player, and enemy. This prepares the repo for a future map editor without implementing that editor or wiring maps into game, arcade, or CLI packages.
+Add shared runtime contracts for future compact broughlike maps and tighten the existing Sigil glyph-map contract so every downloadable glyph map contains the core glyphs needed by a small tactics board: floor, wall, door, player, and enemy. This prepared the repo for future map tooling without implementing that tooling in this historical slice.
 
 ## User-visible behaviour
 
@@ -17,7 +17,7 @@ Add shared runtime contracts for future compact broughlike maps and tighten the 
 
 ## Out of scope
 
-- Do not implement `@bruff/map-editor`.
+- Do not implement map tooling in this historical contract-only slice. The later development-only map tool is `@bruff/quilt`, not `@bruff/map-editor`.
 - Do not integrate map contracts into `@bruff/game`, `@bruff/arcade`, or `@bruff/cli` yet.
 - Do not change `GameState`, replay fixtures, headless API types, or game rendering implementation.
 - Do not add runtime contract imports to `@bruff/cli`, `@bruff/utils`, `@bruff/glyph`, `@bruff/game-element`, or `@bruff/eslint-config`.

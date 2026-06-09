@@ -1,0 +1,55 @@
+# Create Quilt Tasks
+
+- [x] T1 — Add `packages/quilt/package.json`, `packages/quilt/tsconfig.json`, `packages/quilt/eslint.config.js`, and `packages/quilt/vitest.config.ts` with runtime dependencies on `@bruff/utils` and `@bruff/contracts`
+- [x] T2 — Add empty public export files `packages/quilt/index.ts` and `packages/quilt/module/quilt-element.ts`
+- [x] T3 — Add `packages/quilt/README.md` documenting package scope, no-framework rule, and development commands
+- [x] T4 — Add `packages/quilt/AGENTS.md` documenting Web Component shell allowances, pure model rules, and shared contract usage
+- [x] T5 — Add failing chunk coordinate tests in `packages/quilt/module/model/tile-map-data.test.ts`
+- [x] T6 — Implement `TileId`, terrain ID mapping for `floor`, `wall`, and `door`, `TileCoordinate`, `ChunkCoordinate`, `TileLayerId`, `TileChunk`, `TileMapData`, and chunk helper functions in `packages/quilt/module/model/tile-map-data.ts`
+- [x] T7 — Add failing typed-array layer tests in `packages/quilt/module/model/tile-layer.test.ts`
+- [x] T8 — Implement typed-array layer read and write helpers in `packages/quilt/module/model/tile-layer.ts`
+- [x] T9 — Add failing editor state tests in `packages/quilt/module/state/quilt-state.test.ts`
+- [x] T10 — Implement `QuiltState` and `createQuiltState` in `packages/quilt/module/state/quilt-state.ts`
+- [x] T11 — Add failing paint command tests in `packages/quilt/module/commands/editor-command.test.ts`
+- [x] T12 — Implement `EditorCommand`, `PaintTilesCommand`, and `createPaintTilesCommand` in `packages/quilt/module/commands/editor-command.ts`
+- [x] T13 — Add failing command execution tests in `packages/quilt/module/state/execute-editor-command.test.ts`
+- [x] T14 — Implement `executeEditorCommand`, `undoEditorCommand`, and `redoEditorCommand` in `packages/quilt/module/state/execute-editor-command.ts`
+- [x] T15 — Add failing entity metadata tests in `packages/quilt/module/entities/map-entity.test.ts`
+- [x] T16 — Implement `EntityId`, `MapEntity`, entity component types, and entity collection helpers in `packages/quilt/module/entities/map-entity.ts`
+- [x] T17 — Add failing shared broughlike map storage tests in `packages/quilt/module/storage/broughlike-map.test.ts`
+- [x] T18 — Implement `serializeBroughlikeMapData`, `parseBroughlikeMapData`, and `ParseBroughlikeMapDataError` in `packages/quilt/module/storage/broughlike-map.ts` using `@bruff/contracts`
+- [x] T19 — Add failing coordinate conversion tests in `packages/quilt/module/render/coordinates.test.ts`
+- [x] T20 — Implement screen, world, and tile coordinate conversion helpers in `packages/quilt/module/render/coordinates.ts`
+- [x] T21 — Add failing draw plan tests in `packages/quilt/module/render/map-draw-plan.test.ts`
+- [x] T22 — Implement terrain and overlay draw plan projection in `packages/quilt/module/render/map-draw-plan.ts`
+- [x] T23 — Add failing Canvas 2D executor tests in `packages/quilt/module/render/canvas-renderer.test.ts`
+- [x] T24 — Implement Canvas 2D terrain and overlay draw executors in `packages/quilt/module/render/canvas-renderer.ts`
+- [x] T25 — Add failing template tests in `packages/quilt/module/template.test.ts`
+- [x] T26 — Implement the shadow DOM template in `packages/quilt/module/template.ts`
+- [x] T27 — Add failing controller tests in `packages/quilt/module/controller/quilt-controller.test.ts`
+- [x] T28 — Implement pointer-to-command controller wiring in `packages/quilt/module/controller/quilt-controller.ts`
+- [x] T29 — Add failing runtime coordinator tests in `packages/quilt/module/runtime/quilt-runtime.test.ts`
+- [x] T30 — Implement `createQuiltRuntime` and teardown handling in `packages/quilt/module/runtime/quilt-runtime.ts`
+- [x] T31 — Add focused shell tests proving validation, preview-font, and browser-command helpers stay outside `QuiltElement`
+- [x] T32 — Implement validation, preview-font, and browser-command shell helper modules without adding those methods to `QuiltElement`
+- [x] T33 — Add failing Web Component lifecycle tests in `packages/quilt/module/quilt-element.test.ts` that verify `QuiltElement` only coordinates lifecycle/runtime setup
+- [x] T34 — Implement `QuiltElement` lifecycle, shadow root setup, runtime delegation, listener cleanup, `setQuiltMapData`, `getQuiltMapData`, and `registerQuiltElement` in `packages/quilt/module/quilt-element.ts`
+- [x] T35 — Export public APIs and re-export `BroughlikeMap` / `BroughlikeTerrain` types from `packages/quilt/index.ts`
+- [x] T36 — Add `@bruff/quilt` to `packages/arcade/package.json` devDependencies
+- [x] T37 — Add failing Arcade route tests for `/tools-map` in `packages/arcade/e2e/tools-route.spec.ts`
+- [x] T38 — Update `packages/arcade/dev-tools-router.ts` and `packages/arcade/app.ts` to mount `<tool-quilt>` at `/tools-map` only in dev mode
+- [x] T39 — Add failing Arcade accessibility coverage for `/tools-map` in `packages/arcade/e2e/accessibility.spec.ts`
+- [x] T40 — Add failing Arcade paint interaction coverage for `/tools-map` in `packages/arcade/e2e/quilt-interaction.spec.ts`
+- [x] T41 — Update `packages/arcade/scripts/check-bundle-clean.mjs` to reject `dev-tools-router`, `<tool-quilt>` registration strings, `<tool-quil>` typo registration strings, `tool-quilt`, `tool-quil`, `@bruff/quilt`, `@bruff/quil`, and `/tools-map`
+- [x] T42 — Update `packages/arcade/README.md` and `packages/arcade/AGENTS.md` to document the dev-only Quilt route and production import prohibition
+- [x] T43 — Run `pnpm --filter @bruff/quilt run format`
+- [x] T44 — Run `pnpm --filter @bruff/quilt run lint`
+- [x] T45 — Run `pnpm --filter @bruff/quilt run typecheck`
+- [x] T46 — Run `pnpm --filter @bruff/quilt run test`
+- [x] T47 — Run `pnpm --filter @bruff/arcade run format`
+- [x] T48 — Run `pnpm --filter @bruff/arcade run lint`
+- [x] T49 — Run `pnpm --filter @bruff/arcade run typecheck`
+- [x] T50 — Run `pnpm --filter @bruff/arcade run test:e2e`
+- [x] T51 — Run `pnpm --filter @bruff/arcade run build`
+- [x] T52 — Run root `pnpm run ok`
+- [x] T53 — Review `specs/create-map-editor/spec.md` and append a `## Verification` section mapping behaviours to tests
