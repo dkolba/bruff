@@ -4,6 +4,7 @@ import type { EntityId, MapEntity } from "../entities/map-entity.ts";
 const MAP_DATA_VERSION = Number("1");
 const DEFAULT_CHUNK_SIZE = Number("32");
 const CHUNK_KEY_SEPARATOR = ":";
+const QUILT_GRID_SIZE_TEXT = "4,5,6,7,8,9";
 const FLOOR_TILE_INDEX = Number("0");
 const WALL_TILE_INDEX = Number("1");
 const DOOR_TILE_INDEX = Number("2");
@@ -47,11 +48,25 @@ export type TileMapData = Readonly<{
   entities: ReadonlyMap<EntityId, MapEntity>;
 }>;
 
+/** Supported square Quilt grid size. */
+export type QuiltGridSize = number;
+
+/** Selectable square Quilt grid sizes. */
+export const QUILT_GRID_SIZES: ReadonlyArray<QuiltGridSize> =
+  QUILT_GRID_SIZE_TEXT.split(",").map(Number);
+
 /** Input for creating empty tile map data. */
 export type CreateTileMapDataInput = Readonly<{
   width: number;
   height: number;
   chunkSize?: number;
+}>;
+
+/** Input for resizing tile map data. */
+export type ResizeTileMapDataInput = Readonly<{
+  tileMapData: TileMapData;
+  width: QuiltGridSize;
+  height: QuiltGridSize;
 }>;
 
 /** Input for updating a single map tile. */
@@ -122,6 +137,14 @@ const createChunkCoordinates = (
       Array.from({ length: Math.ceil(height / chunkSize) }).map(
         (unusedRow, chunkY) => ({ chunkX, chunkY }),
       ),
+  );
+
+const createTileCoordinates = (
+  width: number,
+  height: number,
+): ReadonlyArray<TileCoordinate> =>
+  Array.from({ length: height }).flatMap((unusedRow, tileY) =>
+    Array.from({ length: width }, (unusedColumn, tileX) => ({ tileX, tileY })),
   );
 
 const getTileChunk = (
@@ -298,4 +321,28 @@ export const setTile = (input: SetTileInput): TileMapData => {
   );
 
   return { ...input.tileMapData, chunks: nextChunks };
+};
+
+/** Resizes map data while preserving terrain at in-bounds coordinates. */
+export const resizeTileMapData = (
+  input: ResizeTileMapDataInput,
+): TileMapData => {
+  const nextTileMapData = createTileMapData({
+    chunkSize: input.tileMapData.chunkSize,
+    height: input.height,
+    width: input.width,
+  });
+  const preservedWidth = Math.min(input.tileMapData.width, input.width);
+  const preservedHeight = Math.min(input.tileMapData.height, input.height);
+
+  return createTileCoordinates(preservedWidth, preservedHeight).reduce(
+    (resizedTileMapData, tileCoordinate) =>
+      setTile({
+        layerId: "terrain",
+        tileCoordinate,
+        tileId: getTile(input.tileMapData, tileCoordinate, "terrain"),
+        tileMapData: resizedTileMapData,
+      }),
+    nextTileMapData,
+  );
 };

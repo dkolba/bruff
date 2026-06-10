@@ -1,10 +1,12 @@
-import * as tileMapDataModule from "./tile-map-data.ts";
 import {
   chunkCoordinateKey,
   createTileMapData,
+  doorTileId,
   floorTileId,
   getChunkCoordinate,
   getTile,
+  QUILT_GRID_SIZES,
+  resizeTileMapData,
   setTile,
   tileCoordinateToChunkIndex,
   wallTileId,
@@ -87,9 +89,57 @@ describe("tile map data", () => {
     );
   });
 
-  test.fails("exports map resizing for Quilt grid controls", () => {
-    expect(tileMapDataModule).toHaveProperty("resizeTileMapData");
-    expect(tileMapDataModule).toHaveProperty("QUILT_GRID_SIZES");
+  test("exports supported grid sizes for Quilt controls", () => {
+    expect(QUILT_GRID_SIZES).toStrictEqual([4, 5, 6, 7, 8, 9]);
+  });
+
+  test("resizes larger maps while preserving terrain coordinates", () => {
+    const tileMapData = setTile({
+      layerId: "terrain",
+      tileCoordinate: { tileX: 3, tileY: 3 },
+      tileId: wallTileId,
+      tileMapData: createTileMapData({ height: 4, width: 4 }),
+    });
+    const nextTileMapData = resizeTileMapData({
+      height: 9,
+      tileMapData,
+      width: 9,
+    });
+
+    expect(getTile(nextTileMapData, { tileX: 3, tileY: 3 }, "terrain")).toBe(
+      wallTileId,
+    );
+    expect(getTile(nextTileMapData, { tileX: 8, tileY: 8 }, "terrain")).toBe(
+      floorTileId,
+    );
+  });
+
+  test("resizes smaller maps while discarding out-of-bounds terrain", () => {
+    const tileMapData = setTile({
+      layerId: "terrain",
+      tileCoordinate: { tileX: 8, tileY: 8 },
+      tileId: doorTileId,
+      tileMapData: setTile({
+        layerId: "terrain",
+        tileCoordinate: { tileX: 3, tileY: 3 },
+        tileId: wallTileId,
+        tileMapData: createTileMapData({ height: 9, width: 9 }),
+      }),
+    });
+    const nextTileMapData = resizeTileMapData({
+      height: 4,
+      tileMapData,
+      width: 4,
+    });
+
+    expect(nextTileMapData.width).toBe(4);
+    expect(nextTileMapData.height).toBe(4);
+    expect(getTile(nextTileMapData, { tileX: 3, tileY: 3 }, "terrain")).toBe(
+      wallTileId,
+    );
+    expect(getTile(nextTileMapData, { tileX: 8, tileY: 8 }, "terrain")).toBe(
+      floorTileId,
+    );
   });
 
   test("updates object and flag layers independently", () => {
