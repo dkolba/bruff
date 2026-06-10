@@ -20,23 +20,17 @@ export type QuiltCanvasContext = {
   fill: (path: Path2D, fillRule?: CanvasFillRule) => void;
 };
 
-// eslint-disable-next-line max-statements
 const executeDrawTerrainGlyph = (
   context: QuiltCanvasContext,
   command: DrawTerrainGlyphCommand,
 ): void => {
-  /* V8 ignore next -- Path2D is a browser API; covered by browser tests. */
+  /* v8 ignore next -- Path2D is a browser API; covered by browser tests. */
   const path2d = new Path2D(command.path);
-  const glyphWidth = command.glyphBounds.x2 - command.glyphBounds.x1;
-  const glyphHeight = command.glyphBounds.y2 - command.glyphBounds.y1;
-  const tileDim = command.tileBounds.x2 - command.tileBounds.x1;
-  const scaleX = (tileDim / glyphWidth) * (command.width / command.unitsPerEm);
-  const scaleY =
-    (tileDim / glyphHeight) * (command.height / command.unitsPerEm);
+  const scale = command.width / command.unitsPerEm;
 
   context.save();
   context.translate(command.x, command.y);
-  context.scale(scaleX, scaleY);
+  context.scale(scale, scale);
   context.fillStyle = GLYPH_FILL_STYLE;
   context.fill(path2d);
   context.restore();

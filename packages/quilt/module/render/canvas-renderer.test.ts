@@ -95,7 +95,7 @@ describe("canvas renderer", () => {
     expect(context.calls).toStrictEqual([
       "save",
       "translate:0:0",
-      "scale:0.000023529411764705884:0.000022857142857142858",
+      "scale:0.016:0.016",
       "fill:nonzero",
       "restore",
     ]);
@@ -134,7 +134,7 @@ describe("canvas renderer", () => {
       "fill:0:0:16:16",
       "save",
       "translate:16:0",
-      "scale:0.000023529411764705884:0.000022857142857142858",
+      "scale:0.016:0.016",
       "fill:nonzero",
       "restore",
     ]);
