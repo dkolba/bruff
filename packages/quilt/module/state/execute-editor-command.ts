@@ -16,9 +16,9 @@ const EMPTY_STACK_LENGTH = 0;
 const getDirtyChunkKey = (chunkSize: number, change: PaintTileChange): string =>
   chunkCoordinateKey(getChunkCoordinate(change.coordinate, chunkSize));
 
-const getDirtyChunks = (
+const getPaintDirtyChunks = (
   quiltState: QuiltState,
-  editorCommand: EditorCommand,
+  editorCommand: { changes: ReadonlyArray<PaintTileChange> },
 ): ReadonlySet<string> =>
   new Set(
     editorCommand.changes.map((change) =>
@@ -26,35 +26,52 @@ const getDirtyChunks = (
     ),
   );
 
+const getResizeDirtyChunks = (editorCommand: {
+  afterTileMapData: TileMapData;
+}): ReadonlySet<string> =>
+  new Set(editorCommand.afterTileMapData.chunks.keys());
+
+const getDirtyChunks = (
+  quiltState: QuiltState,
+  editorCommand: EditorCommand,
+): ReadonlySet<string> =>
+  editorCommand.type === "RESIZE_MAP"
+    ? getResizeDirtyChunks(editorCommand)
+    : getPaintDirtyChunks(quiltState, editorCommand);
+
 const applyEditorCommand = (
   tileMapData: TileMapData,
   editorCommand: EditorCommand,
 ): TileMapData =>
-  editorCommand.changes.reduce(
-    (nextTileMapData, change) =>
-      setTile({
-        layerId: change.layerId,
-        tileCoordinate: change.coordinate,
-        tileId: change.afterTileId,
-        tileMapData: nextTileMapData,
-      }),
-    tileMapData,
-  );
+  editorCommand.type === "RESIZE_MAP"
+    ? editorCommand.afterTileMapData
+    : editorCommand.changes.reduce(
+        (nextTileMapData, change) =>
+          setTile({
+            layerId: change.layerId,
+            tileCoordinate: change.coordinate,
+            tileId: change.afterTileId,
+            tileMapData: nextTileMapData,
+          }),
+        tileMapData,
+      );
 
 const undoAppliedCommand = (
   tileMapData: TileMapData,
   editorCommand: EditorCommand,
 ): TileMapData =>
-  editorCommand.changes.reduce(
-    (nextTileMapData, change) =>
-      setTile({
-        layerId: change.layerId,
-        tileCoordinate: change.coordinate,
-        tileId: change.beforeTileId,
-        tileMapData: nextTileMapData,
-      }),
-    tileMapData,
-  );
+  editorCommand.type === "RESIZE_MAP"
+    ? editorCommand.beforeTileMapData
+    : editorCommand.changes.reduce(
+        (nextTileMapData, change) =>
+          setTile({
+            layerId: change.layerId,
+            tileCoordinate: change.coordinate,
+            tileId: change.beforeTileId,
+            tileMapData: nextTileMapData,
+          }),
+        tileMapData,
+      );
 
 const getLastCommand = (
   editorCommands: ReadonlyArray<EditorCommand>,

@@ -61,6 +61,7 @@ export const registerQuiltElement = (): void => {
   }
 };
 
+// eslint-disable-next-line max-statements, max-lines-per-function
 const createRuntime = (shadowRoot: ShadowRoot): QuiltRuntime | undefined => {
   const terrainCanvas = shadowRoot.querySelector(
     '[data-quilt="terrain-canvas"]',
@@ -70,15 +71,40 @@ const createRuntime = (shadowRoot: ShadowRoot): QuiltRuntime | undefined => {
   );
   const paintToolButton = shadowRoot.querySelector('[data-quilt="paint-tool"]');
   const eraseToolButton = shadowRoot.querySelector('[data-quilt="erase-tool"]');
+  const floorToolButton = shadowRoot.querySelector('[data-quilt="floor-tool"]');
+  const wallToolButton = shadowRoot.querySelector('[data-quilt="wall-tool"]');
+  const doorToolButton = shadowRoot.querySelector('[data-quilt="door-tool"]');
+  const gridSizeSelect = shadowRoot.querySelector(
+    '[data-quilt="grid-size-select"]',
+  );
+  const exportButton = shadowRoot.querySelector('[data-quilt="export-button"]');
+  const importButton = shadowRoot.querySelector('[data-quilt="import-button"]');
+  const importInput = shadowRoot.querySelector('[data-quilt="import-input"]');
+  const errorRegion = shadowRoot.querySelector('[data-quilt="error-region"]');
 
   /* v8 ignore next -- The template owns these selectors; fallback is defensive shell code. */
   return terrainCanvas instanceof HTMLCanvasElement &&
     overlayCanvas instanceof HTMLCanvasElement &&
     paintToolButton instanceof HTMLButtonElement &&
-    eraseToolButton instanceof HTMLButtonElement
+    eraseToolButton instanceof HTMLButtonElement &&
+    floorToolButton instanceof HTMLButtonElement &&
+    wallToolButton instanceof HTMLButtonElement &&
+    doorToolButton instanceof HTMLButtonElement &&
+    gridSizeSelect instanceof HTMLSelectElement &&
+    exportButton instanceof HTMLButtonElement &&
+    importButton instanceof HTMLButtonElement &&
+    importInput instanceof HTMLInputElement &&
+    errorRegion instanceof HTMLElement
     ? createQuiltRuntime({
         canvasSize: getViewportCanvasSize(),
+        doorToolButton,
         eraseToolButton,
+        errorRegion,
+        exportButton,
+        floorToolButton,
+        gridSizeSelect,
+        importButton,
+        importInput,
         overlayCanvas,
         paintToolButton,
         quiltState: createQuiltState({
@@ -88,6 +114,7 @@ const createRuntime = (shadowRoot: ShadowRoot): QuiltRuntime | undefined => {
           }),
         }),
         terrainCanvas,
+        wallToolButton,
       })
     : undefined;
 };

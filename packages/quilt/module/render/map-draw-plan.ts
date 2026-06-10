@@ -7,6 +7,7 @@ import {
   wallTileId,
 } from "../model/tile-map-data.ts";
 import type { QuiltState } from "../state/quilt-state.ts";
+import type { SigilGlyphBounds } from "@bruff/contracts";
 
 const CHUNK_KEY_SEPARATOR = ":";
 const CHUNK_X_INDEX = 0;
@@ -16,7 +17,7 @@ const FLOOR_FILL_STYLE = "#d7d0bf";
 const WALL_FILL_STYLE = "#111111";
 const DOOR_FILL_STYLE = "#8b5a2b";
 
-/** Terrain tile draw command. */
+/** Terrain tile fill draw command. */
 export type DrawTerrainTileCommand = Readonly<{
   kind: "drawTerrainTile";
   x: number;
@@ -24,6 +25,27 @@ export type DrawTerrainTileCommand = Readonly<{
   width: number;
   height: number;
   fillStyle: string;
+}>;
+
+/** Normalized tile-space bounds for glyph scaling. */
+export type TileBounds = Readonly<{
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}>;
+
+/** Terrain glyph path draw command. */
+export type DrawTerrainGlyphCommand = Readonly<{
+  kind: "drawTerrainGlyph";
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  path: string;
+  tileBounds: TileBounds;
+  glyphBounds: SigilGlyphBounds;
+  unitsPerEm: number;
 }>;
 
 /** Overlay grid draw command. */
@@ -45,7 +67,7 @@ export type DrawHoverTileCommand = Readonly<{
 /** Terrain draw plan. */
 export type TerrainDrawPlan = Readonly<{
   kind: "terrain";
-  commands: ReadonlyArray<DrawTerrainTileCommand>;
+  commands: ReadonlyArray<DrawTerrainTileCommand | DrawTerrainGlyphCommand>;
 }>;
 
 /** Overlay draw plan. */
@@ -127,13 +149,14 @@ const parseChunkCoordinate = (chunkKey: string): ChunkCoordinate => {
 const createTerrainTileCommands = (
   input: CreateDrawPlanInput,
   chunkCoordinate: ChunkCoordinate,
-): ReadonlyArray<DrawTerrainTileCommand> =>
+): ReadonlyArray<DrawTerrainTileCommand | DrawTerrainGlyphCommand> =>
   createChunkTileCoordinates(input.quiltState, chunkCoordinate).map(
     (tileCoordinate) =>
       createTerrainTileCommand(
         tileCoordinate,
         input.tileSize,
         getTile(input.quiltState.tileMapData, tileCoordinate, "terrain"),
+        input.quiltState,
       ),
   );
 
@@ -164,14 +187,80 @@ const createTerrainTileCommand = (
   tileCoordinate: TileCoordinate,
   tileSize: number,
   tileId: TileId,
-): DrawTerrainTileCommand => ({
-  fillStyle: tileIdToFillStyle(tileId),
+  quiltState: QuiltState,
+): DrawTerrainTileCommand | DrawTerrainGlyphCommand => {
+  const terrainGlyph = getTerrainGlyphForTileId(quiltState, tileId);
+
+  return terrainGlyph === undefined
+    ? {
+        fillStyle: tileIdToFillStyle(tileId),
+        height: tileSize,
+        kind: "drawTerrainTile",
+        width: tileSize,
+        x: tileCoordinate.tileX * tileSize,
+        y: tileCoordinate.tileY * tileSize,
+      }
+    : createTerrainGlyphCommand(tileCoordinate, tileSize, terrainGlyph);
+};
+
+const createTerrainGlyphCommand = (
+  tileCoordinate: TileCoordinate,
+  tileSize: number,
+  terrainGlyph: {
+    path: string;
+    bounds: SigilGlyphBounds;
+    unitsPerEm: number;
+  },
+): DrawTerrainGlyphCommand => ({
+  glyphBounds: terrainGlyph.bounds,
   height: tileSize,
-  kind: "drawTerrainTile",
+  kind: "drawTerrainGlyph",
+  path: terrainGlyph.path,
+  tileBounds: {
+    x1: 0,
+    x2: 1,
+    y1: 0,
+    y2: 1,
+  },
+  unitsPerEm: terrainGlyph.unitsPerEm,
   width: tileSize,
   x: tileCoordinate.tileX * tileSize,
   y: tileCoordinate.tileY * tileSize,
 });
+
+const tileIdToTerrain = (tileId: TileId): "floor" | "wall" | "door" => {
+  if (tileId === wallTileId) {
+    return "wall";
+  }
+
+  return tileId === doorTileId ? "door" : "floor";
+};
+
+const getTerrainGlyphForTileId = (
+  quiltState: QuiltState,
+  tileId: TileId,
+):
+  | {
+      path: string;
+      bounds: SigilGlyphBounds;
+      unitsPerEm: number;
+    }
+  | undefined => {
+  const terrain = tileIdToTerrain(tileId);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const glyph = quiltState.terrainGlyphs[terrain];
+
+  return glyph === undefined
+    ? undefined
+    : {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        bounds: glyph.bounds,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        path: glyph.path,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        unitsPerEm: glyph.unitsPerEm,
+      };
+};
 
 const tileIdToFillStyle = (tileId: TileId): string => {
   if (tileId === wallTileId) {

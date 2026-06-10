@@ -1,6 +1,13 @@
 import { describe, expect, test } from "vitest";
-import { floorTileId, wallTileId } from "../model/tile-map-data.ts";
-import { createPaintTilesCommand } from "./editor-command.ts";
+import {
+  createTileMapData,
+  floorTileId,
+  wallTileId,
+} from "../model/tile-map-data.ts";
+import {
+  createPaintTilesCommand,
+  createResizeMapCommand,
+} from "./editor-command.ts";
 
 const tileCoordinate = { tileX: 1, tileY: 2 };
 
@@ -27,6 +34,19 @@ describe("editor command", () => {
         },
       ],
       type: "PAINT_TILES",
+    });
+  });
+
+  test("creates resize map command data with before and after snapshots", () => {
+    const beforeTileMapData = createTileMapData({ height: 4, width: 4 });
+    const afterTileMapData = createTileMapData({ height: 9, width: 9 });
+
+    expect(
+      createResizeMapCommand({ beforeTileMapData, afterTileMapData }),
+    ).toStrictEqual({
+      beforeTileMapData,
+      afterTileMapData,
+      type: "RESIZE_MAP",
     });
   });
 });

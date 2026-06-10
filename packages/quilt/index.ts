@@ -32,6 +32,10 @@ export {
 export {
   createQuiltState,
   type QuiltState,
+  type QuiltTerrainDrawMode,
+  type QuiltTerrainGlyph,
+  type QuiltTerrainGlyphMap,
+  type QuiltUserVisibleError,
 } from "./module/state/quilt-state.ts";
 
 export {
@@ -42,9 +46,11 @@ export {
 
 export {
   createPaintTilesCommand,
+  createResizeMapCommand,
   type EditorCommand,
   type PaintTileChange,
   type PaintTilesCommand,
+  type ResizeMapCommand,
 } from "./module/commands/editor-command.ts";
 
 export {
@@ -52,5 +58,10 @@ export {
   serializeBroughlikeMapData,
   type ParseBroughlikeMapDataError,
 } from "./module/storage/broughlike-map.ts";
+
+export {
+  parseQuiltTerrainGlyphs,
+  type ParseQuiltTerrainGlyphsError,
+} from "./module/storage/sigil-glyph-map.ts";
 
 export type { BroughlikeMap, BroughlikeTerrain } from "@bruff/contracts";

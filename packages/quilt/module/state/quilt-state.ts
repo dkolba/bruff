@@ -1,3 +1,6 @@
+/* eslint-disable sort-imports */
+import type { BroughlikeTerrain, SigilGlyphBounds } from "@bruff/contracts";
+import type { EditorCommand } from "../commands/editor-command.ts";
 import {
   type TileCoordinate,
   type TileId,
@@ -5,7 +8,6 @@ import {
   type TileMapData,
   wallTileId,
 } from "../model/tile-map-data.ts";
-import type { EditorCommand } from "../commands/editor-command.ts";
 
 const DEFAULT_CAMERA_WORLD_X = 0;
 const DEFAULT_CAMERA_WORLD_Y = 0;
@@ -13,6 +15,28 @@ const DEFAULT_CAMERA_ZOOM = 1;
 
 /** Available Quilt editing tools. */
 export type QuiltTool = "paint" | "erase" | "select";
+
+/** Terrain draw mode. */
+export type QuiltTerrainDrawMode = BroughlikeTerrain;
+
+/** Glyph rendering data for one terrain tile type. */
+export type QuiltTerrainGlyph = Readonly<{
+  terrain: BroughlikeTerrain;
+  path: string;
+  bounds: SigilGlyphBounds;
+  advanceWidth: number;
+  unitsPerEm: number;
+}>;
+
+/** Imported glyph rendering data keyed by terrain type. */
+export type QuiltTerrainGlyphMap = Readonly<
+  Partial<Record<BroughlikeTerrain, QuiltTerrainGlyph>>
+>;
+
+/** User-visible error surfaced in the Quilt template. */
+export type QuiltUserVisibleError = Readonly<{
+  message: string;
+}>;
 
 /** Quilt camera in world coordinates. */
 export type QuiltCamera = Readonly<{
@@ -35,6 +59,9 @@ export type QuiltState = Readonly<{
   selectedTool: QuiltTool;
   selectedLayer: TileLayerId;
   selectedTileId: TileId;
+  selectedTerrain: QuiltTerrainDrawMode;
+  terrainGlyphs: QuiltTerrainGlyphMap;
+  visibleErrors: ReadonlyArray<QuiltUserVisibleError>;
   camera: QuiltCamera;
   hoveredTile: OptionalTileCoordinate;
   selection: OptionalTileCoordinate;
@@ -50,6 +77,9 @@ export type CreateQuiltStateInput = Readonly<{
   selectedTool?: QuiltTool;
   selectedLayer?: TileLayerId;
   selectedTileId?: TileId;
+  selectedTerrain?: QuiltTerrainDrawMode;
+  terrainGlyphs?: QuiltTerrainGlyphMap;
+  visibleErrors?: ReadonlyArray<QuiltUserVisibleError>;
   camera?: QuiltCamera;
   hoveredTile?: OptionalTileCoordinate;
   selection?: OptionalTileCoordinate;
@@ -71,9 +101,12 @@ export const createQuiltState = (input: CreateQuiltStateInput): QuiltState => ({
   hoveredTile: input.hoveredTile ?? { type: "none" },
   redoStack: input.redoStack ?? [],
   selectedLayer: input.selectedLayer ?? "terrain",
+  selectedTerrain: input.selectedTerrain ?? "floor",
   selectedTileId: input.selectedTileId ?? wallTileId,
   selectedTool: input.selectedTool ?? "paint",
   selection: input.selection ?? { type: "none" },
+  terrainGlyphs: input.terrainGlyphs ?? {},
   tileMapData: input.tileMapData,
   undoStack: input.undoStack ?? [],
+  visibleErrors: input.visibleErrors ?? [],
 });

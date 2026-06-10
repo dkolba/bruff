@@ -1,17 +1,21 @@
+/* eslint-disable sort-imports */
+import { createQuiltState } from "./quilt-state.ts";
+import {
+  createPaintTilesCommand,
+  createResizeMapCommand,
+} from "../commands/editor-command.ts";
 import {
   createTileMapData,
   floorTileId,
   getTile,
   wallTileId,
 } from "../model/tile-map-data.ts";
-import { describe, expect, test } from "vitest";
 import {
   executeEditorCommand,
   redoEditorCommand,
   undoEditorCommand,
 } from "./execute-editor-command.ts";
-import { createPaintTilesCommand } from "../commands/editor-command.ts";
-import { createQuiltState } from "./quilt-state.ts";
+import { describe, expect, test } from "vitest";
 
 const paintedTile = { tileX: 1, tileY: 1 };
 const crossChunkTile = { tileX: 33, tileY: 1 };
@@ -87,5 +91,43 @@ describe("execute editor command", () => {
 
     expect(undoEditorCommand(quiltState)).toBe(quiltState);
     expect(redoEditorCommand(quiltState)).toBe(quiltState);
+  });
+
+  test("executes resize commands marking all map chunks dirty", () => {
+    const beforeTileMapData = createTileMapData({ height: 4, width: 4 });
+    const afterTileMapData = createTileMapData({ height: 9, width: 9 });
+    const command = createResizeMapCommand({
+      beforeTileMapData,
+      afterTileMapData,
+    });
+    const quiltState = createQuiltState({ tileMapData: beforeTileMapData });
+    const nextState = executeEditorCommand(quiltState, command);
+
+    expect(nextState.tileMapData).toBe(afterTileMapData);
+    expect(nextState.dirtyChunks).toEqual(
+      new Set(afterTileMapData.chunks.keys()),
+    );
+    expect(nextState.undoStack).toStrictEqual([command]);
+    expect(nextState.redoStack).toStrictEqual([]);
+  });
+
+  test("undoes and redoes resize commands preserving original map data", () => {
+    const beforeTileMapData = createTileMapData({ height: 4, width: 4 });
+    const afterTileMapData = createTileMapData({ height: 9, width: 9 });
+    const command = createResizeMapCommand({
+      beforeTileMapData,
+      afterTileMapData,
+    });
+    const quiltState = createQuiltState({ tileMapData: beforeTileMapData });
+    const resizedState = executeEditorCommand(quiltState, command);
+    const undoneState = undoEditorCommand(resizedState);
+    const redoneState = redoEditorCommand(undoneState);
+
+    expect(undoneState.tileMapData).toBe(beforeTileMapData);
+    expect(undoneState.undoStack).toStrictEqual([]);
+    expect(undoneState.redoStack).toStrictEqual([command]);
+    expect(redoneState.tileMapData).toBe(afterTileMapData);
+    expect(redoneState.undoStack).toStrictEqual([command]);
+    expect(redoneState.redoStack).toStrictEqual([]);
   });
 });

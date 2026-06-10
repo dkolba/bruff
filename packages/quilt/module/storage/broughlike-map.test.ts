@@ -66,4 +66,20 @@ describe("broughlike map storage", () => {
       expect(parsed.error.reason).toBe("INVALID_BROUGHLIKE_MAP_DATA");
     }
   });
+
+  test("exports deterministic JSON that wraps terrain with shared BroughlikeMap shape", () => {
+    const tileMapData = createTileMapData({ height: 9, width: 9 });
+    const serialized = serializeBroughlikeMapData(tileMapData);
+
+    expect(JSON.stringify(serialized)).toStrictEqual(
+      JSON.stringify({
+        height: 9,
+        rows: Array.from({ length: 9 }, () =>
+          Array.from({ length: 9 }, () => "floor"),
+        ),
+        version: 1,
+        width: 9,
+      }),
+    );
+  });
 });

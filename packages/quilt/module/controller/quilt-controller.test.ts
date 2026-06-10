@@ -1,5 +1,6 @@
 import {
   createTileMapData,
+  doorTileId,
   floorTileId,
   getTile,
   setTile,
@@ -108,5 +109,30 @@ describe("quilt controller", () => {
     overlayCanvas.dispatchEvent(createPointerEvent());
 
     expect(controller.getState()).toBe(quiltState);
+  });
+
+  test("draws selected terrain tile when a terrain draw mode is set", () => {
+    const overlayCanvas = document.createElement("canvas");
+    const quiltState = createQuiltState({
+      selectedTerrain: "door",
+      selectedTileId: doorTileId,
+      tileMapData: createTileMapData({ height: 4, width: 4 }),
+    });
+    const controller = createQuiltController({
+      onStateChange: () => 0,
+      overlayCanvas,
+      quiltState,
+      getTileSize: () => 16,
+    });
+
+    controller.handlePointerDown(createPointerEvent());
+
+    expect(
+      getTile(
+        controller.getState().tileMapData,
+        { tileX: 1, tileY: 1 },
+        "terrain",
+      ),
+    ).toBe(doorTileId);
   });
 });

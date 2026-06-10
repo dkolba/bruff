@@ -97,4 +97,32 @@ describe("quilt element", () => {
 
     expect(customElements.get("tool-quilt")).toBe(QuiltElement);
   });
+
+  test("exposes grid-size select and terrain draw buttons from shadow DOM", () => {
+    const quiltElement = appendElement();
+
+    expect(
+      quiltElement.shadowRoot?.querySelector('[data-quilt="grid-size-select"]'),
+    ).toBeInstanceOf(HTMLSelectElement);
+    expect(
+      quiltElement.shadowRoot?.querySelector('[data-quilt="floor-tool"]'),
+    ).toBeInstanceOf(HTMLButtonElement);
+    expect(
+      quiltElement.shadowRoot?.querySelector('[data-quilt="wall-tool"]'),
+    ).toBeInstanceOf(HTMLButtonElement);
+    expect(
+      quiltElement.shadowRoot?.querySelector('[data-quilt="door-tool"]'),
+    ).toBeInstanceOf(HTMLButtonElement);
+    expect(
+      quiltElement.shadowRoot?.querySelector('[data-quilt="export-button"]'),
+    ).toBeInstanceOf(HTMLButtonElement);
+    expect(
+      quiltElement.shadowRoot?.querySelector('[data-quilt="import-button"]'),
+    ).toBeInstanceOf(HTMLButtonElement);
+    expect(
+      quiltElement.shadowRoot?.querySelector('[data-quilt="error-region"]'),
+    ).toBeInstanceOf(HTMLElement);
+
+    quiltElement.remove();
+  });
 });

@@ -15,11 +15,16 @@ const createContext = (): QuiltCanvasContext & {
     calls,
     clearRect: (x, y, width, height) =>
       calls.push(`clear:${x}:${y}:${width}:${height}`),
+    fill: (path, fillRule) => calls.push(`fill:${fillRule ?? "nonzero"}`),
     fillRect: (x, y, width, height) =>
       calls.push(`fill:${x}:${y}:${width}:${height}`),
     fillStyle: "#000000",
+    save: () => calls.push("save"),
+    restore: () => calls.push("restore"),
+    scale: (x, y) => calls.push(`scale:${x}:${y}`),
     strokeRect: (x, y, width, height) =>
       calls.push(`stroke:${x}:${y}:${width}:${height}`),
+    translate: (x, y) => calls.push(`translate:${x}:${y}`),
   };
 };
 
@@ -62,6 +67,76 @@ describe("canvas renderer", () => {
       "clear:0:0:32:32",
       "stroke:0:0:32:32",
       "stroke:16:0:16:16",
+    ]);
+  });
+
+  test("executes glyph path draw commands with dark gray fill", () => {
+    const context = createContext();
+    const drawPlan: TerrainDrawPlan = {
+      commands: [
+        {
+          glyphBounds: { x1: 10, x2: 690, y1: 20, y2: 720 },
+          height: 16,
+          kind: "drawTerrainGlyph",
+          path: "M0 0L1 1Z",
+          tileBounds: { x1: 0, x2: 1, y1: 0, y2: 1 },
+          unitsPerEm: 1000,
+          width: 16,
+          x: 0,
+          y: 0,
+        },
+      ],
+      kind: "terrain",
+    };
+
+    executeTerrainDrawPlan(context, drawPlan);
+
+    expect(context.fillStyle).toBe("#555555");
+    expect(context.calls).toStrictEqual([
+      "save",
+      "translate:0:0",
+      "scale:0.000023529411764705884:0.000022857142857142858",
+      "fill:nonzero",
+      "restore",
+    ]);
+  });
+
+  test("executes mixed terrain fill and glyph commands", () => {
+    const context = createContext();
+    const drawPlan: TerrainDrawPlan = {
+      commands: [
+        {
+          fillStyle: "#d7d0bf",
+          height: 16,
+          kind: "drawTerrainTile",
+          width: 16,
+          x: 0,
+          y: 0,
+        },
+        {
+          glyphBounds: { x1: 10, x2: 690, y1: 20, y2: 720 },
+          height: 16,
+          kind: "drawTerrainGlyph",
+          path: "M0 0L1 1Z",
+          tileBounds: { x1: 0, x2: 1, y1: 0, y2: 1 },
+          unitsPerEm: 1000,
+          width: 16,
+          x: 16,
+          y: 0,
+        },
+      ],
+      kind: "terrain",
+    };
+
+    executeTerrainDrawPlan(context, drawPlan);
+
+    expect(context.calls).toStrictEqual([
+      "fill:0:0:16:16",
+      "save",
+      "translate:16:0",
+      "scale:0.000023529411764705884:0.000022857142857142858",
+      "fill:nonzero",
+      "restore",
     ]);
   });
 });
