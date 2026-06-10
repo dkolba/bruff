@@ -4,26 +4,26 @@
 - [x] T2 — Raise broughlike map size validation to 9 in `packages/contracts/module/broughlike-map-json.ts`
 - [x] T3 — Add Quilt resize model assertions in `packages/quilt/module/model/tile-map-data.test.ts`
 - [x] T4 — Implement `resizeTileMapData` and `QuiltGridSize` exports in `packages/quilt/module/model/tile-map-data.ts` and `packages/quilt/index.ts`
-- [ ] T5 — Add Quilt resize command assertions in `packages/quilt/module/commands/editor-command.test.ts` and `packages/quilt/module/state/execute-editor-command.test.ts`
-- [ ] T6 — Implement resize command data and reducer handling in `packages/quilt/module/commands/editor-command.ts` and `packages/quilt/module/state/execute-editor-command.ts`
-- [ ] T7 — Add selected terrain state assertions in `packages/quilt/module/state/quilt-state.test.ts`
-- [ ] T8 — Implement selected terrain state fields in `packages/quilt/module/state/quilt-state.ts` and `packages/quilt/index.ts`
-- [ ] T9 — Add grid-size and terrain button markup assertions in `packages/quilt/module/template.test.ts`
-- [ ] T10 — Add grid-size select and terrain draw buttons in `packages/quilt/module/template.ts`
-- [ ] T11 — Add toolbar interaction assertions in `packages/quilt/module/runtime/quilt-runtime.test.ts` and `packages/quilt/module/controller/quilt-controller.test.ts`
-- [ ] T12 — Wire grid-size and terrain draw interactions in `packages/quilt/module/runtime/quilt-runtime.ts` and `packages/quilt/module/controller/quilt-controller.ts`
-- [ ] T13 — Add deterministic map export assertions in `packages/quilt/module/storage/broughlike-map.test.ts` and `packages/quilt/module/browser/quilt-browser-command.test.ts`
-- [ ] T14 — Implement export download command creation in `packages/quilt/module/browser/quilt-browser-command.ts` and `packages/quilt/module/runtime/quilt-runtime.ts`
-- [ ] T15 — Add Sigil glyph import parser assertions in `packages/quilt/module/storage/sigil-glyph-map.test.ts`
-- [ ] T16 — Implement `parseQuiltTerrainGlyphs` in `packages/quilt/module/storage/sigil-glyph-map.ts` and export it from `packages/quilt/index.ts`
-- [ ] T17 — Add glyph path draw-plan assertions in `packages/quilt/module/render/map-draw-plan.test.ts`
-- [ ] T18 — Implement glyph path draw commands in `packages/quilt/module/render/map-draw-plan.ts`
-- [ ] T19 — Add dark-gray Canvas path executor assertions in `packages/quilt/module/render/canvas-renderer.test.ts`
-- [ ] T20 — Implement Canvas path execution in `packages/quilt/module/render/canvas-renderer.ts`
-- [ ] T21 — Add import file-flow assertions in `packages/quilt/module/runtime/quilt-runtime.test.ts` and `packages/quilt/module/browser/quilt-browser-command.test.ts`
-- [ ] T22 — Wire import file reading and visible errors in `packages/quilt/module/runtime/quilt-runtime.ts`, `packages/quilt/module/browser/quilt-browser-command.ts`, and `packages/quilt/module/template.ts`
-- [ ] T23 — Add Quilt element coordinator assertions in `packages/quilt/module/quilt-element.test.ts`
-- [ ] T24 — Update Quilt element wiring in `packages/quilt/module/quilt-element.ts`
-- [ ] T25 — Add Arcade Quilt E2E coverage in `packages/arcade/e2e/quilt-interaction.spec.ts`
-- [ ] T26 — Verify Arcade dev-only routing and production guards in `packages/arcade/e2e/tools-route.spec.ts` and `packages/arcade/scripts/check-bundle-clean.mjs`
-- [ ] T27 — Update Quilt documentation in `packages/quilt/README.md` and `specs/quilt-grid-size-glyph-io/spec.md`
+- [x] T5 — Add Quilt resize command assertions in `packages/quilt/module/commands/editor-command.test.ts` and `packages/quilt/module/state/execute-editor-command.test.ts`
+- [x] T6 — Implement resize command data and reducer handling in `packages/quilt/module/commands/editor-command.ts` and `packages/quilt/module/state/execute-editor-command.ts`
+- [x] T7 — Add selected terrain state assertions in `packages/quilt/module/state/quilt-state.test.ts`
+- [x] T8 — Implement selected terrain state fields in `packages/quilt/module/state/quilt-state.ts` and `packages/quilt/index.ts`
+- [x] T9 — Add grid-size and terrain button markup assertions in `packages/quilt/module/template.test.ts`
+- [x] T10 — Add grid-size select and terrain draw buttons in `packages/quilt/module/template.ts`
+- [x] T11 — Add toolbar interaction assertions in `packages/quilt/module/runtime/quilt-runtime.test.ts` and `packages/quilt/module/controller/quilt-controller.test.ts`
+- [x] T12 — Wire grid-size and terrain draw interactions in `packages/quilt/module/runtime/quilt-runtime.ts` and `packages/quilt/module/controller/quilt-controller.ts`
+- [x] T13 — Add deterministic map export assertions in `packages/quilt/module/storage/broughlike-map.test.ts` and `packages/quilt/module/browser/quilt-browser-command.test.ts`
+- [x] T14 — Implement export download command creation in `packages/quilt/module/browser/quilt-browser-command.ts` and `packages/quilt/module/runtime/quilt-runtime.ts`
+- [x] T15 — Add Sigil glyph import parser assertions in `packages/quilt/module/storage/sigil-glyph-map.test.ts`
+- [x] T16 — Implement `parseQuiltTerrainGlyphs` in `packages/quilt/module/storage/sigil-glyph-map.ts` and export it from `packages/quilt/index.ts`
+- [x] T17 — Add glyph path draw-plan assertions in `packages/quilt/module/render/map-draw-plan.test.ts`
+- [x] T18 — Implement glyph path draw commands in `packages/quilt/module/render/map-draw-plan.ts`
+- [x] T19 — Add dark-gray Canvas path executor assertions in `packages/quilt/module/render/canvas-renderer.test.ts`
+- [x] T20 — Implement Canvas path execution in `packages/quilt/module/render/canvas-renderer.ts`
+- [x] T21 — Add import file-flow assertions in `packages/quilt/module/runtime/quilt-runtime.test.ts` and `packages/quilt/module/browser/quilt-browser-command.test.ts`
+- [x] T22 — Wire import file reading and visible errors in `packages/quilt/module/runtime/quilt-runtime.ts`, `packages/quilt/module/browser/quilt-browser-command.ts`, and `packages/quilt/module/template.ts`
+- [x] T23 — Add Quilt element coordinator assertions in `packages/quilt/module/quilt-element.test.ts`
+- [x] T24 — Update Quilt element wiring in `packages/quilt/module/quilt-element.ts`
+- [x] T25 — Add Arcade Quilt E2E coverage in `packages/arcade/e2e/quilt-interaction.spec.ts`
+- [x] T26 — Verify Arcade dev-only routing and production guards in `packages/arcade/e2e/tools-route.spec.ts` and `packages/arcade/scripts/check-bundle-clean.mjs`
+- [x] T27 — Update Quilt documentation in `packages/quilt/README.md` and `specs/quilt-grid-size-glyph-io/spec.md`
