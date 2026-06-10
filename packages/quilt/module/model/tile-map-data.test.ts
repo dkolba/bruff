@@ -1,3 +1,4 @@
+import * as tileMapDataModule from "./tile-map-data.ts";
 import {
   chunkCoordinateKey,
   createTileMapData,
@@ -84,6 +85,11 @@ describe("tile map data", () => {
     expect(getTile(tileMapData, missingTileCoordinate, "terrain")).toBe(
       floorTileId,
     );
+  });
+
+  test.fails("exports map resizing for Quilt grid controls", () => {
+    expect(tileMapDataModule).toHaveProperty("resizeTileMapData");
+    expect(tileMapDataModule).toHaveProperty("QUILT_GRID_SIZES");
   });
 
   test("updates object and flag layers independently", () => {
