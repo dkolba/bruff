@@ -1,6 +1,6 @@
 # Quilt Grid Size and Glyph I/O Tasks
 
-- [ ] T1 — Add 9x9 broughlike map contract assertions in `packages/contracts/module/broughlike-map-json.test.ts`
+- [x] T1 — Add 9x9 broughlike map contract assertions in `packages/contracts/module/broughlike-map-json.test.ts`
 - [ ] T2 — Raise broughlike map size validation to 9 in `packages/contracts/module/broughlike-map-json.ts`
 - [ ] T3 — Add Quilt resize model assertions in `packages/quilt/module/model/tile-map-data.test.ts`
 - [ ] T4 — Implement `resizeTileMapData` and `QuiltGridSize` exports in `packages/quilt/module/model/tile-map-data.ts` and `packages/quilt/index.ts`

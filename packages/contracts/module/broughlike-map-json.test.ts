@@ -4,7 +4,7 @@ import {
   parseBroughlikeMap,
   type ParseBroughlikeMapError,
 } from "@bruff/contracts";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, test } from "vitest";
 import type { Result } from "@bruff/utils";
 
 const VALID_BROUGHLIKE_MAP = {
@@ -32,13 +32,22 @@ const HEIGHT_MISMATCH_BROUGHLIKE_MAP = {
   width: 2,
 };
 
-const OVERSIZED_BROUGHLIKE_MAP = {
-  height: 8,
-  rows: Array.from({ length: 8 }, () =>
-    Array.from({ length: 8 }, () => "floor"),
+const LARGE_VALID_BROUGHLIKE_MAP = {
+  height: 9,
+  rows: Array.from({ length: 9 }, () =>
+    Array.from({ length: 9 }, () => "floor"),
   ),
   version: 1,
-  width: 8,
+  width: 9,
+};
+
+const OVERSIZED_BROUGHLIKE_MAP = {
+  height: 10,
+  rows: Array.from({ length: 10 }, () =>
+    Array.from({ length: 10 }, () => "floor"),
+  ),
+  version: 1,
+  width: 10,
 };
 
 describe("broughlikeMapSchema", () => {
@@ -58,6 +67,13 @@ describe("parseBroughlikeMap valid input", () => {
     expect(parsedMap).toStrictEqual({
       type: "ok",
       value: VALID_BROUGHLIKE_MAP,
+    });
+  });
+
+  test.fails("accepts 9x9 maps for Quilt export", () => {
+    expect(parseBroughlikeMap(LARGE_VALID_BROUGHLIKE_MAP)).toStrictEqual({
+      type: "ok",
+      value: LARGE_VALID_BROUGHLIKE_MAP,
     });
   });
 });
