@@ -70,7 +70,7 @@ describe("parseBroughlikeMap valid input", () => {
     });
   });
 
-  test.fails("accepts 9x9 maps for Quilt export", () => {
+  test("accepts 9x9 maps for Quilt export", () => {
     expect(parseBroughlikeMap(LARGE_VALID_BROUGHLIKE_MAP)).toStrictEqual({
       type: "ok",
       value: LARGE_VALID_BROUGHLIKE_MAP,
