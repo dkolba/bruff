@@ -18,6 +18,7 @@ import { brand } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
 
 const FIRST_SCHEMA_OPTION_INDEX = 0;
+const SCHEMA_AND_INPUT_GLYPH_READY_TEXT = "Glyphs ready: 6";
 
 describe("ToolSigil state selection", () => {
   it("creates the initial view model", () => {
@@ -74,10 +75,50 @@ describe("ToolSigil loaded font view state", () => {
     expect(selectToolSigilViewModel(loadedState)).toMatchObject({
       downloadDisabled: true,
       fontFileNameText: "component-test.ttf",
-      glyphCountText: "Glyphs ready: 6",
+      glyphCountText: SCHEMA_AND_INPUT_GLYPH_READY_TEXT,
     });
   });
 
+  it("maps required glyph selections to typed characters by schema order", () => {
+    const loadedState = loadCurrentFontState("🌫️🔲🚪👺🤡");
+
+    expect(loadedState.requiredGlyphSelections).toStrictEqual([
+      { name: "floor", unicode: "🌫️" },
+      { name: "wall", unicode: "🔲" },
+      { name: "door", unicode: "🚪" },
+      { name: "player", unicode: "👺" },
+      { name: "enemy", unicode: "🤡" },
+    ]);
+  });
+
+  it("does not append stale schema defaults after all required glyphs are replaced", () => {
+    const viewModel = selectToolSigilViewModel(
+      loadCurrentFontState("🌫️🔲🚪👺🤡"),
+    );
+
+    expect(viewModel.drafts.map((draft) => draft.glyph.unicode)).toStrictEqual([
+      "🌫️",
+      "🔲",
+      "🚪",
+      "👺",
+      "🤡",
+    ]);
+  });
+
+  it("preserves later required selections when replacement characters deduplicate", () => {
+    const loadedState = loadCurrentFontState("★★★★★");
+
+    expect(loadedState.requiredGlyphSelections).toStrictEqual([
+      { name: "floor", unicode: "★" },
+      { name: "wall", unicode: "#" },
+      { name: "door", unicode: "+" },
+      { name: "player", unicode: "@" },
+      { name: "enemy", unicode: "e" },
+    ]);
+  });
+});
+
+describe("ToolSigil schema selection state", () => {
   it("keeps state unchanged for current and unknown schema ids", () => {
     const state = createToolSigilState();
 

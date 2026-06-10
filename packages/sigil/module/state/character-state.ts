@@ -4,10 +4,46 @@ import {
   type SigilSchemaId,
   sigilSchemaNamesByUnicode,
 } from "../sigil-schema-catalog.js";
-import type { ToolSigilState } from "../tool-sigil-state-types.js";
+import type {
+  RequiredGlyphSelection,
+  ToolSigilState,
+} from "../tool-sigil-state-types.js";
 import { extractDrafts } from "../tool-sigil-extract-drafts.js";
 import { extractionCharacters } from "./extraction-characters.js";
 import { schemaOptionById } from "./schema-option.js";
+import { distinctGraphemes, segmentGraphemes } from "../unicode-graphemes.js";
+
+const hasRequiredGraphemeCount = (
+  characters: string,
+  selections: ReadonlyArray<RequiredGlyphSelection>,
+): boolean => segmentGraphemes(characters).length >= selections.length;
+
+const selectionUnicode = (
+  graphemes: ReadonlyArray<string>,
+  selectionIndex: number,
+  fallbackUnicode: string,
+): string => {
+  const grapheme = graphemes[selectionIndex];
+
+  return grapheme === undefined ? fallbackUnicode : grapheme;
+};
+
+/** Maps required glyph selections to typed characters by schema order. */
+const requiredGlyphSelectionsForCharacters = (
+  characters: string,
+  selections: ReadonlyArray<RequiredGlyphSelection>,
+): ReadonlyArray<RequiredGlyphSelection> => {
+  const graphemes = distinctGraphemes(characters);
+
+  if (!hasRequiredGraphemeCount(characters, selections)) {
+    return selections;
+  }
+
+  return selections.map((selection, selectionIndex) => ({
+    ...selection,
+    unicode: selectionUnicode(graphemes, selectionIndex, selection.unicode),
+  }));
+};
 
 /** Updates editable characters.
  * @param state - Current tool state.
@@ -17,12 +53,24 @@ import { schemaOptionById } from "./schema-option.js";
 export const setToolSigilCharacters = (
   state: ToolSigilState,
   characters: string,
-): ToolSigilState => ({
-  ...state,
-  characters,
-  contractIssues: [],
-  ...extractDrafts(state.font, extractionCharacters(characters, state)),
-});
+): ToolSigilState => {
+  const requiredGlyphSelections = requiredGlyphSelectionsForCharacters(
+    characters,
+    state.requiredGlyphSelections,
+  );
+
+  const nextState = {
+    ...state,
+    characters,
+    contractIssues: [],
+    requiredGlyphSelections,
+  };
+
+  return {
+    ...nextState,
+    ...extractDrafts(state.font, extractionCharacters(characters, nextState)),
+  };
+};
 
 /** Updates a required schema glyph.
  * @param state - Current tool state.
