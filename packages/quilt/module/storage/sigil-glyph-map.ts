@@ -37,7 +37,10 @@ export const parseQuiltTerrainGlyphs = (
     });
   }
 
-  const terrainGlyphs: Record<string, QuiltTerrainGlyphMap[keyof QuiltTerrainGlyphMap]> = {};
+  const terrainGlyphs: Record<
+    string,
+    QuiltTerrainGlyphMap[keyof QuiltTerrainGlyphMap]
+  > = {};
 
   for (const terrainKey of TERRAIN_KEYS) {
     const sigilGlyph = parsedGlyphMap.value[terrainKey];

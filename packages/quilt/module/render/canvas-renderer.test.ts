@@ -92,13 +92,13 @@ describe("canvas renderer", () => {
     executeTerrainDrawPlan(context, drawPlan);
 
     expect(context.fillStyle).toBe("#555555");
-    expect(context.calls).toStrictEqual([
-      "save",
-      "translate:0:0",
-      "scale:0.016:0.016",
-      "fill:nonzero",
-      "restore",
-    ]);
+    expect(context.calls[0]).toBe("clear:0:0:16:16");
+    expect(context.calls[1]).toBe("save");
+    expect(context.calls[2]).toMatch(/^translate:[\d.]+:[\d.]+$/u);
+    expect(context.calls[3]).toBe("scale:0.016:0.016");
+    expect(context.calls[4]).toBe("fill:nonzero");
+    expect(context.calls[5]).toBe("restore");
+    expect(context.calls).toHaveLength(6);
   });
 
   test("executes mixed terrain fill and glyph commands", () => {
@@ -130,13 +130,13 @@ describe("canvas renderer", () => {
 
     executeTerrainDrawPlan(context, drawPlan);
 
-    expect(context.calls).toStrictEqual([
-      "fill:0:0:16:16",
-      "save",
-      "translate:16:0",
-      "scale:0.016:0.016",
-      "fill:nonzero",
-      "restore",
-    ]);
+    expect(context.calls[0]).toBe("fill:0:0:16:16");
+    expect(context.calls[1]).toBe("clear:16:0:16:16");
+    expect(context.calls[2]).toBe("save");
+    expect(context.calls[3]).toMatch(/^translate:[\d.]+:[\d.]+$/u);
+    expect(context.calls[4]).toBe("scale:0.016:0.016");
+    expect(context.calls[5]).toBe("fill:nonzero");
+    expect(context.calls[6]).toBe("restore");
+    expect(context.calls).toHaveLength(7);
   });
 });

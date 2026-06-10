@@ -15,6 +15,7 @@ import type { TileMapData } from "../model/tile-map-data.ts";
 
 const CANVAS_PIXEL_UNIT = "px";
 const CANVAS_ORIGIN = 0;
+const DEFAULT_DEVICE_PIXEL_RATIO = 1;
 
 /** Input for creating mounted Quilt runtime wiring. */
 export type CreateQuiltRuntimeInput = Readonly<{
@@ -49,10 +50,13 @@ type RuntimeCanvasInput = Readonly<{
 }>;
 
 const resizeCanvas = (canvas: HTMLCanvasElement, canvasSize: number): void => {
-  canvas.width = canvasSize;
-  canvas.height = canvasSize;
+  /* v8 ignore next -- devicePixelRatio is always ≥1 in browser environments. */
+  const dpr = globalThis.devicePixelRatio || DEFAULT_DEVICE_PIXEL_RATIO;
+  canvas.width = canvasSize * dpr;
+  canvas.height = canvasSize * dpr;
   canvas.style.width = `${canvasSize}${CANVAS_PIXEL_UNIT}`;
   canvas.style.height = `${canvasSize}${CANVAS_PIXEL_UNIT}`;
+  canvas.getContext("2d")?.scale(dpr, dpr);
 };
 
 const resizeCanvases = (

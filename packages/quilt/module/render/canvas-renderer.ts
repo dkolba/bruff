@@ -20,6 +20,23 @@ export type QuiltCanvasContext = {
   fill: (path: Path2D, fillRule?: CanvasFillRule) => void;
 };
 
+const HALF = 2;
+
+const computeGlyphOffsetX = (
+  tileWidth: number,
+  glyphWidth: number,
+  scale: number,
+  glyphX1: number,
+): number => (tileWidth - glyphWidth * scale) / HALF - glyphX1 * scale;
+
+const computeGlyphOffsetY = (
+  tileHeight: number,
+  glyphHeight: number,
+  scale: number,
+  glyphY1: number,
+): number => (tileHeight - glyphHeight * scale) / HALF - glyphY1 * scale;
+
+// eslint-disable-next-line max-statements
 const executeDrawTerrainGlyph = (
   context: QuiltCanvasContext,
   command: DrawTerrainGlyphCommand,
@@ -27,9 +44,25 @@ const executeDrawTerrainGlyph = (
   /* v8 ignore next -- Path2D is a browser API; covered by browser tests. */
   const path2d = new Path2D(command.path);
   const scale = command.width / command.unitsPerEm;
+  const glyphWidth = command.glyphBounds.x2 - command.glyphBounds.x1;
+  const glyphHeight = command.glyphBounds.y2 - command.glyphBounds.y1;
+  const offsetX = computeGlyphOffsetX(
+    command.width,
+    glyphWidth,
+    scale,
+    command.glyphBounds.x1,
+  );
+  const offsetY = computeGlyphOffsetY(
+    command.height,
+    glyphHeight,
+    scale,
+    command.glyphBounds.y1,
+  );
 
+  // Clear the tile before drawing the glyph so old glyphs underneath are not visible.
+  context.clearRect(command.x, command.y, command.width, command.height);
   context.save();
-  context.translate(command.x, command.y);
+  context.translate(command.x + offsetX, command.y + offsetY);
   context.scale(scale, scale);
   context.fillStyle = GLYPH_FILL_STYLE;
   context.fill(path2d);

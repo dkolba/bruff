@@ -90,7 +90,9 @@ describe("quilt runtime", () => {
 
     dispatchPointerDown(runtimeNodes.overlayCanvas, 40, 40);
 
-    expect(runtimeNodes.terrainCanvas.width).toBe(CANVAS_SIZE_128);
+    const expectedBufferSize =
+      CANVAS_SIZE_128 * (globalThis.devicePixelRatio ?? 1);
+    expect(runtimeNodes.terrainCanvas.width).toBe(expectedBufferSize);
     expect(runtimeNodes.terrainCanvas.style.width).toBe(`${CANVAS_SIZE_128}px`);
     expect(
       getTile(
@@ -171,7 +173,9 @@ describe("quilt runtime", () => {
 
     runtime.setCanvasSize(CANVAS_SIZE_128);
 
-    expect(runtimeNodes.overlayCanvas.width).toBe(CANVAS_SIZE_128);
+    const resizedBufferSize =
+      CANVAS_SIZE_128 * (globalThis.devicePixelRatio ?? 1);
+    expect(runtimeNodes.overlayCanvas.width).toBe(resizedBufferSize);
     expect(runtimeNodes.overlayCanvas.style.height).toBe(
       `${CANVAS_SIZE_128}px`,
     );
