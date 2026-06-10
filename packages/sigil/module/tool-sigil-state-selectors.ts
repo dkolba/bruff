@@ -106,6 +106,21 @@ const isValidGlyphMapping = (mapping: SigilGlyphMapping): boolean =>
   findSigilGlyphOption(mapping.groupName, mapping.glyphKey)?.glyph ===
   mapping.glyph;
 
+const selectedRequiredCharacters = (
+  state: ToolSigilState,
+): ReadonlySet<string> =>
+  new Set(state.requiredGlyphSelections.map((selection) => selection.unicode));
+
+const selectedRequiredDrafts = (
+  state: ToolSigilState,
+): ReadonlyArray<SigilGlyphDraft> => {
+  const requiredCharacters = selectedRequiredCharacters(state);
+
+  return state.drafts.filter((draft) =>
+    requiredCharacters.has(draft.glyph.unicode),
+  );
+};
+
 const mappedGlyphErrors = (
   state: ToolSigilState,
 ): ReadonlyArray<SigilExtractionError> =>
@@ -127,21 +142,6 @@ const licenseErrors = (
       (draft) => effectiveLicensesByUnicode[draft.glyph.unicode] === undefined,
     )
     .map((draft) => createMissingLicenseError(draft));
-};
-
-const selectedRequiredCharacters = (
-  state: ToolSigilState,
-): ReadonlySet<string> =>
-  new Set(state.requiredGlyphSelections.map((selection) => selection.unicode));
-
-const selectedRequiredDrafts = (
-  state: ToolSigilState,
-): ReadonlyArray<SigilGlyphDraft> => {
-  const requiredCharacters = selectedRequiredCharacters(state);
-
-  return state.drafts.filter((draft) =>
-    requiredCharacters.has(draft.glyph.unicode),
-  );
 };
 
 const invalidRequiredGlyphSelectionCount = (state: ToolSigilState): number =>
