@@ -1,3 +1,4 @@
+import { distinctGraphemes } from "./unicode-graphemes.js";
 import type { Font } from "opentype.js";
 import type { SigilGlyphDraft } from "./glyph-json.js";
 
@@ -34,7 +35,7 @@ export const completeMissingDrafts = (
   characters: string,
   drafts: ReadonlyArray<SigilGlyphDraft>,
 ): ReadonlyArray<SigilGlyphDraft> =>
-  [...characters].map(
+  distinctGraphemes(characters).map(
     (unicode) =>
       drafts.find((draft) => draft.glyph.unicode === unicode) ??
       missingGlyphDraft(font, unicode),

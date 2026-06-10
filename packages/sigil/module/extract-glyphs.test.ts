@@ -18,6 +18,9 @@ const DESCENDER = -200;
 const DECIMAL_PRECISION = 2;
 const EXTRACTED_GLYPH_COUNT = 3;
 const MIXED_INPUT_EXTRACTED_GLYPH_COUNT = 1;
+const VARIATION_SEQUENCE_EXTRACTED_GLYPH_COUNT = 1;
+const ZERO_ADVANCE_WIDTH = 0;
+const FIRST_DRAFT_INDEX = 0;
 
 const pathForAdvanceWidth = (advanceWidth: number): Path => {
   const path = new Path();
@@ -48,6 +51,13 @@ const createNotdefGlyph = (): Glyph =>
     index: NOTDEF_INDEX,
     name: ".notdef",
     path: new Path(),
+  });
+
+const createGlyphWithoutAdvanceWidth = (): Glyph =>
+  new Glyph({
+    name: "space",
+    path: new Path(),
+    unicode: SPACE_CODE_POINT,
   });
 
 const createTestFont = (): Font =>
@@ -96,6 +106,34 @@ describe("extractSigilGlyphs success", () => {
     expectStarDraft(starDraft);
     expect(heartDraft?.defaultName).toBe("u2665");
     expect(checkDraft?.defaultName).toBe("u2713");
+  });
+
+  it("keeps emoji variation sequences as one extracted character", () => {
+    const extractionReport = extractSigilGlyphs(createTestFont(), "♥️♥️");
+    const [heartDraft] = extractionReport.drafts;
+
+    expect(extractionReport.errors).toStrictEqual([]);
+    expect(extractionReport.drafts).toHaveLength(
+      VARIATION_SEQUENCE_EXTRACTED_GLYPH_COUNT,
+    );
+    expect(heartDraft?.defaultName).toBe("u2665");
+    expect(heartDraft?.glyph.unicode).toBe("♥️");
+  });
+
+  it("uses zero advance width when a glyph omits advance width", () => {
+    const font = new Font({
+      ascender: UNITS_PER_EM,
+      descender: DESCENDER,
+      familyName: "Sigil Test",
+      glyphs: [createNotdefGlyph(), createGlyphWithoutAdvanceWidth()],
+      styleName: "Regular",
+      unitsPerEm: UNITS_PER_EM,
+    });
+
+    expect(
+      extractSigilGlyphs(font, " ").drafts[FIRST_DRAFT_INDEX]?.glyph
+        .advanceWidth,
+    ).toBe(ZERO_ADVANCE_WIDTH);
   });
 });
 

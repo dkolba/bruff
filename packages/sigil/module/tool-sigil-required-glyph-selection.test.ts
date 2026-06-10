@@ -20,6 +20,13 @@ describe("requiredGlyphCharacterOptions", () => {
       { label: "c", unicode: "c" },
     ]);
   });
+
+  it("keeps emoji variation sequences as one option", () => {
+    expect(requiredGlyphCharacterOptions("🌫️🌫️🤡")).toStrictEqual([
+      { label: "🌫️", unicode: "🌫️" },
+      { label: "🤡", unicode: "🤡" },
+    ]);
+  });
 });
 
 describe("defaultRequiredGlyphSelections", () => {

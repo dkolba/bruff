@@ -3,6 +3,7 @@ import type {
   RequiredGlyphSelection,
   RequiredGlyphSelectionView,
 } from "./tool-sigil-state-types.js";
+import { distinctGraphemes } from "./unicode-graphemes.js";
 import type { SigilSchemaOption } from "./sigil-schema-catalog.js";
 
 /**
@@ -14,7 +15,7 @@ import type { SigilSchemaOption } from "./sigil-schema-catalog.js";
 export const requiredGlyphCharacterOptions = (
   characters: string,
 ): ReadonlyArray<RequiredGlyphCharacterOption> =>
-  [...new Set(characters)].map((unicode) => ({
+  distinctGraphemes(characters).map((unicode) => ({
     label: unicode,
     unicode,
   }));

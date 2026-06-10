@@ -5,9 +5,11 @@ import type {
   SigilGlyphDraft,
 } from "./glyph-json.js";
 import { codePointKey } from "./code-point-key.js";
+import { distinctGraphemes } from "./unicode-graphemes.js";
 
 const EMPTY_INPUT_LENGTH = 0;
 const GLYPH_PATH_DECIMAL_PLACES = 2;
+const DEFAULT_ADVANCE_WIDTH = 0;
 
 /** Partitioned extraction state for selected glyphs. */
 type GlyphExtractionState = Readonly<{
@@ -25,10 +27,6 @@ const createMissingGlyphError = (character: string): SigilExtractionError => ({
   type: "missing-glyph",
 });
 
-const distinctCharacters = (characters: string): ReadonlyArray<string> => [
-  ...new Set(characters),
-];
-
 const glyphPath = (glyph: Glyph): string =>
   glyph.path.toPathData(GLYPH_PATH_DECIMAL_PLACES);
 
@@ -42,7 +40,7 @@ const glyphDraft = (
   return {
     defaultName: codePointKey(character),
     glyph: {
-      advanceWidth: font.getAdvanceWidth(character, font.unitsPerEm),
+      advanceWidth: glyph.advanceWidth ?? DEFAULT_ADVANCE_WIDTH,
       bounds: {
         x1: bounds.x1,
         x2: bounds.x2,
@@ -107,7 +105,7 @@ export const extractSigilGlyphs = (
   font: Font,
   characters: string,
 ): SigilExtractionResult => {
-  const uniqueCharacters = distinctCharacters(characters);
+  const uniqueCharacters = distinctGraphemes(characters);
   if (uniqueCharacters.length === EMPTY_INPUT_LENGTH) {
     return extractionError([], [emptyInputError]);
   }
