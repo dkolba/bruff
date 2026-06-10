@@ -3,16 +3,16 @@ import {
   createTerrainDrawPlan,
 } from "./map-draw-plan.ts";
 import {
+  createQuiltState,
+  type QuiltTerrainGlyphMap,
+} from "../state/quilt-state.ts";
+import {
   createTileMapData,
   doorTileId,
   setTile,
   wallTileId,
 } from "../model/tile-map-data.ts";
 import { describe, expect, test } from "vitest";
-import {
-  createQuiltState,
-  type QuiltTerrainGlyphMap,
-} from "../state/quilt-state.ts";
 
 const tileSize = 16;
 

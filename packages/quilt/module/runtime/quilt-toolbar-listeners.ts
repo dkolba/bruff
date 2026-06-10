@@ -1,4 +1,3 @@
-/* eslint-disable sort-imports, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
 import {
   doorTileId,
   floorTileId,
@@ -6,8 +5,8 @@ import {
   resizeTileMapData,
   wallTileId,
 } from "../model/tile-map-data.ts";
-import { createResizeMapCommand } from "../commands/editor-command.ts";
 import type { createQuiltController } from "../controller/quilt-controller.ts";
+import { createResizeMapCommand } from "../commands/editor-command.ts";
 import { executeEditorCommand } from "../state/execute-editor-command.ts";
 import { handleExportClick } from "./quilt-runtime-io.ts";
 
@@ -92,10 +91,9 @@ const attachWallToolListener = (
       selectedTool: "paint",
     });
   };
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+
   elements.wallToolButton.addEventListener("click", handler);
   return (): void => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     elements.wallToolButton.removeEventListener("click", handler);
   };
 };
@@ -118,7 +116,6 @@ const attachDoorToolListener = (
   };
 };
 
-// eslint-disable-next-line max-statements
 const attachGridSizeListener = (
   gridSizeSelect: HTMLSelectElement,
   controller: ToolbarController,

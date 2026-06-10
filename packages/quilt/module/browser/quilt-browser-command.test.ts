@@ -1,8 +1,8 @@
-import { describe, expect, test } from "vitest";
 import {
   createDownloadMapCommand,
   createReadJsonFileCommand,
 } from "./quilt-browser-command.ts";
+import { describe, expect, test } from "vitest";
 
 describe("quilt browser command", () => {
   test("creates download command data outside the Web Component", () => {

@@ -247,17 +247,16 @@ const getTerrainGlyphForTileId = (
     }
   | undefined => {
   const terrain = tileIdToTerrain(tileId);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
   const glyph = quiltState.terrainGlyphs[terrain];
 
   return glyph === undefined
     ? undefined
     : {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
         bounds: glyph.bounds,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+
         path: glyph.path,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+
         unitsPerEm: glyph.unitsPerEm,
       };
 };

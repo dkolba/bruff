@@ -13,3 +13,4 @@ SCRATCHPAD.md
 packages/arcade/e2e/*.spec.ts-snapshots/*-darwin.png
 .vitest-attachments
 secrets
+.pi/agent/models.json
