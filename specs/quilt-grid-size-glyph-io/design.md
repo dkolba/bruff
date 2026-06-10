@@ -165,7 +165,7 @@ QuiltState.tileMapData -> serializeBroughlikeMapData -> JSON.stringify -> downlo
 Import flow:
 
 ```text
-File -> text -> JSON.parse wrapper -> parseQuiltTerrainGlyphs -> QuiltState.terrainGlyphs -> redraw
+File -> Blob#text() -> JSON.parse -> parseQuiltTerrainGlyphs -> QuiltState.terrainGlyphs -> redraw
 ```
 
 ## Architectural decisions and tradeoffs
@@ -196,7 +196,7 @@ Alternative considered: keep Paint/Erase and add a separate terrain palette. Tha
 
 ### Glyph rendering
 
-Chosen: project imported Sigil glyph entries into terrain draw-plan commands, then execute paths in `canvas-renderer.ts` with dark gray fill after scaling each glyph path to the tile rectangle.
+Chosen: project imported Sigil glyph entries into terrain draw-plan commands, then execute paths in `canvas-renderer.ts` with dark gray fill after scaling each glyph path to the tile rectangle. The glyph bounding-box is centered within the tile so the visible path content is evenly positioned. Each tile is cleared before its glyph is drawn so replacing a terrain type (e.g. drawing wall over floor) does not leave the old glyph visible underneath.
 
 Alternative considered: convert glyph paths into offscreen raster images during import. Raster caching may help later, but it adds browser-specific cache lifecycle and image invalidation before performance requires it.
 
@@ -221,7 +221,8 @@ Alternative considered: let `JSON.parse` or file APIs throw to the component. Th
 - `packages/quilt/module/commands/editor-command.ts` supplies existing paint command data.
 - `packages/quilt/module/state/execute-editor-command.ts` supplies existing undo/redo patterns and dirty chunk calculation.
 - `packages/quilt/module/render/map-draw-plan.ts` supplies terrain and overlay draw-plan projection.
-- `packages/quilt/module/render/canvas-renderer.ts` supplies the Canvas 2D execution boundary.
+- `packages/quilt/module/render/canvas-renderer.ts` supplies the Canvas 2D execution boundary, including per-tile clear-before-glyph and centering logic.
+- `packages/quilt/module/runtime/quilt-runtime.ts` applies `devicePixelRatio` when sizing the canvas buffer to produce crisp vector rendering on high-DPI displays.
 - `packages/quilt/module/runtime/quilt-runtime.ts` supplies mounted state, redraw, and cleanup patterns.
 - `packages/quilt/module/controller/quilt-controller.ts` supplies pointer-to-command conversion.
 - `packages/quilt/module/template.ts` supplies toolbar and canvas DOM creation.

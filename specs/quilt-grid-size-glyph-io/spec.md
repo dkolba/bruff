@@ -20,8 +20,10 @@ Expand Quilt so developers can choose a square map size from 4x4 through 9x9, dr
 - Quilt displays an import button that opens a file upload flow for Sigil glyph JSON.
 - The uploaded glyph JSON uses the shared Sigil glyph map shape from `@bruff/contracts`, with entries such as `floor`, `wall`, `door`, `player`, and `enemy`.
 - After a valid glyph JSON import, Quilt uses the imported SVG path data for the corresponding terrain tiles when drawing the board.
-- Imported glyph paths for terrain tiles render in dark gray.
-- If no glyph JSON has been imported, Quilt still renders the editable board with the existing terrain fallback rendering.
+- Imported glyph paths for terrain tiles render in dark gray (`#555555`), centered within each tile so the visible glyph content is evenly positioned.
+- Drawing one terrain over another clears the old glyph before drawing the new one, so glyphs never visibly stack.
+- Glyph paths render at native resolution on high-DPI displays (canvas buffer sized by `devicePixelRatio`).
+- If no glyph JSON has been imported, Quilt still renders the editable board with the existing terrain fallback rendering (solid-color fills).
 - Invalid map export state, invalid glyph JSON, unreadable files, or unsupported terrain values are surfaced as user-visible errors without crashing the component.
 - The feature remains available only in the development-only Quilt route; production Arcade bundles must not gain Quilt route exposure.
 
@@ -50,6 +52,9 @@ None. The decisions below resolve the ambiguities in the request for this specif
 - The export button downloads the drawn terrain map, not the imported Sigil glyph map.
 - The import button uploads Sigil glyph JSON for visual tile rendering, not terrain map JSON.
 - Only imported `floor`, `wall`, and `door` glyph paths are used for terrain rendering in this slice.
+- Glyph paths are centered within each tile (bounding-box offset) so the visible content is evenly positioned regardless of the glyph's font-unit origin.
+- Each terrain tile is cleared before its glyph path is drawn, so replacing a terrain type never leaves the old glyph visible underneath (no stacking).
+- Canvas pixel buffers are multiplied by `devicePixelRatio` with a matching `context.scale(dpr)` applied, so vector paths are crisp on Retina/HiDPI displays.
 - If a valid Sigil glyph map lacks an extra non-terrain entry or contains extra entries, Quilt relies on the shared `@bruff/contracts` parser result to decide validity.
 - The contract layer must be the source of truth for accepted map sizes and JSON shapes. If current contracts do not accept 8x8 or 9x9 maps, the later design must include a contracts update before Quilt export can claim support for those sizes.
 
@@ -64,7 +69,7 @@ None. The decisions below resolve the ambiguities in the request for this specif
 - Glyph import after terrain drawing changes only visual rendering, not terrain data.
 - Invalid glyph JSON reports a validation error and leaves the previous rendering mode unchanged.
 - File read cancellation or an empty file leaves the editor state unchanged and does not crash.
-- Imported path strings that parse but draw outside a tile are scaled/clipped to the tile viewport so one glyph cannot overdraw unrelated tiles.
+- Imported path strings are scaled uniformly (`tileSize / unitsPerEm`) then centered within the tile. A path that extends beyond the tile boundary is clipped by the tile rectangle so one glyph cannot overdraw unrelated tiles.
 - Terrain values not allowed by `@bruff/contracts` are rejected rather than coerced.
 - The active draw type must survive resize unless the resize operation itself fails.
 - Canvas redraws after resize must continue to fit the square viewport using the current Quilt scaling behaviour.

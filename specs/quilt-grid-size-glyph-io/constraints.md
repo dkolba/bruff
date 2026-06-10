@@ -22,10 +22,11 @@
 ## Rendering constraints
 
 - The board remains canvas-rendered.
-- Imported glyph paths are drawn dark gray.
-- Imported glyph paths are scaled/clipped to the destination tile.
-- The existing fallback terrain rendering remains available when no glyph JSON is imported.
-- Canvas sizing continues to derive tile size from the current square viewport and map dimensions.
+- Imported glyph paths are drawn dark gray (`#555555`).
+- Imported glyph paths are scaled uniformly to the destination tile (`tileSize / unitsPerEm`) and centered within the tile via a bounding-box offset so the visible glyph content is evenly positioned.
+- Each tile is cleared (`clearRect`) before its glyph path is drawn so replacing a terrain type (e.g. drawing wall over floor) does not show the old glyph underneath.
+- The existing fallback rendering (solid-color `fillRect` per terrain type) remains available when no glyph JSON is imported.
+- Canvas pixel-buffer dimensions are multiplied by `devicePixelRatio` and a `context.scale(dpr, dpr)` is applied so vector paths render at native resolution on high-DPI displays. CSS dimensions remain derived from the viewport as before.
 
 ## Dependency constraints
 
