@@ -1,6 +1,7 @@
 import "@bruff/sigil";
 import { registerQuiltElement } from "@bruff/quilt";
 
+/** TODO: Also use a register function for the sigil custom element */
 registerQuiltElement();
 
 /** Arcade route variants supported by the dev tools router. */
@@ -27,7 +28,11 @@ export const routePathname = (pathname: string): ArcadeRoute => {
     return TOOLS_ROUTE;
   }
 
-  return pathname === "/tools-map" ? QUILT_ROUTE : GAME_ROUTE;
+  if (pathname === "/tools-map") {
+    return QUILT_ROUTE;
+  }
+
+  return GAME_ROUTE;
 };
 
 /**
@@ -41,7 +46,11 @@ export const routeElementName = (route: ArcadeRoute): ArcadeElementName => {
     return TOOL_SIGIL_ELEMENT_NAME;
   }
 
-  return route === QUILT_ROUTE ? TOOL_QUILT_ELEMENT_NAME : GAME_ELEMENT_NAME;
+  if (route === QUILT_ROUTE) {
+    return TOOL_QUILT_ELEMENT_NAME;
+  }
+
+  return GAME_ELEMENT_NAME;
 };
 
 const findMountRoot = (): HTMLElement => {
