@@ -42,10 +42,10 @@ describe("editor command", () => {
     const afterTileMapData = createTileMapData({ height: 9, width: 9 });
 
     expect(
-      createResizeMapCommand({ beforeTileMapData, afterTileMapData }),
+      createResizeMapCommand({ afterTileMapData, beforeTileMapData }),
     ).toStrictEqual({
-      beforeTileMapData,
       afterTileMapData,
+      beforeTileMapData,
       type: "RESIZE_MAP",
     });
   });

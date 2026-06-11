@@ -1,9 +1,9 @@
+export { QuiltElement } from "./module/quilt-element.ts";
 export {
   getQuiltMapData,
-  QuiltElement,
   registerQuiltElement,
   setQuiltMapData,
-} from "./module/quilt-element.ts";
+} from "./module/quilt-element-helpers.ts";
 
 export {
   chunkCoordinateKey,

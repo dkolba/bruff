@@ -1,11 +1,13 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import {
   getQuiltMapData,
-  QuiltElement,
   registerQuiltElement,
   setQuiltMapData,
-} from "./quilt-element.ts";
+} from "./quilt-element-helpers.ts";
 import { createTileMapData } from "./model/tile-map-data.ts";
+import { QuiltElement } from "./quilt-element.ts";
+
+const DEFAULT_MAP_SIZE = 4;
 
 const appendElement = (): Element => {
   registerQuiltElement();
@@ -15,7 +17,7 @@ const appendElement = (): Element => {
   return quiltElement;
 };
 
-describe("quilt element", () => {
+describe("quilt element — lifecycle setup", () => {
   test("coordinates lifecycle setup without domain methods", () => {
     const quiltElement = appendElement();
 
@@ -32,6 +34,22 @@ describe("quilt element", () => {
     quiltElement.remove();
   });
 
+  test("connectedCallback is idempotent", () => {
+    const quiltElement = appendElement();
+    const { shadowRoot } = quiltElement;
+
+    if (quiltElement instanceof QuiltElement) {
+      quiltElement.connectedCallback();
+    }
+
+    const { shadowRoot: nextShadowRoot } = quiltElement;
+
+    expect(nextShadowRoot).toBe(shadowRoot);
+    quiltElement.remove();
+  });
+});
+
+describe("quilt element — canvas sizing", () => {
   test("sizes canvases from the smaller viewport dimension", () => {
     const quiltElement = appendElement();
     const terrainCanvas = quiltElement.shadowRoot?.querySelector(
@@ -56,27 +74,15 @@ describe("quilt element", () => {
     expect(quiltElement).toBeInstanceOf(QuiltElement);
     quiltElement.remove();
   });
+});
 
-  test("connectedCallback is idempotent", () => {
-    const quiltElement = appendElement();
-    const { shadowRoot } = quiltElement;
-
-    if (quiltElement instanceof QuiltElement) {
-      quiltElement.connectedCallback();
-    }
-
-    const { shadowRoot: nextShadowRoot } = quiltElement;
-
-    expect(nextShadowRoot).toBe(shadowRoot);
-    quiltElement.remove();
-  });
-
+describe("quilt element — map data helpers", () => {
   test("returns default map data before runtime connects", () => {
     registerQuiltElement();
     const quiltElement = document.createElement("tool-quilt");
 
     if (quiltElement instanceof QuiltElement) {
-      expect(getQuiltMapData(quiltElement).width).toBe(4);
+      expect(getQuiltMapData(quiltElement).width).toBe(DEFAULT_MAP_SIZE);
     }
   });
 
@@ -90,7 +96,9 @@ describe("quilt element", () => {
     }
     quiltElement.remove();
   });
+});
 
+describe("quilt element — registration", () => {
   test("registers the custom element once", () => {
     registerQuiltElement();
     registerQuiltElement();
@@ -98,6 +106,23 @@ describe("quilt element", () => {
     expect(customElements.get("tool-quilt")).toBe(QuiltElement);
   });
 
+  test("defines the custom element when not already registered", () => {
+    // eslint-disable-next-line unicorn/no-useless-undefined -- TS requires argument for typed mock
+    const getSpy = vi.spyOn(customElements, "get").mockReturnValue(undefined);
+    const defineSpy = vi
+      .spyOn(customElements, "define")
+      .mockImplementation(vi.fn());
+
+    registerQuiltElement();
+
+    expect(defineSpy).toHaveBeenCalledWith("tool-quilt", QuiltElement);
+
+    getSpy.mockRestore();
+    defineSpy.mockRestore();
+  });
+});
+
+describe("quilt element — shadow DOM structure", () => {
   test("exposes grid-size select and terrain draw buttons from shadow DOM", () => {
     const quiltElement = appendElement();
 

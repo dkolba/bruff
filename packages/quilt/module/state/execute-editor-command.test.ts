@@ -19,8 +19,46 @@ import { describe, expect, test } from "vitest";
 
 const paintedTile = { tileX: 1, tileY: 1 };
 const crossChunkTile = { tileX: 33, tileY: 1 };
+const MAP_SIZE_40 = 40;
+const MAP_SIZE_4 = 4;
+const MAP_SIZE_9 = 9;
 
-describe("execute editor command", () => {
+const assertRedoneTileIsWall = (
+  redoneState: ReturnType<typeof createQuiltState>,
+  command: ReturnType<typeof createPaintTilesCommand>,
+): void => {
+  expect(getTile(redoneState.tileMapData, paintedTile, "terrain")).toBe(
+    wallTileId,
+  );
+  expect(redoneState.undoStack).toStrictEqual([command]);
+  expect(redoneState.redoStack).toStrictEqual([]);
+};
+
+type ResizeAssertInput = Readonly<{
+  undoneState: ReturnType<typeof createQuiltState>;
+  redoneState: ReturnType<typeof createQuiltState>;
+  beforeTileMapData: ReturnType<typeof createTileMapData>;
+  afterTileMapData: ReturnType<typeof createTileMapData>;
+  command: ReturnType<typeof createResizeMapCommand>;
+}>;
+
+const assertResizeUndoRedo = (input: ResizeAssertInput): void => {
+  const {
+    afterTileMapData,
+    beforeTileMapData,
+    command,
+    redoneState,
+    undoneState,
+  } = input;
+  expect(undoneState.tileMapData).toBe(beforeTileMapData);
+  expect(undoneState.undoStack).toStrictEqual([]);
+  expect(undoneState.redoStack).toStrictEqual([command]);
+  expect(redoneState.tileMapData).toBe(afterTileMapData);
+  expect(redoneState.undoStack).toStrictEqual([command]);
+  expect(redoneState.redoStack).toStrictEqual([]);
+};
+
+describe("execute editor command — paint execution", () => {
   test("executes paint commands and tracks dirty chunks", () => {
     const command = createPaintTilesCommand({
       changes: [
@@ -39,7 +77,10 @@ describe("execute editor command", () => {
       ],
     });
     const quiltState = createQuiltState({
-      tileMapData: createTileMapData({ height: 40, width: 40 }),
+      tileMapData: createTileMapData({
+        height: MAP_SIZE_40,
+        width: MAP_SIZE_40,
+      }),
     });
     const nextState = executeEditorCommand(quiltState, command);
 
@@ -53,7 +94,9 @@ describe("execute editor command", () => {
     expect(nextState.undoStack).toStrictEqual([command]);
     expect(nextState.redoStack).toStrictEqual([]);
   });
+});
 
+describe("execute editor command — undo and redo paint", () => {
   test("undoes and redoes paint commands", () => {
     const command = createPaintTilesCommand({
       changes: [
@@ -66,7 +109,7 @@ describe("execute editor command", () => {
       ],
     });
     const quiltState = createQuiltState({
-      tileMapData: createTileMapData({ height: 4, width: 4 }),
+      tileMapData: createTileMapData({ height: MAP_SIZE_4, width: MAP_SIZE_4 }),
     });
     const paintedState = executeEditorCommand(quiltState, command);
     const undoneState = undoEditorCommand(paintedState);
@@ -77,28 +120,32 @@ describe("execute editor command", () => {
     );
     expect(undoneState.undoStack).toStrictEqual([]);
     expect(undoneState.redoStack).toStrictEqual([command]);
-    expect(getTile(redoneState.tileMapData, paintedTile, "terrain")).toBe(
-      wallTileId,
-    );
-    expect(redoneState.undoStack).toStrictEqual([command]);
-    expect(redoneState.redoStack).toStrictEqual([]);
+    assertRedoneTileIsWall(redoneState, command);
   });
 
   test("keeps state unchanged when undo or redo stacks are empty", () => {
     const quiltState = createQuiltState({
-      tileMapData: createTileMapData({ height: 4, width: 4 }),
+      tileMapData: createTileMapData({ height: MAP_SIZE_4, width: MAP_SIZE_4 }),
     });
 
     expect(undoEditorCommand(quiltState)).toBe(quiltState);
     expect(redoEditorCommand(quiltState)).toBe(quiltState);
   });
+});
 
+describe("execute editor command — resize execution", () => {
   test("executes resize commands marking all map chunks dirty", () => {
-    const beforeTileMapData = createTileMapData({ height: 4, width: 4 });
-    const afterTileMapData = createTileMapData({ height: 9, width: 9 });
+    const beforeTileMapData = createTileMapData({
+      height: MAP_SIZE_4,
+      width: MAP_SIZE_4,
+    });
+    const afterTileMapData = createTileMapData({
+      height: MAP_SIZE_9,
+      width: MAP_SIZE_9,
+    });
     const command = createResizeMapCommand({
-      beforeTileMapData,
       afterTileMapData,
+      beforeTileMapData,
     });
     const quiltState = createQuiltState({ tileMapData: beforeTileMapData });
     const nextState = executeEditorCommand(quiltState, command);
@@ -110,24 +157,33 @@ describe("execute editor command", () => {
     expect(nextState.undoStack).toStrictEqual([command]);
     expect(nextState.redoStack).toStrictEqual([]);
   });
+});
 
+describe("execute editor command — undo and redo resize", () => {
   test("undoes and redoes resize commands preserving original map data", () => {
-    const beforeTileMapData = createTileMapData({ height: 4, width: 4 });
-    const afterTileMapData = createTileMapData({ height: 9, width: 9 });
+    const beforeTileMapData = createTileMapData({
+      height: MAP_SIZE_4,
+      width: MAP_SIZE_4,
+    });
+    const afterTileMapData = createTileMapData({
+      height: MAP_SIZE_9,
+      width: MAP_SIZE_9,
+    });
     const command = createResizeMapCommand({
-      beforeTileMapData,
       afterTileMapData,
+      beforeTileMapData,
     });
     const quiltState = createQuiltState({ tileMapData: beforeTileMapData });
     const resizedState = executeEditorCommand(quiltState, command);
     const undoneState = undoEditorCommand(resizedState);
     const redoneState = redoEditorCommand(undoneState);
 
-    expect(undoneState.tileMapData).toBe(beforeTileMapData);
-    expect(undoneState.undoStack).toStrictEqual([]);
-    expect(undoneState.redoStack).toStrictEqual([command]);
-    expect(redoneState.tileMapData).toBe(afterTileMapData);
-    expect(redoneState.undoStack).toStrictEqual([command]);
-    expect(redoneState.redoStack).toStrictEqual([]);
+    assertResizeUndoRedo({
+      afterTileMapData,
+      beforeTileMapData,
+      command,
+      redoneState,
+      undoneState,
+    });
   });
 });

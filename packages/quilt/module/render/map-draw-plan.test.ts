@@ -14,29 +14,69 @@ import {
 } from "../model/tile-map-data.ts";
 import { describe, expect, test } from "vitest";
 
-const tileSize = 16;
+const TILE_SIZE = 16;
+const CHUNK_TILE_COUNT = 256;
+const CHUNK_PIXEL_OFFSET = 512;
+const MAP_SIZE_40 = 40;
+const SMALL_MAP = 4;
+const TINY_MAP = 2;
+const GRID_PIXEL_64 = 64;
+const HOVER_X_OFFSET = 1;
+const HOVER_Y_OFFSET = 2;
+const ORIGIN = 0;
 
-describe("map draw plan", () => {
+describe("map draw plan — dirty chunk projection", () => {
   test("projects dirty chunks into tile-level terrain draw commands", () => {
-    const tileMapData = createTileMapData({ height: 40, width: 40 });
+    const tileMapData = createTileMapData({
+      height: MAP_SIZE_40,
+      width: MAP_SIZE_40,
+    });
     const quiltState = createQuiltState({
       dirtyChunks: new Set(["1:0"]),
       tileMapData,
     });
-    const terrainDrawPlan = createTerrainDrawPlan({ quiltState, tileSize });
+    const terrainDrawPlan = createTerrainDrawPlan({
+      quiltState,
+      tileSize: TILE_SIZE,
+    });
 
     expect(terrainDrawPlan.kind).toBe("terrain");
-    expect(terrainDrawPlan.commands).toHaveLength(256);
-    expect(terrainDrawPlan.commands.at(0)).toStrictEqual({
+    expect(terrainDrawPlan.commands).toHaveLength(CHUNK_TILE_COUNT);
+    expect(terrainDrawPlan.commands.at(ORIGIN)).toStrictEqual({
       fillStyle: "#d7d0bf",
-      height: 16,
       kind: "drawTerrainTile",
-      width: 16,
-      x: 512,
-      y: 0,
+      pixelHeight: TILE_SIZE,
+      pixelWidth: TILE_SIZE,
+      pixelX: CHUNK_PIXEL_OFFSET,
+      pixelY: ORIGIN,
     });
   });
 
+  test("falls back to origin for malformed dirty chunk keys", () => {
+    const tileMapData = createTileMapData({
+      height: SMALL_MAP,
+      width: SMALL_MAP,
+    });
+    const quiltState = createQuiltState({
+      dirtyChunks: new Set(["bad"]),
+      tileMapData,
+    });
+    expect(
+      createTerrainDrawPlan({ quiltState, tileSize: TILE_SIZE }).commands.at(
+        ORIGIN,
+      ),
+    ).toStrictEqual({
+      fillStyle: "#d7d0bf",
+      kind: "drawTerrainTile",
+      pixelHeight: TILE_SIZE,
+      pixelWidth: TILE_SIZE,
+      pixelX: ORIGIN,
+      pixelY: ORIGIN,
+    });
+  });
+});
+
+describe("map draw plan — initial terrain projection", () => {
   test("projects initial terrain when no chunks are dirty", () => {
     const tileMapData = setTile({
       layerId: "terrain",
@@ -46,63 +86,63 @@ describe("map draw plan", () => {
         layerId: "terrain",
         tileCoordinate: { tileX: 1, tileY: 1 },
         tileId: wallTileId,
-        tileMapData: createTileMapData({ height: 2, width: 2 }),
+        tileMapData: createTileMapData({ height: TINY_MAP, width: TINY_MAP }),
       }),
     });
     const quiltState = createQuiltState({ tileMapData });
 
     expect(
-      createTerrainDrawPlan({ quiltState, tileSize }).commands,
+      createTerrainDrawPlan({ quiltState, tileSize: TILE_SIZE }).commands,
     ).toContainEqual({
       fillStyle: "#111111",
-      height: 16,
       kind: "drawTerrainTile",
-      width: 16,
-      x: 16,
-      y: 16,
+      pixelHeight: TILE_SIZE,
+      pixelWidth: TILE_SIZE,
+      pixelX: TILE_SIZE,
+      pixelY: TILE_SIZE,
     });
     expect(
-      createTerrainDrawPlan({ quiltState, tileSize }).commands,
+      createTerrainDrawPlan({ quiltState, tileSize: TILE_SIZE }).commands,
     ).toContainEqual({
       fillStyle: "#8b5a2b",
-      height: 16,
       kind: "drawTerrainTile",
-      width: 16,
-      x: 0,
-      y: 16,
+      pixelHeight: TILE_SIZE,
+      pixelWidth: TILE_SIZE,
+      pixelX: ORIGIN,
+      pixelY: TILE_SIZE,
     });
   });
+});
 
-  test("falls back to origin for malformed dirty chunk keys", () => {
-    const tileMapData = createTileMapData({ height: 4, width: 4 });
-    const quiltState = createQuiltState({
-      dirtyChunks: new Set(["bad"]),
-      tileMapData,
-    });
-
-    expect(
-      createTerrainDrawPlan({ quiltState, tileSize }).commands.at(0),
-    ).toStrictEqual({
-      fillStyle: "#d7d0bf",
-      height: 16,
-      kind: "drawTerrainTile",
-      width: 16,
-      x: 0,
-      y: 0,
-    });
-  });
-
+describe("map draw plan — overlay draw plans", () => {
   test("projects hover and grid overlay draw commands", () => {
-    const tileMapData = createTileMapData({ height: 4, width: 4 });
+    const tileMapData = createTileMapData({
+      height: SMALL_MAP,
+      width: SMALL_MAP,
+    });
     const quiltState = createQuiltState({
-      hoveredTile: { tileCoordinate: { tileX: 1, tileY: 2 }, type: "some" },
+      hoveredTile: {
+        tileCoordinate: { tileX: HOVER_X_OFFSET, tileY: HOVER_Y_OFFSET },
+        type: "some",
+      },
       tileMapData,
     });
-
-    expect(createOverlayDrawPlan({ quiltState, tileSize })).toStrictEqual({
+    expect(
+      createOverlayDrawPlan({ quiltState, tileSize: TILE_SIZE }),
+    ).toStrictEqual({
       commands: [
-        { height: 64, kind: "drawGrid", width: 64 },
-        { height: 16, kind: "drawHoverTile", width: 16, x: 16, y: 32 },
+        {
+          kind: "drawGrid",
+          pixelHeight: GRID_PIXEL_64,
+          pixelWidth: GRID_PIXEL_64,
+        },
+        {
+          kind: "drawHoverTile",
+          pixelHeight: TILE_SIZE,
+          pixelWidth: TILE_SIZE,
+          pixelX: TILE_SIZE,
+          pixelY: TILE_SIZE * HOVER_Y_OFFSET,
+        },
       ],
       kind: "overlay",
     });
@@ -110,14 +150,22 @@ describe("map draw plan", () => {
 
   test("omits hover command when no tile is hovered", () => {
     const quiltState = createQuiltState({
-      tileMapData: createTileMapData({ height: 4, width: 4 }),
+      tileMapData: createTileMapData({ height: SMALL_MAP, width: SMALL_MAP }),
     });
 
     expect(
-      createOverlayDrawPlan({ quiltState, tileSize }).commands,
-    ).toStrictEqual([{ height: 64, kind: "drawGrid", width: 64 }]);
+      createOverlayDrawPlan({ quiltState, tileSize: TILE_SIZE }).commands,
+    ).toStrictEqual([
+      {
+        kind: "drawGrid",
+        pixelHeight: GRID_PIXEL_64,
+        pixelWidth: GRID_PIXEL_64,
+      },
+    ]);
   });
+});
 
+describe("map draw plan — glyph projection", () => {
   test("projects glyph path draw commands when terrain glyphs are imported", () => {
     const terrainGlyphs: QuiltTerrainGlyphMap = {
       wall: {
@@ -130,51 +178,43 @@ describe("map draw plan", () => {
     };
     const tileMapData = setTile({
       layerId: "terrain",
-      tileCoordinate: { tileX: 0, tileY: 0 },
+      tileCoordinate: { tileX: ORIGIN, tileY: ORIGIN },
       tileId: wallTileId,
-      tileMapData: createTileMapData({ height: 4, width: 4 }),
+      tileMapData: createTileMapData({ height: SMALL_MAP, width: SMALL_MAP }),
     });
-    const quiltState = createQuiltState({
-      terrainGlyphs,
-      tileMapData,
-    });
-
-    const drawPlan = createTerrainDrawPlan({ quiltState, tileSize });
-
+    const quiltState = createQuiltState({ terrainGlyphs, tileMapData });
+    const drawPlan = createTerrainDrawPlan({ quiltState, tileSize: TILE_SIZE });
     expect(drawPlan.commands).toContainEqual({
+      glyphBounds: { x1: 10, x2: 690, y1: 20, y2: 720 },
       kind: "drawTerrainGlyph",
       path: "M0 0L1 1Z",
-      tileBounds: { x1: 0, x2: 1, y1: 0, y2: 1 },
+      pixelHeight: TILE_SIZE,
+      pixelWidth: TILE_SIZE,
+      pixelX: ORIGIN,
+      pixelY: ORIGIN,
+      tileBounds: { highX: 1, highY: 1, lowX: 0, lowY: 0 },
       unitsPerEm: 1000,
-      glyphBounds: { x1: 10, x2: 690, y1: 20, y2: 720 },
-      x: 0,
-      y: 0,
-      width: 16,
-      height: 16,
     });
   });
+});
 
+describe("map draw plan — fill fallback", () => {
   test("emits fill command when no glyph is available for a terrain type", () => {
     const tileMapData = setTile({
       layerId: "terrain",
-      tileCoordinate: { tileX: 0, tileY: 0 },
+      tileCoordinate: { tileX: ORIGIN, tileY: ORIGIN },
       tileId: wallTileId,
-      tileMapData: createTileMapData({ height: 2, width: 2 }),
+      tileMapData: createTileMapData({ height: TINY_MAP, width: TINY_MAP }),
     });
-    const quiltState = createQuiltState({
-      terrainGlyphs: {},
-      tileMapData,
-    });
-
-    const drawPlan = createTerrainDrawPlan({ quiltState, tileSize });
-
+    const quiltState = createQuiltState({ terrainGlyphs: {}, tileMapData });
+    const drawPlan = createTerrainDrawPlan({ quiltState, tileSize: TILE_SIZE });
     expect(drawPlan.commands).toContainEqual({
       fillStyle: "#111111",
-      height: 16,
       kind: "drawTerrainTile",
-      width: 16,
-      x: 0,
-      y: 0,
+      pixelHeight: TILE_SIZE,
+      pixelWidth: TILE_SIZE,
+      pixelX: ORIGIN,
+      pixelY: ORIGIN,
     });
   });
 });

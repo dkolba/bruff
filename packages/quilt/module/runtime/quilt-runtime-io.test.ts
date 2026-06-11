@@ -5,6 +5,7 @@ import { createQuiltRuntime } from "./quilt-runtime.ts";
 import { describe, expect, test } from "vitest";
 
 const CANVAS_SIZE_64 = 64;
+const FILE_LOAD_TIMEOUT_MS = 10;
 
 const createRuntimeNodes = (): Readonly<{
   doorToolButton: HTMLButtonElement;
@@ -90,16 +91,23 @@ const VALID_GLYPH_JSON = JSON.stringify({
   },
 });
 
-describe("quilt runtime IO", () => {
+const MAP_SIZE_4 = 4;
+
+const makeRuntimeForIO = (
+  nodes: ReturnType<typeof createRuntimeNodes>,
+): ReturnType<typeof createQuiltRuntime> =>
+  createQuiltRuntime({
+    ...nodes,
+    canvasSize: CANVAS_SIZE_64,
+    quiltState: createQuiltState({
+      tileMapData: createTileMapData({ height: MAP_SIZE_4, width: MAP_SIZE_4 }),
+    }),
+  });
+
+describe("quilt runtime IO — export", () => {
   test("export button triggers download via object URL", () => {
     const runtimeNodes = createRuntimeNodes();
-    createQuiltRuntime({
-      ...runtimeNodes,
-      canvasSize: CANVAS_SIZE_64,
-      quiltState: createQuiltState({
-        tileMapData: createTileMapData({ height: 4, width: 4 }),
-      }),
-    });
+    makeRuntimeForIO(runtimeNodes);
     const createdUrls: Array<string> = [];
 
     globalThis.URL.createObjectURL = (): string => {
@@ -114,36 +122,27 @@ describe("quilt runtime IO", () => {
 
     expect(createdUrls).toStrictEqual(["blob:test"]);
   });
+});
 
+describe("quilt runtime IO — import button", () => {
   test("import button click triggers file input click", () => {
     const runtimeNodes = createRuntimeNodes();
     let inputClicked = false;
     runtimeNodes.importInput.click = (): void => {
       inputClicked = true;
     };
-
-    createQuiltRuntime({
-      ...runtimeNodes,
-      canvasSize: CANVAS_SIZE_64,
-      quiltState: createQuiltState({
-        tileMapData: createTileMapData({ height: 4, width: 4 }),
-      }),
-    });
+    makeRuntimeForIO(runtimeNodes);
 
     runtimeNodes.importButton.click();
 
     expect(inputClicked).toBe(true);
   });
+});
 
+describe("quilt runtime IO — import errors for invalid JSON", () => {
   test("shows visible error for invalid glyph JSON import", () => {
     const runtimeNodes = createRuntimeNodes();
-    const runtime = createQuiltRuntime({
-      ...runtimeNodes,
-      canvasSize: CANVAS_SIZE_64,
-      quiltState: createQuiltState({
-        tileMapData: createTileMapData({ height: 4, width: 4 }),
-      }),
-    });
+    const runtime = makeRuntimeForIO(runtimeNodes);
     const file = createFileWithText("not json", "bad.json");
     const originalText = file.text.bind(file);
     file.text = (): Promise<string> => Promise.resolve("not json");
@@ -161,19 +160,13 @@ describe("quilt runtime IO", () => {
         ]);
         file.text = originalText;
         resolve();
-      }, 10);
+      }, FILE_LOAD_TIMEOUT_MS);
     });
   });
 
   test("shows error for invalid Sigil glyph map structure", () => {
     const runtimeNodes = createRuntimeNodes();
-    const runtime = createQuiltRuntime({
-      ...runtimeNodes,
-      canvasSize: CANVAS_SIZE_64,
-      quiltState: createQuiltState({
-        tileMapData: createTileMapData({ height: 4, width: 4 }),
-      }),
-    });
+    const runtime = makeRuntimeForIO(runtimeNodes);
     const file = createFileWithText("{}", "empty.json");
     const originalText = file.text.bind(file);
     file.text = (): Promise<string> => Promise.resolve("{}");
@@ -187,25 +180,45 @@ describe("quilt runtime IO", () => {
     return new Promise<void>((resolve) => {
       setTimeout(() => {
         expect(runtime.getState().visibleErrors).toStrictEqual([
-          {
-            message: "Invalid glyph JSON: not a valid Sigil glyph map.",
-          },
+          { message: "Invalid glyph JSON: not a valid Sigil glyph map." },
         ]);
         file.text = originalText;
         resolve();
-      }, 10);
+      }, FILE_LOAD_TIMEOUT_MS);
     });
   });
+});
 
+describe("quilt runtime IO — import errors for read failures", () => {
+  test("shows error when file read fails", () => {
+    const runtimeNodes = createRuntimeNodes();
+    const runtime = makeRuntimeForIO(runtimeNodes);
+    const file = createFileWithText("", "bad.json");
+    const originalText = file.text.bind(file);
+    file.text = (): Promise<string> => Promise.reject(new Error("Read failed"));
+
+    Object.defineProperty(runtimeNodes.importInput, "files", {
+      configurable: true,
+      get: () => [file],
+    });
+    runtimeNodes.importInput.dispatchEvent(new Event("change"));
+
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        expect(runtime.getState().visibleErrors).toStrictEqual([
+          { message: "Failed to read glyph JSON file." },
+        ]);
+        file.text = originalText;
+        resolve();
+      }, FILE_LOAD_TIMEOUT_MS);
+    });
+  });
+});
+
+describe("quilt runtime IO — import success", () => {
   test("successfully imports valid glyph JSON and updates terrainGlyphs", () => {
     const runtimeNodes = createRuntimeNodes();
-    const runtime = createQuiltRuntime({
-      ...runtimeNodes,
-      canvasSize: CANVAS_SIZE_64,
-      quiltState: createQuiltState({
-        tileMapData: createTileMapData({ height: 4, width: 4 }),
-      }),
-    });
+    const runtime = makeRuntimeForIO(runtimeNodes);
     const file = createFileWithText(VALID_GLYPH_JSON, "glyphs.json");
     const originalText = file.text.bind(file);
     file.text = (): Promise<string> => Promise.resolve(VALID_GLYPH_JSON);
@@ -224,19 +237,13 @@ describe("quilt runtime IO", () => {
         expect(runtime.getState().terrainGlyphs.door).toBeDefined();
         file.text = originalText;
         resolve();
-      }, 10);
+      }, FILE_LOAD_TIMEOUT_MS);
     });
   });
 
   test("handles empty file selection gracefully", () => {
     const runtimeNodes = createRuntimeNodes();
-    const runtime = createQuiltRuntime({
-      ...runtimeNodes,
-      canvasSize: CANVAS_SIZE_64,
-      quiltState: createQuiltState({
-        tileMapData: createTileMapData({ height: 4, width: 4 }),
-      }),
-    });
+    const runtime = makeRuntimeForIO(runtimeNodes);
 
     Object.defineProperty(runtimeNodes.importInput, "files", {
       configurable: true,
@@ -245,35 +252,5 @@ describe("quilt runtime IO", () => {
     runtimeNodes.importInput.dispatchEvent(new Event("change"));
 
     expect(runtime.getState().visibleErrors).toStrictEqual([]);
-  });
-
-  test("shows error when file read fails", () => {
-    const runtimeNodes = createRuntimeNodes();
-    const runtime = createQuiltRuntime({
-      ...runtimeNodes,
-      canvasSize: CANVAS_SIZE_64,
-      quiltState: createQuiltState({
-        tileMapData: createTileMapData({ height: 4, width: 4 }),
-      }),
-    });
-    const file = createFileWithText("", "bad.json");
-    const originalText = file.text.bind(file);
-    file.text = (): Promise<string> => Promise.reject(new Error("Read failed"));
-
-    Object.defineProperty(runtimeNodes.importInput, "files", {
-      configurable: true,
-      get: () => [file],
-    });
-    runtimeNodes.importInput.dispatchEvent(new Event("change"));
-
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        expect(runtime.getState().visibleErrors).toStrictEqual([
-          { message: "Failed to read glyph JSON file." },
-        ]);
-        file.text = originalText;
-        resolve();
-      }, 10);
-    });
   });
 });

@@ -7,6 +7,7 @@ import {
   createOverlayDrawPlan,
   createTerrainDrawPlan,
 } from "../render/map-draw-plan.ts";
+import { adaptCanvasContext } from "./canvas-context-adapter.ts";
 import { createQuiltState, type QuiltState } from "../state/quilt-state.ts";
 import { handleImportFileChange } from "./quilt-runtime-io.ts";
 import { attachCanvasToolListeners } from "./quilt-toolbar-listeners.ts";
@@ -97,14 +98,14 @@ const renderQuiltState = (
   }
 
   executeTerrainDrawPlan(
-    terrainContext,
+    adaptCanvasContext(terrainContext),
     createTerrainDrawPlan({
       quiltState,
       tileSize: getTileSize(quiltState, canvasSize),
     }),
   );
   executeOverlayDrawPlan(
-    overlayContext,
+    adaptCanvasContext(overlayContext),
     createOverlayDrawPlan({
       quiltState,
       tileSize: getTileSize(quiltState, canvasSize),

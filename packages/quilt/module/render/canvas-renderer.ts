@@ -6,67 +6,105 @@ import type {
 
 const CANVAS_ORIGIN = 0;
 const GLYPH_FILL_STYLE = "#555555";
+const HALF = 2;
+
+/** A rectangular region in pixel-space. */
+type CanvasRect = Readonly<{
+  pixelX: number;
+  pixelY: number;
+  pixelWidth: number;
+  pixelHeight: number;
+}>;
 
 /** Minimal Canvas 2D context capabilities used by Quilt draw executors. */
 export type QuiltCanvasContext = {
   fillStyle: string | CanvasGradient | CanvasPattern;
-  clearRect: (x: number, y: number, width: number, height: number) => void;
-  fillRect: (x: number, y: number, width: number, height: number) => void;
-  strokeRect: (x: number, y: number, width: number, height: number) => void;
+  clearRect: (rect: CanvasRect) => void;
+  fillRect: (rect: CanvasRect) => void;
+  strokeRect: (rect: CanvasRect) => void;
   save: () => void;
   restore: () => void;
-  translate: (x: number, y: number) => void;
-  scale: (x: number, y: number) => void;
+  translate: (translateX: number, translateY: number) => void;
+  scale: (scaleX: number, scaleY: number) => void;
   fill: (path: Path2D, fillRule?: CanvasFillRule) => void;
 };
 
-const HALF = 2;
+const toCanvasRect = (parameters: {
+  pixelHeight: number;
+  pixelWidth: number;
+  pixelX: number;
+  pixelY: number;
+}): CanvasRect => parameters;
 
-const computeGlyphOffsetX = (
-  tileWidth: number,
-  glyphWidth: number,
-  scale: number,
-  glyphX1: number,
-): number => (tileWidth - glyphWidth * scale) / HALF - glyphX1 * scale;
+type GlyphOffsetInput = Readonly<{
+  tileDimension: number;
+  glyphDimension: number;
+  scale: number;
+  glyphOrigin: number;
+}>;
 
-const computeGlyphOffsetY = (
-  tileHeight: number,
-  glyphHeight: number,
-  scale: number,
-  glyphY1: number,
-): number => (tileHeight - glyphHeight * scale) / HALF - glyphY1 * scale;
+const computeGlyphOffset = (input: GlyphOffsetInput): number =>
+  (input.tileDimension - input.glyphDimension * input.scale) / HALF -
+  input.glyphOrigin * input.scale;
 
-// eslint-disable-next-line max-statements
+type ClearAndSetupInput = Readonly<{
+  context: QuiltCanvasContext;
+  command: DrawTerrainGlyphCommand;
+  scale: number;
+  offsetX: number;
+  offsetY: number;
+}>;
+
+const clearAndSetupGlyph = (input: ClearAndSetupInput): void => {
+  const { context, command, offsetX, offsetY, scale } = input;
+  context.clearRect(
+    toCanvasRect({
+      pixelHeight: command.pixelHeight,
+      pixelWidth: command.pixelWidth,
+      pixelX: command.pixelX,
+      pixelY: command.pixelY,
+    }),
+  );
+  context.save();
+  context.translate(command.pixelX + offsetX, command.pixelY + offsetY);
+  context.scale(scale, scale);
+};
+
+const renderGlyphPath = (context: QuiltCanvasContext, path2d: Path2D): void => {
+  context.fillStyle = GLYPH_FILL_STYLE;
+  context.fill(path2d);
+  context.restore();
+};
+
 const executeDrawTerrainGlyph = (
   context: QuiltCanvasContext,
   command: DrawTerrainGlyphCommand,
 ): void => {
   /* v8 ignore next -- Path2D is a browser API; covered by browser tests. */
   const path2d = new Path2D(command.path);
-  const scale = command.width / command.unitsPerEm;
+  const scale = command.pixelWidth / command.unitsPerEm;
   const glyphWidth = command.glyphBounds.x2 - command.glyphBounds.x1;
   const glyphHeight = command.glyphBounds.y2 - command.glyphBounds.y1;
-  const offsetX = computeGlyphOffsetX(
-    command.width,
-    glyphWidth,
+  const offsetX = computeGlyphOffset({
+    glyphDimension: glyphWidth,
+    glyphOrigin: command.glyphBounds.x1,
     scale,
-    command.glyphBounds.x1,
-  );
-  const offsetY = computeGlyphOffsetY(
-    command.height,
-    glyphHeight,
+    tileDimension: command.pixelWidth,
+  });
+  const offsetY = computeGlyphOffset({
+    glyphDimension: glyphHeight,
+    glyphOrigin: command.glyphBounds.y1,
     scale,
-    command.glyphBounds.y1,
-  );
-
-  // Clear the tile before drawing the glyph so old glyphs underneath are not visible.
-  context.clearRect(command.x, command.y, command.width, command.height);
-  context.save();
-  context.translate(command.x + offsetX, command.y + offsetY);
-  context.scale(scale, scale);
-  context.fillStyle = GLYPH_FILL_STYLE;
-  context.fill(path2d);
-  context.restore();
+    tileDimension: command.pixelHeight,
+  });
+  clearAndSetupGlyph({
+    command,
+    context,
+    offsetX,
+    offsetY,
+    scale,
+  });
+  renderGlyphPath(context, path2d);
 };
 
 /** Executes terrain draw commands against a Canvas 2D context boundary. */
@@ -81,7 +119,14 @@ export const executeTerrainDrawPlan = (
     }
 
     context.fillStyle = command.fillStyle;
-    context.fillRect(command.x, command.y, command.width, command.height);
+    context.fillRect(
+      toCanvasRect({
+        pixelHeight: command.pixelHeight,
+        pixelWidth: command.pixelWidth,
+        pixelX: command.pixelX,
+        pixelY: command.pixelY,
+      }),
+    );
     return commandCount;
   }, CANVAS_ORIGIN);
 };
@@ -94,21 +139,32 @@ export const executeOverlayDrawPlan = (
   drawPlan.commands.reduce((commandCount, command) => {
     if (command.kind === "drawGrid") {
       context.clearRect(
-        CANVAS_ORIGIN,
-        CANVAS_ORIGIN,
-        command.width,
-        command.height,
+        toCanvasRect({
+          pixelHeight: command.pixelHeight,
+          pixelWidth: command.pixelWidth,
+          pixelX: CANVAS_ORIGIN,
+          pixelY: CANVAS_ORIGIN,
+        }),
       );
       context.strokeRect(
-        CANVAS_ORIGIN,
-        CANVAS_ORIGIN,
-        command.width,
-        command.height,
+        toCanvasRect({
+          pixelHeight: command.pixelHeight,
+          pixelWidth: command.pixelWidth,
+          pixelX: CANVAS_ORIGIN,
+          pixelY: CANVAS_ORIGIN,
+        }),
       );
       return commandCount;
     }
 
-    context.strokeRect(command.x, command.y, command.width, command.height);
+    context.strokeRect(
+      toCanvasRect({
+        pixelHeight: command.pixelHeight,
+        pixelWidth: command.pixelWidth,
+        pixelX: command.pixelX,
+        pixelY: command.pixelY,
+      }),
+    );
     return commandCount;
   }, CANVAS_ORIGIN);
 };

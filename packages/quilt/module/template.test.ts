@@ -1,7 +1,13 @@
 import { describe, expect, test } from "vitest";
 import { createQuiltTemplate } from "./template.ts";
 
-describe("quilt template", () => {
+const GRID_OPTION_COUNT = 6;
+const FIRST_GRID_SIZE = 4;
+const FIRST_GRID_INDEX = 0;
+const LAST_GRID_SIZE = 9;
+const LAST_GRID_INDEX = 5;
+
+describe("quilt template — structure", () => {
   test("creates shadow DOM template with toolbar and canvases", () => {
     const template = createQuiltTemplate();
 
@@ -18,7 +24,9 @@ describe("quilt template", () => {
       template.content.querySelector('[data-quilt="erase-tool"]'),
     ).toBeInstanceOf(HTMLButtonElement);
   });
+});
 
+describe("quilt template — grid-size select", () => {
   test("includes grid-size select with square options", () => {
     const template = createQuiltTemplate();
     const gridSizeSelect = template.content.querySelector(
@@ -27,14 +35,24 @@ describe("quilt template", () => {
 
     expect(gridSizeSelect).toBeInstanceOf(HTMLSelectElement);
     if (gridSizeSelect instanceof HTMLSelectElement) {
-      expect(gridSizeSelect.options.length).toBe(6);
-      expect(gridSizeSelect.options[0]?.value).toBe("4");
-      expect(gridSizeSelect.options[0]?.textContent).toBe("4×4");
-      expect(gridSizeSelect.options[5]?.value).toBe("9");
-      expect(gridSizeSelect.options[5]?.textContent).toBe("9×9");
+      expect(gridSizeSelect.options.length).toBe(GRID_OPTION_COUNT);
+      expect(gridSizeSelect.options[FIRST_GRID_INDEX]?.value).toBe(
+        `${FIRST_GRID_SIZE}`,
+      );
+      expect(gridSizeSelect.options[FIRST_GRID_INDEX]?.textContent).toBe(
+        `${FIRST_GRID_SIZE}×${FIRST_GRID_SIZE}`,
+      );
+      expect(gridSizeSelect.options[LAST_GRID_INDEX]?.value).toBe(
+        `${LAST_GRID_SIZE}`,
+      );
+      expect(gridSizeSelect.options[LAST_GRID_INDEX]?.textContent).toBe(
+        `${LAST_GRID_SIZE}×${LAST_GRID_SIZE}`,
+      );
     }
   });
+});
 
+describe("quilt template — terrain buttons", () => {
   test("includes terrain draw buttons for floor wall and door", () => {
     const template = createQuiltTemplate();
 
@@ -48,7 +66,9 @@ describe("quilt template", () => {
       template.content.querySelector('[data-quilt="door-tool"]'),
     ).toBeInstanceOf(HTMLButtonElement);
   });
+});
 
+describe("quilt template — import/export", () => {
   test("includes export button and import file input", () => {
     const template = createQuiltTemplate();
 
@@ -66,7 +86,9 @@ describe("quilt template", () => {
       expect(importInput.accept).toBe(".json");
     }
   });
+});
 
+describe("quilt template — error region", () => {
   test("includes error region for user-visible messages", () => {
     const template = createQuiltTemplate();
 

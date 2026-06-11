@@ -14,8 +14,10 @@ import {
 
 const doorCoordinate = { tileX: 1, tileY: 0 };
 const wallCoordinate = { tileX: 0, tileY: 1 };
+const MAP_SIZE_2 = 2;
+const MAP_SIZE_9 = 9;
 
-describe("broughlike map storage", () => {
+describe("broughlike map — serialization", () => {
   test("serializes terrain through the shared broughlike map shape", () => {
     const tileMapData = setTile({
       layerId: "terrain",
@@ -25,30 +27,54 @@ describe("broughlike map storage", () => {
         layerId: "terrain",
         tileCoordinate: doorCoordinate,
         tileId: doorTileId,
-        tileMapData: createTileMapData({ height: 2, width: 2 }),
+        tileMapData: createTileMapData({
+          height: MAP_SIZE_2,
+          width: MAP_SIZE_2,
+        }),
       }),
     });
 
     expect(serializeBroughlikeMapData(tileMapData)).toStrictEqual({
-      height: 2,
+      height: MAP_SIZE_2,
       rows: [
         ["floor", "door"],
         ["wall", "floor"],
       ],
       version: 1,
-      width: 2,
+      width: MAP_SIZE_2,
     });
   });
 
+  test("exports deterministic JSON that wraps terrain with shared BroughlikeMap shape", () => {
+    const tileMapData = createTileMapData({
+      height: MAP_SIZE_9,
+      width: MAP_SIZE_9,
+    });
+    const serialized = serializeBroughlikeMapData(tileMapData);
+
+    expect(JSON.stringify(serialized)).toStrictEqual(
+      JSON.stringify({
+        height: MAP_SIZE_9,
+        rows: Array.from({ length: MAP_SIZE_9 }, () =>
+          Array.from({ length: MAP_SIZE_9 }, () => "floor"),
+        ),
+        version: 1,
+        width: MAP_SIZE_9,
+      }),
+    );
+  });
+});
+
+describe("broughlike map — parsing", () => {
   test("parses valid broughlike map data into tile map data", () => {
     const parsed = parseBroughlikeMapData({
-      height: 2,
+      height: MAP_SIZE_2,
       rows: [
         ["floor", "door"],
         ["wall", "floor"],
       ],
       version: 1,
-      width: 2,
+      width: MAP_SIZE_2,
     });
 
     expect(isOk(parsed)).toBe(true);
@@ -65,21 +91,5 @@ describe("broughlike map storage", () => {
     if (isError(parsed)) {
       expect(parsed.error.reason).toBe("INVALID_BROUGHLIKE_MAP_DATA");
     }
-  });
-
-  test("exports deterministic JSON that wraps terrain with shared BroughlikeMap shape", () => {
-    const tileMapData = createTileMapData({ height: 9, width: 9 });
-    const serialized = serializeBroughlikeMapData(tileMapData);
-
-    expect(JSON.stringify(serialized)).toStrictEqual(
-      JSON.stringify({
-        height: 9,
-        rows: Array.from({ length: 9 }, () =>
-          Array.from({ length: 9 }, () => "floor"),
-        ),
-        version: 1,
-        width: 9,
-      }),
-    );
   });
 });

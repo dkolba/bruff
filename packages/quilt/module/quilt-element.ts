@@ -2,9 +2,9 @@ import {
   createQuiltRuntime,
   type QuiltRuntime,
 } from "./runtime/quilt-runtime.ts";
-import { createTileMapData, type TileMapData } from "./model/tile-map-data.ts";
 import { createQuiltState } from "./state/quilt-state.ts";
 import { createQuiltTemplate } from "./template.ts";
+import { createTileMapData } from "./model/tile-map-data.ts";
 
 const QUILT_ELEMENT_NAME = "tool-quilt";
 const DEFAULT_MAP_SIZE = 4;
@@ -15,6 +15,68 @@ const getViewportCanvasSize = (): number =>
     MIN_VIEWPORT_SIZE,
     Math.floor(Math.min(globalThis.innerWidth, globalThis.innerHeight)),
   );
+
+const queryElement = <T extends Element>(
+  shadowRoot: ShadowRoot,
+  selector: string,
+): T | null => shadowRoot.querySelector<T>(selector);
+
+const isCanvas = (element: unknown): element is HTMLCanvasElement =>
+  element instanceof HTMLCanvasElement;
+const isButton = (element: unknown): element is HTMLButtonElement =>
+  element instanceof HTMLButtonElement;
+const isSelect = (element: unknown): element is HTMLSelectElement =>
+  element instanceof HTMLSelectElement;
+const isInput = (element: unknown): element is HTMLInputElement =>
+  element instanceof HTMLInputElement;
+const isElement = (element: unknown): element is HTMLElement =>
+  element instanceof HTMLElement;
+
+const allElementsValid = (shadowRoot: ShadowRoot): boolean =>
+  isCanvas(queryElement(shadowRoot, '[data-quilt="terrain-canvas"]')) &&
+  isCanvas(queryElement(shadowRoot, '[data-quilt="overlay-canvas"]')) &&
+  isButton(queryElement(shadowRoot, '[data-quilt="paint-tool"]')) &&
+  isButton(queryElement(shadowRoot, '[data-quilt="erase-tool"]')) &&
+  isButton(queryElement(shadowRoot, '[data-quilt="floor-tool"]')) &&
+  isButton(queryElement(shadowRoot, '[data-quilt="wall-tool"]')) &&
+  isButton(queryElement(shadowRoot, '[data-quilt="door-tool"]')) &&
+  isSelect(queryElement(shadowRoot, '[data-quilt="grid-size-select"]')) &&
+  isButton(queryElement(shadowRoot, '[data-quilt="export-button"]')) &&
+  isButton(queryElement(shadowRoot, '[data-quilt="import-button"]')) &&
+  isInput(queryElement(shadowRoot, '[data-quilt="import-input"]')) &&
+  isElement(queryElement(shadowRoot, '[data-quilt="error-region"]'));
+
+/* v8 ignore next -- The template owns these selectors; fallback is defensive shell code. */
+const createRuntime = (shadowRoot: ShadowRoot): QuiltRuntime | undefined =>
+  allElementsValid(shadowRoot)
+    ? createQuiltRuntime({
+        canvasSize: getViewportCanvasSize(),
+        doorToolButton: shadowRoot.querySelector('[data-quilt="door-tool"]')!,
+        eraseToolButton: shadowRoot.querySelector('[data-quilt="erase-tool"]')!,
+        errorRegion: shadowRoot.querySelector('[data-quilt="error-region"]')!,
+        exportButton: shadowRoot.querySelector('[data-quilt="export-button"]')!,
+        floorToolButton: shadowRoot.querySelector('[data-quilt="floor-tool"]')!,
+        gridSizeSelect: shadowRoot.querySelector(
+          '[data-quilt="grid-size-select"]',
+        )!,
+        importButton: shadowRoot.querySelector('[data-quilt="import-button"]')!,
+        importInput: shadowRoot.querySelector('[data-quilt="import-input"]')!,
+        overlayCanvas: shadowRoot.querySelector(
+          '[data-quilt="overlay-canvas"]',
+        )!,
+        paintToolButton: shadowRoot.querySelector('[data-quilt="paint-tool"]')!,
+        quiltState: createQuiltState({
+          tileMapData: createTileMapData({
+            height: DEFAULT_MAP_SIZE,
+            width: DEFAULT_MAP_SIZE,
+          }),
+        }),
+        terrainCanvas: shadowRoot.querySelector(
+          '[data-quilt="terrain-canvas"]',
+        )!,
+        wallToolButton: shadowRoot.querySelector('[data-quilt="wall-tool"]')!,
+      })
+    : undefined;
 
 /** Browser custom element for editing roguelike tile maps. */
 export class QuiltElement extends HTMLElement {
@@ -41,80 +103,4 @@ export class QuiltElement extends HTMLElement {
   }
 }
 
-/** Sets map data on a mounted Quilt element. */
-export const setQuiltMapData = (
-  quiltElement: QuiltElement,
-  tileMapData: TileMapData,
-): void => {
-  quiltElement.runtime?.setMapData(tileMapData);
-};
-
-/** Gets map data from a mounted Quilt element. */
-export const getQuiltMapData = (quiltElement: QuiltElement): TileMapData =>
-  quiltElement.runtime?.getState().tileMapData ??
-  createTileMapData({ height: DEFAULT_MAP_SIZE, width: DEFAULT_MAP_SIZE });
-
-/** Registers the Quilt custom element if it is not already defined. */
-export const registerQuiltElement = (): void => {
-  if (customElements.get(QUILT_ELEMENT_NAME) === undefined) {
-    customElements.define(QUILT_ELEMENT_NAME, QuiltElement);
-  }
-};
-
-// eslint-disable-next-line max-statements, max-lines-per-function
-const createRuntime = (shadowRoot: ShadowRoot): QuiltRuntime | undefined => {
-  const terrainCanvas = shadowRoot.querySelector(
-    '[data-quilt="terrain-canvas"]',
-  );
-  const overlayCanvas = shadowRoot.querySelector(
-    '[data-quilt="overlay-canvas"]',
-  );
-  const paintToolButton = shadowRoot.querySelector('[data-quilt="paint-tool"]');
-  const eraseToolButton = shadowRoot.querySelector('[data-quilt="erase-tool"]');
-  const floorToolButton = shadowRoot.querySelector('[data-quilt="floor-tool"]');
-  const wallToolButton = shadowRoot.querySelector('[data-quilt="wall-tool"]');
-  const doorToolButton = shadowRoot.querySelector('[data-quilt="door-tool"]');
-  const gridSizeSelect = shadowRoot.querySelector(
-    '[data-quilt="grid-size-select"]',
-  );
-  const exportButton = shadowRoot.querySelector('[data-quilt="export-button"]');
-  const importButton = shadowRoot.querySelector('[data-quilt="import-button"]');
-  const importInput = shadowRoot.querySelector('[data-quilt="import-input"]');
-  const errorRegion = shadowRoot.querySelector('[data-quilt="error-region"]');
-
-  /* v8 ignore next -- The template owns these selectors; fallback is defensive shell code. */
-  return terrainCanvas instanceof HTMLCanvasElement &&
-    overlayCanvas instanceof HTMLCanvasElement &&
-    paintToolButton instanceof HTMLButtonElement &&
-    eraseToolButton instanceof HTMLButtonElement &&
-    floorToolButton instanceof HTMLButtonElement &&
-    wallToolButton instanceof HTMLButtonElement &&
-    doorToolButton instanceof HTMLButtonElement &&
-    gridSizeSelect instanceof HTMLSelectElement &&
-    exportButton instanceof HTMLButtonElement &&
-    importButton instanceof HTMLButtonElement &&
-    importInput instanceof HTMLInputElement &&
-    errorRegion instanceof HTMLElement
-    ? createQuiltRuntime({
-        canvasSize: getViewportCanvasSize(),
-        doorToolButton,
-        eraseToolButton,
-        errorRegion,
-        exportButton,
-        floorToolButton,
-        gridSizeSelect,
-        importButton,
-        importInput,
-        overlayCanvas,
-        paintToolButton,
-        quiltState: createQuiltState({
-          tileMapData: createTileMapData({
-            height: DEFAULT_MAP_SIZE,
-            width: DEFAULT_MAP_SIZE,
-          }),
-        }),
-        terrainCanvas,
-        wallToolButton,
-      })
-    : undefined;
-};
+customElements.define(QUILT_ELEMENT_NAME, QuiltElement);

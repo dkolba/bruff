@@ -23,8 +23,16 @@ const expectedSmallChunkCount = 4;
 const changedTileCoordinate = { tileX: 33, tileY: 2 };
 const objectTileCoordinate = { tileX: 1, tileY: 1 };
 const missingTileCoordinate = { tileX: 99, tileY: 99 };
+const mediumMapSize = 40;
+const largeMapSize = 9;
+const firstGridSize = 4;
+const secondGridSize = 5;
+const thirdGridSize = 6;
+const fourthGridSize = 7;
+const fifthGridSize = 8;
+const lastGridSize = 9;
 
-describe("tile map data", () => {
+describe("tile map data — chunk coordinates", () => {
   test("maps tile coordinates to deterministic chunk coordinates", () => {
     expect(
       getChunkCoordinate(
@@ -46,7 +54,9 @@ describe("tile map data", () => {
       ),
     ).toBe(expectedChunkLocalIndex);
   });
+});
 
+describe("tile map data — chunk size configuration", () => {
   test("supports custom chunk sizes", () => {
     const tileMapData = createTileMapData({
       chunkSize: smallChunkSize,
@@ -57,9 +67,14 @@ describe("tile map data", () => {
     expect(tileMapData.chunkSize).toBe(smallChunkSize);
     expect(tileMapData.chunks.size).toBe(expectedSmallChunkCount);
   });
+});
 
+describe("tile map data — creation and immutable updates", () => {
   test("creates floor-filled map data and updates tiles immutably", () => {
-    const tileMapData = createTileMapData({ height: 40, width: 40 });
+    const tileMapData = createTileMapData({
+      height: mediumMapSize,
+      width: mediumMapSize,
+    });
     const nextTileMapData = setTile({
       layerId: "terrain",
       tileCoordinate: changedTileCoordinate,
@@ -88,22 +103,36 @@ describe("tile map data", () => {
       floorTileId,
     );
   });
+});
 
+describe("tile map data — grid sizes", () => {
   test("exports supported grid sizes for Quilt controls", () => {
-    expect(QUILT_GRID_SIZES).toStrictEqual([4, 5, 6, 7, 8, 9]);
+    expect(QUILT_GRID_SIZES).toStrictEqual([
+      firstGridSize,
+      secondGridSize,
+      thirdGridSize,
+      fourthGridSize,
+      fifthGridSize,
+      lastGridSize,
+    ]);
   });
+});
 
+describe("tile map data — resize larger", () => {
   test("resizes larger maps while preserving terrain coordinates", () => {
     const tileMapData = setTile({
       layerId: "terrain",
       tileCoordinate: { tileX: 3, tileY: 3 },
       tileId: wallTileId,
-      tileMapData: createTileMapData({ height: 4, width: 4 }),
+      tileMapData: createTileMapData({
+        height: smallMapSize,
+        width: smallMapSize,
+      }),
     });
     const nextTileMapData = resizeTileMapData({
-      height: 9,
+      height: largeMapSize,
       tileMapData,
-      width: 9,
+      width: largeMapSize,
     });
 
     expect(getTile(nextTileMapData, { tileX: 3, tileY: 3 }, "terrain")).toBe(
@@ -113,7 +142,9 @@ describe("tile map data", () => {
       floorTileId,
     );
   });
+});
 
+describe("tile map data — resize smaller", () => {
   test("resizes smaller maps while discarding out-of-bounds terrain", () => {
     const tileMapData = setTile({
       layerId: "terrain",
@@ -123,17 +154,20 @@ describe("tile map data", () => {
         layerId: "terrain",
         tileCoordinate: { tileX: 3, tileY: 3 },
         tileId: wallTileId,
-        tileMapData: createTileMapData({ height: 9, width: 9 }),
+        tileMapData: createTileMapData({
+          height: largeMapSize,
+          width: largeMapSize,
+        }),
       }),
     });
     const nextTileMapData = resizeTileMapData({
-      height: 4,
+      height: smallMapSize,
       tileMapData,
-      width: 4,
+      width: smallMapSize,
     });
 
-    expect(nextTileMapData.width).toBe(4);
-    expect(nextTileMapData.height).toBe(4);
+    expect(nextTileMapData.width).toBe(smallMapSize);
+    expect(nextTileMapData.height).toBe(smallMapSize);
     expect(getTile(nextTileMapData, { tileX: 3, tileY: 3 }, "terrain")).toBe(
       wallTileId,
     );
@@ -141,7 +175,9 @@ describe("tile map data", () => {
       floorTileId,
     );
   });
+});
 
+describe("tile map data — layer isolation", () => {
   test("updates object and flag layers independently", () => {
     const tileMapData = createTileMapData({
       height: smallMapSize,

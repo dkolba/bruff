@@ -2,9 +2,14 @@ import { createTileMapData, wallTileId } from "../model/tile-map-data.ts";
 import { describe, expect, test } from "vitest";
 import { createQuiltState } from "./quilt-state.ts";
 
-describe("quilt state", () => {
+const MAP_SIZE_4 = 4;
+
+describe("quilt state — defaults", () => {
   test("creates default editor state separate from map data", () => {
-    const tileMapData = createTileMapData({ height: 4, width: 4 });
+    const tileMapData = createTileMapData({
+      height: MAP_SIZE_4,
+      width: MAP_SIZE_4,
+    });
     const quiltState = createQuiltState({ tileMapData });
 
     expect(quiltState).toMatchObject({
@@ -12,8 +17,8 @@ describe("quilt state", () => {
       clipboard: { type: "empty" },
       hoveredTile: { type: "none" },
       selectedLayer: "terrain",
-      selectedTileId: wallTileId,
       selectedTerrain: "floor",
+      selectedTileId: wallTileId,
       selectedTool: "paint",
       selection: { type: "none" },
       terrainGlyphs: {},
@@ -24,9 +29,14 @@ describe("quilt state", () => {
     expect(quiltState.undoStack).toStrictEqual([]);
     expect(quiltState.redoStack).toStrictEqual([]);
   });
+});
 
+describe("quilt state — overrides", () => {
   test("accepts initial state overrides", () => {
-    const tileMapData = createTileMapData({ height: 4, width: 4 });
+    const tileMapData = createTileMapData({
+      height: MAP_SIZE_4,
+      width: MAP_SIZE_4,
+    });
     const quiltState = createQuiltState({
       camera: { worldX: 10, worldY: 20, zoom: 2 },
       selectedTerrain: "door",

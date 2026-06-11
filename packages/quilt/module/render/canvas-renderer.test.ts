@@ -6,6 +6,16 @@ import {
 } from "./canvas-renderer.ts";
 import type { OverlayDrawPlan, TerrainDrawPlan } from "./map-draw-plan.ts";
 
+const TILE_PIXEL_SIZE = 16;
+const DOUBLE_TILE = 32;
+
+type CanvasRect = {
+  pixelX: number;
+  pixelY: number;
+  pixelWidth: number;
+  pixelHeight: number;
+};
+
 const createContext = (): QuiltCanvasContext & {
   calls: ReadonlyArray<string>;
 } => {
@@ -13,33 +23,50 @@ const createContext = (): QuiltCanvasContext & {
 
   return {
     calls,
-    clearRect: (x, y, width, height) =>
-      calls.push(`clear:${x}:${y}:${width}:${height}`),
+    clearRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect) =>
+      calls.push(`clear:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`),
     fill: (path, fillRule) => calls.push(`fill:${fillRule ?? "nonzero"}`),
-    fillRect: (x, y, width, height) =>
-      calls.push(`fill:${x}:${y}:${width}:${height}`),
+    fillRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect) =>
+      calls.push(`fill:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`),
     fillStyle: "#000000",
-    save: () => calls.push("save"),
     restore: () => calls.push("restore"),
-    scale: (x, y) => calls.push(`scale:${x}:${y}`),
-    strokeRect: (x, y, width, height) =>
-      calls.push(`stroke:${x}:${y}:${width}:${height}`),
-    translate: (x, y) => calls.push(`translate:${x}:${y}`),
+    save: () => calls.push("save"),
+    scale: (scaleX, scaleY) => calls.push(`scale:${scaleX}:${scaleY}`),
+    strokeRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect) =>
+      calls.push(`stroke:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`),
+    translate: (translateX, translateY) =>
+      calls.push(`translate:${translateX}:${translateY}`),
   };
 };
 
-describe("canvas renderer", () => {
+type CallPattern = string | RegExp;
+
+const assertCallSequence = (
+  calls: ReadonlyArray<string>,
+  expected: ReadonlyArray<CallPattern>,
+): void => {
+  for (const [index, pattern] of expected.entries()) {
+    if (typeof pattern === "string") {
+      expect(calls[index]).toBe(pattern);
+    } else {
+      expect(calls[index]).toMatch(pattern);
+    }
+  }
+  expect(calls).toHaveLength(expected.length);
+};
+
+describe("canvas renderer — terrain fill plans", () => {
   test("executes terrain draw plans", () => {
     const context = createContext();
     const drawPlan: TerrainDrawPlan = {
       commands: [
         {
           fillStyle: "#d7d0bf",
-          height: 16,
           kind: "drawTerrainTile",
-          width: 16,
-          x: 0,
-          y: 0,
+          pixelHeight: TILE_PIXEL_SIZE,
+          pixelWidth: TILE_PIXEL_SIZE,
+          pixelX: 0,
+          pixelY: 0,
         },
       ],
       kind: "terrain",
@@ -50,13 +77,25 @@ describe("canvas renderer", () => {
     expect(context.calls).toStrictEqual(["fill:0:0:16:16"]);
     expect(context.fillStyle).toBe("#d7d0bf");
   });
+});
 
+describe("canvas renderer — overlay plans", () => {
   test("executes overlay draw plans", () => {
     const context = createContext();
     const drawPlan: OverlayDrawPlan = {
       commands: [
-        { height: 32, kind: "drawGrid", width: 32 },
-        { height: 16, kind: "drawHoverTile", width: 16, x: 16, y: 0 },
+        {
+          kind: "drawGrid",
+          pixelHeight: DOUBLE_TILE,
+          pixelWidth: DOUBLE_TILE,
+        },
+        {
+          kind: "drawHoverTile",
+          pixelHeight: TILE_PIXEL_SIZE,
+          pixelWidth: TILE_PIXEL_SIZE,
+          pixelX: TILE_PIXEL_SIZE,
+          pixelY: 0,
+        },
       ],
       kind: "overlay",
     };
@@ -69,21 +108,23 @@ describe("canvas renderer", () => {
       "stroke:16:0:16:16",
     ]);
   });
+});
 
+describe("canvas renderer — glyph path rendering", () => {
   test("executes glyph path draw commands with dark gray fill", () => {
     const context = createContext();
     const drawPlan: TerrainDrawPlan = {
       commands: [
         {
           glyphBounds: { x1: 10, x2: 690, y1: 20, y2: 720 },
-          height: 16,
           kind: "drawTerrainGlyph",
           path: "M0 0L1 1Z",
-          tileBounds: { x1: 0, x2: 1, y1: 0, y2: 1 },
+          pixelHeight: TILE_PIXEL_SIZE,
+          pixelWidth: TILE_PIXEL_SIZE,
+          pixelX: 0,
+          pixelY: 0,
+          tileBounds: { highX: 1, highY: 1, lowX: 0, lowY: 0 },
           unitsPerEm: 1000,
-          width: 16,
-          x: 0,
-          y: 0,
         },
       ],
       kind: "terrain",
@@ -92,37 +133,40 @@ describe("canvas renderer", () => {
     executeTerrainDrawPlan(context, drawPlan);
 
     expect(context.fillStyle).toBe("#555555");
-    expect(context.calls[0]).toBe("clear:0:0:16:16");
-    expect(context.calls[1]).toBe("save");
-    expect(context.calls[2]).toMatch(/^translate:[\d.]+:[\d.]+$/u);
-    expect(context.calls[3]).toBe("scale:0.016:0.016");
-    expect(context.calls[4]).toBe("fill:nonzero");
-    expect(context.calls[5]).toBe("restore");
-    expect(context.calls).toHaveLength(6);
+    assertCallSequence(context.calls, [
+      "clear:0:0:16:16",
+      "save",
+      /^translate:[\d.]+:[\d.]+$/u,
+      "scale:0.016:0.016",
+      "fill:nonzero",
+      "restore",
+    ]);
   });
+});
 
+describe("canvas renderer — mixed terrain commands", () => {
   test("executes mixed terrain fill and glyph commands", () => {
     const context = createContext();
     const drawPlan: TerrainDrawPlan = {
       commands: [
         {
           fillStyle: "#d7d0bf",
-          height: 16,
           kind: "drawTerrainTile",
-          width: 16,
-          x: 0,
-          y: 0,
+          pixelHeight: TILE_PIXEL_SIZE,
+          pixelWidth: TILE_PIXEL_SIZE,
+          pixelX: 0,
+          pixelY: 0,
         },
         {
           glyphBounds: { x1: 10, x2: 690, y1: 20, y2: 720 },
-          height: 16,
           kind: "drawTerrainGlyph",
           path: "M0 0L1 1Z",
-          tileBounds: { x1: 0, x2: 1, y1: 0, y2: 1 },
+          pixelHeight: TILE_PIXEL_SIZE,
+          pixelWidth: TILE_PIXEL_SIZE,
+          pixelX: TILE_PIXEL_SIZE,
+          pixelY: 0,
+          tileBounds: { highX: 1, highY: 1, lowX: 0, lowY: 0 },
           unitsPerEm: 1000,
-          width: 16,
-          x: 16,
-          y: 0,
         },
       ],
       kind: "terrain",
@@ -130,13 +174,14 @@ describe("canvas renderer", () => {
 
     executeTerrainDrawPlan(context, drawPlan);
 
-    expect(context.calls[0]).toBe("fill:0:0:16:16");
-    expect(context.calls[1]).toBe("clear:16:0:16:16");
-    expect(context.calls[2]).toBe("save");
-    expect(context.calls[3]).toMatch(/^translate:[\d.]+:[\d.]+$/u);
-    expect(context.calls[4]).toBe("scale:0.016:0.016");
-    expect(context.calls[5]).toBe("fill:nonzero");
-    expect(context.calls[6]).toBe("restore");
-    expect(context.calls).toHaveLength(7);
+    assertCallSequence(context.calls, [
+      "fill:0:0:16:16",
+      "clear:16:0:16:16",
+      "save",
+      /^translate:[\d.]+:[\d.]+$/u,
+      "scale:0.016:0.016",
+      "fill:nonzero",
+      "restore",
+    ]);
   });
 });

@@ -20,46 +20,62 @@ export type QuiltController = Readonly<{
   disconnect: () => void;
 }>;
 
+type PointerPaintResult = Readonly<{
+  paintedCoordinate: `${number}:${number}`;
+  quiltState: QuiltState;
+}>;
+
+const computePointerPaint = (
+  input: CreateQuiltControllerInput,
+  currentState: QuiltState,
+  pointerEvent: PointerEvent,
+): PointerPaintResult => {
+  const canvasBounds = input.overlayCanvas.getBoundingClientRect();
+  const tileCoordinate = screenToTileCoordinate({
+    camera: currentState.camera,
+    screenCoordinate: {
+      screenX: pointerEvent.clientX - canvasBounds.left,
+      screenY: pointerEvent.clientY - canvasBounds.top,
+    },
+    tileSize: input.getTileSize(currentState),
+  });
+  const beforeTileId = getTile(
+    currentState.tileMapData,
+    tileCoordinate,
+    currentState.selectedLayer,
+  );
+  const command = createPaintTilesCommand({
+    changes: [
+      {
+        afterTileId:
+          currentState.selectedTool === "erase"
+            ? floorTileId
+            : currentState.selectedTileId,
+        beforeTileId,
+        coordinate: tileCoordinate,
+        layerId: currentState.selectedLayer,
+      },
+    ],
+  });
+
+  return {
+    paintedCoordinate: `${tileCoordinate.tileX}:${tileCoordinate.tileY}`,
+    quiltState: executeEditorCommand(currentState, command),
+  };
+};
+
 /** Creates controller wiring that turns pointer input into editor commands. */
 export const createQuiltController = (
   input: CreateQuiltControllerInput,
 ): QuiltController => {
   let currentState = input.quiltState;
   const handlePointerDown = (pointerEvent: PointerEvent): void => {
-    const canvasBounds = input.overlayCanvas.getBoundingClientRect();
-    const tileCoordinate = screenToTileCoordinate({
-      camera: currentState.camera,
-      screenCoordinate: {
-        screenX: pointerEvent.clientX - canvasBounds.left,
-        screenY: pointerEvent.clientY - canvasBounds.top,
-      },
-      tileSize: input.getTileSize(currentState),
-    });
-    const beforeTileId = getTile(
-      currentState.tileMapData,
-      tileCoordinate,
-      currentState.selectedLayer,
-    );
-    const command = createPaintTilesCommand({
-      changes: [
-        {
-          afterTileId:
-            currentState.selectedTool === "erase"
-              ? floorTileId
-              : currentState.selectedTileId,
-          beforeTileId,
-          coordinate: tileCoordinate,
-          layerId: currentState.selectedLayer,
-        },
-      ],
-    });
-
-    currentState = executeEditorCommand(currentState, command);
+    const paintResult = computePointerPaint(input, currentState, pointerEvent);
+    currentState = paintResult.quiltState;
+    // eslint-disable-next-line dot-notation -- TS noPropertyAccessFromIndexSignature
+    input.overlayCanvas.dataset["quiltPaintedTile"] =
+      paintResult.paintedCoordinate;
     input.onStateChange(currentState);
-    input.overlayCanvas.setAttribute(
-      "data-quilt-painted-tile",
-      `${tileCoordinate.tileX}:${tileCoordinate.tileY}`,
-    );
   };
   const disconnect = (): void => {
     input.overlayCanvas.removeEventListener("pointerdown", handlePointerDown);

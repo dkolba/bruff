@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { floorTileId, wallTileId } from "./tile-map-data.ts";
 import { readTileLayer, writeTileLayer } from "./tile-layer.ts";
 
-describe("tile layer", () => {
+describe("tile layer — read operations", () => {
   test("reads typed-array layer values as tile IDs", () => {
     const layer = new Uint8Array([floorTileId, wallTileId]);
 
@@ -27,14 +27,16 @@ describe("tile layer", () => {
     ).toBe(wallTileId);
   });
 
-  test("uses the fallback tile ID when an index is outside the layer", () => {
+  test("uses fallback tile ID when index is outside the layer", () => {
     const layer = new Uint8Array([wallTileId]);
 
     expect(
       readTileLayer({ fallbackTileId: floorTileId, layer, layerIndex: 4 }),
     ).toBe(floorTileId);
   });
+});
 
+describe("tile layer — write operations", () => {
   test("writes uint16 layer values immutably", () => {
     const layer = new Uint16Array([floorTileId, floorTileId]);
     const nextLayer = writeTileLayer({

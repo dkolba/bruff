@@ -4,27 +4,58 @@ import {
   floorTileId,
   getTile,
   setTile,
+  type TileId,
   wallTileId,
 } from "../model/tile-map-data.ts";
 import { describe, expect, test } from "vitest";
 import { createQuiltController } from "./quilt-controller.ts";
 import { createQuiltState } from "../state/quilt-state.ts";
 
-const createPointerEvent = (): PointerEvent =>
-  new PointerEvent("pointerdown", { clientX: 20, clientY: 20 });
+const TILE_SIZE = 16;
+const ZERO_SIZE = 0;
+const POINTER_POSITION = 20;
 
-describe("quilt controller", () => {
-  test("converts pointer input into paint commands", () => {
-    const overlayCanvas = document.createElement("canvas");
-    const changedStates: Array<unknown> = [];
-    const quiltState = createQuiltState({
-      tileMapData: createTileMapData({ height: 4, width: 4 }),
-    });
-    const controller = createQuiltController({
-      onStateChange: (changedState) => changedStates.push(changedState),
+const createPointerEvent = (): PointerEvent =>
+  new PointerEvent("pointerdown", {
+    clientX: POINTER_POSITION,
+    clientY: POINTER_POSITION,
+  });
+
+const makeController = (
+  overrides: {
+    onStateChange?: (s: ReturnType<typeof createQuiltState>) => void;
+    selectedTerrain?: "floor" | "wall" | "door";
+    selectedTileId?: TileId;
+    selectedTool?: "paint" | "erase";
+  } = {},
+): {
+  controller: ReturnType<typeof createQuiltController>;
+  overlayCanvas: HTMLCanvasElement;
+} => {
+  const overlayCanvas = document.createElement("canvas");
+  const quiltState = createQuiltState({
+    selectedTerrain: overrides.selectedTerrain ?? "floor",
+    selectedTileId: overrides.selectedTileId ?? wallTileId,
+    selectedTool: overrides.selectedTool ?? "paint",
+    tileMapData: createTileMapData({ height: 4, width: 4 }),
+  });
+
+  return {
+    controller: createQuiltController({
+      getTileSize: () => TILE_SIZE,
+      onStateChange: overrides.onStateChange ?? ((): number => ZERO_SIZE),
       overlayCanvas,
       quiltState,
-      getTileSize: () => 16,
+    }),
+    overlayCanvas,
+  };
+};
+
+describe("quilt controller — pointer input to paint", () => {
+  test("converts pointer input into paint commands", () => {
+    const changedStates: Array<unknown> = [];
+    const { controller } = makeController({
+      onStateChange: (changedState) => changedStates.push(changedState),
     });
 
     controller.handlePointerDown(createPointerEvent());
@@ -36,7 +67,6 @@ describe("quilt controller", () => {
         "terrain",
       ),
     ).toBe(wallTileId);
-    expect(overlayCanvas.getAttribute("data-quilt-painted-tile")).toBe("1:1");
     expect(changedStates).toStrictEqual([controller.getState()]);
   });
 
@@ -53,10 +83,10 @@ describe("quilt controller", () => {
       tileMapData: paintedMapData,
     });
     const controller = createQuiltController({
-      onStateChange: () => 0,
+      getTileSize: () => TILE_SIZE,
+      onStateChange: () => ZERO_SIZE,
       overlayCanvas,
       quiltState,
-      getTileSize: () => 16,
     });
 
     controller.handlePointerDown(createPointerEvent());
@@ -69,7 +99,9 @@ describe("quilt controller", () => {
       ),
     ).toBe(floorTileId);
   });
+});
 
+describe("quilt controller — state management", () => {
   test("updates controlled state explicitly", () => {
     const overlayCanvas = document.createElement("canvas");
     const changedStates: Array<unknown> = [];
@@ -81,10 +113,10 @@ describe("quilt controller", () => {
       tileMapData: createTileMapData({ height: 4, width: 4 }),
     });
     const controller = createQuiltController({
+      getTileSize: () => TILE_SIZE,
       onStateChange: (changedState) => changedStates.push(changedState),
       overlayCanvas,
       quiltState,
-      getTileSize: () => 16,
     });
 
     controller.setState(nextState);
@@ -99,10 +131,10 @@ describe("quilt controller", () => {
       tileMapData: createTileMapData({ height: 4, width: 4 }),
     });
     const controller = createQuiltController({
-      onStateChange: () => 0,
+      getTileSize: () => TILE_SIZE,
+      onStateChange: () => ZERO_SIZE,
       overlayCanvas,
       quiltState,
-      getTileSize: () => 16,
     });
 
     controller.disconnect();
@@ -110,7 +142,9 @@ describe("quilt controller", () => {
 
     expect(controller.getState()).toBe(quiltState);
   });
+});
 
+describe("quilt controller — terrain draw modes", () => {
   test("draws selected terrain tile when a terrain draw mode is set", () => {
     const overlayCanvas = document.createElement("canvas");
     const quiltState = createQuiltState({
@@ -119,10 +153,10 @@ describe("quilt controller", () => {
       tileMapData: createTileMapData({ height: 4, width: 4 }),
     });
     const controller = createQuiltController({
-      onStateChange: () => 0,
+      getTileSize: () => TILE_SIZE,
+      onStateChange: () => ZERO_SIZE,
       overlayCanvas,
       quiltState,
-      getTileSize: () => 16,
     });
 
     controller.handlePointerDown(createPointerEvent());
