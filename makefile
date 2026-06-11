@@ -57,11 +57,11 @@ gh-login: ## Authenticate GitHub CLI inside container
 
 pi: ## Run pi inside container
 	docker exec $(DOCKER_EXEC_ARGS) $(CONTAINER) \
-		tmux new-session -s pi-main-session 'pi'
+		env PI_AGENT_API_KEY="$$PI_AGENT_API_KEY" tmux new-session -s pi-main-session 'pi'
 
 shell: ## Open bash shell inside container
 	docker exec $(DOCKER_EXEC_ARGS) $(CONTAINER) \
-		bash
+		env PI_AGENT_API_KEY="$$PI_AGENT_API_KEY" bash
 
 stop: ## Stop development container
 	docker stop $(CONTAINER)
