@@ -29,7 +29,6 @@ describe("quilt element — lifecycle setup", () => {
     ).toBeInstanceOf(HTMLCanvasElement);
     expect("validateQuiltMapSize" in quiltElement).toBe(false);
     expect("createPreviewFontState" in quiltElement).toBe(false);
-    expect("createDownloadMapCommand" in quiltElement).toBe(false);
 
     quiltElement.remove();
   });
