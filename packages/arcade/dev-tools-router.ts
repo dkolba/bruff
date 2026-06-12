@@ -8,7 +8,7 @@ registerQuiltElement();
 export type ArcadeRoute = "game" | "tools" | "quilt";
 
 /** Custom element names mounted by the arcade app shell. */
-export type ArcadeElementName = "bruff-game" | "tool-sigil" | "tool-quilt";
+type ArcadeElementName = "bruff-game" | "tool-sigil" | "tool-quilt";
 
 const GAME_ROUTE: ArcadeRoute = "game";
 const TOOLS_ROUTE: ArcadeRoute = "tools";
@@ -41,7 +41,7 @@ export const routePathname = (pathname: string): ArcadeRoute => {
  * @param route - Arcade route
  * @returns The custom element name for the route
  */
-export const routeElementName = (route: ArcadeRoute): ArcadeElementName => {
+const routeElementName = (route: ArcadeRoute): ArcadeElementName => {
   if (route === TOOLS_ROUTE) {
     return TOOL_SIGIL_ELEMENT_NAME;
   }

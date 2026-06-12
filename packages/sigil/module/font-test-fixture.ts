@@ -77,7 +77,7 @@ export const createTestFont = (): Font =>
   });
 
 /** Creates a valid test font that intentionally lacks schema glyphs. */
-export const createMissingStarTestFont = (): Font =>
+const createMissingStarTestFont = (): Font =>
   new Font({
     ascender: TEST_FONT_UNITS_PER_EM,
     descender: DESCENDER,

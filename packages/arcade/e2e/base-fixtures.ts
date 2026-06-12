@@ -13,7 +13,7 @@ declare global {
 
 const istanbulCLIOutput = path.join(process.cwd(), ".nyc_output");
 
-export function generateUUID(): string {
+function generateUUID(): string {
   return crypto.randomBytes(16).toString("hex");
 }
 

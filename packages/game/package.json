@@ -46,7 +46,6 @@
     "@vitest/browser-playwright": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "eslint": "catalog:",
-    "eslint-plugin-tsdoc": "catalog:",
     "observable-polyfill": "catalog:",
     "playwright": "catalog:",
     "prettier": "catalog:",
