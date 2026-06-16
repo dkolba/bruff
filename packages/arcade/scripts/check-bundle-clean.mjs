@@ -9,6 +9,13 @@ const forbiddenNeedles = [
   "@bruff/sigil",
   "opentype",
   "dev-tools-router",
+  "<tool-quilt>",
+  "<tool-quil>",
+  "tool-quilt",
+  "tool-quil",
+  "@bruff/quilt",
+  "@bruff/quil",
+  "/tools-map",
 ];
 
 const listFiles = async (directory) => {

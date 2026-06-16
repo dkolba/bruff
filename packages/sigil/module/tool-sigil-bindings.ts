@@ -91,7 +91,6 @@ const readGlyphSelectChange = (
 
   return {
     action,
-    // eslint-disable-next-line dot-notation -- TS requires bracket access for DOMStringMap index signatures.
     glyph: selectedOption?.dataset["glyph"],
     glyphKey: target.value,
     groupName,

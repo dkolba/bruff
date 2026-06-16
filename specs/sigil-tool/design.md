@@ -173,9 +173,7 @@ export type ArcadeRoute = "game" | "tools";
 export const routePathname = (pathname: string): ArcadeRoute =>
   pathname === "/tools" ? "tools" : "game";
 
-export const routeElementName = (
-  route: ArcadeRoute,
-): "bruff-game" | "tool-sigil" =>
+const routeElementName = (route: ArcadeRoute): "bruff-game" | "tool-sigil" =>
   route === "tools" ? "tool-sigil" : "bruff-game";
 ```
 

@@ -3,7 +3,7 @@ import { error, ok, type Result } from "@bruff/utils";
 
 const BROUGHLIKE_MAP_VERSION = 1;
 const MIN_BROUGHLIKE_MAP_SIZE = 1;
-const MAX_BROUGHLIKE_MAP_SIZE = 7;
+const MAX_BROUGHLIKE_MAP_SIZE = 9;
 
 /**
  * Runtime schema for terrain values in a compact broughlike map.

@@ -23,7 +23,6 @@
     "eslint": "catalog:",
     "playwright": "catalog:",
     "prettier": "catalog:",
-    "rimraf": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

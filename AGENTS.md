@@ -218,6 +218,7 @@ The repo is a pnpm monorepo. Package-specific rules auto-load from `packages/<pa
 | `@bruff/game-element`  | Imperative shell — Web Component base class that mounts the canvas                   | `packages/game-element/AGENTS.md` |
 | `@bruff/arcade`        | E2E host — Vite app + Playwright tests across desktop/mobile browsers                | `packages/arcade/AGENTS.md`       |
 | `@bruff/sigil`         | Development-only font glyph extraction, glyph mapping, and license JSON tool         | `packages/sigil/AGENTS.md`        |
+| `@bruff/quilt`         | Development-only map creation tool exposed only from Arcade dev routes               | `packages/quilt/AGENTS.md`        |
 | `@bruff/utils`         | Shared utilities — universal root helpers plus explicit DOM subpath services         | `packages/utils/AGENTS.md`        |
 | `@bruff/contracts`     | Shared Zod schemas, readonly inferred types, and Result-returning parser helpers     | `packages/contracts/AGENTS.md`    |
 | `@bruff/cli`           | Terminal shell spike — ANSI mock renderer with injected stdin/stdout boundaries      | `packages/cli/AGENTS.md`          |

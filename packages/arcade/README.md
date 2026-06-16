@@ -11,8 +11,8 @@ pnpm run typecheck  # Type-check with TypeScript
 pnpm run format     # Format with Prettier
 ```
 
-The dev server exposes `/tools` for local tooling such as `<tool-sigil>`.
-Production builds mount only `<bruff-game>`; the tools route and `@bruff/sigil`
+The dev server exposes `/tools` for local tooling such as `<tool-sigil>` and `/tools-map` for Quilt (`<tool-quilt>`).
+Production builds mount only `<bruff-game>`; the tools routes, `@bruff/sigil`, and `@bruff/quilt`
 are loaded through the development-only router.
 
 ## Testing
@@ -41,7 +41,7 @@ Coverage thresholds (branches, lines, functions, statements) are set at 80% and 
 pnpm run build:site   # Production build to site/
 ```
 
-Source maps are enabled in the production build with source contents excluded. The production build also runs `check:bundle-clean`, which fails if emitted assets contain `__bruffTestApi`, `tool-sigil`, `@bruff/sigil`, `opentype`, or `dev-tools-router`.
+Source maps are enabled in the production build with source contents excluded. The production build also runs `check:bundle-clean`, which fails if emitted assets contain `__bruffTestApi`, `tool-sigil`, `@bruff/sigil`, `opentype`, `dev-tools-router`, `tool-quilt`, `@bruff/quilt`, or `/tools-map`.
 
 ## Workspace dependencies
 
@@ -49,4 +49,5 @@ Source maps are enabled in the production build with source contents excluded. T
 | ---------------------- | ------------------------------------------------------------- |
 | `@bruff/game`          | Core game library — provides the `<bruff-game>` Web Component |
 | `@bruff/sigil`         | Development-only glyph JSON extraction tool for `/tools`      |
+| `@bruff/quilt`         | Development-only map creation tool for `/tools-map`           |
 | `@bruff/eslint-config` | Shared ESLint configuration                                   |

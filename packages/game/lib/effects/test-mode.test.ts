@@ -16,7 +16,6 @@ describe("isTestMode", () => {
   it("returns true when bruff-game has data-test-mode=true", (): void => {
     globalThis.window.history.replaceState({}, "", "/");
     const gameElement = document.createElement("bruff-game");
-    // eslint-disable-next-line dot-notation -- TS4111 requires indexed access for index-signature-backed DOMStringMap keys.
     gameElement.dataset["testMode"] = "true";
     document.body.append(gameElement);
 
@@ -67,7 +66,6 @@ describe("isTestModeForEnvironment", () => {
   it("uses the data attribute without a window global", (): void => {
     const testDocument = document.implementation.createHTMLDocument();
     const gameElement = testDocument.createElement("bruff-game");
-    // eslint-disable-next-line dot-notation -- TS4111 requires indexed access for index-signature-backed DOMStringMap keys.
     gameElement.dataset["testMode"] = "true";
     testDocument.body.append(gameElement);
 

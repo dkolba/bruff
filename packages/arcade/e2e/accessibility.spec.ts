@@ -18,6 +18,16 @@ const runAccessibilityCheck = (): void => {
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
     expect(accessibilityScanResults.violations).toEqual([]);
   });
+
+  test("quilt tools route has no accessibility violations", async ({
+    page,
+  }) => {
+    await page.goto("/tools-map");
+    await expect(page.locator("tool-quilt")).toHaveCount(MOUNTED_COUNT);
+
+    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    expect(accessibilityScanResults.violations).toEqual([]);
+  });
 };
 
 test.describe("dark scheme", () => {

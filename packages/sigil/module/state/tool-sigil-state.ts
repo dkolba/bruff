@@ -20,7 +20,6 @@ export {
   selectToolSigilDownloadDisabled,
   selectToolSigilDownloadGlyphMap,
   selectToolSigilViewModel,
-  selectToolSigilVisibleErrors,
 } from "../tool-sigil-state-selectors.js";
 export type {
   ToolSigilFontSelection,

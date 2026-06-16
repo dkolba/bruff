@@ -186,7 +186,7 @@ const catalogErrors = (
  * @param state - Current tool state
  * @returns Visible extraction and naming errors
  */
-export const selectToolSigilVisibleErrors = (
+const selectToolSigilVisibleErrors = (
   state: ToolSigilState,
 ): ReadonlyArray<SigilExtractionError> => {
   const nameResult = createSigilGlyphMap(

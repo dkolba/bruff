@@ -24,6 +24,7 @@
     "build": "pnpm -r --parallel run build",
     "changeset:add": "changeset",
     "changeset:version": "changeset version",
+    "cli": "pnpm --filter @bruff/cli run cli",
     "format": "pnpm run format:ai && pnpm -r --parallel run format",
     "format:ai": "prettier -w .agents AGENTS.md",
     "lint": "pnpm -r --parallel run lint",

@@ -32,9 +32,10 @@ export default defineConfig({
           const address = server.httpServer?.address();
 
           if (typeof address === "object" && address) {
-            const baseUrl = `http://127.0.0.1:${address.port}`;
+            const baseUrl = `http://localhost:${address.port}`;
             console.log("\nAdditional routes:");
-            console.log(`  Tools:  ${baseUrl}/tools`);
+            console.log(`  Tool Glyph-Editor: ${baseUrl}/tools`);
+            console.log(`  Tool Map-Editor:   ${baseUrl}/tools-map`);
           }
         });
       },

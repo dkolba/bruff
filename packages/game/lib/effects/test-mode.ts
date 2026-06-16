@@ -40,7 +40,6 @@ export const isTestModeForEnvironment = ({
   }
 
   const gameElement = testDocument.querySelector<HTMLElement>("bruff-game");
-  // eslint-disable-next-line dot-notation -- TS4111 requires indexed access for index-signature-backed DOMStringMap keys.
   return gameElement?.dataset["testMode"] === "true";
 };
 

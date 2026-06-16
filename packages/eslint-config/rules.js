@@ -19,6 +19,7 @@ export const overrideRulesTslint = {
     "error",
     { prefer: "type-imports" },
   ],
+  "@typescript-eslint/dot-notation": "error",
   "@typescript-eslint/explicit-function-return-type": [
     "warn",
     {
@@ -56,7 +57,14 @@ export const overrideRulesUnicorn = {
  * ESLint rule overrides for ESLint
  */
 export const overrideRulesEslint = {
+  "capitalized-comments": [
+    "error",
+    "always",
+    { ignorePattern: "(?:c8|v8|node:coverage) ignore" },
+  ],
+  "dot-notation": "off",
   "func-names": ["error", "always", { generators: "never" }],
+  "max-lines": ["error", { skipBlankLines: true }],
   "no-console": ["error", { allow: ["info", "warn", "error"] }],
   "no-inline-comments": "off",
   "no-ternary": "off",
@@ -68,14 +76,6 @@ export const overrideRulesEslint = {
   ],
   "one-var": "off",
   "sort-imports": ["error", { ignoreCase: true }],
-  "capitalized-comments": [
-    "error",
-    "always",
-    {
-      ignorePattern: "(?:c8|node:coverage) ignore",
-    },
-  ],
-  "max-lines": ["error", { skipBlankLines: true }],
 };
 
 /**

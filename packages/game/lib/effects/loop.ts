@@ -50,7 +50,6 @@ const subscribeToGameObservables = (
 
 const readSeedAttribute = (): number | undefined => {
   const gameElement = document.querySelector<HTMLElement>("bruff-game");
-  // eslint-disable-next-line dot-notation -- TS4111 requires indexed access for DOMStringMap keys.
   const seedAttribute = gameElement?.dataset["seed"];
   if (seedAttribute === undefined) {
     return undefined;

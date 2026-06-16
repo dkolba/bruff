@@ -32,14 +32,13 @@ export const executeRenderCommand = (
       );
       return;
     }
-    /* eslint-disable capitalized-comments -- V8 coverage directives are case-sensitive. */
+
     /* v8 ignore next 5 -- Exhaustiveness guard is unreachable until a new command variant exists. */
     default: {
       const _exhaustive: never = command;
       // eslint-disable-next-line consistent-return -- Exhaustive guard returns never per package rule A-19.
       return _exhaustive;
     }
-    /* eslint-enable capitalized-comments */
   }
 };
 
