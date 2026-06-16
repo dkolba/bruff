@@ -1,8 +1,8 @@
-/* eslint-disable unicorn/text-encoding-identifier-case, sort-imports -- ASCII is a @bruff/glyph catalog group name. */
-import { createTileMapData } from "../model/tile-map-data.ts";
-import { createQuiltState } from "../state/quilt-state.ts";
-import { createQuiltRuntime } from "./quilt-runtime.ts";
+/* eslint-disable unicorn/text-encoding-identifier-case -- ASCII is a @bruff/glyph catalog group name. */
 import { describe, expect, test } from "vitest";
+import { createQuiltRuntime } from "./quilt-runtime.ts";
+import { createQuiltState } from "../state/quilt-state.ts";
+import { createTileMapData } from "../model/tile-map-data.ts";
 
 const CANVAS_SIZE_64 = 64;
 const FILE_LOAD_TIMEOUT_MS = 10;

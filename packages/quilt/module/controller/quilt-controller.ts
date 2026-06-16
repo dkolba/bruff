@@ -72,7 +72,6 @@ export const createQuiltController = (
   const handlePointerDown = (pointerEvent: PointerEvent): void => {
     const paintResult = computePointerPaint(input, currentState, pointerEvent);
     currentState = paintResult.quiltState;
-    // eslint-disable-next-line dot-notation -- TS noPropertyAccessFromIndexSignature
     input.overlayCanvas.dataset["quiltPaintedTile"] =
       paintResult.paintedCoordinate;
     input.onStateChange(currentState);

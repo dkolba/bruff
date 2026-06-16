@@ -1,17 +1,16 @@
-/* eslint-disable sort-imports */
-import {
-  executeOverlayDrawPlan,
-  executeTerrainDrawPlan,
-} from "../render/canvas-renderer.ts";
 import {
   createOverlayDrawPlan,
   createTerrainDrawPlan,
 } from "../render/map-draw-plan.ts";
-import { adaptCanvasContext } from "./canvas-context-adapter.ts";
 import { createQuiltState, type QuiltState } from "../state/quilt-state.ts";
-import { handleImportFileChange } from "./quilt-runtime-io.ts";
+import {
+  executeOverlayDrawPlan,
+  executeTerrainDrawPlan,
+} from "../render/canvas-renderer.ts";
+import { adaptCanvasContext } from "./canvas-context-adapter.ts";
 import { attachCanvasToolListeners } from "./quilt-toolbar-listeners.ts";
 import { createQuiltController } from "../controller/quilt-controller.ts";
+import { handleImportFileChange } from "./quilt-runtime-io.ts";
 import type { TileMapData } from "../model/tile-map-data.ts";
 
 const CANVAS_PIXEL_UNIT = "px";

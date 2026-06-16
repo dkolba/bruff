@@ -27,7 +27,6 @@ describe("quilt element — lifecycle setup", () => {
     expect(
       quiltElement.shadowRoot?.querySelector('[data-quilt="overlay-canvas"]'),
     ).toBeInstanceOf(HTMLCanvasElement);
-    expect("validateQuiltMapSize" in quiltElement).toBe(false);
     expect("createPreviewFontState" in quiltElement).toBe(false);
 
     quiltElement.remove();

@@ -1,7 +1,6 @@
-/* eslint-disable sort-imports, init-declarations */
 import type { createQuiltController } from "../controller/quilt-controller.ts";
-import { serializeBroughlikeMapData } from "../storage/broughlike-map.ts";
 import { parseQuiltTerrainGlyphs } from "../storage/sigil-glyph-map.ts";
+import { serializeBroughlikeMapData } from "../storage/broughlike-map.ts";
 
 const EMPTY_INPUT_FILES = 0;
 
@@ -32,17 +31,21 @@ export const handleImportFileChange = (
   file
     .text()
     .then((fileText) => {
-      let parsedJson: unknown;
-      try {
-        parsedJson = JSON.parse(fileText);
-      } catch {
+      const parsedGlyphs: ReturnType<typeof parseQuiltTerrainGlyphs> | null =
+        ((): ReturnType<typeof parseQuiltTerrainGlyphs> | null => {
+          try {
+            return parseQuiltTerrainGlyphs(JSON.parse(fileText));
+          } catch {
+            return null;
+          }
+        })();
+      if (parsedGlyphs === null) {
         controller.setState({
           ...controller.getState(),
           visibleErrors: [{ message: "Failed to parse glyph JSON file." }],
         });
         return;
       }
-      const parsedGlyphs = parseQuiltTerrainGlyphs(parsedJson);
       if (parsedGlyphs.type === "error") {
         controller.setState({
           ...controller.getState(),

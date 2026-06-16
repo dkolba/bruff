@@ -178,7 +178,6 @@ describe("createSigilGlyphMap success", () => {
     if (glyphMapResult.type === "error") {
       return;
     }
-    // eslint-disable-next-line dot-notation -- TS requires bracket access for index-signature glyph maps.
     expect(glyphMapResult.value["u2605"]).toMatchObject({
       LICENSE: "MIT",
       mappedGlyph: starMapping,
