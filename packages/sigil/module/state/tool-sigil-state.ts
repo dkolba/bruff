@@ -1,4 +1,14 @@
 export {
+  selectToolSigilDownloadDisabled,
+  selectToolSigilDownloadGlyphMap,
+  selectToolSigilViewModel,
+} from "../tool-sigil-state-selectors.js";
+export type {
+  ToolSigilFontSelection,
+  ToolSigilState,
+  ToolSigilViewModel,
+} from "../tool-sigil-state-types.js";
+export {
   setToolSigilCharacters,
   setToolSigilRequiredGlyphCharacter,
   setToolSigilSchema,
@@ -16,13 +26,3 @@ export {
   setToolSigilMappedGlyph,
 } from "./glyph-state.js";
 export { createToolSigilState } from "./initial-state.js";
-export {
-  selectToolSigilDownloadDisabled,
-  selectToolSigilDownloadGlyphMap,
-  selectToolSigilViewModel,
-} from "../tool-sigil-state-selectors.js";
-export type {
-  ToolSigilFontSelection,
-  ToolSigilState,
-  ToolSigilViewModel,
-} from "../tool-sigil-state-types.js";

@@ -1,5 +1,6 @@
 import { apply, isSupported, Observable } from "observable-polyfill/fn";
 import { describe, expect, it, vi } from "vitest";
+
 import mergeObservables from "./merge.js";
 
 if (!isSupported()) {

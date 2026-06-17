@@ -1,6 +1,7 @@
 import type * as Utilities from "@bruff/utils";
-import { afterEach, describe, expect, it, vi } from "vitest";
 import { log } from "@bruff/utils";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
 import loop from "./loop.js";
 
 vi.mock("@bruff/utils", async (importOriginal) => {

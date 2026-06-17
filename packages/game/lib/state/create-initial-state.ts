@@ -1,4 +1,12 @@
 import {
+  type Brand,
+  brand,
+  createPrng,
+  nextId,
+  type PrngState,
+} from "@bruff/utils";
+
+import {
   BOARD_COLUMNS,
   BOARD_ROWS,
   CURRENT_STATE_VERSION,
@@ -8,13 +16,6 @@ import {
   PLAYER_SIZE,
   TWO,
 } from "../core/constants.ts";
-import {
-  type Brand,
-  brand,
-  createPrng,
-  nextId,
-  type PrngState,
-} from "@bruff/utils";
 import type { GameState } from "../core/types.ts";
 
 const INITIAL_SEED = 1;

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { codePointKey } from "./code-point-key.js";
 
 describe("codePointKey", () => {

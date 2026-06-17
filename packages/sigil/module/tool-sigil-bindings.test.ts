@@ -1,10 +1,11 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- Delegation tests cover grouped glyph names such as ASCII in one DOM fixture. */
+import { describe, expect, it, vi } from "vitest";
+
 import {
   connectToolSigilControls,
   type DisconnectToolSigilControls,
   type ToolSigilControlHandlers,
 } from "./tool-sigil-bindings.js";
-import { describe, expect, it, vi } from "vitest";
 import { requireElement } from "./tool-sigil-test-support.js";
 
 type ConnectedBindingShadowRoot = Readonly<{

@@ -1,4 +1,5 @@
 import { beforeEach, expect, test, vi } from "vitest";
+
 import { error, ok } from "../../universal/fp/result.ts";
 import { getCanvasContext } from "./get-canvas-context.ts";
 

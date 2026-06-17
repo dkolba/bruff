@@ -1,5 +1,5 @@
-import { type core, z } from "zod";
 import { error, ok, type Result } from "@bruff/utils";
+import { type core, z } from "zod";
 
 const BROUGHLIKE_MAP_VERSION = 1;
 const MIN_BROUGHLIKE_MAP_SIZE = 1;

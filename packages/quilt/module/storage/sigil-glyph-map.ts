@@ -4,6 +4,7 @@ import {
   type ParseSigilGlyphMapError,
 } from "@bruff/contracts";
 import { error, ok, type Result } from "@bruff/utils";
+
 import type { QuiltTerrainGlyphMap } from "../state/quilt-state.ts";
 
 const TERRAIN_KEYS: ReadonlyArray<BroughlikeTerrain> = [

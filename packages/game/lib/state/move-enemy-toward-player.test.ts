@@ -1,9 +1,9 @@
-/* eslint-disable sort-imports -- Imports are grouped by fixture dependency role. */
-import { describe, expect, it } from "vitest";
-import { ENEMY_SIZE, ONE, TWO, ZERO } from "../core/constants.js";
 import { brand } from "@bruff/utils";
-import { nextEnemyCellTowardPlayer } from "./move-enemy-toward-player.js";
+import { describe, expect, it } from "vitest";
+
+import { ENEMY_SIZE, ONE, TWO, ZERO } from "../core/constants.js";
 import type { Enemy, Player } from "../core/types.ts";
+import { nextEnemyCellTowardPlayer } from "./move-enemy-toward-player.js";
 
 const TEST_PLAYER_SIZE = 20;
 

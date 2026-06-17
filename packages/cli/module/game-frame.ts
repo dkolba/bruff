@@ -4,12 +4,13 @@ import type {
   HeadlessFrameCell,
   HeadlessFrameEntity,
 } from "@bruff/game/headless";
+import { ASCII } from "@bruff/glyph";
+
 import type {
   TerminalCell,
   TerminalColor,
   TerminalFrame,
 } from "./terminal-cell.ts";
-import { ASCII } from "@bruff/glyph";
 
 const terminalIndexOffset = 1;
 const floorBackground = { blue: 24, green: 24, red: 24 };

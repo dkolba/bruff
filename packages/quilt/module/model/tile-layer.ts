@@ -1,4 +1,5 @@
 import { brand } from "@bruff/utils";
+
 import type { TileId } from "./tile-map-data.ts";
 
 const TILE_INDEX_OFFSET = 1;

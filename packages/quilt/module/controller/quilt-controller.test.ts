@@ -1,3 +1,5 @@
+import { describe, expect, test } from "vitest";
+
 import {
   createTileMapData,
   doorTileId,
@@ -7,9 +9,8 @@ import {
   type TileId,
   wallTileId,
 } from "../model/tile-map-data.ts";
-import { describe, expect, test } from "vitest";
-import { createQuiltController } from "./quilt-controller.ts";
 import { createQuiltState } from "../state/quilt-state.ts";
+import { createQuiltController } from "./quilt-controller.ts";
 
 const TILE_SIZE = 16;
 const ZERO_SIZE = 0;

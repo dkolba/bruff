@@ -1,5 +1,5 @@
-import { type core, z } from "zod";
 import { error, ok, type Result } from "@bruff/utils";
+import { type core, z } from "zod";
 
 const MIN_TEXT_LENGTH = 1;
 

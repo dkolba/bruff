@@ -1,4 +1,5 @@
-import { brand, type Brand } from "@bruff/utils";
+import { type Brand, brand } from "@bruff/utils";
+
 import type { EntityId, MapEntity } from "../entities/map-entity.ts";
 
 const MAP_DATA_VERSION = Number("1");

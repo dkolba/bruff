@@ -1,9 +1,8 @@
-/* eslint-disable sort-imports -- Imports are grouped by reducer dependency role. */
 import type { GameAction } from "../core/actions.ts";
-import type { Board, Enemy, GameState, GridCell } from "../core/types.ts";
 import { CURRENT_STATE_VERSION } from "../core/constants.ts";
-import { nextEnemyCellTowardPlayer } from "./move-enemy-toward-player.ts";
+import type { Board, Enemy, GameState, GridCell } from "../core/types.ts";
 import { cellsEqual, isCellInsideBoard } from "./grid.ts";
+import { nextEnemyCellTowardPlayer } from "./move-enemy-toward-player.ts";
 import { isCellOccupiedByEnemy } from "./occupancy.ts";
 
 type ResolvedEnemy = Readonly<{

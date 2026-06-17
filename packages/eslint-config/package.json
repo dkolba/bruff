@@ -15,7 +15,8 @@
     "eslint-plugin-wc": "catalog:",
     "globals": "catalog:",
     "prettier": "catalog:",
-    "typescript-eslint": "catalog:"
+    "typescript-eslint": "catalog:",
+    "eslint-plugin-simple-import-sort": "catalog:"
   },
   "peerDependencies": {
     "eslint": ">=9"

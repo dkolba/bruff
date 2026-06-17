@@ -1,17 +1,16 @@
-/* eslint-disable sort-imports -- State split keeps dependency groups readable. */
 import {
   sigilSchemaCharacters,
   type SigilSchemaId,
   sigilSchemaNamesByUnicode,
 } from "../sigil-schema-catalog.js";
+import { extractDrafts } from "../tool-sigil-extract-drafts.js";
 import type {
   RequiredGlyphSelection,
   ToolSigilState,
 } from "../tool-sigil-state-types.js";
-import { extractDrafts } from "../tool-sigil-extract-drafts.js";
+import { distinctGraphemes, segmentGraphemes } from "../unicode-graphemes.js";
 import { extractionCharacters } from "./extraction-characters.js";
 import { schemaOptionById } from "./schema-option.js";
-import { distinctGraphemes, segmentGraphemes } from "../unicode-graphemes.js";
 
 const hasRequiredGraphemeCount = (
   characters: string,

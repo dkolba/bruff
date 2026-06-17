@@ -1,5 +1,4 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- `ASCII` is a @bruff/glyph catalog group name in the Sigil glyph JSON contract. */
-import { describe, expect, it } from "vitest";
 import {
   parseSigilGlyphMap,
   type ParseSigilGlyphMapError,
@@ -7,6 +6,7 @@ import {
   sigilGlyphMapSchema,
 } from "@bruff/contracts";
 import { type Result } from "@bruff/utils";
+import { describe, expect, it } from "vitest";
 
 const TEST_ADVANCE_WIDTH = 700;
 const TEST_BOUNDS_X1 = 10;

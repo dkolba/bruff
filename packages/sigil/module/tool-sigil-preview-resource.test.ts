@@ -1,9 +1,10 @@
+import { describe, expect, it, vi } from "vitest";
+
+import { createValidFontFile } from "./font-test-fixture.js";
 import {
   createToolSigilPreviewResource,
   type ToolSigilPreviewResource,
 } from "./tool-sigil-preview-resource.js";
-import { describe, expect, it, vi } from "vitest";
-import { createValidFontFile } from "./font-test-fixture.js";
 import { waitForComponentUpdate } from "./tool-sigil-test-support.js";
 
 const CURRENT_FONT_LOAD_TOKEN = 1;

@@ -1,7 +1,8 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- Tests assert @bruff/glyph catalog group names such as ASCII. */
-import { createSigilGlyphMap, isValidGlyphName } from "./glyph-name.js";
 import { describe, expect, it } from "vitest";
+
 import type { SigilSourceGlyph } from "./glyph-json.js";
+import { createSigilGlyphMap, isValidGlyphName } from "./glyph-name.js";
 
 const ORIGIN = 0;
 const GLYPH_ADVANCE_WIDTH = 600;

@@ -1,13 +1,13 @@
-/* eslint-disable sort-imports -- Test imports are grouped by fixture dependency role. */
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
-import { advanceGameState } from "./advance-game-state.js";
-import type { GameState } from "../core/types.ts";
+
 import {
   CURRENT_STATE_VERSION,
   ENEMY_SIZE,
   PLAYER_SIZE,
 } from "../core/constants.js";
+import type { GameState } from "../core/types.ts";
+import { advanceGameState } from "./advance-game-state.js";
 
 const TEST_SEED = 1;
 const ZERO = 0;

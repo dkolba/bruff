@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { clamp } from "./clamp.ts";
 
 const MIN_RANGE = 0;

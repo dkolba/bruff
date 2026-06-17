@@ -1,8 +1,9 @@
 import * as assert from "node:assert/strict";
+import { test } from "node:test";
 
 import { createHeadlessGame, type GameState } from "@bruff/game/headless";
+
 import { createAnsiFrameStepDriver } from "./ansi-frame-step-driver.ts";
-import { test } from "node:test";
 import type { TextWriter } from "./write-frame.ts";
 
 const defaultCanvas = { height: 7, width: 7 };

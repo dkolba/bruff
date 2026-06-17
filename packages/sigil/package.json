@@ -9,6 +9,7 @@
     "format": "prettier --write .",
     "generate:osi-licenses": "node scripts/generate-osi-license-catalog.mjs",
     "lint": "eslint",
+    "lint:fix": "eslint . --fix",
     "test:watch": "vitest",
     "test": "pnpm run test:chromium && pnpm run test:firefox && pnpm run test:webkit",
     "test:chromium": "vitest run --browser=chromium --coverage ",

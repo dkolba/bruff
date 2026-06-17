@@ -1,4 +1,6 @@
-/* eslint-disable sort-imports, unicorn/text-encoding-identifier-case -- State tests cover catalog names such as ASCII. */
+/* eslint-disable unicorn/text-encoding-identifier-case -- State tests cover catalog names such as ASCII. */
+import { describe, expect, it } from "vitest";
+
 import {
   selectToolSigilViewModel,
   setToolSigilGlyphGroup,
@@ -7,7 +9,6 @@ import {
   asteriskMapping,
   selectedAsteriskState,
 } from "./tool-sigil-state-test-support.js";
-import { describe, expect, it } from "vitest";
 
 describe("ToolSigil mapped glyph state", () => {
   it("selects staged groups and individual mapped glyphs", () => {

@@ -1,11 +1,11 @@
 import { appendText } from "./dom-text.js";
 import { createErrorElements } from "./error-elements.js";
+import type { SigilGlyphOption } from "./glyph-catalog.js";
+import type { SigilGlyphDraft } from "./glyph-json.js";
 import { createGlyphPreview } from "./glyph-preview.js";
+import type { ToolSigilViewModel } from "./state/tool-sigil-state.js";
 import { renderRequiredGlyphSelections } from "./tool-sigil-required-glyph-render.js";
 import { renderToolSigilSchemaSelect } from "./tool-sigil-schema-render.js";
-import type { SigilGlyphDraft } from "./glyph-json.js";
-import type { SigilGlyphOption } from "./glyph-catalog.js";
-import type { ToolSigilViewModel } from "./state/tool-sigil-state.js";
 
 const textInputName = (unicode: string): string => `glyph-name-${unicode}`;
 const glyphGroupSelectName = (unicode: string): string =>

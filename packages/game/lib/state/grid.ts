@@ -1,6 +1,6 @@
-import type { Board, GridCell } from "../core/types.ts";
-import { ONE, ZERO } from "../core/constants.ts";
 import type { InputAction } from "../core/actions.ts";
+import { ONE, ZERO } from "../core/constants.ts";
+import type { Board, GridCell } from "../core/types.ts";
 
 /**
  * Computes the adjacent cell targeted by a movement action.

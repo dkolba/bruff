@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { renderRequiredGlyphSelections } from "./tool-sigil-required-glyph-render.js";
 import { requireElement } from "./tool-sigil-test-support.js";
 

@@ -1,11 +1,12 @@
+import { describe, expect, it } from "vitest";
+
+import { SIGIL_SCHEMA_OPTIONS } from "./sigil-schema-catalog.js";
 import {
   defaultRequiredGlyphSelections,
   requiredGlyphCharacterOptions,
   requiredGlyphSelectionViews,
   selectedRequiredGlyphCharacters,
 } from "./tool-sigil-required-glyph-selection.js";
-import { describe, expect, it } from "vitest";
-import { SIGIL_SCHEMA_OPTIONS } from "./sigil-schema-catalog.js";
 
 const FIRST_SCHEMA_OPTION_INDEX = 0;
 

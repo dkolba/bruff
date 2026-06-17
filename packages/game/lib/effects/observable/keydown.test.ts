@@ -1,5 +1,6 @@
 import { apply, isSupported } from "observable-polyfill/fn";
 import { describe, expect, it, vi } from "vitest";
+
 import createKeyDownObservable from "./keydown.js";
 
 if (!isSupported()) {

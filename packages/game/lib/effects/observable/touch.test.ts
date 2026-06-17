@@ -1,8 +1,9 @@
 import type * as Utilities from "@bruff/utils";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { apply, isSupported } from "observable-polyfill/fn";
-import createTouchObservable from "./touch.js";
 import { getCardinalDirection } from "@bruff/utils";
+import { apply, isSupported } from "observable-polyfill/fn";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import createTouchObservable from "./touch.js";
 
 if (!isSupported()) {
   apply();

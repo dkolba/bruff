@@ -1,14 +1,13 @@
-/* eslint-disable sort-imports -- State split keeps dependency groups readable. */
+import { SIGIL_GLYPH_GROUPS } from "../glyph-catalog.js";
+import { OSI_LICENSE_OPTIONS } from "../osi-license-catalog.js";
 import {
   DEFAULT_SIGIL_SCHEMA_ID,
   SIGIL_SCHEMA_OPTIONS,
   sigilSchemaCharacters,
   sigilSchemaNamesByUnicode,
 } from "../sigil-schema-catalog.js";
-import { SIGIL_GLYPH_GROUPS } from "../glyph-catalog.js";
-import type { ToolSigilState } from "../tool-sigil-state-types.js";
-import { OSI_LICENSE_OPTIONS } from "../osi-license-catalog.js";
 import { defaultRequiredGlyphSelections } from "../tool-sigil-required-glyph-selection.js";
+import type { ToolSigilState } from "../tool-sigil-state-types.js";
 import { schemaOptionById } from "./schema-option.js";
 
 const INITIAL_FONT_LOAD_TOKEN = 0;

@@ -1,3 +1,5 @@
+import { expect } from "vitest";
+
 import {
   clickDownload,
   forceDownloadClick,
@@ -5,7 +7,6 @@ import {
   renameGlyph,
   selectDefaultMappingAndLicense,
 } from "./tool-sigil-test-support.js";
-import { expect } from "vitest";
 
 const REQUIRED_SCHEMA_UNICODES = [".", "#", "+", "@", "e"];
 

@@ -1,10 +1,11 @@
 import type { Font, Glyph } from "opentype.js";
+
+import { codePointKey } from "./code-point-key.js";
 import type {
   SigilExtractionError,
   SigilExtractionResult,
   SigilGlyphDraft,
 } from "./glyph-json.js";
-import { codePointKey } from "./code-point-key.js";
 import { distinctGraphemes } from "./unicode-graphemes.js";
 
 const EMPTY_INPUT_LENGTH = 0;

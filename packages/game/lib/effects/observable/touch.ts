@@ -1,8 +1,9 @@
-import { FIVE, ONE } from "../../core/constants.js";
 import { getCardinalDirection, isSome } from "@bruff/utils";
-import type { InputAction } from "../../core/actions.ts";
-import { normaliseKey } from "../../input/normalise-input.js";
 import type { Observable } from "observable-polyfill/fn";
+
+import type { InputAction } from "../../core/actions.ts";
+import { FIVE, ONE } from "../../core/constants.js";
+import { normaliseKey } from "../../input/normalise-input.js";
 
 /** !TODO:
 This file is currently not included in coverage, because Playwright does not 

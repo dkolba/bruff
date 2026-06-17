@@ -1,3 +1,5 @@
+import { describe, expect, test } from "vitest";
+
 import {
   createEntityId,
   createMapEntity,
@@ -5,7 +7,6 @@ import {
   type MapEntityCollection,
   putMapEntity,
 } from "./map-entity.ts";
-import { describe, expect, test } from "vitest";
 const entityCoordinate = { tileX: 2, tileY: 3 };
 const otherCoordinate = { tileX: 3, tileY: 3 };
 

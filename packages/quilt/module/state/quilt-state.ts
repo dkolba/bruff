@@ -1,5 +1,5 @@
-/* eslint-disable sort-imports */
 import type { BroughlikeTerrain, SigilGlyphBounds } from "@bruff/contracts";
+
 import type { EditorCommand } from "../commands/editor-command.ts";
 import {
   type TileCoordinate,

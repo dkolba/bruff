@@ -1,4 +1,8 @@
 import "../index.js";
+
+import { describe, expect, it } from "vitest";
+
+import { createMissingStarFontFile } from "./font-test-fixture.js";
 import {
   appendToolSigil,
   requireElement,
@@ -7,8 +11,6 @@ import {
   selectFiles,
   waitForElement,
 } from "./tool-sigil-test-support.js";
-import { describe, expect, it } from "vitest";
-import { createMissingStarFontFile } from "./font-test-fixture.js";
 
 const REQUIRED_SCHEMA_UNICODES = [".", "#", "+", "@", "e"];
 

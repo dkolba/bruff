@@ -1,11 +1,11 @@
 import * as assert from "node:assert/strict";
+import { test } from "node:test";
 
+import { createTextInput } from "./bruff-cli.ts";
 import {
   createFakeProcessInput,
   ignoreInput,
 } from "./bruff-cli-test-helpers.ts";
-import { createTextInput } from "./bruff-cli.ts";
-import { test } from "node:test";
 
 test("wraps process-like input behind the text input port", (): void => {
   const processInput = createFakeProcessInput(true);

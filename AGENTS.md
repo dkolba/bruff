@@ -180,7 +180,7 @@ TypeScript:
 ### 4 — Tooling Gates
 
 - **G-1 (MUST)** `pnpm run format` passes.
-- **G-2 (MUST)** `pnpm run lint` passes.
+- **G-2 (MUST)** `pnpm run lint` passes. Run `pnpm run lint:fix` to auto-fix fixable issues (includes import sorting via `simple-import-sort`).
 - **G-3 (MUST)** `pnpm run test` passes.
 - **G-4 (MUST)** `pnpm run typecheck` passes.
 - **G-5 (MUST)** `pnpm run build` passes.

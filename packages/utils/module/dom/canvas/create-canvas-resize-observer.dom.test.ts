@@ -1,6 +1,7 @@
 /* eslint-disable id-length */
 /* eslint-disable max-classes-per-file */
 import { beforeEach, expect, test, vi } from "vitest";
+
 import { createCanvasResizeObserver } from "./create-canvas-resize-observer.ts";
 import { getCanvasContext } from "./get-canvas-context.ts";
 

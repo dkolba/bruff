@@ -1,4 +1,6 @@
-import type { Board, GridCell } from "../core/types.ts";
+import { describe, expect, it } from "vitest";
+
+import type { InputAction } from "../core/actions.ts";
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
@@ -6,9 +8,8 @@ import {
   TWO,
   ZERO,
 } from "../core/constants.js";
+import type { Board, GridCell } from "../core/types.ts";
 import { cellForAction, cellsEqual, isCellInsideBoard } from "./grid.js";
-import { describe, expect, it } from "vitest";
-import type { InputAction } from "../core/actions.ts";
 
 const TEST_BOARD: Board = { columns: BOARD_COLUMNS, rows: BOARD_ROWS };
 const CENTER_CELL: GridCell = { column: TWO + ONE, row: TWO + ONE };

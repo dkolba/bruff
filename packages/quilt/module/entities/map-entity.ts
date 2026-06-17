@@ -1,4 +1,5 @@
-import { brand, type Brand } from "@bruff/utils";
+import { type Brand, brand } from "@bruff/utils";
+
 import type { TileCoordinate } from "../model/tile-map-data.ts";
 
 /** Branded map entity identifier. */

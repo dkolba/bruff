@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle, unicorn/prefer-global-this -- The public browser hook is intentionally named window.__bruffTestApi. */
-import type { BruffTestApi } from "./test-api-types.ts";
-import type { FrameStepDriver } from "../frame-step-driver.ts";
 import type { GameState } from "../../core/types.ts";
 import { normaliseKey } from "../../input/normalise-input.js";
+import type { FrameStepDriver } from "../frame-step-driver.ts";
+import type { BruffTestApi } from "./test-api-types.ts";
 
 type TestApiHostElement = HTMLElement &
   Readonly<{

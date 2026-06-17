@@ -28,6 +28,7 @@
     "format": "pnpm run format:ai && pnpm -r --parallel run format",
     "format:ai": "prettier -w .agents AGENTS.md",
     "lint": "pnpm -r --parallel run lint",
+    "lint:fix": "pnpm -r --parallel run lint:fix",
     "ok": "node scripts/ok.js",
     "start": "pnpm --filter @bruff/arcade run dev",
     "test": "pnpm -r --workspace-concurrency=1 run test",

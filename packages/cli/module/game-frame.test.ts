@@ -1,9 +1,10 @@
 import * as assert from "node:assert/strict";
-
-import { ASCII } from "@bruff/glyph";
-import { gameFrameToTerminalFrame } from "./game-frame.ts";
-import type { HeadlessFrame } from "@bruff/game/headless";
 import { test } from "node:test";
+
+import type { HeadlessFrame } from "@bruff/game/headless";
+import { ASCII } from "@bruff/glyph";
+
+import { gameFrameToTerminalFrame } from "./game-frame.ts";
 
 const testFrame: HeadlessFrame = {
   board: { columns: 7, rows: 7 },

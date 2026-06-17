@@ -1,16 +1,17 @@
+import type { Font } from "opentype.js";
+
+import type { SigilGlyphGroup, SigilGlyphGroupName } from "./glyph-catalog.js";
 import type {
   RequiredSigilGlyphName,
   SigilExtractionError,
   SigilGlyphDraft,
   SigilGlyphMapping,
 } from "./glyph-json.js";
-import type { SigilGlyphGroup, SigilGlyphGroupName } from "./glyph-catalog.js";
+import type { SigilLicenseOption } from "./osi-license-catalog.js";
 import type {
   SigilSchemaId,
   SigilSchemaOption,
 } from "./sigil-schema-catalog.js";
-import type { Font } from "opentype.js";
-import type { SigilLicenseOption } from "./osi-license-catalog.js";
 
 /** Selected textarea character for one required contract glyph. */
 export type RequiredGlyphSelection = Readonly<{

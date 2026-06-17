@@ -1,5 +1,5 @@
-import type { Enemy, GridCell, Player } from "../core/types.ts";
 import { ONE, ZERO } from "../core/constants.ts";
+import type { Enemy, GridCell, Player } from "../core/types.ts";
 
 const signedStep = (distance: number): number => Math.sign(distance) * ONE;
 

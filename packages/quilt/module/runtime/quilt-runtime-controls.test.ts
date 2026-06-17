@@ -1,3 +1,5 @@
+import { describe, expect, test } from "vitest";
+
 import {
   createTileMapData,
   doorTileId,
@@ -5,9 +7,8 @@ import {
   getTile,
   wallTileId,
 } from "../model/tile-map-data.ts";
-import { describe, expect, test } from "vitest";
-import { createQuiltRuntime } from "./quilt-runtime.ts";
 import { createQuiltState } from "../state/quilt-state.ts";
+import { createQuiltRuntime } from "./quilt-runtime.ts";
 
 const CANVAS_POINTER_OFFSET = 20;
 const CANVAS_SIZE_64 = 64;

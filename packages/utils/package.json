@@ -12,6 +12,7 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint",
+    "lint:fix": "eslint . --fix",
     "test:watch": "vitest",
     "test": "pnpm run test:chromium && pnpm run test:firefox && pnpm run test:webkit && pnpm run test:node",
     "test:node": "vitest run --config vitest.node.config.ts --coverage",

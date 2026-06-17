@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { createHeadlessGame } from "./create-headless-game.js";
 import { projectHeadlessFrame } from "./project-headless-frame.js";
 import { stepHeadlessGame } from "./step-headless-game.js";

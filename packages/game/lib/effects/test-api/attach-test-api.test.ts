@@ -1,16 +1,17 @@
-/* eslint-disable no-underscore-dangle, sort-imports, unicorn/prefer-global-this -- Tests assert the intentional window.__bruffTestApi surface. */
+/* eslint-disable no-underscore-dangle, unicorn/prefer-global-this -- Tests assert the intentional window.__bruffTestApi surface. */
 import { brand, createPrng } from "@bruff/utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { FrameStepDriver } from "../frame-step-driver.ts";
-import type { GameState } from "../../core/types.ts";
-import type { RenderStats } from "../../render/render-stats.ts";
-import type { BruffTestApi } from "./test-api-types.ts";
-import { attachTestApi } from "./attach-test-api.js";
+
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
   CURRENT_STATE_VERSION,
 } from "../../core/constants.js";
+import type { GameState } from "../../core/types.ts";
+import type { RenderStats } from "../../render/render-stats.ts";
+import type { FrameStepDriver } from "../frame-step-driver.ts";
+import { attachTestApi } from "./attach-test-api.js";
+import type { BruffTestApi } from "./test-api-types.ts";
 
 const TEST_SEED = 1;
 const ZERO = 0;

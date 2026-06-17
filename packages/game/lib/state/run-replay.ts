@@ -1,14 +1,14 @@
-/* eslint-disable sort-imports -- Result, core, and replay imports are grouped by role. */
 import { error, ok, type Result } from "@bruff/utils";
-import type { GameState } from "../core/types.ts";
+
 import type { InputAction } from "../core/actions.ts";
+import type { GameState } from "../core/types.ts";
+import { advanceGameState } from "./advance-game-state.js";
+import createInitialState from "./create-initial-state.js";
 import type {
   ReplayError,
   ReplayFixture,
   ReplayFrame,
 } from "./replay-fixture.ts";
-import { advanceGameState } from "./advance-game-state.js";
-import createInitialState from "./create-initial-state.js";
 
 const FIRST_FRAME = 1;
 

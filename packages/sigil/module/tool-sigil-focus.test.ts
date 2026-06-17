@@ -1,5 +1,7 @@
 import "../index.js";
+
 import { describe, it } from "vitest";
+
 import {
   expectGlyphNameInputFocusPreserved,
   expectGlyphSelectFocusPreserved,

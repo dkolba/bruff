@@ -1,6 +1,6 @@
 import type { createQuiltController } from "../controller/quilt-controller.ts";
-import { parseQuiltTerrainGlyphs } from "../storage/sigil-glyph-map.ts";
 import { serializeBroughlikeMapData } from "../storage/broughlike-map.ts";
+import { parseQuiltTerrainGlyphs } from "../storage/sigil-glyph-map.ts";
 
 const EMPTY_INPUT_FILES = 0;
 

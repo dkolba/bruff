@@ -1,8 +1,10 @@
 /* node:coverage ignore next */
-import type { TextWriter, WriteFrameResult } from "../module/write-frame.ts";
-import { createAnsiFrameStepDriver } from "../module/ansi-frame-step-driver.ts";
-import { normaliseKey } from "@bruff/game/headless";
 import { pathToFileURL } from "node:url";
+
+import { normaliseKey } from "@bruff/game/headless";
+
+import { createAnsiFrameStepDriver } from "../module/ansi-frame-step-driver.ts";
+import type { TextWriter, WriteFrameResult } from "../module/write-frame.ts";
 
 const controlCShortcut = "\u0003";
 const lowercaseQuitShortcut = "q";

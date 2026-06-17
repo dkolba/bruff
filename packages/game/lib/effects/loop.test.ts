@@ -1,14 +1,15 @@
-/* eslint-disable max-lines-per-function, sort-imports -- Loop shell tests keep mocked setup close to assertions. */
+/* eslint-disable max-lines-per-function -- Loop shell tests keep mocked setup close to assertions. */
 import type * as Utilities from "@bruff/utils";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { error, log, ok } from "@bruff/utils";
-import createTouchObservable from "./observable/touch.js";
-import curtainUp from "./curtain-up.js";
+import type { Observable } from "observable-polyfill/fn";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
 import type { InputAction } from "../core/actions.ts";
+import curtainUp from "./curtain-up.js";
+import loop from "./loop.js";
+import createTouchObservable from "./observable/touch.js";
 import { attachTestApi } from "./test-api/attach-test-api.js";
 import isTestMode from "./test-mode.js";
-import loop from "./loop.js";
-import type { Observable } from "observable-polyfill/fn";
 
 vi.mock("@bruff/utils", async (importOriginal) => {
   const original = await importOriginal<typeof Utilities>();

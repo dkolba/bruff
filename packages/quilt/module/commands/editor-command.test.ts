@@ -1,13 +1,14 @@
-import {
-  createPaintTilesCommand,
-  createResizeMapCommand,
-} from "./editor-command.ts";
+import { describe, expect, test } from "vitest";
+
 import {
   createTileMapData,
   floorTileId,
   wallTileId,
 } from "../model/tile-map-data.ts";
-import { describe, expect, test } from "vitest";
+import {
+  createPaintTilesCommand,
+  createResizeMapCommand,
+} from "./editor-command.ts";
 
 const tileCoordinate = { tileX: 1, tileY: 2 };
 

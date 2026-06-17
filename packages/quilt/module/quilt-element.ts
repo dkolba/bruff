@@ -1,10 +1,10 @@
+import { createTileMapData } from "./model/tile-map-data.ts";
 import {
   createQuiltRuntime,
   type QuiltRuntime,
 } from "./runtime/quilt-runtime.ts";
 import { createQuiltState } from "./state/quilt-state.ts";
 import { createQuiltTemplate } from "./template.ts";
-import { createTileMapData } from "./model/tile-map-data.ts";
 
 const QUILT_ELEMENT_NAME = "tool-quilt";
 const DEFAULT_MAP_SIZE = 4;

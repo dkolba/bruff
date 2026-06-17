@@ -1,12 +1,12 @@
-/* eslint-disable sort-imports -- Render stats tests group fixture dependencies before render target imports. */
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
-import type { Enemy, GameState } from "../core/types.ts";
+
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
   CURRENT_STATE_VERSION,
 } from "../core/constants.js";
+import type { Enemy, GameState } from "../core/types.ts";
 import { renderStatsForState } from "./render-stats.js";
 
 const ZERO = 0;

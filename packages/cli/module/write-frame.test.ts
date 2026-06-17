@@ -1,8 +1,8 @@
 import * as assert from "node:assert/strict";
-
-import { type TextWriter, writeTerminalFrame } from "./write-frame.ts";
-import type { TerminalFrame } from "./terminal-cell.ts";
 import { test } from "node:test";
+
+import type { TerminalFrame } from "./terminal-cell.ts";
+import { type TextWriter, writeTerminalFrame } from "./write-frame.ts";
 
 const frame: TerminalFrame = {
   cells: [

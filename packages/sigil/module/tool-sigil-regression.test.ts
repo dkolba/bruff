@@ -1,4 +1,11 @@
 import "../index.js";
+
+import { describe, it } from "vitest";
+
+import {
+  restoreDownloadTest,
+  stubObjectUrls,
+} from "./tool-sigil-download-test-support.js";
 import {
   appendToolSigilWithShadowRoot,
   expectNewerFontSelectionToWin,
@@ -7,11 +14,6 @@ import {
   expectTypedCharacterSelectionDownload,
   expectUploadedFontPreview,
 } from "./tool-sigil-regression-test-support.js";
-import { describe, it } from "vitest";
-import {
-  restoreDownloadTest,
-  stubObjectUrls,
-} from "./tool-sigil-download-test-support.js";
 
 const STALE_FONT_LOAD_TEST_TIMEOUT_MS = 30_000;
 

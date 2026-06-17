@@ -1,5 +1,6 @@
-import { createPrng, nextId, nextNumber, type PrngState } from "./prng.ts";
 import { describe, expect, it } from "vitest";
+
+import { createPrng, nextId, nextNumber, type PrngState } from "./prng.ts";
 
 const SEED_ONE = 42;
 const SEED_TWO = 12_345;

@@ -1,4 +1,7 @@
-/* eslint-disable sort-imports -- State split keeps dependency groups readable. */
+import { ok } from "@bruff/utils";
+import { describe, expect, it } from "vitest";
+
+import { createTestFont } from "../font-test-fixture.js";
 import {
   applyToolSigilFontLoadResult,
   createToolSigilState,
@@ -8,9 +11,6 @@ import {
   startToolSigilFontSelection,
 } from "./tool-sigil-state.js";
 import { ENEMY_UNICODE } from "./tool-sigil-state-test-support.js";
-import { createTestFont } from "../font-test-fixture.js";
-import { describe, expect, it } from "vitest";
-import { ok } from "@bruff/utils";
 
 describe("ToolSigil license state", () => {
   it("selects a license and memorizes it for new rows", () => {

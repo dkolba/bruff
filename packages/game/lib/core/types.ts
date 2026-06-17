@@ -1,4 +1,5 @@
 import type { Brand, PrngState } from "@bruff/utils";
+
 import type { InputAction } from "./actions.ts";
 
 /**

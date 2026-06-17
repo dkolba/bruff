@@ -1,9 +1,9 @@
 import * as assert from "node:assert/strict";
-
-import { createFakeInput, type FakeInput } from "./bruff-cli-test-helpers.ts";
-import { runBruffCli } from "./bruff-cli.ts";
 import { test } from "node:test";
+
 import type { TextWriter } from "../module/write-frame.ts";
+import { runBruffCli } from "./bruff-cli.ts";
+import { createFakeInput, type FakeInput } from "./bruff-cli-test-helpers.ts";
 
 const initialPlayerCursor = "\u001B[4;4H";
 const expectedInitialWriteCount = 1;

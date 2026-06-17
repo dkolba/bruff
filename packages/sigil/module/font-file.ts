@@ -1,5 +1,6 @@
 import { error, ok, type Result } from "@bruff/utils";
 import { type Font, parse } from "opentype.js";
+
 import type { SigilExtractionError } from "./glyph-json.js";
 
 const WOFF2_EXTENSION = ".woff2";

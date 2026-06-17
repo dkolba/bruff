@@ -1,7 +1,7 @@
+import type { RenderCommand } from "../core/actions.ts";
 import type { Board, CanvasSize, GameState, GridCell } from "../core/types.ts";
 import { projectRenderCells } from "./project-render-cells.js";
 import type { RenderCellEntity } from "./project-render-cells.ts";
-import type { RenderCommand } from "../core/actions.ts";
 
 const PLAYER_COLOR = "blue";
 const ENEMY_COLOR = "red";
