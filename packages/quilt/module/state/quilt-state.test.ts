@@ -1,5 +1,6 @@
-import { createTileMapData, wallTileId } from "../model/tile-map-data.ts";
 import { describe, expect, test } from "vitest";
+
+import { createTileMapData, wallTileId } from "../model/tile-map-data.ts";
 import { createQuiltState } from "./quilt-state.ts";
 
 const MAP_SIZE_4 = 4;

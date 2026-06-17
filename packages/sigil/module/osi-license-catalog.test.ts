@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { OSI_LICENSE_OPTIONS } from "./osi-license-catalog.js";
 
 const ZERO = 0;

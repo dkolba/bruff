@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- Contract validation fixtures use shared glyph group names such as ASCII. */
 import { describe, expect, it } from "vitest";
+
 import {
   hasToolSigilContractIssues,
   validateToolSigilGlyphMap,

@@ -11,6 +11,7 @@
     "dev": "vite",
     "format": "prettier --write .",
     "lint": "eslint",
+    "lint:fix": "eslint . --fix",
     "typecheck": "tsc",
     "test:e2e": "playwright test",
     "test:e2e:update-snapshots": "pnpm run test:e2e --grep @snapshot --update-snapshots=all",

@@ -1,8 +1,8 @@
 import * as assert from "node:assert/strict";
+import { test } from "node:test";
 
 import { renderTerminalFrame } from "./render-frame.ts";
 import type { TerminalFrame } from "./terminal-cell.ts";
-import { test } from "node:test";
 
 test("renders cursor, colors, and glyph commands for each cell", (): void => {
   const frame: TerminalFrame = {

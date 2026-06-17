@@ -1,6 +1,7 @@
-import type * as DomUtilities from "@bruff/utils/dom";
 import type * as Utilities from "@bruff/utils";
+import type * as DomUtilities from "@bruff/utils/dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
+
 import curtainUp from "./curtain-up.js";
 
 vi.mock("@bruff/utils", async (importOriginal) => {

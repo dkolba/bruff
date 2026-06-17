@@ -1,12 +1,12 @@
-/* eslint-disable sort-imports -- Render projection scenarios keep compact state fixtures inline. */
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
-import type { Enemy, GameState, GridCell } from "../core/types.ts";
+
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
   CURRENT_STATE_VERSION,
 } from "../core/constants.js";
+import type { Enemy, GameState, GridCell } from "../core/types.ts";
 import { projectRenderCells } from "./project-render-cells.js";
 
 const ZERO = 0;

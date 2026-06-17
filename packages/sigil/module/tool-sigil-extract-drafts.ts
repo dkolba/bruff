@@ -1,6 +1,7 @@
-import { completeMissingDrafts } from "./tool-sigil-missing-drafts.js";
-import { extractSigilGlyphs } from "./extract-glyphs.js";
 import type { Font } from "opentype.js";
+
+import { extractSigilGlyphs } from "./extract-glyphs.js";
+import { completeMissingDrafts } from "./tool-sigil-missing-drafts.js";
 import type { ToolSigilState } from "./tool-sigil-state-types.js";
 
 /**

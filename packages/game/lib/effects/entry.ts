@@ -1,5 +1,6 @@
 import { GameElement } from "@bruff/game-element";
 import { log } from "@bruff/utils";
+
 import loop from "./loop.js";
 
 if (!customElements.get("bruff-game")) {

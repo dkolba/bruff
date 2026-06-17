@@ -1,3 +1,5 @@
+import { createResizeMapCommand } from "../commands/editor-command.ts";
+import type { createQuiltController } from "../controller/quilt-controller.ts";
 import {
   doorTileId,
   floorTileId,
@@ -5,8 +7,6 @@ import {
   resizeTileMapData,
   wallTileId,
 } from "../model/tile-map-data.ts";
-import type { createQuiltController } from "../controller/quilt-controller.ts";
-import { createResizeMapCommand } from "../commands/editor-command.ts";
 import { executeEditorCommand } from "../state/execute-editor-command.ts";
 import { handleExportClick } from "./quilt-runtime-io.ts";
 

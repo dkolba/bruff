@@ -1,3 +1,6 @@
+import { brand, createPrng } from "@bruff/utils";
+import { describe, expect, it } from "vitest";
+
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
@@ -8,8 +11,6 @@ import {
   TWO,
   ZERO,
 } from "../core/constants.js";
-import { brand, createPrng } from "@bruff/utils";
-import { describe, expect, it } from "vitest";
 import type { Enemy, GameState, GridCell } from "../core/types.ts";
 import { isCellOccupiedByActor, isCellOccupiedByEnemy } from "./occupancy.js";
 

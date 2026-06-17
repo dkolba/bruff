@@ -1,4 +1,7 @@
-/* eslint-disable sort-imports -- Replay fixture imports are grouped by domain role. */
+import { brand } from "@bruff/utils";
+import { describe, expect, it } from "vitest";
+
+import type { InputAction } from "../core/actions.ts";
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
@@ -8,9 +11,6 @@ import {
   PLAYER_SIZE,
   TWO,
 } from "../core/constants.js";
-import { brand } from "@bruff/utils";
-import { describe, expect, it } from "vitest";
-import type { InputAction } from "../core/actions.ts";
 import type { GameState } from "../core/types.ts";
 import { advanceGameState } from "./advance-game-state.js";
 import createInitialState from "./create-initial-state.js";

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { CURRENT_STATE_VERSION } from "../core/constants.js";
 import { parseReplayFixture } from "./replay-fixture.js";
 

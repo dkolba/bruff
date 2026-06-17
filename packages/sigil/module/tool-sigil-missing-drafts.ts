@@ -1,6 +1,7 @@
-import { distinctGraphemes } from "./unicode-graphemes.js";
 import type { Font } from "opentype.js";
+
 import type { SigilGlyphDraft } from "./glyph-json.js";
+import { distinctGraphemes } from "./unicode-graphemes.js";
 
 const MISSING_GLYPH_ADVANCE_WIDTH = 0;
 const MISSING_GLYPH_BOUND = 0;

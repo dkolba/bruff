@@ -1,10 +1,11 @@
+import { describe, expect, it, vi } from "vitest";
+
 import {
   advanceManualClock,
   manualClock,
   readClock,
   wallClock,
 } from "./clock.js";
-import { describe, expect, it, vi } from "vitest";
 
 const MANUAL_CLOCK_START = 12;
 const MANUAL_CLOCK_DELTA = 5;

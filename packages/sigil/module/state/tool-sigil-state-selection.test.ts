@@ -1,21 +1,21 @@
-/* eslint-disable sort-imports -- State split keeps dependency groups readable. */
+import { brand } from "@bruff/utils";
+import { describe, expect, it } from "vitest";
+
+import {
+  DEFAULT_SIGIL_SCHEMA_ID,
+  SIGIL_SCHEMA_OPTIONS,
+} from "../sigil-schema-catalog.js";
 import {
   createToolSigilState,
   selectToolSigilViewModel,
   setToolSigilSchema,
 } from "./tool-sigil-state.js";
 import {
-  DEFAULT_SIGIL_SCHEMA_ID,
-  SIGIL_SCHEMA_OPTIONS,
-} from "../sigil-schema-catalog.js";
-import {
   EMPTY_COUNT,
   loadCurrentFontState,
   SIGIL_GLYPH_MAP_CHARACTERS,
   SIGIL_GLYPH_MAP_NAMES_BY_UNICODE,
 } from "./tool-sigil-state-test-support.js";
-import { brand } from "@bruff/utils";
-import { describe, expect, it } from "vitest";
 
 const FIRST_SCHEMA_OPTION_INDEX = 0;
 const SCHEMA_AND_INPUT_GLYPH_READY_TEXT = "Glyphs ready: 6";

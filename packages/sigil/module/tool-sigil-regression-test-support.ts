@@ -1,3 +1,10 @@
+import { expect } from "vitest";
+
+import {
+  createMissingStarFontFile,
+  createValidFontFile,
+} from "./font-test-fixture.js";
+import type { ToolSigil } from "./tool-sigil.js";
 import {
   appendToolSigil,
   clickDownload,
@@ -10,12 +17,6 @@ import {
   waitForComponentUpdate,
   waitForElement,
 } from "./tool-sigil-test-support.js";
-import {
-  createMissingStarFontFile,
-  createValidFontFile,
-} from "./font-test-fixture.js";
-import { expect } from "vitest";
-import type { ToolSigil } from "./tool-sigil.js";
 
 const BLOCKED_DOWNLOAD_BLOB_COUNT = 0;
 const DOWNLOADED_BLOB_COUNT = 1;

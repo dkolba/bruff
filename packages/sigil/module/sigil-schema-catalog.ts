@@ -1,4 +1,5 @@
-import { brand, type Brand, none, type Option, some } from "@bruff/utils";
+import { type Brand, brand, none, type Option, some } from "@bruff/utils";
+
 import type { RequiredSigilGlyphName } from "./glyph-json.js";
 
 /** Stable id for a concrete sigil contract schema preset. */

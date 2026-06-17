@@ -1,15 +1,16 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- Render tests use small literal view models for glyph catalog UI states. */
+import { describe, expect, it } from "vitest";
+
 import {
   DEFAULT_SIGIL_SCHEMA_ID,
   SIGIL_SCHEMA_OPTIONS,
 } from "./sigil-schema-catalog.js";
-import { describe, expect, it } from "vitest";
+import type { ToolSigilViewModel } from "./state/tool-sigil-state.js";
 import {
   renderToolSigil,
   renderToolSigilSelection,
 } from "./tool-sigil-render.js";
 import { requireElement } from "./tool-sigil-test-support.js";
-import type { ToolSigilViewModel } from "./state/tool-sigil-state.js";
 
 const EMPTY_CHILD_COUNT = 0;
 const EMPTY_CATALOG_MAPPED_GLYPH_OPTION_COUNT = 1;

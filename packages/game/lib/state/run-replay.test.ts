@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import canonicalFixture from "../../tests/fixtures/canonical-replay.json";
 import canonicalSnapshot from "../../tests/snapshots/canonical-replay.json";
 import { parseReplayFixture } from "./replay-fixture.js";

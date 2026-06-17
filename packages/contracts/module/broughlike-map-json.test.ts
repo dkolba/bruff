@@ -4,8 +4,8 @@ import {
   parseBroughlikeMap,
   type ParseBroughlikeMapError,
 } from "@bruff/contracts";
-import { describe, expect, it, test } from "vitest";
 import type { Result } from "@bruff/utils";
+import { describe, expect, it, test } from "vitest";
 
 const VALID_BROUGHLIKE_MAP = {
   height: 3,

@@ -1,7 +1,6 @@
-/* eslint-disable sort-imports -- State split keeps dependency groups readable. */
+import { selectedRequiredGlyphCharacters } from "../tool-sigil-required-glyph-selection.js";
 import type { ToolSigilState } from "../tool-sigil-state-types.js";
 import { distinctGraphemes } from "../unicode-graphemes.js";
-import { selectedRequiredGlyphCharacters } from "../tool-sigil-required-glyph-selection.js";
 
 /** Deduplicates textarea and selected required characters for extraction.
  * @param characters - Characters requested by the textarea.

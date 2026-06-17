@@ -1,4 +1,8 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- State validation tests cover fixed Sigil glyph fixture values. */
+import { ok } from "@bruff/utils";
+import { describe, expect, it } from "vitest";
+
+import { createTestFont } from "./font-test-fixture.js";
 import {
   applyToolSigilFontLoadResult,
   clearToolSigilPreviewFontFamily,
@@ -12,9 +16,6 @@ import {
   startToolSigilFontSelection,
   type ToolSigilState,
 } from "./state/tool-sigil-state.js";
-import { describe, expect, it } from "vitest";
-import { createTestFont } from "./font-test-fixture.js";
-import { ok } from "@bruff/utils";
 
 const STALE_FONT_LOAD_TOKEN = 1;
 const CURRENT_FONT_LOAD_TOKEN = 2;

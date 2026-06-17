@@ -1,6 +1,8 @@
-/* eslint-disable max-lines-per-function, sort-imports -- Movement cases stay grouped for readability. */
+/* eslint-disable max-lines-per-function -- Movement cases stay grouped for readability. */
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
+
+import type { GameAction } from "../core/actions.ts";
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
@@ -11,7 +13,6 @@ import {
   TWO,
   ZERO,
 } from "../core/constants.js";
-import type { GameAction } from "../core/actions.ts";
 import type { GameState, GridCell } from "../core/types.ts";
 import updatePlayer from "./update-player.js";
 

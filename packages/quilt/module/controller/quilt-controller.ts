@@ -1,8 +1,8 @@
-import { floorTileId, getTile } from "../model/tile-map-data.ts";
 import { createPaintTilesCommand } from "../commands/editor-command.ts";
+import { floorTileId, getTile } from "../model/tile-map-data.ts";
+import { screenToTileCoordinate } from "../render/coordinates.ts";
 import { executeEditorCommand } from "../state/execute-editor-command.ts";
 import type { QuiltState } from "../state/quilt-state.ts";
-import { screenToTileCoordinate } from "../render/coordinates.ts";
 
 /** Input for creating Quilt pointer controller wiring. */
 export type CreateQuiltControllerInput = Readonly<{

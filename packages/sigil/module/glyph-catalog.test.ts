@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- Tests assert @bruff/glyph catalog group names such as ASCII. */
 import { describe, expect, it } from "vitest";
+
 import {
   findSigilGlyphGroup,
   findSigilGlyphOption,

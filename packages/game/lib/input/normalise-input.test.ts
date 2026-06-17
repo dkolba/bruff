@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
 import { isNone } from "@bruff/utils";
+import { describe, expect, it } from "vitest";
+
 import { normaliseKey } from "./normalise-input.js";
 
 const KNOWN_KEYS = [

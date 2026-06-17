@@ -1,9 +1,10 @@
+import { describe, expect, it } from "vitest";
+
+import { loadSigilFontFile } from "./font-file.js";
 import {
   createValidFontFile,
   TEST_FONT_UNITS_PER_EM,
 } from "./font-test-fixture.js";
-import { describe, expect, it } from "vitest";
-import { loadSigilFontFile } from "./font-file.js";
 
 describe("loadSigilFontFile", () => {
   it("parses a valid OpenType font file", async () => {

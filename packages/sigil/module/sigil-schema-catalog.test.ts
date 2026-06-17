@@ -1,3 +1,5 @@
+import { describe, expect, it } from "vitest";
+
 import {
   DEFAULT_SIGIL_SCHEMA_ID,
   findSigilSchemaOption,
@@ -6,7 +8,6 @@ import {
   sigilSchemaCharacters,
   sigilSchemaNamesByUnicode,
 } from "./sigil-schema-catalog.js";
-import { describe, expect, it } from "vitest";
 
 const FIRST_SCHEMA_OPTION_INDEX = 0;
 

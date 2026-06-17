@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+
 import { createQuiltTemplate } from "./template.ts";
 
 const GRID_OPTION_COUNT = 6;

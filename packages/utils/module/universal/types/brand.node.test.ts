@@ -1,5 +1,6 @@
-import { type Brand, brand } from "./brand.ts";
 import { describe, expect, it } from "vitest";
+
+import { type Brand, brand } from "./brand.ts";
 
 const SAMPLE_STRING = "abc";
 const SAMPLE_NUMBER = 7;

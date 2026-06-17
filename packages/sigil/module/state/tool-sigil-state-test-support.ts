@@ -1,4 +1,7 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- State test support uses catalog names such as ASCII. */
+import { ok } from "@bruff/utils";
+
+import { createTestFont } from "../font-test-fixture.js";
 import {
   applyToolSigilFontLoadResult,
   createToolSigilState,
@@ -8,8 +11,6 @@ import {
   startToolSigilFontSelection,
   type ToolSigilState,
 } from "./tool-sigil-state.js";
-import { createTestFont } from "../font-test-fixture.js";
-import { ok } from "@bruff/utils";
 
 export const EMPTY_COUNT = 0;
 

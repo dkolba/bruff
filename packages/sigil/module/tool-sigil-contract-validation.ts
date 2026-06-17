@@ -1,4 +1,5 @@
 import { parseSigilGlyphMap } from "@bruff/contracts";
+
 import type { ToolSigilContractIssue } from "./tool-sigil-state-types.js";
 
 const EMPTY_PATH_LENGTH = 0;

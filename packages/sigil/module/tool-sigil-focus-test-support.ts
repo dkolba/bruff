@@ -1,10 +1,11 @@
+import { expect } from "vitest";
+
 import {
   loadCharactersFromTestFont,
   requireElement,
   selectDefaultMappingAndLicense,
   waitForElement,
 } from "./tool-sigil-test-support.js";
-import { expect } from "vitest";
 
 const MINIMUM_SELECT_OPTION_COUNT = 1;
 

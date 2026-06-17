@@ -1,12 +1,12 @@
-/* eslint-disable sort-imports -- Property cases keep arbitraries and assertions together. */
 import { brand, createPrng } from "@bruff/utils";
-import { describe, expect } from "vitest";
 import { fc, test } from "@fast-check/vitest";
-import { BOARD_COLUMNS, BOARD_ROWS, ONE, ZERO } from "../core/constants.js";
+import { describe, expect } from "vitest";
+
 import type { GameAction, InputAction } from "../core/actions.ts";
+import { BOARD_COLUMNS, BOARD_ROWS, ONE, ZERO } from "../core/constants.js";
 import type { GameState, GridCell } from "../core/types.ts";
-import updatePlayer from "./update-player.js";
 import { cellForAction, isCellInsideBoard } from "./grid.js";
+import updatePlayer from "./update-player.js";
 
 const TEST_SEED = 1;
 const MIN_CANVAS = 1;

@@ -1,16 +1,16 @@
-/* eslint-disable sort-imports -- Imports are grouped by runtime boundary. */
-import { apply, isSupported, type Observable } from "observable-polyfill/fn";
-import type { InputAction } from "../core/actions.ts";
 import { log } from "@bruff/utils";
+import { apply, isSupported, type Observable } from "observable-polyfill/fn";
+
+import type { InputAction } from "../core/actions.ts";
+import createInitialState from "../state/create-initial-state.js";
+import curtainUp from "./curtain-up.js";
 import {
   createManualFrameStepDriver,
   createWallClockFrameStepDriver,
   type FrameStepDriver,
 } from "./frame-step-driver.js";
-import createInitialState from "../state/create-initial-state.js";
 import createKeyDownObservable from "./observable/keydown.js";
 import createTouchObservable from "./observable/touch.js";
-import curtainUp from "./curtain-up.js";
 import isTestMode from "./test-mode.js";
 
 if (!isSupported()) {

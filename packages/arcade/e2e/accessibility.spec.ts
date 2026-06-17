@@ -1,5 +1,6 @@
-import { expect, gotoTestMode, test } from "./base-fixtures.js";
 import { AxeBuilder } from "@axe-core/playwright";
+
+import { expect, gotoTestMode, test } from "./base-fixtures.js";
 
 const MOUNTED_COUNT = 1;
 

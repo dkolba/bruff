@@ -1,12 +1,10 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- Download tests use shared glyph group names such as ASCII. */
 import "../index.js";
-import {
-  appendToolSigil,
-  clickDownload,
-  loadCharactersFromTestFont,
-  requireShadowRoot,
-  selectDefaultMappingAndLicense,
-} from "./tool-sigil-test-support.js";
+
+import { ok } from "@bruff/utils";
+import { describe, expect, it } from "vitest";
+
+import { createTestFont } from "./font-test-fixture.js";
 import {
   applyToolSigilFontLoadResult,
   createToolSigilState,
@@ -18,7 +16,6 @@ import {
   startToolSigilFontSelection,
   type ToolSigilState,
 } from "./state/tool-sigil-state.js";
-import { describe, expect, it } from "vitest";
 import {
   expectDeterministicFilenameDownload,
   expectEditedGlyphJsonDownload,
@@ -28,8 +25,13 @@ import {
   stubObjectUrls,
   trackDownloadClicks,
 } from "./tool-sigil-download-test-support.js";
-import { createTestFont } from "./font-test-fixture.js";
-import { ok } from "@bruff/utils";
+import {
+  appendToolSigil,
+  clickDownload,
+  loadCharactersFromTestFont,
+  requireShadowRoot,
+  selectDefaultMappingAndLicense,
+} from "./tool-sigil-test-support.js";
 
 const REQUIRED_SCHEMA_UNICODES = [".", "#", "+", "@", "e"];
 

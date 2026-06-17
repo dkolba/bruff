@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
-import { floorTileId, wallTileId } from "./tile-map-data.ts";
+
 import { readTileLayer, writeTileLayer } from "./tile-layer.ts";
+import { floorTileId, wallTileId } from "./tile-map-data.ts";
 
 describe("tile layer — read operations", () => {
   test("reads typed-array layer values as tile IDs", () => {

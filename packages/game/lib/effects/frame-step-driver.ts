@@ -1,7 +1,13 @@
-/* eslint-disable max-lines-per-function, sort-imports -- Driver construction keeps closure state together and import groups readable. */
+/* eslint-disable max-lines-per-function -- Driver construction keeps closure state together and import groups readable. */
 import { radiatingBarsBackgroundAnimation } from "@bruff/utils/dom";
-import type { GameState } from "../core/types.ts";
+
 import type { InputAction } from "../core/actions.ts";
+import type { GameState } from "../core/types.ts";
+import {
+  initialRenderStats,
+  type RenderStats,
+} from "../render/render-stats.js";
+import { advanceGameState } from "../state/advance-game-state.js";
 import {
   advanceManualClock,
   type Clock,
@@ -9,11 +15,6 @@ import {
   readClock,
   wallClock,
 } from "./clock.js";
-import {
-  initialRenderStats,
-  type RenderStats,
-} from "../render/render-stats.js";
-import { advanceGameState } from "../state/advance-game-state.js";
 import render from "./render.js";
 
 const ZERO = 0;

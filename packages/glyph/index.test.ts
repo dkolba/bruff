@@ -1,13 +1,14 @@
+import { expect, test } from "vitest";
+
 import {
   ASCII,
-  braille,
   BRAILLE,
+  braille,
   combine,
   COMBINING,
   GEO,
   RUNIC,
 } from "./index.js";
-import { expect, test } from "vitest";
 
 const DOT_ONE_MASK = 1;
 const FULL_MASK = 255;

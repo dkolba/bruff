@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
 import { Font, Glyph, Path } from "opentype.js";
+import { describe, expect, it } from "vitest";
+
 import { extractSigilGlyphs } from "./extract-glyphs.js";
 import type { SigilGlyphDraft } from "./glyph-json.js";
 

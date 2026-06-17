@@ -8,11 +8,12 @@ import {
   projectHeadlessFrame,
   stepHeadlessGame,
 } from "@bruff/game/headless";
-import type { TextWriter, WriteFrameResult } from "./write-frame.ts";
+
 import { encodeAnsiCommands } from "./ansi.ts";
 import { gameFrameToTerminalFrame } from "./game-frame.ts";
 import { renderTerminalFrame } from "./render-frame.ts";
 import type { TerminalFrame } from "./terminal-cell.ts";
+import type { TextWriter, WriteFrameResult } from "./write-frame.ts";
 
 const defaultCanvas: CanvasSize = { height: 7, width: 7 };
 const defaultSeed = 1;

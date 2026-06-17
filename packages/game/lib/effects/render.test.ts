@@ -1,12 +1,12 @@
-/* eslint-disable sort-imports -- Render effect tests group DOM/test imports before grid constants. */
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it, vi } from "vitest";
-import type { GameState } from "../core/types.ts";
+
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
   CURRENT_STATE_VERSION,
 } from "../core/constants.js";
+import type { GameState } from "../core/types.ts";
 import render from "./render.js";
 
 const THREE = 3;

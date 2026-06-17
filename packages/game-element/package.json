@@ -8,6 +8,7 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint",
+    "lint:fix": "eslint . --fix",
     "test:watch": "vitest",
     "test": "pnpm run test:chromium && pnpm run test:firefox && pnpm run test:webkit",
     "test:chromium": "vitest run --browser=chromium --coverage ",

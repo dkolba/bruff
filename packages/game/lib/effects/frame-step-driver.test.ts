@@ -1,14 +1,15 @@
-/* eslint-disable max-lines-per-function, sort-imports -- Tests keep each driver scenario self-contained. */
+/* eslint-disable max-lines-per-function -- Tests keep each driver scenario self-contained. */
 import { brand, createPrng } from "@bruff/utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { GameState } from "../core/types.ts";
+
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
   CURRENT_STATE_VERSION,
 } from "../core/constants.js";
-import { createFrameStepDriver } from "./frame-step-driver.js";
+import type { GameState } from "../core/types.ts";
 import { manualClock } from "./clock.js";
+import { createFrameStepDriver } from "./frame-step-driver.js";
 
 const TEST_SEED = 1;
 const ZERO = 0;

@@ -1,5 +1,6 @@
-import { describe, expect } from "vitest";
 import { fc, test } from "@fast-check/vitest";
+import { describe, expect } from "vitest";
+
 import { CURRENT_STATE_VERSION } from "../core/constants.js";
 import type { ReplayFixture } from "./replay-fixture.ts";
 import { runReplay } from "./run-replay.js";

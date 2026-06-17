@@ -1,7 +1,7 @@
 import * as assert from "node:assert/strict";
+import { test } from "node:test";
 
 import { encodeAnsiCommand, encodeAnsiCommands } from "./ansi.ts";
-import { test } from "node:test";
 
 test("encodes screen clearing", (): void => {
   assert.equal(encodeAnsiCommand({ type: "clear-screen" }), "\u001B[2J");

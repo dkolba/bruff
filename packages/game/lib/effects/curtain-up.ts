@@ -1,3 +1,4 @@
+import { flatMapResult, ok, pipe, type Result } from "@bruff/utils";
 import {
   canvasResizeListener,
   createCanvasResizeObserver,
@@ -5,7 +6,6 @@ import {
   getCanvasContext,
   getShadowGameRoot,
 } from "@bruff/utils/dom";
-import { flatMapResult, ok, pipe, type Result } from "@bruff/utils";
 
 /**
  * The error reasons that {@link curtainUp} can surface to its caller.

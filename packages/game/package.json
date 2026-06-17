@@ -29,6 +29,7 @@
     "build:lib": "vite build --config vite.config.lib.js",
     "format": "prettier --write .",
     "lint": "eslint",
+    "lint:fix": "eslint . --fix",
     "typecheck": "tsc",
     "test:unit": "pnpm run test:unit:chromium && pnpm run test:unit:firefox && pnpm run test:unit:webkit",
     "test:unit:chromium": "vitest run --browser=chromium --coverage",

@@ -1,10 +1,10 @@
+import type { SigilSchemaOption } from "./sigil-schema-catalog.js";
 import type {
   RequiredGlyphCharacterOption,
   RequiredGlyphSelection,
   RequiredGlyphSelectionView,
 } from "./tool-sigil-state-types.js";
 import { distinctGraphemes } from "./unicode-graphemes.js";
-import type { SigilSchemaOption } from "./sigil-schema-catalog.js";
 
 /**
  * Creates one option for each distinct typed character.

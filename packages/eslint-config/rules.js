@@ -75,7 +75,7 @@ export const overrideRulesEslint = {
     { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
   ],
   "one-var": "off",
-  "sort-imports": ["error", { ignoreCase: true }],
+  "sort-imports": "off", // Will be sorted via simple-import-sort
 };
 
 /**
@@ -92,4 +92,9 @@ export const overrideRulesWebComponents = {
   "wc/no-exports-with-element": "error",
   "wc/no-method-prefixed-with-on": "error",
   "wc/tag-name-matches-class": "error",
+};
+
+export const overrideRulesSimpleImportSort = {
+  "simple-import-sort/imports": "error",
+  "simple-import-sort/exports": "error",
 };

@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from "vitest";
+
 import {
   BASE_SIZE,
   PULSE_MAGNITUDE,
@@ -6,7 +8,6 @@ import {
   ROTATION_SPEED,
   TWO,
 } from "../../constants.ts";
-import { describe, expect, it, vi } from "vitest";
 import { radiatingBarsBackgroundAnimation } from "./radiating-bars-background-animation.ts";
 
 // Test constants

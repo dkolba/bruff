@@ -1,4 +1,9 @@
-/* eslint-disable sort-imports -- State split keeps dependency groups readable. */
+import { brand, ok } from "@bruff/utils";
+import { describe, expect, it } from "vitest";
+
+import { createWallOnlyTestFont } from "../font-test-fixture.js";
+import { DEFAULT_SIGIL_SCHEMA_ID } from "../sigil-schema-catalog.js";
+import { requiredGlyphSelectionViews } from "../tool-sigil-required-glyph-selection.js";
 import {
   applyToolSigilFontLoadResult,
   createToolSigilState,
@@ -8,15 +13,10 @@ import {
   setToolSigilSchema,
   startToolSigilFontSelection,
 } from "./tool-sigil-state.js";
-import { DEFAULT_SIGIL_SCHEMA_ID } from "../sigil-schema-catalog.js";
 import {
   loadCurrentFontState,
   SIGIL_GLYPH_MAP_NAMES_BY_UNICODE,
 } from "./tool-sigil-state-test-support.js";
-import { brand, ok } from "@bruff/utils";
-import { createWallOnlyTestFont } from "../font-test-fixture.js";
-import { describe, expect, it } from "vitest";
-import { requiredGlyphSelectionViews } from "../tool-sigil-required-glyph-selection.js";
 
 describe("ToolSigil schema partial font view state", () => {
   it("pre-fills every schema row when only one glyph exists in the font", () => {

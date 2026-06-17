@@ -1,13 +1,13 @@
-/* eslint-disable sort-imports -- State split keeps dependency groups readable. */
+import type { Result } from "@bruff/utils";
+import type { Font } from "opentype.js";
+
 import type { SigilExtractionError } from "../glyph-json.js";
+import { extractDrafts } from "../tool-sigil-extract-drafts.js";
 import type {
   ToolSigilFontSelection,
   ToolSigilState,
 } from "../tool-sigil-state-types.js";
-import type { Font } from "opentype.js";
-import { extractDrafts } from "../tool-sigil-extract-drafts.js";
 import { extractionCharacters } from "./extraction-characters.js";
-import type { Result } from "@bruff/utils";
 
 const NEXT_FONT_LOAD_TOKEN_OFFSET = 1;
 

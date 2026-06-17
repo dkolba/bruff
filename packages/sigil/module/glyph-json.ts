@@ -1,7 +1,5 @@
 import type { SigilSourceGlyph } from "@bruff/contracts";
 
-export { requiredSigilGlyphNames } from "@bruff/contracts";
-
 export type {
   RequiredSigilGlyphName,
   SigilGlyph,
@@ -10,6 +8,7 @@ export type {
   SigilGlyphMapping,
   SigilSourceGlyph,
 } from "@bruff/contracts";
+export { requiredSigilGlyphNames } from "@bruff/contracts";
 
 /** Extracted glyph before the user-editable name is applied. */
 export type SigilGlyphDraft = Readonly<{

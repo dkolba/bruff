@@ -1,3 +1,5 @@
+import type { SigilGlyphBounds } from "@bruff/contracts";
+
 import {
   type ChunkCoordinate,
   doorTileId,
@@ -7,7 +9,6 @@ import {
   wallTileId,
 } from "../model/tile-map-data.ts";
 import type { QuiltState } from "../state/quilt-state.ts";
-import type { SigilGlyphBounds } from "@bruff/contracts";
 
 const CHUNK_KEY_SEPARATOR = ":";
 const CHUNK_X_INDEX = 0;

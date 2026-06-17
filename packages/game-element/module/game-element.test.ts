@@ -1,6 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { GameElement } from "./game-element.js";
 import { log } from "@bruff/utils";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { GameElement } from "./game-element.js";
 
 const SINGLE_CALL = 1;
 const createGameElement = (): GameElement => {

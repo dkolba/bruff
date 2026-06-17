@@ -1,5 +1,11 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- Component integration tests cover the full Sigil browser workflow and glyph group names such as ASCII. */
 import "../index.js";
+
+import { describe, expect, it } from "vitest";
+
+import { createValidFontFile } from "./font-test-fixture.js";
+import { registerToolSigil } from "./register-tool-sigil.js";
+import { ToolSigil } from "./tool-sigil.js";
 import {
   appendToolSigil,
   loadCharactersFromTestFont,
@@ -11,10 +17,6 @@ import {
   selectMappedGlyph,
   waitForComponentUpdate,
 } from "./tool-sigil-test-support.js";
-import { describe, expect, it } from "vitest";
-import { createValidFontFile } from "./font-test-fixture.js";
-import { registerToolSigil } from "./register-tool-sigil.js";
-import { ToolSigil } from "./tool-sigil.js";
 
 const EXPECTED_REQUIRED_GLYPH_NAMES = [
   "floor",

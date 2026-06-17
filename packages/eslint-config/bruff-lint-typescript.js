@@ -5,6 +5,7 @@ import {
   overrideRulesTslint,
   overrideRulesUnicorn,
   overrideRulesWebComponents,
+  overrideRulesSimpleImportSort,
 } from "./rules.js";
 import eslint from "@eslint/js";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
@@ -12,6 +13,7 @@ import globals from "globals";
 import tsdoc from "eslint-plugin-tsdoc";
 import tseslint from "typescript-eslint";
 import { configs as wcconfigs } from "eslint-plugin-wc";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 const typescriptFiles = { files: ["**/*.ts"] };
 
@@ -41,6 +43,11 @@ const rules = {
     rules: {
       ...wcconfigs["flat/recommended"].rules,
       ...overrideRulesWebComponents,
+    },
+  },
+  simpleImportSort: {
+    rules: {
+      ...overrideRulesSimpleImportSort,
     },
   },
 };
@@ -81,6 +88,14 @@ const tsdocTypescriptConfig = {
     tsdoc,
   },
   ...rules.tsdoc,
+};
+
+const simpleImportSortConfig = {
+  ...typescriptFiles,
+  plugins: {
+    "simple-import-sort": simpleImportSort,
+  },
+  ...rules.simpleImportSort,
 };
 
 const webComponentsConfig = {
@@ -188,6 +203,8 @@ const typescriptConfig = tseslint.config(
   webComponentsConfig,
   // Layer-boundary import restrictions (packages-game.md A-1..A-4)
   ...layerImportRestrictions,
+  // Simple import sort
+  simpleImportSortConfig,
 );
 
 export default typescriptConfig;

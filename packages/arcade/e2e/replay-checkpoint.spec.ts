@@ -1,7 +1,8 @@
 /* eslint-disable no-magic-numbers, no-underscore-dangle, unicorn/prefer-global-this -- E2E replay setup uses fixed fixture frame constants and the browser test API. */
-import { expect, gotoTestMode, test } from "./base-fixtures.js";
-import canonicalFixture from "../../game/tests/fixtures/canonical-replay.json" with { type: "json" };
 import type { Page } from "@playwright/test";
+
+import canonicalFixture from "../../game/tests/fixtures/canonical-replay.json" with { type: "json" };
+import { expect, gotoTestMode, test } from "./base-fixtures.js";
 
 type ReplayCheckpointFixture = Readonly<{
   frames: ReadonlyArray<

@@ -1,4 +1,6 @@
+import { parseSigilGlyphMap } from "@bruff/contracts";
 import { error, ok, type Result } from "@bruff/utils";
+
 import {
   requiredSigilGlyphNames,
   type SigilExtractionError,
@@ -8,7 +10,6 @@ import {
   type SigilGlyphMapping,
   type SigilSourceGlyph,
 } from "./glyph-json.js";
-import { parseSigilGlyphMap } from "@bruff/contracts";
 
 const EMPTY_NAME_LENGTH = 0;
 const EMPTY_ERROR_COUNT = 0;

@@ -1,6 +1,7 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { canvasResizeListener } from "./canvas-resize-listener.ts";
+
 import { onLog } from "../../universal/event-bus/event-bus.ts";
+import { canvasResizeListener } from "./canvas-resize-listener.ts";
 
 afterEach(() => {
   vi.restoreAllMocks();

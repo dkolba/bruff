@@ -1,4 +1,5 @@
 import { expect, test } from "vitest";
+
 import { pipe } from "./pipe.ts";
 
 const ONE = 1;

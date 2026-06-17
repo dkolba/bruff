@@ -1,3 +1,5 @@
+import { describe, expect, it } from "vitest";
+
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
@@ -8,7 +10,6 @@ import {
   PLAYER_SIZE,
   TWO,
 } from "../core/constants.js";
-import { describe, expect, it } from "vitest";
 import createInitialState from "./create-initial-state.js";
 
 const TEST_CANVAS = { height: 600, width: 800 };

@@ -1,5 +1,6 @@
-import { expect, gotoTestMode, test } from "./base-fixtures.js";
 import type { Page } from "@playwright/test";
+
+import { expect, gotoTestMode, test } from "./base-fixtures.js";
 
 test("captures the static HUD region @snapshot", async ({
   page,

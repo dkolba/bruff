@@ -1,8 +1,8 @@
-import { executeRenderCommands } from "./execute-render-command.js";
 import type { GameState } from "../core/types.ts";
 import { projectRenderCommands } from "../render/project-render-commands.js";
-import type { RenderStats } from "../render/render-stats.ts";
 import { renderStatsForState } from "../render/render-stats.js";
+import type { RenderStats } from "../render/render-stats.ts";
+import { executeRenderCommands } from "./execute-render-command.js";
 
 /**
  * Draws one frame from the given {@link GameState} onto the supplied

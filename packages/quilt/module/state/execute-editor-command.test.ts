@@ -1,5 +1,5 @@
-/* eslint-disable sort-imports */
-import { createQuiltState } from "./quilt-state.ts";
+import { describe, expect, test } from "vitest";
+
 import {
   createPaintTilesCommand,
   createResizeMapCommand,
@@ -15,7 +15,7 @@ import {
   redoEditorCommand,
   undoEditorCommand,
 } from "./execute-editor-command.ts";
-import { describe, expect, test } from "vitest";
+import { createQuiltState } from "./quilt-state.ts";
 
 const paintedTile = { tileX: 1, tileY: 1 };
 const crossChunkTile = { tileX: 33, tileY: 1 };

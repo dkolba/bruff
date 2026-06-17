@@ -1,11 +1,12 @@
 import { describe, expect, test, vi } from "vitest";
+
+import { createTileMapData } from "./model/tile-map-data.ts";
+import { QuiltElement } from "./quilt-element.ts";
 import {
   getQuiltMapData,
   registerQuiltElement,
   setQuiltMapData,
 } from "./quilt-element-helpers.ts";
-import { createTileMapData } from "./model/tile-map-data.ts";
-import { QuiltElement } from "./quilt-element.ts";
 
 const DEFAULT_MAP_SIZE = 4;
 

@@ -1,10 +1,10 @@
 import * as assert from "node:assert/strict";
+import { test } from "node:test";
+import { pathToFileURL } from "node:url";
 
+import type { TextWriter } from "../module/write-frame.ts";
 import { isCliEntryPoint, runBruffCliWithProcess } from "./bruff-cli.ts";
 import { createFakeProcessInput } from "./bruff-cli-test-helpers.ts";
-import { pathToFileURL } from "node:url";
-import { test } from "node:test";
-import type { TextWriter } from "../module/write-frame.ts";
 
 test("detects whether the CLI module is the process entrypoint", (): void => {
   const entryPath = "/tmp/bruff-cli.ts";

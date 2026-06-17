@@ -1,13 +1,14 @@
-/* eslint-disable max-lines-per-function, sort-imports -- Grid occupancy scenarios keep compact state fixtures inline. */
+/* eslint-disable max-lines-per-function -- Grid occupancy scenarios keep compact state fixtures inline. */
 import { brand, createPrng } from "@bruff/utils";
 import { describe, expect, it } from "vitest";
-import type { Enemy, GameState, GridCell, Player } from "../core/types.ts";
+
 import {
   CURRENT_STATE_VERSION,
   ENEMY_SIZE,
   PLAYER_SIZE,
   ZERO,
 } from "../core/constants.js";
+import type { Enemy, GameState, GridCell, Player } from "../core/types.ts";
 import { updateEnemies } from "./update-enemies.js";
 
 const ONE = 1;

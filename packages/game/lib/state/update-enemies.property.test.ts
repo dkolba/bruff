@@ -1,7 +1,8 @@
-/* eslint-disable sort-imports -- Grid property fixtures group constants, arbitraries, and reducer imports. */
 import { brand, createPrng } from "@bruff/utils";
+import { fc, test } from "@fast-check/vitest";
 import { describe, expect } from "vitest";
-import type { Enemy, GameState, GridCell } from "../core/types.ts";
+
+import type { GameAction } from "../core/actions.ts";
 import {
   BOARD_COLUMNS,
   BOARD_ROWS,
@@ -11,8 +12,7 @@ import {
   PLAYER_SIZE,
   ZERO,
 } from "../core/constants.js";
-import { fc, test } from "@fast-check/vitest";
-import type { GameAction } from "../core/actions.ts";
+import type { Enemy, GameState, GridCell } from "../core/types.ts";
 import { updateEnemies } from "./update-enemies.js";
 
 const TEST_SEED = 1;

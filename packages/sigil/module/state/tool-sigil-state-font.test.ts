@@ -1,13 +1,13 @@
-/* eslint-disable sort-imports -- State split keeps dependency groups readable. */
+import { error } from "@bruff/utils";
+import { describe, expect, it } from "vitest";
+
+import type { SigilExtractionError } from "../glyph-json.js";
 import {
   applyToolSigilFontLoadResult,
   createToolSigilState,
   selectToolSigilViewModel,
   startToolSigilFontSelection,
 } from "./tool-sigil-state.js";
-import { error } from "@bruff/utils";
-import { describe, expect, it } from "vitest";
-import type { SigilExtractionError } from "../glyph-json.js";
 
 const invalidFontErrors: ReadonlyArray<SigilExtractionError> = [
   {

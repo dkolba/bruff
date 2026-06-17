@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/text-encoding-identifier-case -- ASCII is a @bruff/glyph catalog group name. */
-import { describe, expect, test } from "vitest";
 import { isError, isOk } from "@bruff/utils";
+import { describe, expect, test } from "vitest";
+
 import { parseQuiltTerrainGlyphs } from "./sigil-glyph-map.ts";
 
 const VALID_GLYPH_JSON = {
