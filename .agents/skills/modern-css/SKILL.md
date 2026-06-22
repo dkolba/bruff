@@ -7,7 +7,7 @@ description: Write cutting-edge and modern native CSS. Apply this skill whenever
 
 Write clean, high-performance, maintainable CSS using **only the native web platform**. No build step (Sass/Less), no utility-first framework (Tailwind), no runtime style library (CSS-in-JS), and **no third-party token package either** — not even a CSS-only one. Everything below is plain `.css` you write and own.
 
-The token scale conventions here (numbered size/color steps, named shadow/ease tiers, etc.) are inspired by the kind of taxonomy popularized by open-source CSS variable libraries — borrow the *naming pattern*, not the dependency. Hand-roll your own `:root` scale once per project; it's a few hundred lines you fully control, versus a package you import.
+The token scale conventions here (numbered size/color steps, named shadow/ease tiers, etc.) are inspired by the kind of taxonomy popularized by open-source CSS variable libraries — borrow the _naming pattern_, not the dependency. Hand-roll your own `:root` scale once per project; it's a few hundred lines you fully control, versus a package you import.
 
 ## Table of Contents
 
@@ -39,7 +39,7 @@ The token scale conventions here (numbered size/color steps, named shadow/ease t
 
 1. **Hand-roll one small token file, once.** Define your own numbered scales for color, space, type, shadow, and motion directly in `:root`. This replaces both a Sass `$variables` file and a third-party CSS-variable package — no import, no version to track, no bytes you didn't write yourself.
 2. **Leverage the platform.** CSS now handles nesting, scoping, container queries, color manipulation, and typed properties natively. Don't reach for a preprocessor first.
-3. **Container over viewport.** Components should respond to their *parent container* (`@container`), not the global viewport (`@media`). This makes components genuinely reusable.
+3. **Container over viewport.** Components should respond to their _parent container_ (`@container`), not the global viewport (`@media`). This makes components genuinely reusable.
 4. **Control the cascade explicitly.** Use `@layer` to define a specificity hierarchy upfront. Eliminates `!important` wars and BEM gymnastics.
 5. **Fluid, not stepped.** Use `clamp()`, `min()`, `max()` for typography and spacing that scale continuously, not just at fixed breakpoints.
 6. **Logical, not physical.** Use `margin-inline`, `padding-block`, `inset-inline-start` instead of `left`/`right`/`top`/`bottom` — RTL and writing-mode support for free.
@@ -51,7 +51,7 @@ The token scale conventions here (numbered size/color steps, named shadow/ease t
 
 ## 1. Hand-Rolled Design Tokens (the Library-Inspired Pattern)
 
-A well-known category of open-source CSS variable packages popularized a useful *taxonomy*: numbered steps for color and size (`--gray-1` … `--gray-9`, `--size-1` … `--size-8`), named tiers for shadow and easing (`--shadow-1` … `--shadow-3`), and fluid scales built from `clamp()`. That naming pattern is worth copying. The dependency is not — it's trivial to write the same shape of scale yourself, fully self-contained, in well under 100 lines.
+A well-known category of open-source CSS variable packages popularized a useful _taxonomy_: numbered steps for color and size (`--gray-1` … `--gray-9`, `--size-1` … `--size-8`), named tiers for shadow and easing (`--shadow-1` … `--shadow-3`), and fluid scales built from `clamp()`. That naming pattern is worth copying. The dependency is not — it's trivial to write the same shape of scale yourself, fully self-contained, in well under 100 lines.
 
 Write this once per project, in a `tokens` layer, with **zero imports**:
 
@@ -59,22 +59,22 @@ Write this once per project, in a `tokens` layer, with **zero imports**:
 @layer tokens {
   :root {
     /* ---- Color steps — write your own OKLCH ramp per hue you need ---- */
-    --gray-0:  oklch(99% 0.002 250);
-    --gray-1:  oklch(96% 0.004 250);
-    --gray-2:  oklch(91% 0.006 250);
-    --gray-3:  oklch(83% 0.008 250);
-    --gray-4:  oklch(72% 0.010 250);
-    --gray-5:  oklch(60% 0.012 250);
-    --gray-6:  oklch(48% 0.014 250);
-    --gray-7:  oklch(36% 0.014 250);
-    --gray-8:  oklch(26% 0.012 250);
-    --gray-9:  oklch(16% 0.010 250);
+    --gray-0: oklch(99% 0.002 250);
+    --gray-1: oklch(96% 0.004 250);
+    --gray-2: oklch(91% 0.006 250);
+    --gray-3: oklch(83% 0.008 250);
+    --gray-4: oklch(72% 0.01 250);
+    --gray-5: oklch(60% 0.012 250);
+    --gray-6: oklch(48% 0.014 250);
+    --gray-7: oklch(36% 0.014 250);
+    --gray-8: oklch(26% 0.012 250);
+    --gray-9: oklch(16% 0.01 250);
 
     --violet-3: oklch(78% 0.14 295);
-    --violet-6: oklch(58% 0.20 295);
+    --violet-6: oklch(58% 0.2 295);
     --violet-9: oklch(32% 0.16 295);
 
-    --red-6:   oklch(58% 0.21 25);
+    --red-6: oklch(58% 0.21 25);
     --green-6: oklch(62% 0.17 150);
 
     /* ---- Size steps — rem-based, like a numbered spacing scale ---- */
@@ -106,9 +106,12 @@ Write this once per project, in a `tokens` layer, with **zero imports**:
     /* ---- Shadow tiers — tune one color/strength pair, derive the rest ---- */
     --shadow-color: 250 10% 10%;
     --shadow-strength: 6%;
-    --shadow-1: 0 1px 2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%));
-    --shadow-2: 0 4px 12px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 8%));
-    --shadow-3: 0 12px 32px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 10%));
+    --shadow-1: 0 1px 2px
+      hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%));
+    --shadow-2: 0 4px 12px
+      hsl(var(--shadow-color) / calc(var(--shadow-strength) + 8%));
+    --shadow-3: 0 12px 32px
+      hsl(var(--shadow-color) / calc(var(--shadow-strength) + 10%));
 
     /* ---- Easing tiers ---- */
     --ease-1: cubic-bezier(0.25, 0, 0.5, 1);
@@ -139,9 +142,9 @@ Never reference `--gray-6` or `--violet-6` directly inside component CSS. Alias 
 ```css
 @layer tokens {
   :root {
-    --brand:     var(--violet-6);
-    --text-1:    var(--gray-9);
-    --text-2:    var(--gray-7);
+    --brand: var(--violet-6);
+    --text-1: var(--gray-9);
+    --text-2: var(--gray-7);
     --surface-1: var(--gray-0);
     --surface-2: var(--gray-1);
     --surface-3: var(--gray-2);
@@ -149,9 +152,9 @@ Never reference `--gray-6` or `--violet-6` directly inside component CSS. Alias 
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --brand:     var(--violet-3);
-      --text-1:    var(--gray-1);
-      --text-2:    var(--gray-3);
+      --brand: var(--violet-3);
+      --text-1: var(--gray-1);
+      --text-2: var(--gray-3);
       --surface-1: var(--gray-9);
       --surface-2: var(--gray-8);
       --surface-3: var(--gray-7);
@@ -187,12 +190,12 @@ Declare layer order at the very top of your root stylesheet. Later layers win ov
 ```css
 @layer reset, tokens, base, objects, components, utilities;
 
-@import url('reset.css')      layer(reset);
-@import url('tokens.css')     layer(tokens);   /* your hand-rolled scale from §1 */
-@import url('base.css')       layer(base);
-@import url('objects.css')    layer(objects);  /* Layout primitives */
-@import url('components.css') layer(components);
-@import url('utilities.css')  layer(utilities);
+@import url("reset.css") layer(reset);
+@import url("tokens.css") layer(tokens); /* your hand-rolled scale from §1 */
+@import url("base.css") layer(base);
+@import url("objects.css") layer(objects); /* Layout primitives */
+@import url("components.css") layer(components);
+@import url("utilities.css") layer(utilities);
 ```
 
 This replaces BEM-heavy and Sass-heavy architectures with an explicit, readable hierarchy.
@@ -207,7 +210,9 @@ This replaces BEM-heavy and Sass-heavy architectures with an explicit, readable 
 
 @layer utilities {
   /* Wins over .button despite lower specificity — layer order beats it */
-  .bg-alert { background: var(--red-6); }
+  .bg-alert {
+    background: var(--red-6);
+  }
 }
 ```
 
@@ -233,7 +238,9 @@ This replaces BEM-heavy and Sass-heavy architectures with an explicit, readable 
 <section class="article-body">
   <style>
     @scope {
-      img { border-radius: var(--radius-2); }
+      img {
+        border-radius: var(--radius-2);
+      }
     }
   </style>
 </section>
@@ -253,10 +260,10 @@ This replaces BEM-heavy and Sass-heavy architectures with an explicit, readable 
 
 The scope root (`.article-body`) is **included**; the scope limit (`figure`) is **excluded**. To change this, combine either boundary with `> *`:
 
-| Pattern | Effect |
-|:---|:---|
-| `@scope (root) to (limit > *)` | both bounds inclusive |
-| `@scope (root > *) to (limit)` | both bounds exclusive |
+| Pattern                            | Effect                           |
+| :--------------------------------- | :------------------------------- |
+| `@scope (root) to (limit > *)`     | both bounds inclusive            |
+| `@scope (root > *) to (limit)`     | both bounds exclusive            |
 | `@scope (root > *) to (limit > *)` | exclusive upper, inclusive lower |
 
 ### `:scope` — styling the root itself, and conditional limits
@@ -270,7 +277,9 @@ Inside an `@scope` block, `:scope` refers to the scope root and can be styled di
     border-radius: var(--radius-3);
   }
 
-  h3 { color: var(--brand); }
+  h3 {
+    color: var(--brand);
+  }
 }
 ```
 
@@ -278,19 +287,25 @@ Inside an `@scope` block, `:scope` refers to the scope root and can be styled di
 
 ```css
 /* `figure` is only a limit when it's a DIRECT CHILD of the scope root */
-@scope (.article-body) to (:scope > figure) { /* … */ }
+@scope (.article-body) to (:scope > figure) {
+  /* … */
+}
 
 /* `figure` is only a limit when the scope root is nested inside .feature */
-@scope (.article-body) to (.feature :scope figure) { /* … */ }
+@scope (.article-body) to (.feature :scope figure) {
+  /* … */
+}
 ```
 
-Scoped style rules can never select *outside* the subtree — a selector like `:scope + p` is invalid.
+Scoped style rules can never select _outside_ the subtree — a selector like `:scope + p` is invalid.
 
 You can also scope to **multiple roots/limits at once** with selector lists:
 
 ```css
 @scope (.article-hero, .article-body) to (figure) {
-  img { border-radius: var(--radius-2); }
+  img {
+    border-radius: var(--radius-2);
+  }
 }
 ```
 
@@ -301,14 +316,20 @@ Bare selectors and the `&` nesting selector **inside an `@scope` block behave as
 ```css
 @scope (.article-body) {
   /* specificity 0-0-1, same as plain `img` */
-  img { /* … */ }
+  img {
+    /* … */
+  }
 
   /* ALSO 0-0-1 — & adds nothing */
-  & img { /* … */ }
+  & img {
+    /* … */
+  }
 
   /* explicit :scope is a pseudo-class → adds 0-1-0 */
   /* :scope img → 0-1-1 */
-  :scope img { /* … */ }
+  :scope img {
+    /* … */
+  }
 }
 ```
 
@@ -316,7 +337,7 @@ Bare selectors and the `&` nesting selector **inside an `@scope` block behave as
 
 ### Scoping proximity — a new cascade criterion
 
-`@scope` adds **scoping proximity** to the cascade: when two scopes have conflicting declarations for the same element, the one whose scope root is *closer* (fewer DOM hops) wins — **overriding source order**, but **overridden by** `!important`, cascade layers, and specificity.
+`@scope` adds **scoping proximity** to the cascade: when two scopes have conflicting declarations for the same element, the one whose scope root is _closer_ (fewer DOM hops) wins — **overriding source order**, but **overridden by** `!important`, cascade layers, and specificity.
 
 ```css
 /* Nested theme cards: an inner .light-theme inside an outer .dark-theme
@@ -324,13 +345,21 @@ Bare selectors and the `&` nesting selector **inside an `@scope` block behave as
    comes later in source order. */
 
 @scope (.light-theme) {
-  :scope { background: var(--gray-0); }
-  p      { color: var(--gray-9); }
+  :scope {
+    background: var(--gray-0);
+  }
+  p {
+    color: var(--gray-9);
+  }
 }
 
 @scope (.dark-theme) {
-  :scope { background: var(--gray-9); }
-  p      { color: var(--gray-0); }
+  :scope {
+    background: var(--gray-9);
+  }
+  p {
+    color: var(--gray-0);
+  }
 }
 ```
 
@@ -344,7 +373,7 @@ The innermost `<p>` is one hop from its nearest `.light-theme` ancestor but two 
 
 - Theming nested/overlapping sections (light card inside dark page, etc.)
 - Styling third-party or CMS-generated markup where you can't add classes deep in the tree
-- Component libraries where you want `img`, `a`, `h2` etc. to be styled *only* within the component root, without writing `.my-component img`
+- Component libraries where you want `img`, `a`, `h2` etc. to be styled _only_ within the component root, without writing `.my-component img`
 - Donut scopes: style "everything except the nested widget" cleanly
 
 ---
@@ -384,7 +413,10 @@ Use `container-type: inline-size` for width-responsive components; use `size` on
 
 ```css
 /* Pad a card differently when it contains an image */
-.card:has(img) { padding: 0; overflow: hidden; }
+.card:has(img) {
+  padding: 0;
+  overflow: hidden;
+}
 
 /* Form validation state without JS */
 fieldset:has(input:invalid:not(:focus)) {
@@ -398,7 +430,9 @@ body:has(#dark-mode:checked) {
 }
 
 /* Style nav chrome when a mobile menu is open */
-nav:has([aria-expanded="true"]) .nav__overlay { display: block; }
+nav:has([aria-expanded="true"]) .nav__overlay {
+  display: block;
+}
 ```
 
 `:has()` replaces an enormous amount of JavaScript state management. Pair it with accessibility attributes (`[aria-expanded]`, `[aria-selected]`, `:checked`, `:invalid`) for accessible, JS-free UI state.
@@ -411,9 +445,9 @@ OKLCH gives perceptually uniform brightness — adjusting lightness predictably,
 
 ```css
 :root {
-  --brand:       var(--violet-6);
+  --brand: var(--violet-6);
   --brand-light: color-mix(in oklch, var(--brand), white 25%);
-  --brand-dark:  color-mix(in oklch, var(--brand), black 20%);
+  --brand-dark: color-mix(in oklch, var(--brand), black 20%);
 
   /* Relative color syntax for a translucent variant */
   --brand-subtle: oklch(from var(--brand) l c h / 0.12);
@@ -435,17 +469,17 @@ One rule, no breakpoints. This is the same fluid-scale shape referenced in §1 �
 ```css
 @layer tokens {
   :root {
-    --text-sm:   clamp(0.875rem, 0.8rem + 0.4vw, 1rem);
-    --text-base: clamp(1rem,     0.9rem + 0.5vw, 1.25rem);
-    --text-lg:   clamp(1.125rem, 1rem   + 0.7vw, 1.5rem);
-    --text-xl:   clamp(1.5rem,   1.2rem + 1.5vw, 2.5rem);
-    --text-2xl:  clamp(2rem,     1.5rem + 2.5vw, 4rem);
+    --text-sm: clamp(0.875rem, 0.8rem + 0.4vw, 1rem);
+    --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+    --text-lg: clamp(1.125rem, 1rem + 0.7vw, 1.5rem);
+    --text-xl: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
+    --text-2xl: clamp(2rem, 1.5rem + 2.5vw, 4rem);
 
-    --space-xs:  clamp(0.25rem,  0.5vw,  0.5rem);
-    --space-s:   clamp(0.5rem,   1vw,    0.75rem);
-    --space-m:   clamp(1rem,     2.5vw,  1.5rem);
-    --space-l:   clamp(1.5rem,   4vw,    3rem);
-    --space-xl:  clamp(3rem,     8vw,    6rem);
+    --space-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+    --space-s: clamp(0.5rem, 1vw, 0.75rem);
+    --space-m: clamp(1rem, 2.5vw, 1.5rem);
+    --space-l: clamp(1.5rem, 4vw, 3rem);
+    --space-xl: clamp(3rem, 8vw, 6rem);
   }
 }
 ```
@@ -463,14 +497,14 @@ padding-right: 2rem;
 border-top: 1px solid;
 
 /* Logical (use these instead) */
-margin-inline-start: var(--size-3);  /* left in LTR, right in RTL */
-padding-inline-end: var(--size-4);   /* right in LTR, left in RTL */
-border-block-start: 1px solid;       /* top in horizontal writing mode */
+margin-inline-start: var(--size-3); /* left in LTR, right in RTL */
+padding-inline-end: var(--size-4); /* right in LTR, left in RTL */
+border-block-start: 1px solid; /* top in horizontal writing mode */
 
 /* Common patterns */
-margin-inline: auto;             /* center horizontally */
-padding-block: var(--space-m);   /* top + bottom padding */
-inset-inline-start: 0;           /* left edge, RTL-safe */
+margin-inline: auto; /* center horizontally */
+padding-block: var(--space-m); /* top + bottom padding */
+inset-inline-start: 0; /* left edge, RTL-safe */
 ```
 
 ---
@@ -517,7 +551,9 @@ Use `:where()` as your default for shared base styles — they're always overrid
   &:hover {
     box-shadow: var(--shadow-3);
 
-    .card__title { color: var(--brand); }
+    .card__title {
+      color: var(--brand);
+    }
   }
 
   /* Media/container queries nest too */
@@ -543,8 +579,12 @@ Keep nesting **max 2–3 levels**. Deep nesting recreates the BEM problem in a d
     min(60ch, 100%)
     minmax(var(--space-m), 1fr);
 }
-.layout > * { grid-column: 2; }
-.layout > .full-bleed { grid-column: 1 / -1; }
+.layout > * {
+  grid-column: 2;
+}
+.layout > .full-bleed {
+  grid-column: 1 / -1;
+}
 
 /* Responsive card grid — no media queries */
 .auto-grid {
@@ -568,9 +608,15 @@ Use **Flexbox** for one-dimensional UI (toolbars, nav rows, button groups, cente
 ## 12. Dynamic Viewport Units
 
 ```css
-.hero    { min-height: 100dvh; } /* Dynamic: adjusts as browser chrome shows/hides */
-.drawer  { height: 100svh; }     /* Small: assumes chrome is fully visible */
-.overlay { max-height: 100lvh; } /* Large: assumes chrome is hidden */
+.hero {
+  min-height: 100dvh;
+} /* Dynamic: adjusts as browser chrome shows/hides */
+.drawer {
+  height: 100svh;
+} /* Small: assumes chrome is fully visible */
+.overlay {
+  max-height: 100lvh;
+} /* Large: assumes chrome is hidden */
 ```
 
 Never use `100vh` for full-screen mobile layouts — it breaks when the address bar shows/hides. Use `100dvh` instead.
@@ -594,8 +640,12 @@ Replace heavy JS scroll listeners with pure CSS.
   animation-timeline: scroll(root);
 }
 @keyframes grow-bar {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 /* Fade-in on scroll entry */
@@ -606,8 +656,14 @@ Replace heavy JS scroll listeners with pure CSS.
   animation-timing-function: var(--ease-out-3);
 }
 @keyframes fade-up {
-  from { opacity: 0; translate: 0 2rem; }
-  to   { opacity: 1; translate: 0 0; }
+  from {
+    opacity: 0;
+    translate: 0 2rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
 }
 ```
 
@@ -638,7 +694,9 @@ Animatable, typed, scoped custom properties — useful for building your own "mi
   animation: shift-hue 6s linear infinite;
 }
 @keyframes shift-hue {
-  to { --hue: 360; }
+  to {
+    --hue: 360;
+  }
 }
 ```
 
@@ -658,10 +716,11 @@ Position floating UI relative to any anchor element — no JS, no Popper/Floatin
 .popover {
   position: absolute;
   position-anchor: --my-popover;
-  inset-block-end: anchor(top);  /* popover sits above the trigger */
+  inset-block-end: anchor(top); /* popover sits above the trigger */
   inset-inline-start: anchor(center);
   translate: -50% 0;
-  position-try-fallbacks: flip-block, flip-inline; /* auto-reposition on overflow */
+  position-try-fallbacks:
+    flip-block, flip-inline; /* auto-reposition on overflow */
 }
 ```
 
@@ -671,22 +730,22 @@ Check browser support for your target audience before relying on this for critic
 
 ## 16. Replacing SCSS — Reference Table
 
-| Old SCSS Pattern | Modern CSS Replacement |
-|:---|:---|
-| `$colors: (...)` color map | A hand-rolled numbered `--gray-1`…`--gray-9` scale (§1) + your own semantic aliases |
-| `@mixin flex-center` | Utility class `.grid-center { display:grid; place-items:center }` |
-| `@mixin button($bg, $fg)` | `var(--btn-bg)` / `var(--btn-fg)` set per-variant via custom properties |
-| `@mixin mobile { @media ... }` | `@container (width < 500px)` |
-| `@mixin card { ... }` | `@layer components { .card { ... } }` |
-| `@mixin stack($gap)` | `.stack { gap: var(--stack-gap, var(--space-m)) }` + inline style override |
-| Sass nesting | Native CSS nesting |
-| Sass variables / `$variable` | CSS custom properties — your own `--foo: value` scale |
-| `color.adjust($c, $lightness: 10%)` | `color-mix(in oklch, var(--c), white 10%)` |
-| Deeply-specific selector for a subtree (`.feature > .body > img`) | `@scope (.body) { img { … } }` |
-| Theming via duplicated selector blocks | `@scope` + scoping proximity |
-| `@for $i from 1 through 12` | No native loop — only genuine remaining logic gap |
+| Old SCSS Pattern                                                  | Modern CSS Replacement                                                              |
+| :---------------------------------------------------------------- | :---------------------------------------------------------------------------------- |
+| `$colors: (...)` color map                                        | A hand-rolled numbered `--gray-1`…`--gray-9` scale (§1) + your own semantic aliases |
+| `@mixin flex-center`                                              | Utility class `.grid-center { display:grid; place-items:center }`                   |
+| `@mixin button($bg, $fg)`                                         | `var(--btn-bg)` / `var(--btn-fg)` set per-variant via custom properties             |
+| `@mixin mobile { @media ... }`                                    | `@container (width < 500px)`                                                        |
+| `@mixin card { ... }`                                             | `@layer components { .card { ... } }`                                               |
+| `@mixin stack($gap)`                                              | `.stack { gap: var(--stack-gap, var(--space-m)) }` + inline style override          |
+| Sass nesting                                                      | Native CSS nesting                                                                  |
+| Sass variables / `$variable`                                      | CSS custom properties — your own `--foo: value` scale                               |
+| `color.adjust($c, $lightness: 10%)`                               | `color-mix(in oklch, var(--c), white 10%)`                                          |
+| Deeply-specific selector for a subtree (`.feature > .body > img`) | `@scope (.body) { img { … } }`                                                      |
+| Theming via duplicated selector blocks                            | `@scope` + scoping proximity                                                        |
+| `@for $i from 1 through 12`                                       | No native loop — only genuine remaining logic gap                                   |
 
-**The key shift:** Sass generates CSS at compile time. Modern CSS *composes behavior at runtime* via the cascade. Runtime composition is more powerful: it responds to context, inherits through the DOM, and is inspectable live in DevTools.
+**The key shift:** Sass generates CSS at compile time. Modern CSS _composes behavior at runtime_ via the cascade. Runtime composition is more powerful: it responds to context, inherits through the DOM, and is inspectable live in DevTools.
 
 ---
 
@@ -763,40 +822,40 @@ A complete, self-contained starting point — copy this into `tokens.css`, no im
 @layer tokens {
   :root {
     /* Color steps */
-    --gray-0:  oklch(99% 0.002 250);
-    --gray-1:  oklch(96% 0.004 250);
-    --gray-2:  oklch(91% 0.006 250);
-    --gray-7:  oklch(36% 0.014 250);
-    --gray-8:  oklch(26% 0.012 250);
-    --gray-9:  oklch(16% 0.010 250);
+    --gray-0: oklch(99% 0.002 250);
+    --gray-1: oklch(96% 0.004 250);
+    --gray-2: oklch(91% 0.006 250);
+    --gray-7: oklch(36% 0.014 250);
+    --gray-8: oklch(26% 0.012 250);
+    --gray-9: oklch(16% 0.01 250);
     --violet-3: oklch(78% 0.14 295);
-    --violet-6: oklch(58% 0.20 295);
-    --red-6:   oklch(58% 0.21 25);
+    --violet-6: oklch(58% 0.2 295);
+    --red-6: oklch(58% 0.21 25);
     --green-6: oklch(62% 0.17 150);
 
     /* Semantic aliases */
-    --brand:     var(--violet-6);
-    --text-1:    var(--gray-9);
-    --text-2:    var(--gray-7);
+    --brand: var(--violet-6);
+    --text-1: var(--gray-9);
+    --text-2: var(--gray-7);
     --surface-1: var(--gray-0);
     --surface-2: var(--gray-1);
     --surface-3: var(--gray-2);
-    --error:     var(--red-6);
-    --success:   var(--green-6);
+    --error: var(--red-6);
+    --success: var(--green-6);
 
     /* Space — fluid */
-    --space-xs:  clamp(0.25rem,  0.5vw,  0.5rem);
-    --space-s:   clamp(0.5rem,   1vw,    0.75rem);
-    --space-m:   clamp(1rem,     2.5vw,  1.5rem);
-    --space-l:   clamp(1.5rem,   4vw,    3rem);
-    --space-xl:  clamp(3rem,     8vw,    6rem);
+    --space-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+    --space-s: clamp(0.5rem, 1vw, 0.75rem);
+    --space-m: clamp(1rem, 2.5vw, 1.5rem);
+    --space-l: clamp(1.5rem, 4vw, 3rem);
+    --space-xl: clamp(3rem, 8vw, 6rem);
 
     /* Typography — fluid */
-    --text-sm:   clamp(0.875rem, 0.8rem + 0.4vw, 1rem);
-    --text-base: clamp(1rem,     0.9rem + 0.5vw, 1.2rem);
-    --text-lg:   clamp(1.125rem, 1rem   + 0.7vw, 1.5rem);
-    --text-xl:   clamp(1.5rem,   1.2rem + 1.5vw, 2.25rem);
-    --text-2xl:  clamp(2rem,     1.5rem + 2.5vw, 4rem);
+    --text-sm: clamp(0.875rem, 0.8rem + 0.4vw, 1rem);
+    --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.2rem);
+    --text-lg: clamp(1.125rem, 1rem + 0.7vw, 1.5rem);
+    --text-xl: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+    --text-2xl: clamp(2rem, 1.5rem + 2.5vw, 4rem);
 
     /* Radii */
     --radius-1: 4px;
@@ -819,9 +878,9 @@ A complete, self-contained starting point — copy this into `tokens.css`, no im
       --surface-1: var(--gray-9);
       --surface-2: var(--gray-8);
       --surface-3: var(--gray-7);
-      --text-1:    var(--gray-1);
-      --text-2:    var(--gray-2);
-      --brand:     var(--violet-3);
+      --text-1: var(--gray-1);
+      --text-2: var(--gray-2);
+      --brand: var(--violet-3);
     }
   }
 }
@@ -835,7 +894,11 @@ Every component then references `var(--text-1)`, `var(--space-m)`, etc. — neve
 
 ```css
 @layer reset {
-  *, *::before, *::after { box-sizing: border-box; }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
   html {
     text-size-adjust: none;
@@ -849,17 +912,46 @@ Every component then references `var(--text-1)`, `var(--space-m)`, etc. — neve
     -webkit-font-smoothing: antialiased;
   }
 
-  h1, h2, h3, h4, p, figure, blockquote, dl { margin: 0; }
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  figure,
+  blockquote,
+  dl {
+    margin: 0;
+  }
 
-  ul[role="list"], ol[role="list"] { list-style: none; padding: 0; margin: 0; }
+  ul[role="list"],
+  ol[role="list"] {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
-  img, video, canvas, svg { max-width: 100%; display: block; height: auto; }
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+    display: block;
+    height: auto;
+  }
 
-  input, button, textarea, select { font: inherit; color: inherit; }
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
 
   /* Reduce motion for users who prefer it */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
@@ -872,20 +964,20 @@ Every component then references `var(--text-1)`, `var(--space-m)`, etc. — neve
 
 ## 20. Quick Reference: Do This, Not That
 
-| Avoid | Prefer | Why |
-|:---|:---|:---|
-| Importing a third-party CSS variable package | A ~100-line hand-rolled token file (§1, §18) | Zero dependency, zero version drift, fully inspectable |
-| `@media (max-width: 768px)` for components | `@container (width < 500px)` | Components adapt to layout context, not viewport |
-| `.parent .child .grandchild` | `@scope (.parent) { .child { … } }` | Decoupled, near-zero added specificity |
-| Duplicated theme selector blocks (`.dark p`, `.light p`) | `@scope (.theme-x) { p { … } }` per theme | Scoping proximity resolves nesting conflicts |
-| `margin-left` / `padding-right` | `margin-inline-start` / `padding-inline-end` | RTL-safe automatically |
-| `#3b82f6` / `hsl(220 90% 56%)` | `oklch(62% 0.22 250)` | Perceptually uniform, predictable |
-| JS scroll listeners for animation | `animation-timeline: scroll()` / `view()` | Off-main-thread, no JS |
-| JS for dark-mode class toggling | `:root { … }` + `@media (prefers-color-scheme: dark)` | Native, respects OS setting |
-| Sass `$variable` / `$map` | Hand-rolled `--custom-property` scale | Runtime, cascading, DevTools-inspectable |
-| `100vh` on mobile | `100dvh` | Accounts for dynamic browser chrome |
-| `@mixin stack($gap)` | `.stack { gap: var(--stack-gap, var(--space-m)) }` | Runtime configurable |
-| Deep nesting (4+ levels) | Max 2–3 levels | Readability, mirrors DOM depth |
+| Avoid                                                    | Prefer                                                | Why                                                    |
+| :------------------------------------------------------- | :---------------------------------------------------- | :----------------------------------------------------- |
+| Importing a third-party CSS variable package             | A ~100-line hand-rolled token file (§1, §18)          | Zero dependency, zero version drift, fully inspectable |
+| `@media (max-width: 768px)` for components               | `@container (width < 500px)`                          | Components adapt to layout context, not viewport       |
+| `.parent .child .grandchild`                             | `@scope (.parent) { .child { … } }`                   | Decoupled, near-zero added specificity                 |
+| Duplicated theme selector blocks (`.dark p`, `.light p`) | `@scope (.theme-x) { p { … } }` per theme             | Scoping proximity resolves nesting conflicts           |
+| `margin-left` / `padding-right`                          | `margin-inline-start` / `padding-inline-end`          | RTL-safe automatically                                 |
+| `#3b82f6` / `hsl(220 90% 56%)`                           | `oklch(62% 0.22 250)`                                 | Perceptually uniform, predictable                      |
+| JS scroll listeners for animation                        | `animation-timeline: scroll()` / `view()`             | Off-main-thread, no JS                                 |
+| JS for dark-mode class toggling                          | `:root { … }` + `@media (prefers-color-scheme: dark)` | Native, respects OS setting                            |
+| Sass `$variable` / `$map`                                | Hand-rolled `--custom-property` scale                 | Runtime, cascading, DevTools-inspectable               |
+| `100vh` on mobile                                        | `100dvh`                                              | Accounts for dynamic browser chrome                    |
+| `@mixin stack($gap)`                                     | `.stack { gap: var(--stack-gap, var(--space-m)) }`    | Runtime configurable                                   |
+| Deep nesting (4+ levels)                                 | Max 2–3 levels                                        | Readability, mirrors DOM depth                         |
 
 ---
 
