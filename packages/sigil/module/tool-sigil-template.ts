@@ -4,11 +4,10 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
     box-sizing: border-box;
     display: block;
     min-height: 100%;
-    padding: 2rem;
-    color: CanvasText;
-    background: Canvas;
+    padding: var(--space-6, 2rem);
+    color: var(--text-1, CanvasText);
+    background: var(--surface-1, Canvas);
     font-family: system-ui, sans-serif;
-    text-align: left;
     height: 100%;
   }
 
@@ -19,16 +18,19 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
   }
 
   section {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
     height: inherit;
-    max-width: 56rem;
     margin: 0 auto;
     overflow-y: auto;
+    width: 100%;
   }
 
   h1 {
-    margin: 0 0 0.75rem;
-    font-size: 2rem;
-    line-height: 1.1;
+    margin: 0 0 var(--space-3, 0.75rem);
+    font-size: var(--font-size-4, 2rem);
+    line-height: var(--font-lineheight-tight, 1.1);
   }
 
   p,
@@ -47,8 +49,7 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
 
   form {
     display: grid;
-    gap: 1rem;
-    max-width: 42rem;
+    gap: var(--space-4, 1rem);
   }
 
   label {
@@ -61,11 +62,10 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
   select,
   textarea,
   button {
-    border: 1px solid color-mix(in srgb, CanvasText 45%, Canvas);
-    border-radius: 6px;
-    padding: 0.55rem 0.7rem;
-    color: CanvasText;
-    background: Canvas;
+    border: 1px solid var(--border-color, color-mix(in oklch, CanvasText 45%, Canvas));
+    border-radius: var(--radius-2, 6px);
+    color: var(--text-1, CanvasText);
+    background: var(--surface-1, Canvas);
   }
 
   button {
@@ -80,29 +80,27 @@ export const TOOL_SIGIL_TEMPLATE = `<style>
 
   [data-state="glyph-list"] {
     display: grid;
-    gap: 0.75rem;
+    gap: var(--space-3, 0.75rem);
   }
 
   [role="alert"] {
-    border-left: 4px solid currentColor;
-    padding-left: 0.75rem;
+    border-inline-start: var(--space-1, 0.25rem) solid currentColor;
+    padding-inline-start: var(--space-3, 0.75rem);
   }
 
   .glyph-row {
     display: grid;
     grid-template-rows: minmax(2rem, auto) repeat(4, minmax(0, 1fr));
-    gap: 0.75rem;
+    gap: var(--space-3, 0.75rem);
     align-items: end;
   }
 
   .glyph-preview {
-    font-size: 1.5rem;
-    line-height: 1;
+    font-size: var(--font-size-3, 1.5rem);
+    line-height: var(--font-lineheight-1, 1);
   }
-
   .tool-copy {
-    max-width: 42rem;
-    line-height: 1.5;
+    line-height: var(--font-lineheight-base, 1.5);
   }
 </style>
 <section aria-labelledby="sigil-tool-title">

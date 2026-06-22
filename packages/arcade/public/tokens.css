@@ -1,0 +1,31 @@
+@layer tokens {
+  :root {
+    /* ---- Semantic color aliases ---- */
+    --text-1: CanvasText;
+    --surface-1: Canvas;
+    --border-color: color-mix(in oklch, CanvasText 45%, Canvas);
+
+    /* ---- Space ---- */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-6: 2rem;
+
+    /* ---- Font sizes ---- */
+    --font-size-0: 0.75rem;
+    --font-size-3: 1.5rem;
+    --font-size-4: 2rem;
+
+    /* ---- Font weights ---- */
+    --font-weight-semibold: 600;
+
+    /* ---- Radii ---- */
+    --radius-2: 6px;
+
+    /* ---- Line heights ---- */
+    --font-lineheight-1: 1;
+    --font-lineheight-tight: 1.1;
+    --font-lineheight-base: 1.5;
+  }
+}
