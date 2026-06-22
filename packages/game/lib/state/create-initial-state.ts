@@ -40,13 +40,13 @@ const drawId = <Tag extends string>(
  * @param seed - Deterministic seed for entity identity and replay stability
  * @returns The initial game state
  */
-// eslint-disable-next-line max-lines-per-function -- initial state construction is kept inline for deterministic readability.
 const createInitialState = (
   canvas: {
     height: number;
     width: number;
   },
   seed: number = INITIAL_SEED,
+  // eslint-disable-next-line max-lines-per-function -- initial state construction is kept inline for readability.
 ): GameState => {
   const player = drawId<"PlayerId">(createPrng(seed));
   const enemy0 = drawId<"EnemyId">(player.prng);
