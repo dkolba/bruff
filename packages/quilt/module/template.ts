@@ -2,11 +2,12 @@ const TEMPLATE_HTML = `
   <style>
     :host {
       display: block;
-      min-height: 100vh;
+      min-height: 100dvh;
     }
 
     .quilt-stage {
       display: grid;
+      justify-content: center;
     }
 
     canvas {

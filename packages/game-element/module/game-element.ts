@@ -71,14 +71,15 @@ export class GameElement extends HTMLElement {
 
           #bruff-hud {
             position: fixed;
-            top: 12px;
-            left: 12px;
-            padding: 4px 8px;
-            color: CanvasText;
-            background: Canvas;
-            border: 1px solid CanvasText;
+            inset-block-start: var(--space-3, 0.75rem);
+            inset-inline-start: var(--space-3, 0.75rem);
+            padding-block: var(--space-1, 0.25rem);
+            padding-inline: var(--space-2, 0.5rem);
+            color: var(--text-1, CanvasText);
+            background: var(--surface-1, Canvas);
+            border: 1px solid var(--border-color, color-mix(in oklch, CanvasText 45%, Canvas));
             font:
-              600 0.75rem system-ui,
+              var(--font-weight-semibold, 600) var(--font-size-0, 0.75rem) system-ui,
               sans-serif;
             z-index: 1;
           }
