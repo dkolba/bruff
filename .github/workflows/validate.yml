@@ -5,6 +5,35 @@ env:
   NODE_VERSION: "24"
 
 jobs:
+  format_ai:
+    name: 📏 Format AI
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.13.1
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v7.0.0
+
+      - name: 📦 Enable pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: 📥 Download deps
+        run: pnpm ci
+
+      - name: 📏 Format AI
+        run: |
+          pnpm run format:ai
+          git diff --exit-code
+
   format_utils:
     name: 📏 Format Utils
     runs-on: ubuntu-latest
