@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@axe-core/playwright':
-      specifier: 4.11.3
-      version: 4.11.3
+      specifier: 4.12.1
+      version: 4.12.1
     '@changesets/cli':
       specifier: 2.31.0
       version: 2.31.0
@@ -103,7 +103,7 @@ importers:
     devDependencies:
       '@axe-core/playwright':
         specifier: 'catalog:'
-        version: 4.11.3(playwright-core@1.61.1)
+        version: 4.12.1(playwright-core@1.61.1)
       '@bruff/eslint-config':
         specifier: workspace:0.0.0
         version: link:../eslint-config
@@ -466,8 +466,8 @@ importers:
 
 packages:
 
-  '@axe-core/playwright@4.11.3':
-    resolution: {integrity: sha512-h/kfksv4F0cVIDlKpT4700OehdRgpvuVskuQ2nb7/JmtWUXpe9ftHAPtwyXGvVSsa6SJ64A9ER7Zrzc/sIvC4w==, tarball: https://registry.npmjs.org/@axe-core/playwright/-/playwright-4.11.3.tgz}
+  '@axe-core/playwright@4.12.1':
+    resolution: {integrity: sha512-rMd7xriptqKpP+w5265i4Hdkv2X5kbu6uiBi/B2I7uf3hieRBM3qDCfaKPtxfiYb2mKXfF+yLODJwIx+Jv1GDw==, tarball: https://registry.npmjs.org/@axe-core/playwright/-/playwright-4.12.1.tgz}
     peerDependencies:
       playwright-core: '>= 1.0.0'
 
@@ -1114,8 +1114,8 @@ packages:
   ast-v8-to-istanbul@1.0.0:
     resolution: {integrity: sha512-1fSfIwuDICFA4LKkCzRPO7F0hzFf0B7+Xqrl27ynQaa+Rh0e1Es0v6kWHPott3lU10AyAr7oKHa65OppjLn3Rg==, tarball: https://registry.npmjs.org/ast-v8-to-istanbul/-/ast-v8-to-istanbul-1.0.0.tgz}
 
-  axe-core@4.11.4:
-    resolution: {integrity: sha512-KunSNx+TVpkAw/6ULfhnx+HWRecjqZGTOyquAoWHYLRSdK1tB5Ihce1ZW+UY3fj33bYAFWPu7W/GRSmmrCGuxA==, tarball: https://registry.npmjs.org/axe-core/-/axe-core-4.11.4.tgz}
+  axe-core@4.12.1:
+    resolution: {integrity: sha512-s7iGf5GaVMxEG0ENN9x+xTr7GFZCb1ZP/1uATUpCEK2X78nDB3RwbtFCo9pGAf9ru+VwoQ464DkaLEeRM08wJA==, tarball: https://registry.npmjs.org/axe-core/-/axe-core-4.12.1.tgz}
     engines: {node: '>=4'}
 
   balanced-match@4.0.4:
@@ -2368,9 +2368,9 @@ packages:
 
 snapshots:
 
-  '@axe-core/playwright@4.11.3(playwright-core@1.61.1)':
+  '@axe-core/playwright@4.12.1(playwright-core@1.61.1)':
     dependencies:
-      axe-core: 4.11.4
+      axe-core: 4.12.1
       playwright-core: 1.61.1
 
   '@babel/code-frame@7.29.0':
@@ -3180,7 +3180,7 @@ snapshots:
       estree-walker: 3.0.3
       js-tokens: 10.0.0
 
-  axe-core@4.11.4: {}
+  axe-core@4.12.1: {}
 
   balanced-match@4.0.4: {}
 
