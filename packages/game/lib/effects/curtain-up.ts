@@ -11,9 +11,7 @@ import {
  * The error reasons that {@link curtainUp} can surface to its caller.
  */
 export type CurtainUpError =
-  | "canvas-context-not-found"
-  | "canvas-not-found"
-  | "game-root-not-found";
+  "canvas-context-not-found" | "canvas-not-found" | "game-root-not-found";
 
 /**
  * The successful product of {@link curtainUp}: the canvas, its 2D

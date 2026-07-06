@@ -31,10 +31,7 @@ export type LootTableComponent = Readonly<{
 
 /** Map entity component variants. */
 export type EntityComponent =
-  | DoorComponent
-  | SpawnComponent
-  | ScriptComponent
-  | LootTableComponent;
+  DoorComponent | SpawnComponent | ScriptComponent | LootTableComponent;
 
 /** Map entity component map keys. */
 export type ComponentType = EntityComponent["type"];

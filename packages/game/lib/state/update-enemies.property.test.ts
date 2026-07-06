@@ -49,31 +49,27 @@ const gridGameStateArb: fc.Arbitrary<GameState> = gridCellArb.chain(
           selector: cellKey,
         },
       )
-      .map(
-        (enemyCells): GameState => ({
-          board: { columns: BOARD_COLUMNS, rows: BOARD_ROWS },
-          canvas: { height: GRID_CANVAS_SIZE, width: GRID_CANVAS_SIZE },
-          enemies: enemyCells.map(
-            (enemyCell, index): Enemy => ({
-              cell: enemyCell,
-              id: brand<"EnemyId">(`test-grid-enemy-${index}`),
-              size: ENEMY_SIZE,
-              spawnOrder: index,
-            }),
-          ),
-          frameIndex: ZERO,
-          input: [],
-          player: {
-            cell: playerCell,
-            id: brand<"PlayerId">("test-grid-player"),
-            size: PLAYER_SIZE,
-          },
-          playerMoved: true,
-          prng: createPrng(TEST_SEED),
-          seed: TEST_SEED,
-          stateVersion: CURRENT_STATE_VERSION,
-        }),
-      ),
+      .map((enemyCells): GameState => ({
+        board: { columns: BOARD_COLUMNS, rows: BOARD_ROWS },
+        canvas: { height: GRID_CANVAS_SIZE, width: GRID_CANVAS_SIZE },
+        enemies: enemyCells.map((enemyCell, index): Enemy => ({
+          cell: enemyCell,
+          id: brand<"EnemyId">(`test-grid-enemy-${index}`),
+          size: ENEMY_SIZE,
+          spawnOrder: index,
+        })),
+        frameIndex: ZERO,
+        input: [],
+        player: {
+          cell: playerCell,
+          id: brand<"PlayerId">("test-grid-player"),
+          size: PLAYER_SIZE,
+        },
+        playerMoved: true,
+        prng: createPrng(TEST_SEED),
+        seed: TEST_SEED,
+        stateVersion: CURRENT_STATE_VERSION,
+      })),
 );
 
 describe("updateEnemies (property-based)", () => {

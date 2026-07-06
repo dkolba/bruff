@@ -25,18 +25,16 @@ const fixtureArb: fc.Arbitrary<ReplayFixture> = fc
     inputs: fc.array(replayInputArb, { maxLength: MAX_FRAMES, minLength: 0 }),
     seed: fc.integer({ max: MAX_SEED, min: MIN_SEED }),
   })
-  .map(
-    ({ inputs, seed }): ReplayFixture => ({
-      frames: inputs.map((input, index) => ({
-        frame: index + FIRST_FRAME,
-        input,
-      })),
-      initialCanvas: { height: 600, width: 800 },
-      seed,
-      stateVersion: CURRENT_STATE_VERSION,
-      totalFrames: inputs.length,
-    }),
-  );
+  .map(({ inputs, seed }): ReplayFixture => ({
+    frames: inputs.map((input, index) => ({
+      frame: index + FIRST_FRAME,
+      input,
+    })),
+    initialCanvas: { height: 600, width: 800 },
+    seed,
+    stateVersion: CURRENT_STATE_VERSION,
+    totalFrames: inputs.length,
+  }));
 
 describe("runReplay (property-based)", () => {
   test.prop([fixtureArb])(
