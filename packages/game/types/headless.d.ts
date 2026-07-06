@@ -104,5 +104,4 @@ export declare const stepHeadlessGame: (
 export declare const normaliseKey: (
   key: string,
 ) =>
-  | Readonly<{ type: "none" }>
-  | Readonly<{ type: "some"; value: InputAction }>;
+  Readonly<{ type: "none" }> | Readonly<{ type: "some"; value: InputAction }>;
