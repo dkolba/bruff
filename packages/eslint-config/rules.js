@@ -51,6 +51,11 @@ export const overrideRulesUnicorn = {
   "unicorn/better-regex": "warn",
   "unicorn/no-array-reduce": "off",
   "unicorn/no-null": "off",
+  "unicorn/try-complexity": ["error", { max: 2 }],
+  "unicorn/prefer-includes-over-repeated-comparisons": [
+    "error",
+    { minimumComparisons: 5 },
+  ],
 };
 
 /**
