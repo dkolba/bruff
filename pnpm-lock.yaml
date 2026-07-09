@@ -46,8 +46,8 @@ catalogs:
       specifier: 0.5.2
       version: 0.5.2
     eslint-plugin-unicorn:
-      specifier: 65.0.0
-      version: 65.0.0
+      specifier: 65.0.1
+      version: 65.0.1
     eslint-plugin-wc:
       specifier: 3.1.0
       version: 3.1.0
@@ -225,7 +225,7 @@ importers:
         version: 0.5.2(eslint@10.4.1)(typescript@5.9.3)
       eslint-plugin-unicorn:
         specifier: 'catalog:'
-        version: 65.0.0(eslint@10.4.1)
+        version: 65.0.1(eslint@10.4.1)
       eslint-plugin-wc:
         specifier: 'catalog:'
         version: 3.1.0(eslint@10.4.1)
@@ -1277,8 +1277,8 @@ packages:
   eslint-plugin-tsdoc@0.5.2:
     resolution: {integrity: sha512-BlvqjWZdBJDIPO/YU3zcPCF23CvjYT3gyu63yo6b609NNV3D1b6zceAREy2xnweuBoDpZcLNuPyAUq9cvx6bbQ==, tarball: https://registry.npmjs.org/eslint-plugin-tsdoc/-/eslint-plugin-tsdoc-0.5.2.tgz}
 
-  eslint-plugin-unicorn@65.0.0:
-    resolution: {integrity: sha512-wE75x2QqMuPgZXcoc8LgTz7+gk5+SZK93Cxe6jkfouKp6+FwYwjMGrbYQTMRH8HK8X6jeTBhPPI2Cun923EMLQ==, tarball: https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-65.0.0.tgz}
+  eslint-plugin-unicorn@65.0.1:
+    resolution: {integrity: sha512-daCrQrgxOoOz2uMPWB3Y3vvv/5q+ncwICI8IjoebiwtW87CaY4tAN5EEiRXTYVnf7qi1v1BGBdHOSnZLV0rx6A==, tarball: https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-65.0.1.tgz}
     engines: {node: ^20.10.0 || >=21.0.0}
     peerDependencies:
       eslint: '>=9.38.0'
@@ -3299,7 +3299,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-unicorn@65.0.0(eslint@10.4.1):
+  eslint-plugin-unicorn@65.0.1(eslint@10.4.1):
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.4.1)
