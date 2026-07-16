@@ -5,12 +5,12 @@ import {
 } from "../../constants.ts";
 
 /**
- * Returns the cardinal or intercardinal direction string for a given 2D delta.
- *
- * @param dx - The horizontal component of the direction vector
- * @param dy - The vertical component of the direction vector
- * @returns One of: "NORTH", "NORTHEAST", "EAST", "SOUTHEAST", "SOUTH", "SOUTHWEST", "WEST", "NORTHWEST"
- */
+Returns the cardinal or intercardinal direction string for a given 2D delta.
+
+@param dx - The horizontal component of the direction vector
+@param dy - The vertical component of the direction vector
+@returns One of: "NORTH", "NORTHEAST", "EAST", "SOUTHEAST", "SOUTH", "SOUTHWEST", "WEST", "NORTHWEST"
+*/
 export const getCardinalDirection = (dx: number, dy: number): string => {
   const angle = (Math.atan2(dy, dx) * HALF_CIRCLE_DEGREES) / Math.PI;
   const directions = [

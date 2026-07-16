@@ -56,6 +56,10 @@ export const overrideRulesUnicorn = {
     "error",
     { minimumComparisons: 5 },
   ],
+  "unicorn/prefer-dom-node-html-methods": "off", // Set to "true" when baseline: https://developer.mozilla.org/en-US/docs/Web/API/Element/setHTML
+  "unicorn/no-unsafe-dom-html": "off", // Set to "true" when baseline: https://developer.mozilla.org/en-US/docs/Web/API/Element/setHTML
+  "unicorn/prefer-minimal-ternary": "off",
+  "unicorn/prefer-scoped-selector": "off",
 };
 
 /**

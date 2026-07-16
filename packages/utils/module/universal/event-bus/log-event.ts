@@ -1,8 +1,8 @@
 import type { LogLevel } from "./log-level";
 
 /**
- * Payload emitted through the log event bus.
- */
+Payload emitted through the log event bus.
+*/
 export type LogEvent = Readonly<{
   level: LogLevel;
   message: string;

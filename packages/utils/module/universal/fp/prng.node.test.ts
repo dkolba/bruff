@@ -64,7 +64,8 @@ describe("nextNumber", () => {
 describe("nextId", () => {
   it("generates unique values across 10000 draws", () => {
     const ids = generateIdBatch(SEED_ONE, ID_COUNT);
-    expect(new Set(ids).size).toBe(ID_COUNT);
+    const setIds = new Set(ids);
+    expect(setIds.size).toBe(ID_COUNT);
   });
 
   it("same seed produces the same ID sequence", () => {

@@ -1,10 +1,10 @@
 import { log } from "../../universal/event-bus/event-bus.ts";
 
 /**
- * Logs that the element has been resized
- *
- * @returns void
- */
+Logs that the element has been resized
+
+@returns void
+*/
 const logInfo = (): void => {
   log({
     level: "info",
@@ -14,11 +14,11 @@ const logInfo = (): void => {
 };
 
 /**
- * Creates an event listener for canvas resize events
- *
- * @param canvas - The canvas element to listen for resize events
- * @returns Cleanup function that removes the event listener
- */
+Creates an event listener for canvas resize events
+
+@param canvas - The canvas element to listen for resize events
+@returns Cleanup function that removes the event listener
+*/
 export const canvasResizeListener = (
   canvas: HTMLCanvasElement,
 ): (() => void) => {
