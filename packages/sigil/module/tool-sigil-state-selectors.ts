@@ -190,6 +190,10 @@ const catalogErrors = (
 const selectToolSigilVisibleErrors = (
   state: ToolSigilState,
 ): ReadonlyArray<SigilExtractionError> => {
+  if (state.drafts.length === EMPTY_COUNT) {
+    return state.errors;
+  }
+
   const nameResult = createSigilGlyphMap(
     selectedRequiredDrafts(state),
     outputNamesByUnicode(state),
@@ -204,10 +208,6 @@ const selectToolSigilVisibleErrors = (
     ...mappedGlyphErrors(state),
     ...licenseErrors(state),
   ];
-
-  if (state.drafts.length === EMPTY_COUNT) {
-    return state.errors;
-  }
 
   if (selectionErrors.length > EMPTY_COUNT) {
     const visibleNameErrors =

@@ -1,6 +1,4 @@
-/**
- * Browser globals needed to decide whether test mode is active.
- */
+/** Browser globals needed to decide whether test mode is active. */
 export type TestModeEnvironment = Readonly<{
   document?: Document;
   isBuildEnabled: boolean;
@@ -45,8 +43,9 @@ export const isTestModeForEnvironment = ({
 
 const isTestMode = (): boolean =>
   isTestModeForEnvironment({
-    document: globalThis.document,
+    document,
     isBuildEnabled: __BRUFF_TEST_MODE__,
+    // eslint-disable-next-line unicorn/no-unnecessary-global-this -- window property needed for type narrowing
     window: globalThis.window,
   });
 

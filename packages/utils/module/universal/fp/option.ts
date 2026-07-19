@@ -1,13 +1,9 @@
 import { error, ok, type Result } from "./result.ts";
 
-/**
- * The present variant of an {@link Option}.
- */
+/** The present variant of an {@link Option}. */
 export type Some<T> = Readonly<{ type: "some"; value: T }>;
 
-/**
- * The absent variant of an {@link Option}.
- */
+/** The absent variant of an {@link Option}. */
 export type None = Readonly<{ type: "none" }>;
 
 /**

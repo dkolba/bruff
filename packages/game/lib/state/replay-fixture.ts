@@ -24,17 +24,13 @@ type ReplayFixtureCandidate = Readonly<{
   totalFrames?: unknown;
 }>;
 
-/**
- * One replay input scheduled before a logical frame.
- */
+/** One replay input scheduled before a logical frame. */
 export type ReplayFrame = Readonly<{
   frame: number;
   input: string;
 }>;
 
-/**
- * Serializable replay fixture consumed by deterministic tests.
- */
+/** Serializable replay fixture consumed by deterministic tests. */
 export type ReplayFixture = Readonly<{
   frames: ReadonlyArray<ReplayFrame>;
   initialCanvas: Readonly<{
@@ -46,9 +42,7 @@ export type ReplayFixture = Readonly<{
   totalFrames: number;
 }>;
 
-/**
- * Typed parse and replay failures.
- */
+/** Typed parse and replay failures. */
 export type ReplayError =
   | Readonly<{
       reason: string;
@@ -83,7 +77,7 @@ const isNumber = (raw: unknown): raw is number =>
   typeof raw === "number" && Number.isFinite(raw);
 
 const isInteger = (raw: unknown): raw is number =>
-  isNumber(raw) && Number.isInteger(raw);
+  isNumber(raw) && Number.isSafeInteger(raw);
 
 const invalidFixture = (reason: string): Result<never, ReplayError> =>
   error({ reason, type: "invalidFixture" });

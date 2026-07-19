@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function -- Test describe blocks nest callbacks that approach the limit */
 import { describe, expect, test } from "vitest";
 
 import {
@@ -56,7 +57,9 @@ describe("quilt controller — pointer input to paint", () => {
   test("converts pointer input into paint commands", () => {
     const changedStates: Array<unknown> = [];
     const { controller } = makeController({
-      onStateChange: (changedState) => changedStates.push(changedState),
+      onStateChange: (changedState) => {
+        changedStates.push(changedState);
+      },
     });
 
     controller.handlePointerDown(createPointerEvent());
@@ -115,7 +118,9 @@ describe("quilt controller — state management", () => {
     });
     const controller = createQuiltController({
       getTileSize: () => TILE_SIZE,
-      onStateChange: (changedState) => changedStates.push(changedState),
+      onStateChange: (changedState) => {
+        changedStates.push(changedState);
+      },
       overlayCanvas,
       quiltState,
     });

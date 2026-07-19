@@ -72,8 +72,8 @@ export const serializeBroughlikeMapData = (
   tileMapData: TileMapData,
 ): BroughlikeMap => ({
   height: tileMapData.height,
-  rows: Array.from({ length: tileMapData.height }).map((unusedRow, tileY) =>
-    Array.from({ length: tileMapData.width }).map((unusedColumn, tileX) =>
+  rows: Array.from({ length: tileMapData.height }, (unusedRow, tileY) =>
+    Array.from({ length: tileMapData.width }, (unusedColumn, tileX) =>
       tileIdToTerrain(getTile(tileMapData, { tileX, tileY }, "terrain")),
     ),
   ),

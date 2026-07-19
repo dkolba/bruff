@@ -5,7 +5,8 @@ import {
   type SigilSchemaOption,
 } from "../sigil-schema-catalog.js";
 
-/** Finds a schema option by identifier.
+/**
+ * Finds a schema option by identifier.
  * @param schemaId - Schema identifier.
  * @returns Matching schema option when available.
  */

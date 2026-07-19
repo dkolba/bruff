@@ -20,51 +20,59 @@ export const handleExportClick = (controller: ToolbarController): void => {
   URL.revokeObjectURL(url);
 };
 
-export const handleImportFileChange = (
+const parseGlyphJsonFile = (
+  fileText: string,
+): ReturnType<typeof parseQuiltTerrainGlyphs> | null => {
+  try {
+    return parseQuiltTerrainGlyphs(JSON.parse(fileText));
+  } catch {
+    return null;
+  }
+};
+
+const applyParsedGlyphs = (
+  controller: ToolbarController,
+  parsedGlyphs: ReturnType<typeof parseQuiltTerrainGlyphs> | null,
+): void => {
+  if (parsedGlyphs === null) {
+    controller.setState({
+      ...controller.getState(),
+      visibleErrors: [{ message: "Failed to parse glyph JSON file." }],
+    });
+    return;
+  }
+  if (parsedGlyphs.type === "error") {
+    controller.setState({
+      ...controller.getState(),
+      visibleErrors: [
+        { message: "Invalid glyph JSON: not a valid Sigil glyph map." },
+      ],
+    });
+    return;
+  }
+  controller.setState({
+    ...controller.getState(),
+    terrainGlyphs: parsedGlyphs.value,
+    visibleErrors: [],
+  });
+};
+
+export const handleImportFileChange = async (
   importInput: HTMLInputElement,
   controller: ToolbarController,
-): void => {
+): Promise<void> => {
   const file = importInput.files?.[EMPTY_INPUT_FILES];
   if (file === undefined) {
     return;
   }
-  file
-    .text()
-    .then((fileText) => {
-      const parsedGlyphs: ReturnType<typeof parseQuiltTerrainGlyphs> | null =
-        ((): ReturnType<typeof parseQuiltTerrainGlyphs> | null => {
-          try {
-            return parseQuiltTerrainGlyphs(JSON.parse(fileText));
-          } catch {
-            return null;
-          }
-        })();
-      if (parsedGlyphs === null) {
-        controller.setState({
-          ...controller.getState(),
-          visibleErrors: [{ message: "Failed to parse glyph JSON file." }],
-        });
-        return;
-      }
-      if (parsedGlyphs.type === "error") {
-        controller.setState({
-          ...controller.getState(),
-          visibleErrors: [
-            { message: "Invalid glyph JSON: not a valid Sigil glyph map." },
-          ],
-        });
-        return;
-      }
-      controller.setState({
-        ...controller.getState(),
-        terrainGlyphs: parsedGlyphs.value,
-        visibleErrors: [],
-      });
-    })
-    .catch(() => {
-      controller.setState({
-        ...controller.getState(),
-        visibleErrors: [{ message: "Failed to read glyph JSON file." }],
-      });
+
+  try {
+    const fileText = await file.text();
+    applyParsedGlyphs(controller, parseGlyphJsonFile(fileText));
+  } catch {
+    controller.setState({
+      ...controller.getState(),
+      visibleErrors: [{ message: "Failed to read glyph JSON file." }],
     });
+  }
 };

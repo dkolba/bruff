@@ -20,9 +20,7 @@ const defaultSeed = 1;
 const minimumFrameCount = 0;
 const arrayLastIndexOffset = 1;
 
-/**
- * Options for creating a deterministic ANSI frame-step driver.
- */
+/** Options for creating a deterministic ANSI frame-step driver. */
 export type AnsiFrameStepOptions = Readonly<{
   /** Terminal canvas dimensions used when no initial state is supplied. */
   canvas?: CanvasSize;
@@ -34,9 +32,7 @@ export type AnsiFrameStepOptions = Readonly<{
   writer: TextWriter;
 }>;
 
-/**
- * Summary facts for the latest ANSI render.
- */
+/** Summary facts for the latest ANSI render. */
 export type AnsiFrameRenderStats = Readonly<{
   /** Number of enemy cells in the headless frame. */
   enemiesDrawn: number;
@@ -48,9 +44,7 @@ export type AnsiFrameRenderStats = Readonly<{
   terminalCellsDrawn: number;
 }>;
 
-/**
- * Complete terminal artifacts produced for one rendered frame.
- */
+/** Complete terminal artifacts produced for one rendered frame. */
 export type AnsiRenderedFrame = Readonly<{
   /** Encoded ANSI text written to the terminal writer. */
   ansiText: string;
@@ -66,9 +60,7 @@ export type AnsiRenderedFrame = Readonly<{
   writeResult: WriteFrameResult;
 }>;
 
-/**
- * Result of stepping zero or more terminal frames.
- */
+/** Result of stepping zero or more terminal frames. */
 export type AnsiFrameStepResult = Readonly<{
   /** Per-frame terminal artifacts produced during this step call. */
   frames: ReadonlyArray<AnsiRenderedFrame>;
@@ -222,9 +214,7 @@ const stepDriverFrames = (
   };
 };
 
-/**
- * Create a deterministic ANSI terminal frame-step driver.
- */
+/** Create a deterministic ANSI terminal frame-step driver. */
 export const createAnsiFrameStepDriver = (
   options: AnsiFrameStepOptions,
 ): AnsiFrameStepDriver => {

@@ -26,7 +26,7 @@ test("writes encoded frame text to the injected writer", (): void => {
 
   assert.deepEqual(writeTerminalFrame(writer, frame), { type: "ok" });
   assert.deepEqual(writtenTexts, [
-    "\u001B[2J\u001B[1;2H\u001B[38;2;1;2;3m\u001B[48;2;4;5;6m@\u001B[3;1H\u001B[0m",
+    "\u{1B}[2J\u{1B}[1;2H\u{1B}[38;2;1;2;3m\u{1B}[48;2;4;5;6m@\u{1B}[3;1H\u{1B}[0m",
   ]);
 });
 

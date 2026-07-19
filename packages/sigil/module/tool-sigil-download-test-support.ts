@@ -11,9 +11,9 @@ import {
 const REQUIRED_SCHEMA_UNICODES = [".", "#", "+", "@", "e"];
 
 const selectSchemaMappingAndLicense = (shadowRoot: ShadowRoot): void => {
-  REQUIRED_SCHEMA_UNICODES.map((unicode) =>
-    selectDefaultMappingAndLicense(shadowRoot, unicode),
-  );
+  for (const unicode of REQUIRED_SCHEMA_UNICODES) {
+    selectDefaultMappingAndLicense(shadowRoot, unicode);
+  }
 };
 
 /** Browser URL API stubs captured for download tests. */
@@ -37,30 +37,34 @@ export const stubObjectUrls = (): ObjectUrlStubState => {
   const originalCreateObjectURL = URL.createObjectURL;
   const originalRevokeObjectURL = URL.revokeObjectURL;
 
-  Object.defineProperty(URL, "createObjectURL", {
-    configurable: true,
-    value: (blob: Blob): string => {
-      createdBlobs.push(blob);
-      return "blob:sigil-json";
+  Object.defineProperties(URL, {
+    createObjectURL: {
+      configurable: true,
+      value: (blob: Blob): string => {
+        createdBlobs.push(blob);
+        return "blob:sigil-json";
+      },
     },
-  });
-  Object.defineProperty(URL, "revokeObjectURL", {
-    configurable: true,
-    value: (url: string): void => {
-      revokedUrls.push(url);
+    revokeObjectURL: {
+      configurable: true,
+      value: (url: string): void => {
+        revokedUrls.push(url);
+      },
     },
   });
 
   return {
     createdBlobs,
     restore: (): void => {
-      Object.defineProperty(URL, "createObjectURL", {
-        configurable: true,
-        value: originalCreateObjectURL,
-      });
-      Object.defineProperty(URL, "revokeObjectURL", {
-        configurable: true,
-        value: originalRevokeObjectURL,
+      Object.defineProperties(URL, {
+        createObjectURL: {
+          configurable: true,
+          value: originalCreateObjectURL,
+        },
+        revokeObjectURL: {
+          configurable: true,
+          value: originalRevokeObjectURL,
+        },
       });
     },
     revokedUrls,
@@ -82,7 +86,7 @@ export const trackDownloadClicks = (): DownloadClickState => {
     event.preventDefault();
   };
 
-  document.addEventListener("click", trackClick, true);
+  document.addEventListener("click", trackClick, { capture: true });
 
   return {
     downloads,

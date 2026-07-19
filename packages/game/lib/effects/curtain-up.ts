@@ -7,9 +7,7 @@ import {
   getShadowGameRoot,
 } from "@bruff/utils/dom";
 
-/**
- * The error reasons that {@link curtainUp} can surface to its caller.
- */
+/** The error reasons that {@link curtainUp} can surface to its caller. */
 export type CurtainUpError =
   "canvas-context-not-found" | "canvas-not-found" | "game-root-not-found";
 
@@ -29,7 +27,7 @@ export type CurtainUpStage = Readonly<{
  *
  * @param selector - The selector for the game-root element
  * @returns `ok` with both the canvas and its 2D context, or `error`
- *   carrying the first failure reason encountered along the chain
+ * carrying the first failure reason encountered along the chain
  */
 const resolveStageInputs = (
   selector: string,
@@ -65,7 +63,7 @@ const resolveStageInputs = (
  * typed {@link Result} so the caller can decide how to surface them.
  *
  * @returns `ok` with the prepared stage, or `error` carrying the
- *   first failure reason encountered along the chain
+ * first failure reason encountered along the chain
  */
 const curtainUp = (): Result<CurtainUpStage, CurtainUpError> => {
   const inputs = resolveStageInputs("bruff-game");

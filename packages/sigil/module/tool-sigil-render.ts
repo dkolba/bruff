@@ -233,7 +233,7 @@ const renderMappedGlyphSelect = (
   viewModel: ToolSigilViewModel,
 ): void => {
   const select = shadowRoot.querySelector<HTMLSelectElement>(
-    `select[name="${mappedGlyphSelectName(draft.glyph.unicode)}"]`,
+    `select[name="${CSS.escape(mappedGlyphSelectName(draft.glyph.unicode))}"]`,
   );
   if (select === null) {
     return;
@@ -265,10 +265,10 @@ export const renderToolSigilSelection = (
 ): void => {
   for (const draft of viewModel.drafts) {
     const groupSelect = shadowRoot.querySelector<HTMLSelectElement>(
-      `select[name="${glyphGroupSelectName(draft.glyph.unicode)}"]`,
+      `select[name="${CSS.escape(glyphGroupSelectName(draft.glyph.unicode))}"]`,
     );
     const licenseSelect = shadowRoot.querySelector<HTMLSelectElement>(
-      `select[name="${licenseSelectName(draft.glyph.unicode)}"]`,
+      `select[name="${CSS.escape(licenseSelectName(draft.glyph.unicode))}"]`,
     );
 
     if (groupSelect !== null) {

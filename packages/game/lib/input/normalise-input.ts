@@ -13,29 +13,29 @@ import type { InputAction } from "../core/actions.ts";
  * @returns `some(InputAction)` for known inputs, `none` otherwise
  */
 export const normaliseKey = (key: string): Option<InputAction> => {
-  const normalisedKey = key.startsWith("\u001B[") ? key : key.toLowerCase();
+  const normalisedKey = key.startsWith("\u{1B}[") ? key : key.toLowerCase();
 
   switch (normalisedKey) {
     case "arrowup":
-    case "\u001B[A":
+    case "\u{1B}[A":
     case "north":
     case "w": {
       return some({ type: "move-up" });
     }
     case "arrowdown":
-    case "\u001B[B":
+    case "\u{1B}[B":
     case "s":
     case "south": {
       return some({ type: "move-down" });
     }
     case "a":
     case "arrowleft":
-    case "\u001B[D":
+    case "\u{1B}[D":
     case "west": {
       return some({ type: "move-left" });
     }
     case "arrowright":
-    case "\u001B[C":
+    case "\u{1B}[C":
     case "d":
     case "east": {
       return some({ type: "move-right" });

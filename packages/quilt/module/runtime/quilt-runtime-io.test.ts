@@ -111,11 +111,11 @@ describe("quilt runtime IO — export", () => {
     makeRuntimeForIO(runtimeNodes);
     const createdUrls: Array<string> = [];
 
-    globalThis.URL.createObjectURL = (): string => {
+    URL.createObjectURL = (): string => {
       createdUrls.push("blob:test");
       return "blob:test";
     };
-    globalThis.URL.revokeObjectURL = (): void => {
+    URL.revokeObjectURL = (): void => {
       // No-op stub for test environment.
     };
 

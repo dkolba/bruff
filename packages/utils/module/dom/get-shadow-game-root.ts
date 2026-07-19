@@ -5,8 +5,8 @@ import { error, ok, type Result } from "../universal/fp/result.ts";
  *
  * @param gameRoot - The selector for the game-root element
  * @returns `ok` with the shadow root or
- *   `error("game-root-not-found")` when no element matches the
- *   selector or the matching element has no attached shadow root
+ * `error("game-root-not-found")` when no element matches the
+ * selector or the matching element has no attached shadow root
  */
 export const getShadowGameRoot = (
   gameRoot: string,

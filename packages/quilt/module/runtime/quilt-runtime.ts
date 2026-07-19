@@ -51,7 +51,7 @@ type RuntimeCanvasInput = Readonly<{
 
 const resizeCanvas = (canvas: HTMLCanvasElement, canvasSize: number): void => {
   /* v8 ignore next -- devicePixelRatio is always ≥1 in browser environments. */
-  const dpr = globalThis.devicePixelRatio || DEFAULT_DEVICE_PIXEL_RATIO;
+  const dpr = devicePixelRatio || DEFAULT_DEVICE_PIXEL_RATIO;
   canvas.width = canvasSize * dpr;
   canvas.height = canvasSize * dpr;
   canvas.style.width = `${canvasSize}${CANVAS_PIXEL_UNIT}`;

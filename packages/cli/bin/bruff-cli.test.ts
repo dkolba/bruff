@@ -32,3 +32,11 @@ test("does not set process raw mode for non-tty input", (): void => {
   assert.equal(textInput.setRawMode?.(true), textInput);
   assert.deepEqual(processInput.rawModes(), []);
 });
+
+test("skips raw mode when unsupported on a tty", (): void => {
+  const processInput = createFakeProcessInput(true, false);
+  const textInput = createTextInput(processInput);
+
+  assert.equal(textInput.setRawMode?.(true), textInput);
+  assert.deepEqual(processInput.rawModes(), []);
+});

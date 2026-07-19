@@ -1,11 +1,7 @@
-/**
- * The success variant of a {@link Result}.
- */
+/** The success variant of a {@link Result}. */
 export type Ok<T> = Readonly<{ type: "ok"; value: T }>;
 
-/**
- * The failure variant of a {@link Result}.
- */
+/** The failure variant of a {@link Result}. */
 export type Failure<E> = Readonly<{ error: E; type: "error" }>;
 
 /**
@@ -77,7 +73,7 @@ export const mapResult =
  *
  * @param next - Function returning a follow-on `Result`
  * @returns A function that maps a `Result<T, UpstreamError>` to a
- *   `Result<U, UpstreamError | NextError>`
+ * `Result<U, UpstreamError | NextError>`
  */
 export const flatMapResult =
   <T, U, NextError>(next: (value: T) => Result<U, NextError>) =>

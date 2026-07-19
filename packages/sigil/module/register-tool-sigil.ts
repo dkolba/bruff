@@ -13,5 +13,3 @@ export const registerToolSigil = (): void => {
     customElements.define(TOOL_SIGIL_TAG_NAME, ToolSigil);
   }
 };
-
-registerToolSigil();

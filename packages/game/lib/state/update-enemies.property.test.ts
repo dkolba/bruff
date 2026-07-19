@@ -108,7 +108,8 @@ describe("updateEnemies (property-based)", () => {
         ...next.enemies.map((enemy) => enemy.cell),
       ].map((cell) => cellKey(cell));
 
-      expect(new Set(occupiedCellKeys).size).toBe(occupiedCellKeys.length);
+      const uniqueOccupiedCellKeys = new Set(occupiedCellKeys);
+      expect(uniqueOccupiedCellKeys.size).toBe(occupiedCellKeys.length);
     },
   );
 });

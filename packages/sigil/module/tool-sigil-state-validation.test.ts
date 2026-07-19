@@ -117,14 +117,12 @@ describe("ToolSigil stale font state", () => {
       ...createToolSigilState(),
       fontLoadToken: CURRENT_FONT_LOAD_TOKEN,
     };
-
-    expect(
-      applyToolSigilFontLoadResult(
-        currentState,
-        STALE_FONT_LOAD_TOKEN,
-        ok(createTestFont()),
-      ),
-    ).toBe(currentState);
+    const ignoreStaleFont = applyToolSigilFontLoadResult(
+      currentState,
+      STALE_FONT_LOAD_TOKEN,
+      ok(createTestFont()),
+    );
+    expect(ignoreStaleFont).toBe(currentState);
   });
 });
 

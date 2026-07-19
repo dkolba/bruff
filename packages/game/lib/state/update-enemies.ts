@@ -136,7 +136,7 @@ const updateEnemiesOnTick = (state: GameState): ReadonlyArray<Enemy> => {
  * @param state - The current game state
  * @param action - The action to apply
  * @returns A new game state with enemy positions updated on tick,
- *   unchanged otherwise
+ * unchanged otherwise
  */
 export const updateEnemies = (
   state: GameState,

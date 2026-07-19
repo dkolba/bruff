@@ -16,13 +16,17 @@ export type SigilGlyphDraft = Readonly<{
   glyph: SigilSourceGlyph;
 }>;
 
-/** Extraction report that can carry valid drafts and non-fatal errors together. */
+/**
+ * Extraction report that can carry valid drafts and non-fatal errors together.
+ */
 export type SigilExtractionReport = Readonly<{
   drafts: ReadonlyArray<SigilGlyphDraft>;
   errors: ReadonlyArray<SigilExtractionError>;
 }>;
 
-/** Transitional extraction result carrying both report and legacy Result fields. */
+/**
+ * Transitional extraction result carrying both report and legacy Result fields.
+ */
 export type SigilExtractionResult =
   | Readonly<
       SigilExtractionReport & {

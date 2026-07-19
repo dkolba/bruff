@@ -24,9 +24,7 @@ const getConsoleMethod = (level: LogLevel): ConsoleLogSink =>
 
 const getPrefix = (level: LogLevel): string => `[${level}]`;
 
-/**
- * Writes a log event to the browser console.
- */
+/** Writes a log event to the browser console. */
 export const consoleLogHandler = (event: LogEvent): void => {
   const sink = getConsoleMethod(event.level);
   const prefix = getPrefix(event.level);

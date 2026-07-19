@@ -25,21 +25,19 @@ describe("ToolSigil mapped glyph state", () => {
 
 describe("ToolSigil mapped glyph group changes", () => {
   it("clears a selected glyph when the staged group changes", () => {
-    expect(
-      selectToolSigilViewModel(
-        setToolSigilGlyphGroup(selectedAsteriskState(), "★", "BOX"),
-      ).selectedGlyphsByUnicode,
-    ).toStrictEqual({});
+    const cleared = selectToolSigilViewModel(
+      setToolSigilGlyphGroup(selectedAsteriskState(), "★", "BOX"),
+    ).selectedGlyphsByUnicode;
+    expect(cleared).toStrictEqual({});
   });
 });
 
 describe("ToolSigil mapped glyph group preservation", () => {
   it("preserves a selected glyph when the staged group stays the same", () => {
-    expect(
-      selectToolSigilViewModel(
-        setToolSigilGlyphGroup(selectedAsteriskState(), "★", "ASCII"),
-      ).selectedGlyphsByUnicode,
-    ).toStrictEqual({
+    const preserved = selectToolSigilViewModel(
+      setToolSigilGlyphGroup(selectedAsteriskState(), "★", "ASCII"),
+    ).selectedGlyphsByUnicode;
+    expect(preserved).toStrictEqual({
       "★": asteriskMapping,
     });
   });

@@ -24,15 +24,17 @@ const isWoff2File = (fontFile: File): boolean =>
  * @param fontFile - Browser file selected by the user
  * @returns Parsed font or a typed loading error
  */
-export const loadSigilFontFile = (
+export const loadSigilFontFile = async (
   fontFile: File,
 ): Promise<Result<Font, ReadonlyArray<SigilExtractionError>>> => {
   if (isWoff2File(fontFile)) {
-    return Promise.resolve(error([unsupportedWoff2Error]));
+    return error([unsupportedWoff2Error]);
   }
 
-  return fontFile
-    .arrayBuffer()
-    .then((fontBuffer) => ok(parse(fontBuffer)))
-    .catch(() => error([createInvalidFontError(fontFile)]));
+  try {
+    const fontBuffer = await fontFile.arrayBuffer();
+    return ok(parse(fontBuffer));
+  } catch {
+    return error([createInvalidFontError(fontFile)]);
+  }
 };

@@ -76,8 +76,14 @@ describe("sigil glyph map storage", () => {
     expect(isOk(parsed)).toBe(true);
     if (isOk(parsed)) {
       // Only terrain keys are projectable.
-      expect(Object.keys(parsed.value).toSorted()).toStrictEqual(
-        ["floor", "wall", "door"].toSorted(),
+      expect(
+        Object.keys(parsed.value).toSorted((first, second) =>
+          first.localeCompare(second),
+        ),
+      ).toStrictEqual(
+        ["floor", "wall", "door"].toSorted((first, second) =>
+          first.localeCompare(second),
+        ),
       );
     }
   });

@@ -11,7 +11,8 @@ import { extractionCharacters } from "./extraction-characters.js";
 
 const NEXT_FONT_LOAD_TOKEN_OFFSET = 1;
 
-/** Starts a new font selection.
+/**
+ * Starts a new font selection.
  * @param state - Current tool state.
  * @param fontFileName - Selected file name.
  * @returns Cleared state and async load token.
@@ -36,7 +37,8 @@ export const startToolSigilFontSelection = (
   };
 };
 
-/** Applies a parsed font result.
+/**
+ * Applies a parsed font result.
  * @param state - Current tool state.
  * @param fontLoadToken - Captured load token.
  * @param fontResult - Parsed font result.
@@ -70,7 +72,8 @@ export const applyToolSigilFontLoadResult = (
   };
 };
 
-/** Applies a preview font family.
+/**
+ * Applies a preview font family.
  * @param state - Current tool state.
  * @param fontLoadToken - Captured load token.
  * @param previewFontFamily - Preview font family.
@@ -88,7 +91,8 @@ export const setToolSigilPreviewFontFamily = (
       }
     : state;
 
-/** Clears the preview font family.
+/**
+ * Clears the preview font family.
  * @param state - Current tool state.
  * @param fontLoadToken - Captured load token.
  * @returns Updated tool state.

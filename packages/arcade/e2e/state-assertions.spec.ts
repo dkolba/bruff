@@ -172,13 +172,14 @@ test("blocks grid movement at the board edge", async ({
   await gotoTestMode(page);
 
   const state = await page.evaluate(() => {
-    const frameStep = 1;
-    const origin = 0;
     const { __bruffTestApi: testApi } = globalThis;
     const initialState = testApi?.getState();
     if (testApi === undefined || initialState === undefined) {
       return null;
     }
+
+    const frameStep = 1;
+    const origin = 0;
 
     testApi.loadState({
       ...initialState,
@@ -210,7 +211,6 @@ test("blocks grid movement into an enemy-occupied cell", async ({
   await gotoTestMode(page);
 
   const state = await page.evaluate(() => {
-    const frameStep = 1;
     const { __bruffTestApi: testApi } = globalThis;
     const initialState = testApi?.getState();
     const [enemy] = initialState?.enemies ?? [];
@@ -221,6 +221,8 @@ test("blocks grid movement into an enemy-occupied cell", async ({
     ) {
       return null;
     }
+
+    const frameStep = 1;
 
     testApi.loadState({
       ...initialState,

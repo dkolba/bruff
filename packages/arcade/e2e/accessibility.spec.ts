@@ -8,7 +8,8 @@ const runAccessibilityCheck = (): void => {
   test("root route has no accessibility violations", async ({ page }) => {
     await gotoTestMode(page);
 
-    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    const axeBuilder = new AxeBuilder({ page });
+    const accessibilityScanResults = await axeBuilder.analyze();
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
@@ -16,7 +17,8 @@ const runAccessibilityCheck = (): void => {
     await page.goto("/tools");
     await expect(page.locator("tool-sigil")).toHaveCount(MOUNTED_COUNT);
 
-    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    const axeBuilder = new AxeBuilder({ page });
+    const accessibilityScanResults = await axeBuilder.analyze();
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 
@@ -26,7 +28,8 @@ const runAccessibilityCheck = (): void => {
     await page.goto("/tools-map");
     await expect(page.locator("tool-quilt")).toHaveCount(MOUNTED_COUNT);
 
-    const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    const axeBuilder = new AxeBuilder({ page });
+    const accessibilityScanResults = await axeBuilder.analyze();
     expect(accessibilityScanResults.violations).toEqual([]);
   });
 };

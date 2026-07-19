@@ -1,9 +1,11 @@
 import { defineConfig } from "vitest/config";
 
+const indexUrl = new URL("index.ts", import.meta.url);
+
 export default defineConfig({
   resolve: {
     alias: {
-      "@bruff/utils": new URL("index.ts", import.meta.url).pathname,
+      "@bruff/utils": indexUrl.pathname,
     },
   },
   test: {

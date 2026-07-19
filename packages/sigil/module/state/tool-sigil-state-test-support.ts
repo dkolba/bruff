@@ -32,7 +32,8 @@ export const asteriskMapping = {
   groupName: "ASCII",
 };
 
-/** Loads the current test font for a character set.
+/**
+ * Loads the current test font for a character set.
  * @param characters - Characters requested for extraction.
  * @returns Tool state with the current test font loaded.
  */
@@ -49,7 +50,8 @@ export const loadCurrentFontState = (characters: string): ToolSigilState => {
   );
 };
 
-/** Builds a state with an asterisk glyph selected.
+/**
+ * Builds a state with an asterisk glyph selected.
  * @returns State with ASCII asterisk mapping selected.
  */
 export const selectedAsteriskState = (): ToolSigilState =>

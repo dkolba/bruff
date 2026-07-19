@@ -117,7 +117,7 @@ test("clones loaded state and clears queued input", (): void => {
     seed: explicitSeed,
   });
 
-  driver.dispatchInput("\u001B[C");
+  driver.dispatchInput("\u{1B}[C");
   driver.loadState(loadedState);
   const driverState = driver.getState();
 
@@ -143,7 +143,7 @@ test("normalises arrow and WASD input", (): void => {
   const arrowDriver = createDriver();
   const wasdDriver = createDriver();
 
-  arrowDriver.dispatchInput("\u001B[C");
+  arrowDriver.dispatchInput("\u{1B}[C");
   wasdDriver.dispatchInput("d");
 
   assert.deepEqual(playerCell(arrowDriver.stepFrames(oneFrameCount).state), {
@@ -159,8 +159,8 @@ test("normalises arrow and WASD input", (): void => {
 test("applies queued input FIFO in one logical tick", (): void => {
   const driver = createDriver();
 
-  driver.dispatchInput("\u001B[C");
-  driver.dispatchInput("\u001B[B");
+  driver.dispatchInput("\u{1B}[C");
+  driver.dispatchInput("\u{1B}[B");
   const result = driver.stepFrames(oneFrameCount);
 
   assert.equal(result.state.frameIndex, movedFrameIndex);
@@ -178,11 +178,8 @@ test("does not advance for zero, negative, fractional, or invalid counts", (): v
     driver.stepFrames(negativeFrameCount).frames.length,
     zeroFrameCount,
   );
-  assert.equal(driver.stepFrames(Number.NaN).frames.length, zeroFrameCount);
-  assert.equal(
-    driver.stepFrames(Number.POSITIVE_INFINITY).frames.length,
-    zeroFrameCount,
-  );
+  assert.equal(driver.stepFrames(NaN).frames.length, zeroFrameCount);
+  assert.equal(driver.stepFrames(Infinity).frames.length, zeroFrameCount);
   assert.equal(
     driver.stepFrames(fractionalFrameCount).frames.length,
     oneFrameCount,
@@ -218,7 +215,7 @@ test("exposes state loading, rendering, and stepping methods", (): void => {
 test("steps movement once then renders later frames only", (): void => {
   const driver = createDriver();
 
-  driver.dispatchInput("\u001B[C");
+  driver.dispatchInput("\u{1B}[C");
   const result = driver.stepFrames(renderOnlyFrameCount);
 
   assert.equal(result.frames.length, renderOnlyFrameCount);
@@ -235,7 +232,7 @@ test("returns terminal artifacts and ANSI text", (): void => {
     writer: writerProbe.writer,
   });
 
-  driver.dispatchInput("\u001B[C");
+  driver.dispatchInput("\u{1B}[C");
   const result = driver.stepFrames(oneFrameCount);
   const [frame] = result.frames;
 
@@ -253,7 +250,7 @@ test("returns render stats and cloned final state", (): void => {
     writer: createWriterProbe().writer,
   });
 
-  driver.dispatchInput("\u001B[C");
+  driver.dispatchInput("\u{1B}[C");
   const result = driver.stepFrames(oneFrameCount);
   const [frame] = result.frames;
 

@@ -38,13 +38,13 @@ describe("quilt template — grid-size select", () => {
     if (gridSizeSelect instanceof HTMLSelectElement) {
       expect(gridSizeSelect.options.length).toBe(GRID_OPTION_COUNT);
       expect(gridSizeSelect.options[FIRST_GRID_INDEX]?.value).toBe(
-        `${FIRST_GRID_SIZE}`,
+        String(FIRST_GRID_SIZE),
       );
       expect(gridSizeSelect.options[FIRST_GRID_INDEX]?.textContent).toBe(
-        `${FIRST_GRID_SIZE}×${FIRST_GRID_SIZE}`,
+        `${String(FIRST_GRID_SIZE)}×${String(FIRST_GRID_SIZE)}`,
       );
       expect(gridSizeSelect.options[LAST_GRID_INDEX]?.value).toBe(
-        `${LAST_GRID_SIZE}`,
+        String(LAST_GRID_SIZE),
       );
       expect(gridSizeSelect.options[LAST_GRID_INDEX]?.textContent).toBe(
         `${LAST_GRID_SIZE}×${LAST_GRID_SIZE}`,

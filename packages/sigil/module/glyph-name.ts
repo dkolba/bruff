@@ -32,7 +32,9 @@ type CreateSigilGlyphInput = Readonly<{
   sourceGlyph: SigilSourceGlyph;
 }>;
 
-/** Mapping, license, and required-name selections keyed by source Unicode character. */
+/**
+ * Mapping, license, and required-name selections keyed by source Unicode character.
+ */
 export type SigilGlyphMapSelection = Readonly<{
   licensesByUnicode: Readonly<Record<string, string>>;
   mappedGlyphsByUnicode: Readonly<Record<string, SigilGlyphMapping>>;
@@ -63,7 +65,7 @@ const isControlCharacter = (character: string): boolean => {
  */
 export const isValidGlyphName = (name: string): boolean =>
   name.trim().length !== EMPTY_NAME_LENGTH &&
-  ![...name].some((character) => isControlCharacter(character));
+  [...name].every((character) => !isControlCharacter(character));
 
 const invalidGlyphNameError = (glyphName: string): SigilExtractionError => ({
   message: `Invalid glyph name "${glyphName}".`,

@@ -57,7 +57,7 @@ type StubFontFaceLoad = () => RestoreBrowserStub;
 const stubFontFaceLoad = (
   loadFontFace: (fontFace: FontFace) => Promise<FontFace>,
 ): RestoreBrowserStub => {
-  const originalFontFace = globalThis.FontFace;
+  const originalFontFace = FontFace;
 
   class StubFontFace extends originalFontFace {
     override load(): Promise<FontFace> {
@@ -193,9 +193,9 @@ export const expectPartialGlyphJsonDownload = async (
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, ".");
   await expectFloorGlyphRow(shadowRoot);
-  REQUIRED_SCHEMA_UNICODES.map((unicode) =>
-    selectDefaultMappingAndLicense(shadowRoot, unicode),
-  );
+  for (const unicode of REQUIRED_SCHEMA_UNICODES) {
+    selectDefaultMappingAndLicense(shadowRoot, unicode);
+  }
   renameGlyph(shadowRoot, ".", "customFloor");
   clickDownload(shadowRoot);
 
@@ -208,9 +208,9 @@ export const expectTypedCharacterSelectionDownload = async (
 ): Promise<void> => {
   await loadCharactersFromTestFont(shadowRoot, ".#+@e★");
   selectRequiredGlyphCharacter(shadowRoot, "floor", "★");
-  [...REQUIRED_SCHEMA_UNICODES, "★"].map((unicode) =>
-    selectDefaultMappingAndLicense(shadowRoot, unicode),
-  );
+  for (const unicode of [...REQUIRED_SCHEMA_UNICODES, "★"]) {
+    selectDefaultMappingAndLicense(shadowRoot, unicode);
+  }
   clickDownload(shadowRoot);
 
   const blobText = await requirePartialExtractionBlob(urlStubs).text();

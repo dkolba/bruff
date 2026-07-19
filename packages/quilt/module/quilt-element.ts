@@ -11,10 +11,7 @@ const DEFAULT_MAP_SIZE = 4;
 const MIN_VIEWPORT_SIZE = 1;
 
 const getViewportCanvasSize = (): number =>
-  Math.max(
-    MIN_VIEWPORT_SIZE,
-    Math.floor(Math.min(globalThis.innerWidth, globalThis.innerHeight)),
-  );
+  Math.max(MIN_VIEWPORT_SIZE, Math.floor(Math.min(innerWidth, innerHeight)));
 
 const queryElement = <T extends Element>(
   shadowRoot: ShadowRoot,
@@ -80,10 +77,11 @@ const createRuntime = (shadowRoot: ShadowRoot): QuiltRuntime | undefined =>
 
 /** Browser custom element for editing roguelike tile maps. */
 export class QuiltElement extends HTMLElement {
-  public runtime: QuiltRuntime | undefined;
   private readonly resizeCanvas = (): void => {
     this.runtime?.setCanvasSize(getViewportCanvasSize());
   };
+
+  public runtime: QuiltRuntime | undefined;
 
   public connectedCallback(): void {
     if (this.shadowRoot !== null) {
@@ -93,14 +91,15 @@ export class QuiltElement extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.append(createQuiltTemplate().content.cloneNode(true));
     this.runtime = createRuntime(shadowRoot);
-    globalThis.addEventListener("resize", this.resizeCanvas);
+    addEventListener("resize", this.resizeCanvas);
   }
 
   public disconnectedCallback(): void {
-    globalThis.removeEventListener("resize", this.resizeCanvas);
+    removeEventListener("resize", this.resizeCanvas);
     this.runtime?.disconnect();
     this.runtime = undefined;
   }
 }
 
+// eslint-disable-next-line unicorn/no-top-level-side-effects -- Entry point must register the custom element
 customElements.define(QUILT_ELEMENT_NAME, QuiltElement);

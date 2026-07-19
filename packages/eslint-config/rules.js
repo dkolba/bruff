@@ -1,6 +1,4 @@
-/**
- * ESLint rule overrides for TSLint plugin
- */
+/** ESLint rule overrides for TSLint plugin */
 export const overrideRulesTslint = {
   "@typescript-eslint/ban-ts-comment": [
     "error",
@@ -37,16 +35,12 @@ export const overrideRulesTslint = {
   "@typescript-eslint/no-unsafe-return": "error",
 };
 
-/**
- * ESLint rule overrides for TSDoc plugin
- */
+/** ESLint rule overrides for TSDoc plugin */
 export const overrideRulesTsdoc = {
   "tsdoc/syntax": "warn",
 };
 
-/**
- * ESLint rule overrides for the unicorn plugin
- */
+/** ESLint rule overrides for the unicorn plugin */
 export const overrideRulesUnicorn = {
   "unicorn/better-regex": "warn",
   "unicorn/no-array-reduce": "off",
@@ -56,11 +50,14 @@ export const overrideRulesUnicorn = {
     "error",
     { minimumComparisons: 5 },
   ],
+  "unicorn/prefer-dom-node-html-methods": "off", // Set to "true" when baseline: https://developer.mozilla.org/en-US/docs/Web/API/Element/setHTML
+  "unicorn/no-unsafe-dom-html": "off", // Set to "true" when baseline: https://developer.mozilla.org/en-US/docs/Web/API/Element/setHTML
+  "unicorn/prefer-minimal-ternary": "off",
+  "unicorn/prefer-scoped-selector": "off",
+  "unicorn/no-asterisk-prefix-in-documentation-comments": "off",
 };
 
-/**
- * ESLint rule overrides for ESLint
- */
+/** ESLint rule overrides for ESLint */
 export const overrideRulesEslint = {
   "capitalized-comments": [
     "error",
@@ -83,9 +80,7 @@ export const overrideRulesEslint = {
   "sort-imports": "off", // Will be sorted via simple-import-sort
 };
 
-/**
- * ESLint rule overrides for the "WC" Web Components plubin
- */
+/** ESLint rule overrides for the "WC" Web Components plugin */
 export const overrideRulesWebComponents = {
   // Web Components
   "wc/define-tag-after-class-definition": "error",

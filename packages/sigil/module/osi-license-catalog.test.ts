@@ -20,8 +20,9 @@ describe("OSI_LICENSE_OPTIONS", () => {
     const values = OSI_LICENSE_OPTIONS.map(
       (licenseOption) => licenseOption.value,
     );
+    const uniqueValues = new Set(values);
 
-    expect(new Set(values).size).toBe(values.length);
+    expect(uniqueValues.size).toBe(values.length);
   });
 
   it("contains representative SPDX identifiers", () => {

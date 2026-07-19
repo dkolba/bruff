@@ -33,41 +33,38 @@ export const createToolSigilPreviewResource = (
 ): ToolSigilPreviewResource => {
   let previewFontState: PreviewFontState = createPreviewFontState();
   let currentFontLoadToken = 0;
-
   const clear = (): void => {
     currentFontLoadToken += NEXT_FONT_LOAD_TOKEN_OFFSET;
     previewFontState = clearPreviewFontFace(previewFontState);
   };
-
   const load = (fontFile: File, fontLoadToken: number): string => {
     currentFontLoadToken = fontLoadToken;
     const { fontFamily, fontState } =
       allocatePreviewFontFamily(previewFontState);
     previewFontState = fontState;
-    loadPreviewFontFace(fontFile, fontFamily)
-      .then((previewFontFace) => {
+    // eslint-disable-next-line no-void -- Fire-and-forget in synchronous context; errors are handled inside the async IIFE.
+    void (async (): Promise<void> => {
+      try {
+        // eslint-disable-next-line unicorn/no-declarations-before-early-exit -- The early exit check depends on the async operation completing
+        const previewFontFace = await loadPreviewFontFace(fontFile, fontFamily);
         if (fontLoadToken !== currentFontLoadToken) {
           return;
         }
-
         previewFontState = installPreviewFontFace(
           previewFontState,
           previewFontFace,
         );
         handlers.onPreviewFontLoaded(fontLoadToken, fontFamily);
-      })
-      .catch(() => {
+      } catch {
         if (fontLoadToken !== currentFontLoadToken) {
           return;
         }
-
         clear();
         handlers.onPreviewFontCleared(fontLoadToken);
-      });
-
+      }
+    })();
     return fontFamily;
   };
-
   return {
     clear,
     disconnect: clear,

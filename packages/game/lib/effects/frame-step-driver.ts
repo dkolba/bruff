@@ -22,9 +22,7 @@ const ONE_THOUSAND_MS = 1000;
 const FRAMES_PER_SECOND = 60;
 const FRAME_DURATION_MS = ONE_THOUSAND_MS / FRAMES_PER_SECOND;
 
-/**
- * Stable control surface shared by production RAF and test stepping.
- */
+/** Stable control surface shared by production RAF and test stepping. */
 export type FrameStepDriver = Readonly<{
   dispatchInput: (input: InputAction) => void;
   freezeForSnapshot: () => Promise<void>;
@@ -35,9 +33,7 @@ export type FrameStepDriver = Readonly<{
   stepFrames: (frameCount: number) => GameState;
 }>;
 
-/**
- * Dependencies needed to construct a {@link FrameStepDriver}.
- */
+/** Dependencies needed to construct a {@link FrameStepDriver}. */
 export type FrameStepDriverDependencies = Readonly<{
   clock: Clock;
   context: CanvasRenderingContext2D;

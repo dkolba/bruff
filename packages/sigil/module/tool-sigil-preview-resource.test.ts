@@ -23,7 +23,7 @@ type PreviewResourceDisconnectTest = Readonly<{
 }>;
 
 const createDeferredFontFaceLoad = (): DeferredFontFaceLoad => {
-  const originalFontFace = globalThis.FontFace;
+  const originalFontFace = FontFace;
   let resolveFontFaceLoad: (() => void) | null = null;
 
   class StubFontFace extends originalFontFace {

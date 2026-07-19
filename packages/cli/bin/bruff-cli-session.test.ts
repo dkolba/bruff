@@ -5,13 +5,13 @@ import type { TextWriter } from "../module/write-frame.ts";
 import { runBruffCli } from "./bruff-cli.ts";
 import { createFakeInput } from "./bruff-cli-test-helpers.ts";
 
-const initialPlayerCursor = "\u001B[4;4H";
-const movedPlayerCursor = "\u001B[4;5H";
-const ansiClearPrefix = "\u001B[2J";
-const ansiForegroundPrefix = "\u001B[38;2;";
-const ansiBackgroundPrefix = "\u001B[48;2;";
-const ansiResetSuffix = "\u001B[0m";
-const controlCShortcut = "\u0003";
+const initialPlayerCursor = "\u{1B}[4;4H";
+const movedPlayerCursor = "\u{1B}[4;5H";
+const ansiClearPrefix = "\u{1B}[2J";
+const ansiForegroundPrefix = "\u{1B}[38;2;";
+const ansiBackgroundPrefix = "\u{1B}[48;2;";
+const ansiResetSuffix = "\u{1B}[0m";
+const controlCShortcut = "\u{3}";
 const initialFrameWriteIndex = 0;
 const movedFrameWriteIndex = 1;
 const expectedMovementWriteCount = 2;
@@ -78,7 +78,7 @@ test("normalises terminal arrow input and writes the next game frame", (): void 
   };
 
   assert.deepEqual(runBruffCli({ input, writer }), { type: "ok" });
-  input.emit("\u001B[C");
+  input.emit("\u{1B}[C");
 
   assert.equal(writtenTexts.length, expectedMovementWriteCount);
   assert.equal(

@@ -51,7 +51,7 @@ const VALID_SIGIL_GLYPH_MAP = {
 
 const INVALID_SIGIL_GLYPH_MAP = {
   ...VALID_SIGIL_GLYPH_MAP,
-  floor: createGlyphEntry(".", Number.POSITIVE_INFINITY),
+  floor: createGlyphEntry(".", Infinity),
 };
 
 const MISSING_REQUIRED_SIGIL_GLYPH_MAP = {

@@ -5,10 +5,11 @@ import type { InputAction } from "../../core/actions.ts";
 import { FIVE, ONE } from "../../core/constants.js";
 import { normaliseKey } from "../../input/normalise-input.js";
 
-/** !TODO:
-This file is currently not included in coverage, because Playwright does not 
-provide a clean touch interface
-*/
+/**
+ * !TODO:
+ * This file is currently not included in coverage, because Playwright does not
+ * provide a clean touch interface
+ */
 
 /**
  * Checks if an event is a touch event.

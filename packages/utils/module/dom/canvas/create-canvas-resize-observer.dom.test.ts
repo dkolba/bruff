@@ -35,11 +35,16 @@ test("#createCanvasResizeObserver updates canvas dimensions", () => {
 
   // Mock ResizeObserver
   const mockResizeObserver = vi.fn();
-  Object.defineProperty(canvas, "clientWidth", { value: NEW_WIDTH });
-  Object.defineProperty(canvas, "clientHeight", { value: NEW_HEIGHT });
+  Object.defineProperties(canvas, {
+    clientHeight: { value: NEW_HEIGHT },
+    clientWidth: { value: NEW_WIDTH },
+  });
   vi.stubGlobal(
     "ResizeObserver",
     class {
+      observe = mockResizeObserver;
+      unobserve = vi.fn();
+      disconnect = vi.fn();
       constructor(callback: ResizeObserverCallback) {
         mockResizeObserver.mockImplementation(() => {
           callback(
@@ -66,9 +71,6 @@ test("#createCanvasResizeObserver updates canvas dimensions", () => {
           );
         });
       }
-      observe = mockResizeObserver;
-      unobserve = vi.fn();
-      disconnect = vi.fn();
     },
   );
 

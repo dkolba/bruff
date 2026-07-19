@@ -10,8 +10,10 @@ const MIN_SEED = 1;
 const MAX_SEED = 10_000;
 const FIRST_FRAME = 1;
 
-const countInputFrames = (fixture: ReplayFixture): number =>
-  new Set(fixture.frames.map((frame) => frame.frame)).size;
+const countInputFrames = (fixture: ReplayFixture): number => {
+  const frameSet = new Set(fixture.frames.map((frame) => frame.frame));
+  return frameSet.size;
+};
 
 const replayInputArb = fc.constantFrom(
   "move-down",

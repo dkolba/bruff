@@ -17,39 +17,12 @@ const createStencil = (templateMarkup: string): DocumentFragment => {
   return stencil;
 };
 
-/**
- * A class to represent a game web component
- */
+/** A class to represent a game web component */
 // eslint-disable-next-line wc/define-tag-after-class-definition
 export class GameElement extends HTMLElement {
   #testApi: GameElementTestApi | undefined;
 
   #unsubscribe: (() => void) | undefined;
-
-  get testApi(): GameElementTestApi | undefined {
-    return this.#testApi;
-  }
-
-  setTestApi(testApi: GameElementTestApi | undefined): void {
-    this.#testApi = testApi;
-  }
-
-  connectedCallback(): void {
-    if (!this.shadowRoot) {
-      this.attachShadow({ mode: "open" }).append(
-        createStencil(GameElement.template()),
-      );
-    }
-
-    if (this.#unsubscribe === undefined) {
-      this.#unsubscribe = onLog(consoleLogHandler);
-    }
-  }
-
-  disconnectedCallback(): void {
-    this.#unsubscribe?.();
-    this.#unsubscribe = undefined;
-  }
 
   static template(): string {
     const width = window.innerWidth;
@@ -87,6 +60,31 @@ export class GameElement extends HTMLElement {
           <div id="bruff-hud" aria-label="bruff status">bruff</div>
           <canvas id="gamecanvas" width="${width}" height="${height}"></canvas>
         </template>`;
+  }
+
+  get testApi(): GameElementTestApi | undefined {
+    return this.#testApi;
+  }
+
+  setTestApi(testApi: GameElementTestApi | undefined): void {
+    this.#testApi = testApi;
+  }
+
+  connectedCallback(): void {
+    if (!this.shadowRoot) {
+      this.attachShadow({ mode: "open" }).append(
+        createStencil(GameElement.template()),
+      );
+    }
+
+    if (this.#unsubscribe === undefined) {
+      this.#unsubscribe = onLog(consoleLogHandler);
+    }
+  }
+
+  disconnectedCallback(): void {
+    this.#unsubscribe?.();
+    this.#unsubscribe = undefined;
   }
 }
 

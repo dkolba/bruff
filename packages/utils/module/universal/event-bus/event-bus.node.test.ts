@@ -7,7 +7,7 @@ const FIRST_CALL_INDEX = 0;
 const CONTEXT_ID = 1;
 
 const getFirstInvocationCallOrder = (spy: ReturnType<typeof vi.fn>): number =>
-  spy.mock.invocationCallOrder[FIRST_CALL_INDEX] ?? Number.NaN;
+  spy.mock.invocationCallOrder[FIRST_CALL_INDEX] ?? NaN;
 
 afterEach(() => {
   vi.restoreAllMocks();

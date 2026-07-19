@@ -20,10 +20,9 @@ const mergeObservables = <T>(
     );
     /* eslint-enable @typescript-eslint/consistent-type-assertions */
     return () => {
-      // eslint-disable-next-line unicorn/no-array-for-each -- Declarative iteration is preferred per C-17; T47 explicitly mandates `.forEach`.
-      subs.forEach((sub) => {
+      for (const sub of subs) {
         sub.unsubscribe();
-      });
+      }
     };
   });
 

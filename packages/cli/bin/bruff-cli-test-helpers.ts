@@ -5,9 +5,7 @@ import type {
   TextInputChunk,
 } from "./bruff-cli.ts";
 
-/**
- * Fake stdin-like input used by CLI tests.
- */
+/** Fake stdin-like input used by CLI tests. */
 export type FakeInput = TextInput &
   Readonly<{
     emit: (chunk: TextInputChunk) => void;
@@ -16,25 +14,19 @@ export type FakeInput = TextInput &
     rawModes: () => ReadonlyArray<boolean>;
   }>;
 
-/**
- * Fake process input used by process-port tests.
- */
+/** Fake process input used by process-port tests. */
 export type FakeProcessInput = ProcessTextInput &
   Readonly<{
     eventLog: () => ReadonlyArray<string>;
     rawModes: () => ReadonlyArray<boolean>;
   }>;
 
-/**
- * Data listener placeholder for fake inputs.
- */
+/** Data listener placeholder for fake inputs. */
 export const ignoreInput = (chunk: TextInputChunk): void => {
   chunk.toString();
 };
 
-/**
- * Create a fake CLI text input port.
- */
+/** Create a fake CLI text input port. */
 export const createFakeInput = (
   isTTY: boolean,
   supportsRawMode = true,
@@ -84,9 +76,7 @@ export const createFakeInput = (
   return input;
 };
 
-/**
- * Create a fake process input port.
- */
+/** Create a fake process input port. */
 export const createFakeProcessInput = (
   isTTY: boolean | undefined,
   supportsRawMode = true,
