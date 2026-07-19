@@ -37,12 +37,12 @@ const createRequiredGlyphLabel = (
 };
 
 /**
-Renders required contract glyph source-character selects.
-
-@param shadowRoot - Component shadow root
-@param selections - Required glyph selection view models
-@returns Nothing
-*/
+ * Renders required contract glyph source-character selects.
+ *
+ * @param shadowRoot - Component shadow root
+ * @param selections - Required glyph selection view models
+ * @returns Nothing
+ */
 export const renderRequiredGlyphSelections = (
   shadowRoot: ShadowRoot,
   selections: ReadonlyArray<RequiredGlyphSelectionView>,

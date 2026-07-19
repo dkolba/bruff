@@ -5,10 +5,11 @@ import {
   type SigilSchemaOption,
 } from "../sigil-schema-catalog.js";
 
-/** Finds a schema option by identifier.
-@param schemaId - Schema identifier.
-@returns Matching schema option when available.
-*/
+/**
+ * Finds a schema option by identifier.
+ * @param schemaId - Schema identifier.
+ * @returns Matching schema option when available.
+ */
 export const schemaOptionById = (
   schemaId: SigilSchemaId,
 ): SigilSchemaOption | undefined => {

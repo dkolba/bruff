@@ -12,9 +12,10 @@ import { schemaOptionById } from "./schema-option.js";
 
 const INITIAL_FONT_LOAD_TOKEN = 0;
 
-/** Creates the initial empty state for the sigil tool.
-@returns Initial tool state.
-*/
+/**
+ * Creates the initial empty state for the sigil tool.
+ * @returns Initial tool state.
+ */
 export const createToolSigilState = (): ToolSigilState => {
   const schemaOption = schemaOptionById(DEFAULT_SIGIL_SCHEMA_ID);
 

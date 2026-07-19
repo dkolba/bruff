@@ -17,11 +17,11 @@ const isTestApiHostElement = (
 const cloneGameState = (state: GameState): GameState => structuredClone(state);
 
 /**
-Attaches the browser test API to both window and the game element.
-
-@param driver - The active frame-step driver
-@returns A teardown function that removes the API again
-*/
+ * Attaches the browser test API to both window and the game element.
+ *
+ * @param driver - The active frame-step driver
+ * @returns A teardown function that removes the API again
+ */
 export const attachTestApi = (driver: FrameStepDriver): (() => void) => {
   const dispatchInput = (input: string): void => {
     const normalisedInput = normaliseKey(input);

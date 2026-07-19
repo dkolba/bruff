@@ -1,13 +1,19 @@
 import "@bruff/sigil";
 import { registerQuiltElement } from "@bruff/quilt";
 
-/** TODO: Also use a register function for the sigil custom element */
+/**
+ * TODO: Also use a register function for the sigil custom element
+ */
 registerQuiltElement();
 
-/** Arcade route variants supported by the dev tools router. */
+/**
+ * Arcade route variants supported by the dev tools router.
+ */
 export type ArcadeRoute = "game" | "tools" | "quilt";
 
-/** Custom element names mounted by the arcade app shell. */
+/**
+ * Custom element names mounted by the arcade app shell.
+ */
 type ArcadeElementName = "bruff-game" | "tool-sigil" | "tool-quilt";
 
 const GAME_ROUTE: ArcadeRoute = "game";

@@ -32,7 +32,9 @@ type CreateSigilGlyphInput = Readonly<{
   sourceGlyph: SigilSourceGlyph;
 }>;
 
-/** Mapping, license, and required-name selections keyed by source Unicode character. */
+/**
+ * Mapping, license, and required-name selections keyed by source Unicode character.
+ */
 export type SigilGlyphMapSelection = Readonly<{
   licensesByUnicode: Readonly<Record<string, string>>;
   mappedGlyphsByUnicode: Readonly<Record<string, SigilGlyphMapping>>;
@@ -56,11 +58,11 @@ const isControlCharacter = (character: string): boolean => {
 };
 
 /**
-Checks whether a glyph name is valid for use as a JSON key.
-
-@param name - User-editable glyph name
-@returns `true` when `name` is non-empty and has no control characters
-*/
+ * Checks whether a glyph name is valid for use as a JSON key.
+ *
+ * @param name - User-editable glyph name
+ * @returns `true` when `name` is non-empty and has no control characters
+ */
 export const isValidGlyphName = (name: string): boolean =>
   name.trim().length !== EMPTY_NAME_LENGTH &&
   [...name].every((character) => !isControlCharacter(character));
@@ -130,13 +132,13 @@ const completeRequiredGlyphs = (
 };
 
 /**
-Combines source glyph data with the selected shared glyph mapping.
-
-@param sourceGlyph - Extracted source-font glyph data
-@param mappedGlyph - Selected `@bruff/glyph` mapping
-@param license - Selected machine-readable license value
-@returns Downloadable sigil glyph payload
-*/
+ * Combines source glyph data with the selected shared glyph mapping.
+ *
+ * @param sourceGlyph - Extracted source-font glyph data
+ * @param mappedGlyph - Selected `@bruff/glyph` mapping
+ * @param license - Selected machine-readable license value
+ * @returns Downloadable sigil glyph payload
+ */
 export const createSigilGlyph = ({
   license,
   mappedGlyph,
@@ -183,13 +185,13 @@ const applyGlyphDraft =
   };
 
 /**
-Creates the final glyph map from extracted drafts and edited names.
-
-@param drafts - Extracted glyph drafts
-@param namesByUnicode - Edited names keyed by source Unicode character
-@param selection - Selected mapped glyphs and licenses keyed by source Unicode
-@returns Glyph map result or validation errors
-*/
+ * Creates the final glyph map from extracted drafts and edited names.
+ *
+ * @param drafts - Extracted glyph drafts
+ * @param namesByUnicode - Edited names keyed by source Unicode character
+ * @param selection - Selected mapped glyphs and licenses keyed by source Unicode
+ * @returns Glyph map result or validation errors
+ */
 export const createSigilGlyphMap = (
   drafts: ReadonlyArray<SigilGlyphDraft>,
   namesByUnicode: Readonly<Record<string, string>>,

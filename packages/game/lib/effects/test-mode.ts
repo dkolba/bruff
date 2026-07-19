@@ -1,6 +1,6 @@
 /**
-Browser globals needed to decide whether test mode is active.
-*/
+ * Browser globals needed to decide whether test mode is active.
+ */
 export type TestModeEnvironment = Readonly<{
   document?: Document;
   isBuildEnabled: boolean;
@@ -17,11 +17,11 @@ const hasTestModeQueryParameter = (testWindow?: Window): boolean => {
 };
 
 /**
-Decides whether the current environment has enabled browser test mode.
-
-@param environment - Browser globals and build-time test-mode flag
-@returns Whether browser test mode is active
-*/
+ * Decides whether the current environment has enabled browser test mode.
+ *
+ * @param environment - Browser globals and build-time test-mode flag
+ * @returns Whether browser test mode is active
+ */
 export const isTestModeForEnvironment = ({
   document: testDocument,
   isBuildEnabled,

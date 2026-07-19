@@ -16,21 +16,27 @@ const selectSchemaMappingAndLicense = (shadowRoot: ShadowRoot): void => {
   }
 };
 
-/** Browser URL API stubs captured for download tests. */
+/**
+ * Browser URL API stubs captured for download tests.
+ */
 export type ObjectUrlStubState = Readonly<{
   createdBlobs: ReadonlyArray<Blob>;
   restore: () => void;
   revokedUrls: ReadonlyArray<string>;
 }>;
 
-/** Captured anchor-click state for download tests. */
+/**
+ * Captured anchor-click state for download tests.
+ */
 export type DownloadClickState = Readonly<{
   downloads: ReadonlyArray<string>;
   hrefs: ReadonlyArray<string>;
   restore: () => void;
 }>;
 
-/** Stubs object URL creation and revocation. */
+/**
+ * Stubs object URL creation and revocation.
+ */
 export const stubObjectUrls = (): ObjectUrlStubState => {
   const createdBlobs: Array<Blob> = [];
   const revokedUrls: Array<string> = [];
@@ -71,7 +77,9 @@ export const stubObjectUrls = (): ObjectUrlStubState => {
   };
 };
 
-/** Captures clicked anchor download metadata. */
+/**
+ * Captures clicked anchor download metadata.
+ */
 export const trackDownloadClicks = (): DownloadClickState => {
   const downloads: Array<string> = [];
   const hrefs: Array<string> = [];
@@ -106,7 +114,9 @@ const requireFirstBlob = (blobs: ReadonlyArray<Blob>): Blob => {
   return blob;
 };
 
-/** Expects a download Blob to contain the contract glyph name. */
+/**
+ * Expects a download Blob to contain the contract glyph name.
+ */
 export const expectEditedGlyphJsonDownload = async (
   shadowRoot: ShadowRoot,
   urlStubs: ObjectUrlStubState,
@@ -124,7 +134,9 @@ export const expectEditedGlyphJsonDownload = async (
   expect(blobText).not.toContain('"customFloor":');
 };
 
-/** Expects a download click to use the fixed sigil filename. */
+/**
+ * Expects a download click to use the fixed sigil filename.
+ */
 export const expectDeterministicFilenameDownload = async (
   shadowRoot: ShadowRoot,
   clickState: DownloadClickState,
@@ -137,7 +149,9 @@ export const expectDeterministicFilenameDownload = async (
   expect(clickState.hrefs).toEqual(["blob:sigil-json"]);
 };
 
-/** Expects a download to revoke its temporary object URL. */
+/**
+ * Expects a download to revoke its temporary object URL.
+ */
 export const expectRevokedObjectUrlDownload = async (
   shadowRoot: ShadowRoot,
   urlStubs: ObjectUrlStubState,
@@ -149,7 +163,9 @@ export const expectRevokedObjectUrlDownload = async (
   expect(urlStubs.revokedUrls).toEqual(["blob:sigil-json"]);
 };
 
-/** Expects invalid glyph names to block JSON Blob creation. */
+/**
+ * Expects invalid glyph names to block JSON Blob creation.
+ */
 export const expectInvalidGlyphDownloadBlocked = async (
   shadowRoot: ShadowRoot,
   urlStubs: ObjectUrlStubState,
@@ -160,7 +176,9 @@ export const expectInvalidGlyphDownloadBlocked = async (
   expect(urlStubs.createdBlobs).toEqual([]);
 };
 
-/** Removes the component and restores download-related browser stubs. */
+/**
+ * Removes the component and restores download-related browser stubs.
+ */
 export const restoreDownloadTest = (
   element: Element,
   urlStubs: ObjectUrlStubState,

@@ -19,11 +19,11 @@ const isWoff2File = (fontFile: File): boolean =>
   fontFile.name.toLowerCase().endsWith(WOFF2_EXTENSION);
 
 /**
-Loads a user-supplied font file into an OpenType font.
-
-@param fontFile - Browser file selected by the user
-@returns Parsed font or a typed loading error
-*/
+ * Loads a user-supplied font file into an OpenType font.
+ *
+ * @param fontFile - Browser file selected by the user
+ * @returns Parsed font or a typed loading error
+ */
 export const loadSigilFontFile = async (
   fontFile: File,
 ): Promise<Result<Font, ReadonlyArray<SigilExtractionError>>> => {

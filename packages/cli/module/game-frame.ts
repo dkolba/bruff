@@ -34,8 +34,8 @@ const terminalCellForGameCell = (cell: HeadlessFrameCell): TerminalCell => ({
 });
 
 /**
-Convert DOM-free game frame cells into positioned terminal cells.
-*/
+ * Convert DOM-free game frame cells into positioned terminal cells.
+ */
 export const gameFrameToTerminalFrame = (
   frame: HeadlessFrame,
 ): TerminalFrame => ({

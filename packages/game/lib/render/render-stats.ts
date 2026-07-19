@@ -1,8 +1,8 @@
 import type { GameState } from "../core/types.ts";
 
 /**
-Counts captured from the most recent render.
-*/
+ * Counts captured from the most recent render.
+ */
 export type RenderStats = Readonly<{
   enemiesDrawn: number;
   frameIndex: number;
@@ -10,8 +10,8 @@ export type RenderStats = Readonly<{
 }>;
 
 /**
-Empty stats used before the first frame is drawn.
-*/
+ * Empty stats used before the first frame is drawn.
+ */
 export const initialRenderStats = (): RenderStats => ({
   enemiesDrawn: 0,
   frameIndex: 0,
@@ -19,10 +19,10 @@ export const initialRenderStats = (): RenderStats => ({
 });
 
 /**
-Derives render stats from the state snapshot used for a frame.
-
-@param state - The rendered state snapshot
-*/
+ * Derives render stats from the state snapshot used for a frame.
+ *
+ * @param state - The rendered state snapshot
+ */
 export const renderStatsForState = (state: GameState): RenderStats => ({
   enemiesDrawn: state.enemies.length,
   frameIndex: state.frameIndex,

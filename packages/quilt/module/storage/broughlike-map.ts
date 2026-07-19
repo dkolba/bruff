@@ -21,7 +21,9 @@ const BROUGHLIKE_MAP_VERSION = 1;
 const FIRST_ROW_INDEX = 0;
 const FIRST_COLUMN_INDEX = 0;
 
-/** Quilt parse error for shared broughlike map data. */
+/**
+ * Quilt parse error for shared broughlike map data.
+ */
 export type ParseBroughlikeMapDataError = Readonly<{
   reason: "INVALID_BROUGHLIKE_MAP_DATA";
   source: ParseBroughlikeMapError;
@@ -67,7 +69,9 @@ const broughlikeMapToTileMapData = (
     }),
   );
 
-/** Serializes Quilt terrain data to the shared broughlike map JSON contract. */
+/**
+ * Serializes Quilt terrain data to the shared broughlike map JSON contract.
+ */
 export const serializeBroughlikeMapData = (
   tileMapData: TileMapData,
 ): BroughlikeMap => ({
@@ -81,7 +85,9 @@ export const serializeBroughlikeMapData = (
   width: tileMapData.width,
 });
 
-/** Parses shared broughlike map JSON into Quilt tile map data. */
+/**
+ * Parses shared broughlike map JSON into Quilt tile map data.
+ */
 export const parseBroughlikeMapData = (
   input: unknown,
 ): Result<TileMapData, ParseBroughlikeMapDataError> => {

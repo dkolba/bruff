@@ -37,8 +37,8 @@ import {
 import { TOOL_SIGIL_TEMPLATE } from "./tool-sigil-template.js";
 
 /**
-Development-only web component for extracting glyph JSON from uploaded fonts.
-*/
+ * Development-only web component for extracting glyph JSON from uploaded fonts.
+ */
 // eslint-disable-next-line wc/define-tag-after-class-definition
 export class ToolSigil extends HTMLElement {
   #disconnectControls: DisconnectToolSigilControls | undefined;

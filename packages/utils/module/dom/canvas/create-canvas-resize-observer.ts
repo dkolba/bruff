@@ -1,10 +1,10 @@
 /**
-Creates a resize observer for a canvas element that keeps the canvas dimensions in sync with its client dimensions
-
-@param canvas - The canvas element to observe
-@param context - The 2D rendering context of the canvas
-@returns The resize observer instance
-*/
+ * Creates a resize observer for a canvas element that keeps the canvas dimensions in sync with its client dimensions
+ *
+ * @param canvas - The canvas element to observe
+ * @param context - The 2D rendering context of the canvas
+ * @returns The resize observer instance
+ */
 export const createCanvasResizeObserver = (
   canvas: Readonly<HTMLCanvasElement>,
   context: Readonly<CanvasRenderingContext2D>,

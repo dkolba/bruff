@@ -13,19 +13,20 @@ const TERRAIN_KEYS: ReadonlyArray<BroughlikeTerrain> = [
   "door",
 ];
 
-/** Structured parse failure for {@link parseQuiltTerrainGlyphs}. */
+/**
+ * Structured parse failure for {@link parseQuiltTerrainGlyphs}.
+ */
 export type ParseQuiltTerrainGlyphsError = Readonly<{
   reason: "INVALID_QUILT_TERRAIN_GLYPHS";
   source: ParseSigilGlyphMapError;
 }>;
 
-// eslint-disable-next-line unicorn/no-asterisk-prefix-in-documentation-comments -- JSDoc-style comment without asterisk prefixes is intentional
 /**
-Parses an unknown input into Quilt terrain glyph rendering data,
-extracting only floor, wall, and door entries from a Sigil glyph map.
-
-@param input - Unknown candidate value
-@returns A typed result containing terrain glyphs or parse failure
+ * Parses an unknown input into Quilt terrain glyph rendering data,
+ * extracting only floor, wall, and door entries from a Sigil glyph map.
+ *
+ * @param input - Unknown candidate value
+ * @returns A typed result containing terrain glyphs or parse failure
  */
 export const parseQuiltTerrainGlyphs = (
   input: unknown,

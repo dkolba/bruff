@@ -9,11 +9,11 @@ const issuePath = (path: ReadonlyArray<PropertyKey>): string =>
   path.length === EMPTY_PATH_LENGTH ? ROOT_PATH : path.map(String).join(".");
 
 /**
-Validates candidate SigilGlyphMap JSON with the shared contract.
-
-@param candidateGlyphMap - Produced JSON candidate
-@returns Path-aware shared contract issues
-*/
+ * Validates candidate SigilGlyphMap JSON with the shared contract.
+ *
+ * @param candidateGlyphMap - Produced JSON candidate
+ * @returns Path-aware shared contract issues
+ */
 export const validateToolSigilGlyphMap = (
   candidateGlyphMap: unknown,
 ): ReadonlyArray<ToolSigilContractIssue> => {
@@ -28,11 +28,11 @@ export const validateToolSigilGlyphMap = (
 };
 
 /**
-Checks whether shared contract validation returned any issue.
-
-@param issues - Path-aware shared contract issues
-@returns True when at least one issue exists
-*/
+ * Checks whether shared contract validation returned any issue.
+ *
+ * @param issues - Path-aware shared contract issues
+ * @returns True when at least one issue exists
+ */
 export const hasToolSigilContractIssues = (
   issues: ReadonlyArray<ToolSigilContractIssue>,
 ): boolean => issues.length > EMPTY_PATH_LENGTH;

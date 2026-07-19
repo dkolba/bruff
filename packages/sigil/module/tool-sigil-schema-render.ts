@@ -1,11 +1,11 @@
 import type { ToolSigilViewModel } from "./state/tool-sigil-state.js";
 
 /**
-Renders the schema selector options and selected value.
-
-@param shadowRoot - Component shadow root to update
-@param viewModel - Render-ready sigil tool state
-*/
+ * Renders the schema selector options and selected value.
+ *
+ * @param shadowRoot - Component shadow root to update
+ * @param viewModel - Render-ready sigil tool state
+ */
 export const renderToolSigilSchemaSelect = (
   shadowRoot: ShadowRoot,
   viewModel: ToolSigilViewModel,

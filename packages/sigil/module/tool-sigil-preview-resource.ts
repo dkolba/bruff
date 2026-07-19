@@ -9,13 +9,17 @@ import {
 
 const NEXT_FONT_LOAD_TOKEN_OFFSET = 1;
 
-/** Callbacks emitted by the preview font resource owner. */
+/**
+ * Callbacks emitted by the preview font resource owner.
+ */
 export type ToolSigilPreviewResourceHandlers = Readonly<{
   onPreviewFontCleared: (fontLoadToken: number) => void;
   onPreviewFontLoaded: (fontLoadToken: number, fontFamily: string) => void;
 }>;
 
-/** Browser preview font resource owned outside the custom element class. */
+/**
+ * Browser preview font resource owned outside the custom element class.
+ */
 export type ToolSigilPreviewResource = Readonly<{
   clear: () => void;
   disconnect: () => void;
@@ -23,11 +27,11 @@ export type ToolSigilPreviewResource = Readonly<{
 }>;
 
 /**
-Creates the preview font resource manager used by `<tool-sigil>`.
-
-@param handlers - Coordinator callbacks for current preview load results
-@returns A resource object for loading and clearing browser font faces
-*/
+ * Creates the preview font resource manager used by `<tool-sigil>`.
+ *
+ * @param handlers - Coordinator callbacks for current preview load results
+ * @returns A resource object for loading and clearing browser font faces
+ */
 export const createToolSigilPreviewResource = (
   handlers: ToolSigilPreviewResourceHandlers,
 ): ToolSigilPreviewResource => {

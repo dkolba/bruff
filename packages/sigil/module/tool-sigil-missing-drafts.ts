@@ -24,13 +24,13 @@ const missingGlyphDraft = (font: Font, unicode: string): SigilGlyphDraft => ({
 });
 
 /**
-Creates renderable drafts for every requested character.
-
-@param font - Parsed font used to supply units-per-em for missing rows
-@param characters - Requested schema characters in display order
-@param drafts - Successfully extracted drafts
-@returns Drafts completed with placeholder rows for missing glyphs
-*/
+ * Creates renderable drafts for every requested character.
+ *
+ * @param font - Parsed font used to supply units-per-em for missing rows
+ * @param characters - Requested schema characters in display order
+ * @param drafts - Successfully extracted drafts
+ * @returns Drafts completed with placeholder rows for missing glyphs
+ */
 export const completeMissingDrafts = (
   font: Font,
   characters: string,

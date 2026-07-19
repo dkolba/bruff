@@ -3,7 +3,9 @@ import type { SigilExtractionError } from "./glyph-json.js";
 
 const EMPTY_COUNT = 0;
 
-/** Creates visible alert elements for extraction and naming errors. */
+/**
+ * Creates visible alert elements for extraction and naming errors.
+ */
 export const createErrorElements = (
   errors: ReadonlyArray<SigilExtractionError>,
 ): ReadonlyArray<HTMLElement> => {

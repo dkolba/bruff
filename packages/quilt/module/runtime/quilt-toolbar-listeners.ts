@@ -186,7 +186,9 @@ const attachImportFileListener = (
   };
 };
 
-/** Attaches toolbar DOM event listeners and returns detach callbacks. */
+/**
+ * Attaches toolbar DOM event listeners and returns detach callbacks.
+ */
 export const attachCanvasToolListeners = (
   elements: CanvasToolbarElements,
   controller: ToolbarController,

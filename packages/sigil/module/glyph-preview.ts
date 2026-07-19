@@ -1,7 +1,9 @@
 import { appendText } from "./dom-text.js";
 import type { SigilGlyphDraft } from "./glyph-json.js";
 
-/** Creates a rendered glyph preview using the uploaded font family. */
+/**
+ * Creates a rendered glyph preview using the uploaded font family.
+ */
 export const createGlyphPreview = (
   draft: SigilGlyphDraft,
   previewFontFamily: string,

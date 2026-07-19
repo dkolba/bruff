@@ -4,7 +4,9 @@ import { ToolSigil } from "./tool-sigil.js";
 
 const COMPONENT_UPDATE_DELAY_MS = 20;
 
-/** Appends a fresh sigil tool element. */
+/**
+ * Appends a fresh sigil tool element.
+ */
 export const appendToolSigil = (): ToolSigil => {
   const element = new ToolSigil();
 
@@ -13,7 +15,9 @@ export const appendToolSigil = (): ToolSigil => {
   return element;
 };
 
-/** Returns an attached shadow root or fails the test. */
+/**
+ * Returns an attached shadow root or fails the test.
+ */
 export const requireShadowRoot = (element: ToolSigil): ShadowRoot => {
   const { shadowRoot } = element;
   if (shadowRoot === null) {
@@ -23,7 +27,9 @@ export const requireShadowRoot = (element: ToolSigil): ShadowRoot => {
   return shadowRoot;
 };
 
-/** Returns a matched shadow DOM element or fails the test. */
+/**
+ * Returns a matched shadow DOM element or fails the test.
+ */
 export const requireElement = <ElementType extends Element>(
   shadowRoot: ShadowRoot,
   selector: string,
@@ -36,7 +42,9 @@ export const requireElement = <ElementType extends Element>(
   return element;
 };
 
-/** Waits for a matched shadow DOM element. */
+/**
+ * Waits for a matched shadow DOM element.
+ */
 export const waitForElement = <ElementType extends Element>(
   shadowRoot: ShadowRoot,
   selector: string,
@@ -65,13 +73,17 @@ const waitForSchemaFontProcessing = (
 ): Promise<Element> =>
   waitForElement(shadowRoot, 'input[data-unicode="."], [role="alert"]');
 
-/** Waits for component microtasks and file parsing to settle in browser tests. */
+/**
+ * Waits for component microtasks and file parsing to settle in browser tests.
+ */
 export const waitForComponentUpdate = (): Promise<void> =>
   new Promise((resolve) => {
     setTimeout(resolve, COMPONENT_UPDATE_DELAY_MS);
   });
 
-/** Replaces a file input's selected files and dispatches change. */
+/**
+ * Replaces a file input's selected files and dispatches change.
+ */
 export const selectFiles = (
   fileInput: HTMLInputElement,
   files: ReadonlyArray<File>,
@@ -89,7 +101,9 @@ export const selectFiles = (
   fileInput.dispatchEvent(new Event("change", { bubbles: true }));
 };
 
-/** Loads the test font for the selected schema. */
+/**
+ * Loads the test font for the selected schema.
+ */
 export const loadCharactersFromTestFont = async (
   shadowRoot: ShadowRoot,
   characters: string,
@@ -111,7 +125,9 @@ export const loadCharactersFromTestFont = async (
   await waitForSchemaFontProcessing(shadowRoot);
 };
 
-/** Renames one rendered glyph input. */
+/**
+ * Renames one rendered glyph input.
+ */
 export const renameGlyph = (
   shadowRoot: ShadowRoot,
   unicode: string,
@@ -126,7 +142,9 @@ export const renameGlyph = (
   glyphNameInput.dispatchEvent(new InputEvent("input", { bubbles: true }));
 };
 
-/** Selects a staged shared glyph group for one source glyph row. */
+/**
+ * Selects a staged shared glyph group for one source glyph row.
+ */
 export const selectGlyphGroup = (
   shadowRoot: ShadowRoot,
   unicode: string,
@@ -141,7 +159,9 @@ export const selectGlyphGroup = (
   groupSelect.dispatchEvent(new Event("change", { bubbles: true }));
 };
 
-/** Selects a shared glyph mapping for one source glyph row. */
+/**
+ * Selects a shared glyph mapping for one source glyph row.
+ */
 export const selectMappedGlyph = (
   shadowRoot: ShadowRoot,
   unicode: string,
@@ -156,7 +176,9 @@ export const selectMappedGlyph = (
   glyphSelect.dispatchEvent(new Event("change", { bubbles: true }));
 };
 
-/** Selects a license for one source glyph row. */
+/**
+ * Selects a license for one source glyph row.
+ */
 export const selectLicense = (
   shadowRoot: ShadowRoot,
   unicode: string,
@@ -171,7 +193,9 @@ export const selectLicense = (
   licenseSelect.dispatchEvent(new Event("change", { bubbles: true }));
 };
 
-/** Selects the default test mapping and license for one source glyph row. */
+/**
+ * Selects the default test mapping and license for one source glyph row.
+ */
 export const selectDefaultMappingAndLicense = (
   shadowRoot: ShadowRoot,
   unicode: string,
@@ -181,7 +205,9 @@ export const selectDefaultMappingAndLicense = (
   selectLicense(shadowRoot, unicode, "MIT");
 };
 
-/** Clicks the component download button. */
+/**
+ * Clicks the component download button.
+ */
 export const clickDownload = (shadowRoot: ShadowRoot): void => {
   requireElement<HTMLButtonElement>(
     shadowRoot,
@@ -189,7 +215,9 @@ export const clickDownload = (shadowRoot: ShadowRoot): void => {
   ).click();
 };
 
-/** Dispatches a download click even when the button is disabled. */
+/**
+ * Dispatches a download click even when the button is disabled.
+ */
 export const forceDownloadClick = (shadowRoot: ShadowRoot): void => {
   requireElement<HTMLButtonElement>(
     shadowRoot,

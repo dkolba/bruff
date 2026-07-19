@@ -8,15 +8,15 @@ import {
 } from "@bruff/utils/dom";
 
 /**
-The error reasons that {@link curtainUp} can surface to its caller.
-*/
+ * The error reasons that {@link curtainUp} can surface to its caller.
+ */
 export type CurtainUpError =
   "canvas-context-not-found" | "canvas-not-found" | "game-root-not-found";
 
 /**
-The successful product of {@link curtainUp}: the canvas, its 2D
-context, and a teardown function that detaches the resize listener.
-*/
+ * The successful product of {@link curtainUp}: the canvas, its 2D
+ * context, and a teardown function that detaches the resize listener.
+ */
 export type CurtainUpStage = Readonly<{
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
@@ -24,13 +24,13 @@ export type CurtainUpStage = Readonly<{
 }>;
 
 /**
-Composes the shadow root → canvas → 2D-context boundary chain into
-a single railway. Each step short-circuits on its own typed error.
-
-@param selector - The selector for the game-root element
-@returns `ok` with both the canvas and its 2D context, or `error`
-  carrying the first failure reason encountered along the chain
-*/
+ * Composes the shadow root → canvas → 2D-context boundary chain into
+ * a single railway. Each step short-circuits on its own typed error.
+ *
+ * @param selector - The selector for the game-root element
+ * @returns `ok` with both the canvas and its 2D context, or `error`
+ * carrying the first failure reason encountered along the chain
+ */
 const resolveStageInputs = (
   selector: string,
 ): Result<
@@ -59,14 +59,14 @@ const resolveStageInputs = (
   )(selector);
 
 /**
-Wires the shadow root → canvas → 2D context chain, attaches a
-resize observer, and returns the canvas plus its teardown
-function. Failures from any boundary helper are bubbled up as a
-typed {@link Result} so the caller can decide how to surface them.
-
-@returns `ok` with the prepared stage, or `error` carrying the
-  first failure reason encountered along the chain
-*/
+ * Wires the shadow root → canvas → 2D context chain, attaches a
+ * resize observer, and returns the canvas plus its teardown
+ * function. Failures from any boundary helper are bubbled up as a
+ * typed {@link Result} so the caller can decide how to surface them.
+ *
+ * @returns `ok` with the prepared stage, or `error` carrying the
+ * first failure reason encountered along the chain
+ */
 const curtainUp = (): Result<CurtainUpStage, CurtainUpError> => {
   const inputs = resolveStageInputs("bruff-game");
   if (inputs.type === "error") {

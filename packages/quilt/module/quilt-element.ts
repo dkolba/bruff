@@ -75,7 +75,9 @@ const createRuntime = (shadowRoot: ShadowRoot): QuiltRuntime | undefined =>
       })
     : undefined;
 
-/** Browser custom element for editing roguelike tile maps. */
+/**
+ * Browser custom element for editing roguelike tile maps.
+ */
 export class QuiltElement extends HTMLElement {
   private readonly resizeCanvas = (): void => {
     this.runtime?.setCanvasSize(getViewportCanvasSize());

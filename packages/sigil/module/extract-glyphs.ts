@@ -12,7 +12,9 @@ const EMPTY_INPUT_LENGTH = 0;
 const GLYPH_PATH_DECIMAL_PLACES = 2;
 const DEFAULT_ADVANCE_WIDTH = 0;
 
-/** Partitioned extraction state for selected glyphs. */
+/**
+ * Partitioned extraction state for selected glyphs.
+ */
 type GlyphExtractionState = Readonly<{
   drafts: ReadonlyArray<SigilGlyphDraft>;
   errors: ReadonlyArray<SigilExtractionError>;
@@ -96,12 +98,12 @@ const extractionError = (
 });
 
 /**
-Extracts selected font glyphs into sigil glyph drafts.
-
-@param font - Parsed OpenType font
-@param characters - User-entered characters to extract
-@returns Extracted drafts with any user-visible extraction errors
-*/
+ * Extracts selected font glyphs into sigil glyph drafts.
+ *
+ * @param font - Parsed OpenType font
+ * @param characters - User-entered characters to extract
+ * @returns Extracted drafts with any user-visible extraction errors
+ */
 export const extractSigilGlyphs = (
   font: Font,
   characters: string,

@@ -13,8 +13,8 @@ import {
 import { hsla } from "../../universal/color/hsla.ts";
 
 /**
-Draws a single bar with color shifting based on position.
-*/
+ * Draws a single bar with color shifting based on position.
+ */
 const drawBar = ({
   context,
   index,
@@ -39,20 +39,20 @@ const drawBar = ({
 };
 
 /**
-Creates an animated background pattern of radiating bars that rotate and pulse.
-The bars emanate from the center of the canvas in both directions, with colors
-that shift based on position and time.
-
-@param context - The 2D rendering context of the canvas
-@param timestamp - The current timestamp for animation timing
-@returns void
-@remarks
-The animation uses the following effects:
-- Rotation: The entire pattern rotates based on the timestamp
-- Pulsing: The bars' size pulses using a sine wave
-- Color shifting: Colors transition across the hue spectrum
-- Symmetry: Bars radiate both left and right from center
-*/
+ * Creates an animated background pattern of radiating bars that rotate and pulse.
+ * The bars emanate from the center of the canvas in both directions, with colors
+ * that shift based on position and time.
+ *
+ * @param context - The 2D rendering context of the canvas
+ * @param timestamp - The current timestamp for animation timing
+ * @returns void
+ * @remarks
+ * The animation uses the following effects:
+ * - Rotation: The entire pattern rotates based on the timestamp
+ * - Pulsing: The bars' size pulses using a sine wave
+ * - Color shifting: Colors transition across the hue spectrum
+ * - Symmetry: Bars radiate both left and right from center
+ */
 export const radiatingBarsBackgroundAnimation = (
   context: CanvasRenderingContext2D,
   timestamp: number,

@@ -47,7 +47,9 @@ const TEMPLATE_HTML = `
   </section>
 `;
 
-/** Creates the Quilt shadow DOM template. */
+/**
+ * Creates the Quilt shadow DOM template.
+ */
 export const createQuiltTemplate = (): HTMLTemplateElement => {
   const template = document.createElement("template");
   template.innerHTML = TEMPLATE_HTML;

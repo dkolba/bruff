@@ -5,7 +5,9 @@ import type {
   TileMapData,
 } from "../model/tile-map-data.ts";
 
-/** One tile layer change captured by a paint command. */
+/**
+ * One tile layer change captured by a paint command.
+ */
 export type PaintTileChange = Readonly<{
   coordinate: TileCoordinate;
   layerId: TileLayerId;
@@ -13,34 +15,46 @@ export type PaintTileChange = Readonly<{
   afterTileId: TileId;
 }>;
 
-/** Undoable command for painting one or more tiles. */
+/**
+ * Undoable command for painting one or more tiles.
+ */
 export type PaintTilesCommand = Readonly<{
   type: "PAINT_TILES";
   changes: ReadonlyArray<PaintTileChange>;
 }>;
 
-/** Undoable command for resizing the map grid. */
+/**
+ * Undoable command for resizing the map grid.
+ */
 export type ResizeMapCommand = Readonly<{
   type: "RESIZE_MAP";
   beforeTileMapData: TileMapData;
   afterTileMapData: TileMapData;
 }>;
 
-/** Quilt editor command ADT. */
+/**
+ * Quilt editor command ADT.
+ */
 export type EditorCommand = PaintTilesCommand | ResizeMapCommand;
 
-/** Input for creating a paint command. */
+/**
+ * Input for creating a paint command.
+ */
 export type CreatePaintTilesCommandInput = Readonly<{
   changes: ReadonlyArray<PaintTileChange>;
 }>;
 
-/** Input for creating a resize map command. */
+/**
+ * Input for creating a resize map command.
+ */
 export type CreateResizeMapCommandInput = Readonly<{
   beforeTileMapData: TileMapData;
   afterTileMapData: TileMapData;
 }>;
 
-/** Creates a plain-data paint tiles command. */
+/**
+ * Creates a plain-data paint tiles command.
+ */
 export const createPaintTilesCommand = (
   input: CreatePaintTilesCommandInput,
 ): PaintTilesCommand => ({
@@ -48,7 +62,9 @@ export const createPaintTilesCommand = (
   type: "PAINT_TILES",
 });
 
-/** Creates a plain-data resize map command with before/after snapshots. */
+/**
+ * Creates a plain-data resize map command with before/after snapshots.
+ */
 export const createResizeMapCommand = (
   input: CreateResizeMapCommandInput,
 ): ResizeMapCommand => ({

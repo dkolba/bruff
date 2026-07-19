@@ -9,7 +9,9 @@ const createJsonBlob = (glyphMap: SigilGlyphMap): Blob =>
     type: JSON_MIME_TYPE,
   });
 
-/** Creates and revokes a temporary JSON download link for a glyph map. */
+/**
+ * Creates and revokes a temporary JSON download link for a glyph map.
+ */
 export const triggerJsonDownload = (glyphMap: SigilGlyphMap): void => {
   const objectUrl = URL.createObjectURL(createJsonBlob(glyphMap));
   const downloadLink = document.createElement("a");

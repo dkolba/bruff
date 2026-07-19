@@ -1,5 +1,7 @@
 /* eslint-disable max-lines -- we want ALL THE LICENSES */
-/** One selectable OSI license option. */
+/**
+ * One selectable OSI license option.
+ */
 export type SigilLicenseOption = Readonly<{
   id: string;
   name: string;
@@ -8,7 +10,9 @@ export type SigilLicenseOption = Readonly<{
   value: string;
 }>;
 
-/** Generated OSI license options used by the sigil browser tool. */
+/**
+ * Generated OSI license options used by the sigil browser tool.
+ */
 export const OSI_LICENSE_OPTIONS: ReadonlyArray<SigilLicenseOption> = [
   {
     id: "apache-2-0",

@@ -10,19 +10,25 @@ export type {
 } from "@bruff/contracts";
 export { requiredSigilGlyphNames } from "@bruff/contracts";
 
-/** Extracted glyph before the user-editable name is applied. */
+/**
+ * Extracted glyph before the user-editable name is applied.
+ */
 export type SigilGlyphDraft = Readonly<{
   defaultName: string;
   glyph: SigilSourceGlyph;
 }>;
 
-/** Extraction report that can carry valid drafts and non-fatal errors together. */
+/**
+ * Extraction report that can carry valid drafts and non-fatal errors together.
+ */
 export type SigilExtractionReport = Readonly<{
   drafts: ReadonlyArray<SigilGlyphDraft>;
   errors: ReadonlyArray<SigilExtractionError>;
 }>;
 
-/** Transitional extraction result carrying both report and legacy Result fields. */
+/**
+ * Transitional extraction result carrying both report and legacy Result fields.
+ */
 export type SigilExtractionResult =
   | Readonly<
       SigilExtractionReport & {
@@ -37,7 +43,9 @@ export type SigilExtractionResult =
       }
     >;
 
-/** User-facing extraction failure. */
+/**
+ * User-facing extraction failure.
+ */
 export type SigilExtractionError = Readonly<{
   type:
     | "download-failed"

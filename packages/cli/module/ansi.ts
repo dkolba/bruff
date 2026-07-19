@@ -8,8 +8,8 @@ const encodeCursorMove = (position: TerminalPosition): string =>
   `\u{1B}[${position.row};${position.column}H`;
 
 /**
-Terminal command encoded as ANSI text before writing.
-*/
+ * Terminal command encoded as ANSI text before writing.
+ */
 export type AnsiCommand =
   | Readonly<{ type: "clear-screen" }>
   | Readonly<{ position: TerminalPosition; type: "cursor-move" }>
@@ -19,8 +19,8 @@ export type AnsiCommand =
   | Readonly<{ glyph: string; type: "write-glyph" }>;
 
 /**
-Encode one terminal command as ANSI text.
-*/
+ * Encode one terminal command as ANSI text.
+ */
 export const encodeAnsiCommand = (command: AnsiCommand): string => {
   switch (command.type) {
     case "clear-screen": {
@@ -50,8 +50,8 @@ export const encodeAnsiCommand = (command: AnsiCommand): string => {
 };
 
 /**
-Encode terminal commands as one ANSI text chunk.
-*/
+ * Encode terminal commands as one ANSI text chunk.
+ */
 export const encodeAnsiCommands = (
   commands: ReadonlyArray<AnsiCommand>,
 ): string => commands.map((command) => encodeAnsiCommand(command)).join("");

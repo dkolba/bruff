@@ -8,22 +8,22 @@ const SIX = 6;
 const TWELVE = 12;
 
 /**
-Adds a number to the input value.
-
-@param number - The number to add
-@returns (first: number) =\> number - A function that adds num to its input
-*/
+ * Adds a number to the input value.
+ *
+ * @param number - The number to add
+ * @returns (first: number) =\> number - A function that adds num to its input
+ */
 const add =
   (second: number): ((first: number) => number) =>
   (first: number): number =>
     first + second;
 
 /**
-Doubles a number.
-
-@param number - The number to double
-@returns number - The doubled number
-*/
+ * Doubles a number.
+ *
+ * @param number - The number to double
+ * @returns number - The doubled number
+ */
 const double = (operand: number): number => operand + operand;
 
 test("#pipe", () => {

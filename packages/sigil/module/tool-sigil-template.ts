@@ -1,4 +1,6 @@
-/** Static shadow DOM template for the sigil tool shell. */
+/**
+ * Static shadow DOM template for the sigil tool shell.
+ */
 export const TOOL_SIGIL_TEMPLATE = `<style>
   :host {
     box-sizing: border-box;

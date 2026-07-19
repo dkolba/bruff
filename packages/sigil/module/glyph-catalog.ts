@@ -31,10 +31,14 @@ type GlyphTableDefinition = Readonly<{
   glyphs: GlyphTable;
 }>;
 
-/** Stable group name for a top-level `@bruff/glyph` export table. */
+/**
+ * Stable group name for a top-level `@bruff/glyph` export table.
+ */
 export type SigilGlyphGroupName = string;
 
-/** One selectable glyph from the shared glyph catalog. */
+/**
+ * One selectable glyph from the shared glyph catalog.
+ */
 export type SigilGlyphOption = Readonly<{
   groupName: SigilGlyphGroupName;
   glyphKey: string;
@@ -42,7 +46,9 @@ export type SigilGlyphOption = Readonly<{
   label: string;
 }>;
 
-/** One selectable glyph group from the shared glyph catalog. */
+/**
+ * One selectable glyph group from the shared glyph catalog.
+ */
 export type SigilGlyphGroup = Readonly<{
   groupName: SigilGlyphGroupName;
   label: string;
@@ -105,30 +111,32 @@ const glyphGroup = ({
   label: labelText(groupName),
 });
 
-/** Ordered selectable glyph groups projected from `@bruff/glyph`. */
+/**
+ * Ordered selectable glyph groups projected from `@bruff/glyph`.
+ */
 export const SIGIL_GLYPH_GROUPS: ReadonlyArray<SigilGlyphGroup> =
   GLYPH_TABLES.map((tableDefinition) => glyphGroup(tableDefinition)).filter(
     (group) => group.glyphs.length > EMPTY_LENGTH,
   );
 
 /**
-Finds a selectable glyph group by catalog group name.
-
-@param groupName - Glyph group name
-@returns Matching group, or undefined when unavailable
-*/
+ * Finds a selectable glyph group by catalog group name.
+ *
+ * @param groupName - Glyph group name
+ * @returns Matching group, or undefined when unavailable
+ */
 export const findSigilGlyphGroup = (
   groupName: SigilGlyphGroupName,
 ): SigilGlyphGroup | undefined =>
   SIGIL_GLYPH_GROUPS.find((group) => group.groupName === groupName);
 
 /**
-Finds a selectable glyph by group and key.
-
-@param groupName - Glyph group name
-@param glyphKey - Glyph key inside the group
-@returns Matching glyph, or undefined when unavailable
-*/
+ * Finds a selectable glyph by group and key.
+ *
+ * @param groupName - Glyph group name
+ * @param glyphKey - Glyph key inside the group
+ * @returns Matching glyph, or undefined when unavailable
+ */
 export const findSigilGlyphOption = (
   groupName: SigilGlyphGroupName,
   glyphKey: string,

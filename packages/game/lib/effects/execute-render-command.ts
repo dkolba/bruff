@@ -3,11 +3,11 @@ import type { RenderCommand } from "../core/actions.ts";
 const ZERO = 0;
 
 /**
-Executes a single render command against the live Canvas context.
-
-@param context - The Canvas context to draw to
-@param command - The command to execute
-*/
+ * Executes a single render command against the live Canvas context.
+ *
+ * @param context - The Canvas context to draw to
+ * @param command - The command to execute
+ */
 export const executeRenderCommand = (
   context: CanvasRenderingContext2D,
   command: RenderCommand,
@@ -43,11 +43,11 @@ export const executeRenderCommand = (
 };
 
 /**
-Executes render commands in list order.
-
-@param context - The Canvas context to draw to
-@param commands - The commands to execute
-*/
+ * Executes render commands in list order.
+ *
+ * @param context - The Canvas context to draw to
+ * @param commands - The commands to execute
+ */
 export const executeRenderCommands = (
   context: CanvasRenderingContext2D,
   commands: ReadonlyArray<RenderCommand>,

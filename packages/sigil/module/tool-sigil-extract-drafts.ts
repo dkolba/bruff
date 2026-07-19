@@ -5,12 +5,12 @@ import { completeMissingDrafts } from "./tool-sigil-missing-drafts.js";
 import type { ToolSigilState } from "./tool-sigil-state-types.js";
 
 /**
-Extracts renderable drafts for requested characters.
-
-@param font - Current parsed font, when available
-@param characters - Requested source characters
-@returns Extracted drafts and typed extraction errors
-*/
+ * Extracts renderable drafts for requested characters.
+ *
+ * @param font - Current parsed font, when available
+ * @param characters - Requested source characters
+ * @returns Extracted drafts and typed extraction errors
+ */
 export const extractDrafts = (
   font: Font | undefined,
   characters: string,

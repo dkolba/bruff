@@ -8,7 +8,9 @@ const CANVAS_ORIGIN = 0;
 const GLYPH_FILL_STYLE = "#555555";
 const HALF = 2;
 
-/** A rectangular region in pixel-space. */
+/**
+ * A rectangular region in pixel-space.
+ */
 type CanvasRect = Readonly<{
   pixelX: number;
   pixelY: number;
@@ -16,7 +18,9 @@ type CanvasRect = Readonly<{
   pixelHeight: number;
 }>;
 
-/** Minimal Canvas 2D context capabilities used by Quilt draw executors. */
+/**
+ * Minimal Canvas 2D context capabilities used by Quilt draw executors.
+ */
 export type QuiltCanvasContext = {
   fillStyle: string | CanvasGradient | CanvasPattern;
   clearRect: (rect: CanvasRect) => void;
@@ -107,7 +111,9 @@ const executeDrawTerrainGlyph = (
   renderGlyphPath(context, path2d);
 };
 
-/** Executes terrain draw commands against a Canvas 2D context boundary. */
+/**
+ * Executes terrain draw commands against a Canvas 2D context boundary.
+ */
 export const executeTerrainDrawPlan = (
   context: QuiltCanvasContext,
   drawPlan: TerrainDrawPlan,
@@ -131,7 +137,9 @@ export const executeTerrainDrawPlan = (
   }, CANVAS_ORIGIN);
 };
 
-/** Executes overlay draw commands against a Canvas 2D context boundary. */
+/**
+ * Executes overlay draw commands against a Canvas 2D context boundary.
+ */
 export const executeOverlayDrawPlan = (
   context: QuiltCanvasContext,
   drawPlan: OverlayDrawPlan,

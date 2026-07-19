@@ -21,78 +21,124 @@ const minimumFrameCount = 0;
 const arrayLastIndexOffset = 1;
 
 /**
-Options for creating a deterministic ANSI frame-step driver.
-*/
+ * Options for creating a deterministic ANSI frame-step driver.
+ */
 export type AnsiFrameStepOptions = Readonly<{
-  /** Terminal canvas dimensions used when no initial state is supplied. */
+  /**
+   * Terminal canvas dimensions used when no initial state is supplied.
+   */
   canvas?: CanvasSize;
-  /** Complete game state to load into the driver. */
+  /**
+   * Complete game state to load into the driver.
+   */
   initialState?: GameState;
-  /** Deterministic seed used when no initial state is supplied. */
+  /**
+   * Deterministic seed used when no initial state is supplied.
+   */
   seed?: number;
-  /** Injected terminal writer used for every rendered frame. */
+  /**
+   * Injected terminal writer used for every rendered frame.
+   */
   writer: TextWriter;
 }>;
 
 /**
-Summary facts for the latest ANSI render.
-*/
+ * Summary facts for the latest ANSI render.
+ */
 export type AnsiFrameRenderStats = Readonly<{
-  /** Number of enemy cells in the headless frame. */
+  /**
+   * Number of enemy cells in the headless frame.
+   */
   enemiesDrawn: number;
-  /** Logical frame index represented by the render. */
+  /**
+   * Logical frame index represented by the render.
+   */
   frameIndex: number;
-  /** Whether the player was present in the headless frame. */
+  /**
+   * Whether the player was present in the headless frame.
+   */
   playerDrawn: boolean;
-  /** Number of terminal cells emitted by the terminal projection. */
+  /**
+   * Number of terminal cells emitted by the terminal projection.
+   */
   terminalCellsDrawn: number;
 }>;
 
 /**
-Complete terminal artifacts produced for one rendered frame.
-*/
+ * Complete terminal artifacts produced for one rendered frame.
+ */
 export type AnsiRenderedFrame = Readonly<{
-  /** Encoded ANSI text written to the terminal writer. */
+  /**
+   * Encoded ANSI text written to the terminal writer.
+   */
   ansiText: string;
-  /** DOM-free game render projection for the frame. */
+  /**
+   * DOM-free game render projection for the frame.
+   */
   headlessFrame: HeadlessFrame;
-  /** Structural render facts for tests. */
+  /**
+   * Structural render facts for tests.
+   */
   renderStats: AnsiFrameRenderStats;
-  /** Cloned game state represented by the frame. */
+  /**
+   * Cloned game state represented by the frame.
+   */
   state: GameState;
-  /** Terminal cell projection for the frame. */
+  /**
+   * Terminal cell projection for the frame.
+   */
   terminalFrame: TerminalFrame;
-  /** Result returned by the injected writer boundary. */
+  /**
+   * Result returned by the injected writer boundary.
+   */
   writeResult: WriteFrameResult;
 }>;
 
 /**
-Result of stepping zero or more terminal frames.
-*/
+ * Result of stepping zero or more terminal frames.
+ */
 export type AnsiFrameStepResult = Readonly<{
-  /** Per-frame terminal artifacts produced during this step call. */
+  /**
+   * Per-frame terminal artifacts produced during this step call.
+   */
   frames: ReadonlyArray<AnsiRenderedFrame>;
-  /** Cloned final game state after stepping. */
+  /**
+   * Cloned final game state after stepping.
+   */
   state: GameState;
-  /** Write result from the last frame, or ok when no frame was rendered. */
+  /**
+   * Write result from the last frame, or ok when no frame was rendered.
+   */
   writeResult: WriteFrameResult;
 }>;
 
 /**
-Deterministic terminal frame-step control surface for tests and CLI wiring.
-*/
+ * Deterministic terminal frame-step control surface for tests and CLI wiring.
+ */
 export type AnsiFrameStepDriver = Readonly<{
-  /** Queue raw terminal input for the next logical frame. */
+  /**
+   * Queue raw terminal input for the next logical frame.
+   */
   dispatchInput: (input: string) => void;
-  /** Return stats from the latest render. */
+  /**
+   * Return stats from the latest render.
+   */
   getRenderStats: () => AnsiFrameRenderStats;
-  /** Return a cloned copy of the current game state. */
+  /**
+   * Return a cloned copy of the current game state.
+   */
   getState: () => GameState;
-  /** Replace the current game state and clear queued input. */
+  /**
+   * Replace the current game state and clear queued input.
+   */
   loadState: (state: GameState) => void;
-  /** Render the current game state without advancing simulation. */
+  /**
+   * Render the current game state without advancing simulation.
+   */
   renderFrame: () => AnsiRenderedFrame;
-  /** Step and render a deterministic number of frames. */
+  /**
+   * Step and render a deterministic number of frames.
+   */
   stepFrames: (frameCount: number) => AnsiFrameStepResult;
 }>;
 
@@ -223,8 +269,8 @@ const stepDriverFrames = (
 };
 
 /**
-Create a deterministic ANSI terminal frame-step driver.
-*/
+ * Create a deterministic ANSI terminal frame-step driver.
+ */
 export const createAnsiFrameStepDriver = (
   options: AnsiFrameStepOptions,
 ): AnsiFrameStepDriver => {

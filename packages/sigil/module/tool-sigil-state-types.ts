@@ -13,19 +13,25 @@ import type {
   SigilSchemaOption,
 } from "./sigil-schema-catalog.js";
 
-/** Selected textarea character for one required contract glyph. */
+/**
+ * Selected textarea character for one required contract glyph.
+ */
 export type RequiredGlyphSelection = Readonly<{
   name: RequiredSigilGlyphName;
   unicode: string;
 }>;
 
-/** One select option derived from the textarea. */
+/**
+ * One select option derived from the textarea.
+ */
 export type RequiredGlyphCharacterOption = Readonly<{
   label: string;
   unicode: string;
 }>;
 
-/** Render-ready state for one required glyph source-character select. */
+/**
+ * Render-ready state for one required glyph source-character select.
+ */
 export type RequiredGlyphSelectionView = Readonly<{
   isValid: boolean;
   name: RequiredSigilGlyphName;
@@ -33,13 +39,17 @@ export type RequiredGlyphSelectionView = Readonly<{
   selectedUnicode: string;
 }>;
 
-/** User-visible contract validation issue. */
+/**
+ * User-visible contract validation issue.
+ */
 export type ToolSigilContractIssue = Readonly<{
   message: string;
   path: string;
 }>;
 
-/** Immutable state owned by the `<tool-sigil>` coordinator. */
+/**
+ * Immutable state owned by the `<tool-sigil>` coordinator.
+ */
 export type ToolSigilState = Readonly<{
   characters: string;
   contractIssues: ReadonlyArray<ToolSigilContractIssue>;
@@ -61,13 +71,17 @@ export type ToolSigilState = Readonly<{
   licenseOptions: ReadonlyArray<SigilLicenseOption>;
 }>;
 
-/** State and token returned when a new font selection starts. */
+/**
+ * State and token returned when a new font selection starts.
+ */
 export type ToolSigilFontSelection = Readonly<{
   fontLoadToken: number;
   state: ToolSigilState;
 }>;
 
-/** Render-ready projection of `ToolSigilState`. */
+/**
+ * Render-ready projection of `ToolSigilState`.
+ */
 export type ToolSigilViewModel = Readonly<{
   characters: string;
   contractIssues: ReadonlyArray<ToolSigilContractIssue>;

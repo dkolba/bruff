@@ -4,17 +4,23 @@ import type { TileId } from "./tile-map-data.ts";
 
 const TILE_INDEX_OFFSET = 1;
 
-/** Typed arrays supported by Quilt tile layers. */
+/**
+ * Typed arrays supported by Quilt tile layers.
+ */
 export type TileLayer = Uint8Array | Uint16Array | Uint32Array;
 
-/** Input for reading one tile layer value. */
+/**
+ * Input for reading one tile layer value.
+ */
 export type ReadTileLayerInput = Readonly<{
   layer: TileLayer;
   layerIndex: number;
   fallbackTileId: TileId;
 }>;
 
-/** Input for writing one tile layer value. */
+/**
+ * Input for writing one tile layer value.
+ */
 export type WriteTileLayerInput = Readonly<{
   layer: TileLayer;
   layerIndex: number;
@@ -78,7 +84,9 @@ const writeUint32Layer = (input: WriteTileLayerInput): Uint32Array => {
   return layer;
 };
 
-/** Reads a tile ID from a typed-array layer. */
+/**
+ * Reads a tile ID from a typed-array layer.
+ */
 export const readTileLayer = (input: ReadTileLayerInput): TileId => {
   if (input.layer instanceof Uint16Array) {
     return readUint16Layer(input.layer, input.layerIndex, input.fallbackTileId);
@@ -89,7 +97,9 @@ export const readTileLayer = (input: ReadTileLayerInput): TileId => {
     : readUint8Layer(input.layer, input.layerIndex, input.fallbackTileId);
 };
 
-/** Returns a copied typed-array layer with one tile changed. */
+/**
+ * Returns a copied typed-array layer with one tile changed.
+ */
 export const writeTileLayer = (input: WriteTileLayerInput): TileLayer => {
   if (input.layer instanceof Uint16Array) {
     return writeUint16Layer(input);

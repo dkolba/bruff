@@ -17,7 +17,9 @@ const CANVAS_PIXEL_UNIT = "px";
 const CANVAS_ORIGIN = 0;
 const DEFAULT_DEVICE_PIXEL_RATIO = 1;
 
-/** Input for creating mounted Quilt runtime wiring. */
+/**
+ * Input for creating mounted Quilt runtime wiring.
+ */
 export type CreateQuiltRuntimeInput = Readonly<{
   canvasSize: number;
   doorToolButton: HTMLButtonElement;
@@ -35,7 +37,9 @@ export type CreateQuiltRuntimeInput = Readonly<{
   wallToolButton: HTMLButtonElement;
 }>;
 
-/** Mounted Quilt runtime handles owned by the Web Component shell. */
+/**
+ * Mounted Quilt runtime handles owned by the Web Component shell.
+ */
 export type QuiltRuntime = Readonly<{
   disconnect: () => void;
   getState: () => QuiltState;
@@ -124,7 +128,9 @@ const createController = (
     quiltState: input.quiltState,
   });
 
-/** Creates mounted runtime wiring and teardown handles for Quilt. */
+/**
+ * Creates mounted runtime wiring and teardown handles for Quilt.
+ */
 export const createQuiltRuntime = (
   input: CreateQuiltRuntimeInput,
 ): QuiltRuntime => {

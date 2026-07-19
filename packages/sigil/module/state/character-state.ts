@@ -27,7 +27,9 @@ const selectionUnicode = (
   return grapheme === undefined ? fallbackUnicode : grapheme;
 };
 
-/** Maps required glyph selections to typed characters by schema order. */
+/**
+ * Maps required glyph selections to typed characters by schema order.
+ */
 const requiredGlyphSelectionsForCharacters = (
   characters: string,
   selections: ReadonlyArray<RequiredGlyphSelection>,
@@ -44,11 +46,12 @@ const requiredGlyphSelectionsForCharacters = (
   }));
 };
 
-/** Updates editable characters.
-@param state - Current tool state.
-@param characters - Characters requested for extraction.
-@returns Updated tool state.
-*/
+/**
+ * Updates editable characters.
+ * @param state - Current tool state.
+ * @param characters - Characters requested for extraction.
+ * @returns Updated tool state.
+ */
 export const setToolSigilCharacters = (
   state: ToolSigilState,
   characters: string,
@@ -71,12 +74,13 @@ export const setToolSigilCharacters = (
   };
 };
 
-/** Updates a required schema glyph.
-@param state - Current tool state.
-@param name - Required glyph name.
-@param Unicode - Selected source character.
-@returns Updated tool state.
-*/
+/**
+ * Updates a required schema glyph.
+ * @param state - Current tool state.
+ * @param name - Required glyph name.
+ * @param Unicode - Selected source character.
+ * @returns Updated tool state.
+ */
 export const setToolSigilRequiredGlyphCharacter = (
   state: ToolSigilState,
   name: string,
@@ -105,11 +109,12 @@ export const setToolSigilRequiredGlyphCharacter = (
   };
 };
 
-/** Selects a schema.
-@param state - Current tool state.
-@param schemaId - Schema identifier to select.
-@returns Updated tool state.
-*/
+/**
+ * Selects a schema.
+ * @param state - Current tool state.
+ * @param schemaId - Schema identifier to select.
+ * @returns Updated tool state.
+ */
 export const setToolSigilSchema = (
   state: ToolSigilState,
   schemaId: SigilSchemaId,

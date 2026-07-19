@@ -15,7 +15,9 @@ const REQUIRED_ADVANCE_WIDTH = 400;
 const NOTDEF_ADVANCE_WIDTH = 300;
 const DESCENDER = -200;
 
-/** Units-per-em used by the tiny browser test font. */
+/**
+ * Units-per-em used by the tiny browser test font.
+ */
 export const TEST_FONT_UNITS_PER_EM = 1000;
 
 const createTestPath = (advanceWidth: number): Path => {
@@ -53,10 +55,10 @@ const createWallGlyph = (): Glyph =>
   createTestGlyph("wall", WALL_CODE_POINT, REQUIRED_ADVANCE_WIDTH);
 
 /**
-Creates a tiny valid font for browser file-upload tests.
-
-@returns A font with schema-required glyphs and units-per-em of 1000
-*/
+ * Creates a tiny valid font for browser file-upload tests.
+ *
+ * @returns A font with schema-required glyphs and units-per-em of 1000
+ */
 export const createTestFont = (): Font =>
   new Font({
     ascender: TEST_FONT_UNITS_PER_EM,
@@ -76,7 +78,9 @@ export const createTestFont = (): Font =>
     unitsPerEm: TEST_FONT_UNITS_PER_EM,
   });
 
-/** Creates a valid test font that intentionally lacks schema glyphs. */
+/**
+ * Creates a valid test font that intentionally lacks schema glyphs.
+ */
 const createMissingStarTestFont = (): Font =>
   new Font({
     ascender: TEST_FONT_UNITS_PER_EM,
@@ -87,7 +91,9 @@ const createMissingStarTestFont = (): Font =>
     unitsPerEm: TEST_FONT_UNITS_PER_EM,
   });
 
-/** Creates a valid test font that only supports the schema wall glyph. */
+/**
+ * Creates a valid test font that only supports the schema wall glyph.
+ */
 export const createWallOnlyTestFont = (): Font =>
   new Font({
     ascender: TEST_FONT_UNITS_PER_EM,
@@ -99,22 +105,22 @@ export const createWallOnlyTestFont = (): Font =>
   });
 
 /**
-Creates a browser File wrapping the tiny valid test font.
-
-@param fileName - Font file name to expose to the component
-@returns A TTF-like browser File
-*/
+ * Creates a browser File wrapping the tiny valid test font.
+ *
+ * @param fileName - Font file name to expose to the component
+ * @returns A TTF-like browser File
+ */
 export const createValidFontFile = (fileName: string): File =>
   new File([createTestFont().toArrayBuffer()], fileName, {
     type: "font/ttf",
   });
 
 /**
-Creates a valid browser File for a font without the star glyph.
-
-@param fileName - Font file name to expose to the component
-@returns A TTF-like browser File
-*/
+ * Creates a valid browser File for a font without the star glyph.
+ *
+ * @param fileName - Font file name to expose to the component
+ * @returns A TTF-like browser File
+ */
 export const createMissingStarFontFile = (fileName: string): File =>
   new File([createMissingStarTestFont().toArrayBuffer()], fileName, {
     type: "font/ttf",

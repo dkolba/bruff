@@ -4,11 +4,11 @@ const BRAILLE_CODE_POINT_OFFSET = 10_240;
 const BRAILLE_PATTERN_COUNT = 256;
 
 /**
-Unicode glyph catalog for a roguelike renderer.
-
-Prefer glyphs that render clearly in the target game font. Width and coverage
-vary by platform, especially outside the Basic Multilingual Plane.
-*/
+ * Unicode glyph catalog for a roguelike renderer.
+ *
+ * Prefer glyphs that render clearly in the target game font. Width and coverage
+ * vary by platform, especially outside the Basic Multilingual Plane.
+ */
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. ASCII PRINTABLE  (U+0021–U+007E)
@@ -450,11 +450,11 @@ export const BRAILLE = {
 } as const;
 
 /**
-Generates any Braille character from an 8-bit dot mask.
-
-@param mask - Dot mask using b0=dot1 through b7=dot8.
-@returns The matching Unicode Braille pattern.
-*/
+ * Generates any Braille character from an 8-bit dot mask.
+ *
+ * @param mask - Dot mask using b0=dot1 through b7=dot8.
+ * @returns The matching Unicode Braille pattern.
+ */
 export const braille = (mask: number): string =>
   String.fromCodePoint(
     BRAILLE_CODE_POINT_OFFSET +
@@ -1150,12 +1150,12 @@ export const COMBINING = {
 } as const;
 
 /**
-Applies combining characters to a base glyph.
-
-@param base - Base glyph.
-@param combiners - Combining marks to append to the base glyph.
-@returns The composed glyph sequence.
-*/
+ * Applies combining characters to a base glyph.
+ *
+ * @param base - Base glyph.
+ * @param combiners - Combining marks to append to the base glyph.
+ * @returns The composed glyph sequence.
+ */
 export const combine = (
   base: string,
   ...combiners: ReadonlyArray<string>
