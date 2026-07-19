@@ -5,7 +5,7 @@ import type { TextWriter } from "../module/write-frame.ts";
 import { runBruffCli } from "./bruff-cli.ts";
 import { createFakeInput, type FakeInput } from "./bruff-cli-test-helpers.ts";
 
-const initialPlayerCursor = "\u001B[4;4H";
+const initialPlayerCursor = "\u{1B}[4;4H";
 const expectedInitialWriteCount = 1;
 
 type CliProbe = Readonly<{

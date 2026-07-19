@@ -22,8 +22,8 @@ const renderTerminalCell = (cell: TerminalCell): ReadonlyArray<AnsiCommand> => [
 ];
 
 /**
- * Convert a terminal frame into ANSI commands.
- */
+Convert a terminal frame into ANSI commands.
+*/
 export const renderTerminalFrame = (
   frame: TerminalFrame,
 ): ReadonlyArray<AnsiCommand> => [

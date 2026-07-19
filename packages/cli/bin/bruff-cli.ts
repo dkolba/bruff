@@ -6,45 +6,45 @@ import { normaliseKey } from "@bruff/game/headless";
 import { createAnsiFrameStepDriver } from "../module/ansi-frame-step-driver.ts";
 import type { TextWriter, WriteFrameResult } from "../module/write-frame.ts";
 
-const controlCShortcut = "\u0003";
+const controlCShortcut = "\u{3}";
 const lowercaseQuitShortcut = "q";
 const uppercaseQuitShortcut = "Q";
 const inputFrameCount = 1;
 /**
- * Text input chunk received from the terminal.
- */
+Text input chunk received from the terminal.
+*/
 export type TextInputChunk = Buffer | string;
 
 /**
- * Minimal stdin-like input used by the CLI session.
- */
+Minimal stdin-like input used by the CLI session.
+*/
 export type TextInput = Readonly<{
   /**
-   * Whether the input supports terminal raw mode.
-   */
+  Whether the input supports terminal raw mode.
+  */
   isTTY?: boolean;
   /**
-   * Stop reading input.
-   */
+  Stop reading input.
+  */
   pause: () => TextInput;
   /**
-   * Start reading input.
-   */
+  Start reading input.
+  */
   resume: () => TextInput;
   /**
-   * Enable or disable terminal raw mode.
-   */
+  Enable or disable terminal raw mode.
+  */
   setRawMode?: (enabled: boolean) => TextInput;
   /**
-   * Register an input listener.
-   */
+  Register an input listener.
+  */
   on: (
     eventName: "data",
     listener: (chunk: TextInputChunk) => void,
   ) => TextInput;
   /**
-   * Remove an input listener.
-   */
+  Remove an input listener.
+  */
   off: (
     eventName: "data",
     listener: (chunk: TextInputChunk) => void,
@@ -52,63 +52,63 @@ export type TextInput = Readonly<{
 }>;
 
 /**
- * Process stdin shape adapted into the CLI text input port.
- */
+Process stdin shape adapted into the CLI text input port.
+*/
 export type ProcessTextInput = Readonly<{
   /**
-   * Whether the process input supports terminal behaviour.
-   */
+  Whether the process input supports terminal behaviour.
+  */
   isTTY?: boolean;
   /**
-   * Remove an input listener.
-   */
+  Remove an input listener.
+  */
   off: (
     eventName: "data",
     listener: (chunk: TextInputChunk) => void,
   ) => unknown;
   /**
-   * Register an input listener.
-   */
+  Register an input listener.
+  */
   on: (eventName: "data", listener: (chunk: TextInputChunk) => void) => unknown;
   /**
-   * Stop reading input.
-   */
+  Stop reading input.
+  */
   pause: () => unknown;
   /**
-   * Start reading input.
-   */
+  Start reading input.
+  */
   resume: () => unknown;
   /**
-   * Enable or disable terminal raw mode.
-   */
+  Enable or disable terminal raw mode.
+  */
   setRawMode?: (enabled: boolean) => unknown;
 }>;
 
 /**
- * Input and output ports for the CLI session.
- */
+Input and output ports for the CLI session.
+*/
 export type BruffCliPorts = Readonly<{
   /**
-   * Terminal input.
-   */
+  Terminal input.
+  */
   input: TextInput;
   /**
-   * Terminal output.
-   */
+  Terminal output.
+  */
   writer: TextWriter;
 }>;
 
 /**
- * Process input and output ports used by the executable CLI wrapper.
- */
+Process input and output ports used by the executable CLI wrapper.
+*/
 export type BruffCliProcessPorts = Readonly<{
   /**
-   * Process terminal input.
-   */
+  Process terminal input.
+  */
   input: ProcessTextInput;
   /**
-   * Process terminal output.
-   */
+  Process terminal output.
+  */
   writer: TextWriter;
 }>;
 
@@ -132,10 +132,10 @@ const releaseCliInput = (
   listener: (chunk: TextInputChunk) => void,
 ): TextInput => disableRawMode(input.off("data", listener));
 
-/* node:coverage ignore next 8 */
+/* node:coverage ignore next 7 */
 /**
- * Adapt a process-like input stream into the CLI text input port.
- */
+Adapt a process-like input stream into the CLI text input port.
+*/
 export const createTextInput = (source: ProcessTextInput): TextInput => {
   const input: TextInput = {
     isTTY: source.isTTY,
@@ -174,8 +174,8 @@ export const createTextInput = (source: ProcessTextInput): TextInput => {
 };
 
 /**
- * Render the deterministic game scene and wait for input.
- */
+Render the deterministic game scene and wait for input.
+*/
 export const runBruffCli = (ports: BruffCliPorts): WriteFrameResult => {
   const driver = createAnsiFrameStepDriver({
     writer: ports.writer,
@@ -213,8 +213,8 @@ export const runBruffCli = (ports: BruffCliPorts): WriteFrameResult => {
 };
 
 /**
- * Determine whether this module is being executed as the process entrypoint.
- */
+Determine whether this module is being executed as the process entrypoint.
+*/
 export const isCliEntryPoint = (
   argv: ReadonlyArray<string>,
   moduleUrl: string,
@@ -227,8 +227,8 @@ export const isCliEntryPoint = (
 };
 
 /**
- * Render the CLI using process-like ports.
- */
+Render the CLI using process-like ports.
+*/
 export const runBruffCliWithProcess = (
   ports: BruffCliProcessPorts,
 ): WriteFrameResult =>
@@ -236,15 +236,3 @@ export const runBruffCliWithProcess = (
     input: createTextInput(ports.input),
     writer: ports.writer,
   });
-
-/* node:coverage ignore next 10 */
-if (isCliEntryPoint(process.argv, import.meta.url)) {
-  const writeResult = runBruffCliWithProcess({
-    input: process.stdin,
-    writer: process.stdout,
-  });
-
-  if (writeResult.type === "error") {
-    process.exitCode = 1;
-  }
-}
