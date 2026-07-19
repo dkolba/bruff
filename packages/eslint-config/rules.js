@@ -80,7 +80,7 @@ export const overrideRulesEslint = {
   "sort-imports": "off", // Will be sorted via simple-import-sort
 };
 
-/** ESLint rule overrides for the "WC" Web Components plubin */
+/** ESLint rule overrides for the "WC" Web Components plugin */
 export const overrideRulesWebComponents = {
   // Web Components
   "wc/define-tag-after-class-definition": "error",
