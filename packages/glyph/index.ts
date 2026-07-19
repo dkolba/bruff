@@ -4,11 +4,11 @@ const BRAILLE_CODE_POINT_OFFSET = 10_240;
 const BRAILLE_PATTERN_COUNT = 256;
 
 /**
- * Unicode glyph catalog for a roguelike renderer.
- *
- * Prefer glyphs that render clearly in the target game font. Width and coverage
- * vary by platform, especially outside the Basic Multilingual Plane.
- */
+Unicode glyph catalog for a roguelike renderer.
+
+Prefer glyphs that render clearly in the target game font. Width and coverage
+vary by platform, especially outside the Basic Multilingual Plane.
+*/
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. ASCII PRINTABLE  (U+0021–U+007E)
@@ -450,11 +450,11 @@ export const BRAILLE = {
 } as const;
 
 /**
- * Generates any Braille character from an 8-bit dot mask.
- *
- * @param mask - Dot mask using b0=dot1 through b7=dot8.
- * @returns The matching Unicode Braille pattern.
- */
+Generates any Braille character from an 8-bit dot mask.
+
+@param mask - Dot mask using b0=dot1 through b7=dot8.
+@returns The matching Unicode Braille pattern.
+*/
 export const braille = (mask: number): string =>
   String.fromCodePoint(
     BRAILLE_CODE_POINT_OFFSET +
@@ -1111,51 +1111,51 @@ export const COPTIC = {
 // ─────────────────────────────────────────────────────────────────────────────
 export const COMBINING = {
   // Diacritics (U+0300–U+036F)
-  GRAVE: "\u0300",
-  ACUTE: "\u0301",
-  CIRC: "\u0302",
-  TILDE_C: "\u0303",
-  MACRON: "\u0304",
-  OVERLINE: "\u0305",
-  BREVE: "\u0306",
-  DOT_ABOVE: "\u0307",
-  DIAERESIS: "\u0308",
-  HOOK_ABOVE: "\u0309",
-  RING_ABOVE: "\u030A",
-  DOUBLE_ACUTE: "\u030B",
-  CARON: "\u030C",
-  VERT_LINE_ABV: "\u030D",
-  DOUBLE_VERT_ABV: "\u030E",
-  DOUBLE_GRAVE: "\u030F",
-  CANDRABINDU: "\u0310",
-  INVERTED_BREVE: "\u0311",
-  HORN: "\u031B",
-  DOT_BELOW: "\u0323",
-  DIAER_BELOW: "\u0324",
-  RING_BELOW: "\u0325",
-  CEDILLA: "\u0327",
-  OGONEK: "\u0328",
+  GRAVE: "\u{300}",
+  ACUTE: "\u{301}",
+  CIRC: "\u{302}",
+  TILDE_C: "\u{303}",
+  MACRON: "\u{304}",
+  OVERLINE: "\u{305}",
+  BREVE: "\u{306}",
+  DOT_ABOVE: "\u{307}",
+  DIAERESIS: "\u{308}",
+  HOOK_ABOVE: "\u{309}",
+  RING_ABOVE: "\u{30A}",
+  DOUBLE_ACUTE: "\u{30B}",
+  CARON: "\u{30C}",
+  VERT_LINE_ABV: "\u{30D}",
+  DOUBLE_VERT_ABV: "\u{30E}",
+  DOUBLE_GRAVE: "\u{30F}",
+  CANDRABINDU: "\u{310}",
+  INVERTED_BREVE: "\u{311}",
+  HORN: "\u{31B}",
+  DOT_BELOW: "\u{323}",
+  DIAER_BELOW: "\u{324}",
+  RING_BELOW: "\u{325}",
+  CEDILLA: "\u{327}",
+  OGONEK: "\u{328}",
 
   // Enclosing
-  ENCLOSING_CIRCLE: "\u20DD", // character + ⃝  = circled char
-  ENCLOSING_KEYCAP: "\u20E3", // char + ⃣ = keycap
-  ENCLOSING_CIRCLE_BP: "\u20E0", // prohibited sign
-  ENCLOSING_DIAMOND: "\u20DF",
-  ENCLOSING_SQUARE: "\u20DE",
-  COMBINING_LONG_STROKE_OVERLAY: "\u0336", // strikethrough
+  ENCLOSING_CIRCLE: "\u{20DD}", // character + ⃝  = circled char
+  ENCLOSING_KEYCAP: "\u{20E3}", // char + ⃣ = keycap
+  ENCLOSING_CIRCLE_BP: "\u{20E0}", // prohibited sign
+  ENCLOSING_DIAMOND: "\u{20DF}",
+  ENCLOSING_SQUARE: "\u{20DE}",
+  COMBINING_LONG_STROKE_OVERLAY: "\u{336}", // strikethrough
 
   // Overlay
-  LONG_SOLIDUS: "\u0338", // NOT slash overlay
-  SHORT_SOLIDUS: "\u0337",
+  LONG_SOLIDUS: "\u{338}", // NOT slash overlay
+  SHORT_SOLIDUS: "\u{337}",
 } as const;
 
 /**
- * Applies combining characters to a base glyph.
- *
- * @param base - Base glyph.
- * @param combiners - Combining marks to append to the base glyph.
- * @returns The composed glyph sequence.
- */
+Applies combining characters to a base glyph.
+
+@param base - Base glyph.
+@param combiners - Combining marks to append to the base glyph.
+@returns The composed glyph sequence.
+*/
 export const combine = (
   base: string,
   ...combiners: ReadonlyArray<string>
