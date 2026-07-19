@@ -18,9 +18,7 @@ const FLOOR_FILL_STYLE = "#d7d0bf";
 const WALL_FILL_STYLE = "#111111";
 const DOOR_FILL_STYLE = "#8b5a2b";
 
-/**
- * Terrain tile fill draw command.
- */
+/** Terrain tile fill draw command. */
 export type DrawTerrainTileCommand = Readonly<{
   kind: "drawTerrainTile";
   pixelX: number;
@@ -30,9 +28,7 @@ export type DrawTerrainTileCommand = Readonly<{
   fillStyle: string;
 }>;
 
-/**
- * Normalized tile-space bounds for glyph scaling.
- */
+/** Normalized tile-space bounds for glyph scaling. */
 export type TileBounds = Readonly<{
   lowX: number;
   lowY: number;
@@ -40,9 +36,7 @@ export type TileBounds = Readonly<{
   highY: number;
 }>;
 
-/**
- * Terrain glyph path draw command.
- */
+/** Terrain glyph path draw command. */
 export type DrawTerrainGlyphCommand = Readonly<{
   kind: "drawTerrainGlyph";
   pixelX: number;
@@ -55,18 +49,14 @@ export type DrawTerrainGlyphCommand = Readonly<{
   unitsPerEm: number;
 }>;
 
-/**
- * Overlay grid draw command.
- */
+/** Overlay grid draw command. */
 export type DrawGridCommand = Readonly<{
   kind: "drawGrid";
   pixelWidth: number;
   pixelHeight: number;
 }>;
 
-/**
- * Overlay hover tile draw command.
- */
+/** Overlay hover tile draw command. */
 export type DrawHoverTileCommand = Readonly<{
   kind: "drawHoverTile";
   pixelX: number;
@@ -75,25 +65,19 @@ export type DrawHoverTileCommand = Readonly<{
   pixelHeight: number;
 }>;
 
-/**
- * Terrain draw plan.
- */
+/** Terrain draw plan. */
 export type TerrainDrawPlan = Readonly<{
   kind: "terrain";
   commands: ReadonlyArray<DrawTerrainTileCommand | DrawTerrainGlyphCommand>;
 }>;
 
-/**
- * Overlay draw plan.
- */
+/** Overlay draw plan. */
 export type OverlayDrawPlan = Readonly<{
   kind: "overlay";
   commands: ReadonlyArray<DrawGridCommand | DrawHoverTileCommand>;
 }>;
 
-/**
- * Input for projecting Quilt draw plans.
- */
+/** Input for projecting Quilt draw plans. */
 export type CreateDrawPlanInput = Readonly<{
   quiltState: QuiltState;
   tileSize: number;
@@ -260,9 +244,7 @@ const createTerrainTileCommands = (
       }),
   );
 
-/**
- * Projects transient editor state to overlay draw commands.
- */
+/** Projects transient editor state to overlay draw commands. */
 export const createOverlayDrawPlan = (
   input: CreateDrawPlanInput,
 ): OverlayDrawPlan => ({
@@ -286,9 +268,7 @@ export const createOverlayDrawPlan = (
   kind: "overlay",
 });
 
-/**
- * Projects dirty chunks to terrain tile draw commands.
- */
+/** Projects dirty chunks to terrain tile draw commands. */
 export const createTerrainDrawPlan = (
   input: CreateDrawPlanInput,
 ): TerrainDrawPlan => ({

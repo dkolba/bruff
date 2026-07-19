@@ -7,9 +7,7 @@ import {
   getShadowGameRoot,
 } from "@bruff/utils/dom";
 
-/**
- * The error reasons that {@link curtainUp} can surface to its caller.
- */
+/** The error reasons that {@link curtainUp} can surface to its caller. */
 export type CurtainUpError =
   "canvas-context-not-found" | "canvas-not-found" | "game-root-not-found";
 

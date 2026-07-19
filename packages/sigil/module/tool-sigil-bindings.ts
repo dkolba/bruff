@@ -37,9 +37,7 @@ type GlyphSelectChange = Readonly<{
   unicode: string;
 }>;
 
-/**
- * Event handlers supplied by the `<tool-sigil>` coordinator.
- */
+/** Event handlers supplied by the `<tool-sigil>` coordinator. */
 export type ToolSigilControlHandlers = Readonly<{
   onCharactersInput: (characters: string) => void;
   onDownloadClick: () => void;
@@ -52,9 +50,7 @@ export type ToolSigilControlHandlers = Readonly<{
   onSchemaChange: (schemaId: string) => void;
 }>;
 
-/**
- * Disconnects DOM listeners owned by a connected sigil control binding.
- */
+/** Disconnects DOM listeners owned by a connected sigil control binding. */
 export type DisconnectToolSigilControls = () => void;
 
 const queryToolSigilControls = (shadowRoot: ShadowRoot): ToolSigilControls => ({

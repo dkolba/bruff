@@ -7,9 +7,7 @@ type Rect = Readonly<{
   pixelHeight: number;
 }>;
 
-/**
- * Adapts a native CanvasRenderingContext2D to QuiltCanvasContext.
- */
+/** Adapts a native CanvasRenderingContext2D to QuiltCanvasContext. */
 export const adaptCanvasContext = (
   context: CanvasRenderingContext2D,
 ): QuiltCanvasContext => ({

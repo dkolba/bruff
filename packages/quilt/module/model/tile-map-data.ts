@@ -14,35 +14,25 @@ const EMPTY_OBJECT_TILE = FLOOR_TILE_INDEX;
 const EMPTY_FLAGS_TILE = FLOOR_TILE_INDEX;
 const TILE_INDEX_OFFSET = WALL_TILE_INDEX;
 
-/**
- * Branded numeric tile identifier.
- */
+/** Branded numeric tile identifier. */
 export type TileId = Brand<number, "TileId">;
 
-/**
- * Integer tile coordinate in map space.
- */
+/** Integer tile coordinate in map space. */
 export type TileCoordinate = Readonly<{
   tileX: number;
   tileY: number;
 }>;
 
-/**
- * Integer chunk coordinate in map space.
- */
+/** Integer chunk coordinate in map space. */
 export type ChunkCoordinate = Readonly<{
   chunkX: number;
   chunkY: number;
 }>;
 
-/**
- * Supported tile layer identifiers.
- */
+/** Supported tile layer identifiers. */
 export type TileLayerId = "terrain" | "object" | "flags";
 
-/**
- * Immutable map chunk with cache-friendly typed-array layers.
- */
+/** Immutable map chunk with cache-friendly typed-array layers. */
 export type TileChunk = Readonly<{
   chunkCoordinate: ChunkCoordinate;
   terrainLayer: Uint8Array;
@@ -50,9 +40,7 @@ export type TileChunk = Readonly<{
   flagsLayer: Uint32Array;
 }>;
 
-/**
- * Chunked map data used by Quilt.
- */
+/** Chunked map data used by Quilt. */
 export type TileMapData = Readonly<{
   version: typeof MAP_DATA_VERSION;
   width: number;
@@ -62,38 +50,28 @@ export type TileMapData = Readonly<{
   entities: ReadonlyMap<EntityId, MapEntity>;
 }>;
 
-/**
- * Supported square Quilt grid size.
- */
+/** Supported square Quilt grid size. */
 export type QuiltGridSize = number;
 
-/**
- * Selectable square Quilt grid sizes.
- */
+/** Selectable square Quilt grid sizes. */
 export const QUILT_GRID_SIZES: ReadonlyArray<QuiltGridSize> =
   QUILT_GRID_SIZE_TEXT.split(",").map(Number);
 
-/**
- * Input for creating empty tile map data.
- */
+/** Input for creating empty tile map data. */
 export type CreateTileMapDataInput = Readonly<{
   width: number;
   height: number;
   chunkSize?: number;
 }>;
 
-/**
- * Input for resizing tile map data.
- */
+/** Input for resizing tile map data. */
 export type ResizeTileMapDataInput = Readonly<{
   tileMapData: TileMapData;
   width: QuiltGridSize;
   height: QuiltGridSize;
 }>;
 
-/**
- * Input for updating a single map tile.
- */
+/** Input for updating a single map tile. */
 export type SetTileInput = Readonly<{
   tileMapData: TileMapData;
   tileCoordinate: TileCoordinate;
@@ -101,18 +79,14 @@ export type SetTileInput = Readonly<{
   tileId: TileId;
 }>;
 
-/**
- * Input for reading a tile layer value.
- */
+/** Input for reading a tile layer value. */
 type ReadChunkLayerInput = Readonly<{
   chunk: TileChunk;
   layerId: TileLayerId;
   layerIndex: number;
 }>;
 
-/**
- * Input for writing a tile layer value.
- */
+/** Input for writing a tile layer value. */
 type WriteChunkLayerInput = Readonly<{
   chunk: TileChunk;
   layerId: TileLayerId;
@@ -120,16 +94,12 @@ type WriteChunkLayerInput = Readonly<{
   tileId: TileId;
 }>;
 
-/**
- * Terrain tile IDs for floor, wall, and door cells.
- */
+/** Terrain tile IDs for floor, wall, and door cells. */
 export const floorTileId: TileId = brand<"TileId", number>(FLOOR_TILE_INDEX);
 export const wallTileId: TileId = brand<"TileId", number>(WALL_TILE_INDEX);
 export const doorTileId: TileId = brand<"TileId", number>(DOOR_TILE_INDEX);
 
-/**
- * Converts a tile coordinate to its owning chunk coordinate.
- */
+/** Converts a tile coordinate to its owning chunk coordinate. */
 export const getChunkCoordinate = (
   tileCoordinate: TileCoordinate,
   chunkSize: number,
@@ -138,9 +108,7 @@ export const getChunkCoordinate = (
   chunkY: Math.floor(tileCoordinate.tileY / chunkSize),
 });
 
-/**
- * Creates a stable string key for a chunk coordinate.
- */
+/** Creates a stable string key for a chunk coordinate. */
 export const chunkCoordinateKey = (chunkCoordinate: ChunkCoordinate): string =>
   `${chunkCoordinate.chunkX}${CHUNK_KEY_SEPARATOR}${chunkCoordinate.chunkY}`;
 
@@ -277,9 +245,7 @@ const writeChunkLayer = (input: WriteChunkLayerInput): TileChunk => {
     : writeTerrainLayer(input);
 };
 
-/**
- * Creates chunked map data filled with floor terrain.
- */
+/** Creates chunked map data filled with floor terrain. */
 export const createTileMapData = (
   input: CreateTileMapDataInput,
 ): TileMapData => {
@@ -306,9 +272,7 @@ export const createTileMapData = (
   };
 };
 
-/**
- * Converts a tile coordinate to a chunk-local typed-array index.
- */
+/** Converts a tile coordinate to a chunk-local typed-array index. */
 export const tileCoordinateToChunkIndex = (
   tileCoordinate: TileCoordinate,
   chunkSize: number,
@@ -319,9 +283,7 @@ export const tileCoordinateToChunkIndex = (
   return localY * chunkSize + localX;
 };
 
-/**
- * Reads a tile ID from a map layer.
- */
+/** Reads a tile ID from a map layer. */
 export const getTile = (
   tileMapData: TileMapData,
   tileCoordinate: TileCoordinate,
@@ -337,9 +299,7 @@ export const getTile = (
   return brand<"TileId", number>(tileId);
 };
 
-/**
- * Returns map data with one tile updated by replacing the owning chunk.
- */
+/** Returns map data with one tile updated by replacing the owning chunk. */
 export const setTile = (input: SetTileInput): TileMapData => {
   const chunkCoordinate = getChunkCoordinate(
     input.tileCoordinate,
@@ -366,9 +326,7 @@ export const setTile = (input: SetTileInput): TileMapData => {
   return { ...input.tileMapData, chunks: nextChunks };
 };
 
-/**
- * Resizes map data while preserving terrain at in-bounds coordinates.
- */
+/** Resizes map data while preserving terrain at in-bounds coordinates. */
 export const resizeTileMapData = (
   input: ResizeTileMapDataInput,
 ): TileMapData => {

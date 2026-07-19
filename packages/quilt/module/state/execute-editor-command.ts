@@ -77,9 +77,7 @@ const getLastCommand = (
   editorCommands: ReadonlyArray<EditorCommand>,
 ): EditorCommand | undefined => editorCommands.at(-LAST_ITEM_OFFSET);
 
-/**
- * Applies an editor command to Quilt state and pushes it onto undo history.
- */
+/** Applies an editor command to Quilt state and pushes it onto undo history. */
 export const executeEditorCommand = (
   quiltState: QuiltState,
   editorCommand: EditorCommand,
@@ -95,9 +93,7 @@ export const executeEditorCommand = (
   };
 };
 
-/**
- * Undoes the latest editor command when one exists.
- */
+/** Undoes the latest editor command when one exists. */
 export const undoEditorCommand = (quiltState: QuiltState): QuiltState => {
   const editorCommand = getLastCommand(quiltState.undoStack);
 
@@ -115,9 +111,7 @@ export const undoEditorCommand = (quiltState: QuiltState): QuiltState => {
       };
 };
 
-/**
- * Redoes the latest undone editor command when one exists.
- */
+/** Redoes the latest undone editor command when one exists. */
 export const redoEditorCommand = (quiltState: QuiltState): QuiltState => {
   const editorCommand = getLastCommand(quiltState.redoStack);
 

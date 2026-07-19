@@ -1,6 +1,4 @@
-/**
- * Browser globals needed to decide whether test mode is active.
- */
+/** Browser globals needed to decide whether test mode is active. */
 export type TestModeEnvironment = Readonly<{
   document?: Document;
   isBuildEnabled: boolean;

@@ -13,9 +13,7 @@ const TERRAIN_KEYS: ReadonlyArray<BroughlikeTerrain> = [
   "door",
 ];
 
-/**
- * Structured parse failure for {@link parseQuiltTerrainGlyphs}.
- */
+/** Structured parse failure for {@link parseQuiltTerrainGlyphs}. */
 export type ParseQuiltTerrainGlyphsError = Readonly<{
   reason: "INVALID_QUILT_TERRAIN_GLYPHS";
   source: ParseSigilGlyphMapError;

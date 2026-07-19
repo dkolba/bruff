@@ -1,10 +1,6 @@
 import { log } from "../../universal/event-bus/event-bus.ts";
 
-/**
- * Logs that the element has been resized
- *
- * @returns void
- */
+/** Logs that the element has been resized @returns void */
 const logInfo = (): void => {
   log({
     level: "info",

@@ -15,9 +15,7 @@ const REQUIRED_ADVANCE_WIDTH = 400;
 const NOTDEF_ADVANCE_WIDTH = 300;
 const DESCENDER = -200;
 
-/**
- * Units-per-em used by the tiny browser test font.
- */
+/** Units-per-em used by the tiny browser test font. */
 export const TEST_FONT_UNITS_PER_EM = 1000;
 
 const createTestPath = (advanceWidth: number): Path => {
@@ -78,9 +76,7 @@ export const createTestFont = (): Font =>
     unitsPerEm: TEST_FONT_UNITS_PER_EM,
   });
 
-/**
- * Creates a valid test font that intentionally lacks schema glyphs.
- */
+/** Creates a valid test font that intentionally lacks schema glyphs. */
 const createMissingStarTestFont = (): Font =>
   new Font({
     ascender: TEST_FONT_UNITS_PER_EM,
@@ -91,9 +87,7 @@ const createMissingStarTestFont = (): Font =>
     unitsPerEm: TEST_FONT_UNITS_PER_EM,
   });
 
-/**
- * Creates a valid test font that only supports the schema wall glyph.
- */
+/** Creates a valid test font that only supports the schema wall glyph. */
 export const createWallOnlyTestFont = (): Font =>
   new Font({
     ascender: TEST_FONT_UNITS_PER_EM,

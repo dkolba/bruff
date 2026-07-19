@@ -12,9 +12,7 @@ const EMPTY_INPUT_LENGTH = 0;
 const GLYPH_PATH_DECIMAL_PLACES = 2;
 const DEFAULT_ADVANCE_WIDTH = 0;
 
-/**
- * Partitioned extraction state for selected glyphs.
- */
+/** Partitioned extraction state for selected glyphs. */
 type GlyphExtractionState = Readonly<{
   drafts: ReadonlyArray<SigilGlyphDraft>;
   errors: ReadonlyArray<SigilExtractionError>;

@@ -5,19 +5,13 @@ const BROUGHLIKE_MAP_VERSION = 1;
 const MIN_BROUGHLIKE_MAP_SIZE = 1;
 const MAX_BROUGHLIKE_MAP_SIZE = 9;
 
-/**
- * Runtime schema for terrain values in a compact broughlike map.
- */
+/** Runtime schema for terrain values in a compact broughlike map. */
 export const broughlikeTerrainSchema = z.enum(["floor", "wall", "door"]);
 
-/**
- * Readonly TypeScript type inferred from {@link broughlikeTerrainSchema}.
- */
+/** Readonly TypeScript type inferred from {@link broughlikeTerrainSchema}. */
 export type BroughlikeTerrain = z.infer<typeof broughlikeTerrainSchema>;
 
-/**
- * Runtime schema for compact broughlike map JSON.
- */
+/** Runtime schema for compact broughlike map JSON. */
 export const broughlikeMapSchema = z
   .object({
     height: z
@@ -51,14 +45,10 @@ export const broughlikeMapSchema = z
     }
   });
 
-/**
- * Readonly TypeScript type inferred from {@link broughlikeMapSchema}.
- */
+/** Readonly TypeScript type inferred from {@link broughlikeMapSchema}. */
 export type BroughlikeMap = Readonly<z.infer<typeof broughlikeMapSchema>>;
 
-/**
- * Structured parse failure for {@link parseBroughlikeMap}.
- */
+/** Structured parse failure for {@link parseBroughlikeMap}. */
 export type ParseBroughlikeMapError = Readonly<{
   reason: "INVALID_BROUGHLIKE_MAP";
   issues: ReadonlyArray<core.$ZodIssue>;

@@ -1,58 +1,44 @@
 import type { TileCoordinate } from "../model/tile-map-data.ts";
 import type { QuiltCamera } from "../state/quilt-state.ts";
 
-/**
- * Screen-space coordinate in CSS pixels.
- */
+/** Screen-space coordinate in CSS pixels. */
 export type ScreenCoordinate = Readonly<{
   screenX: number;
   screenY: number;
 }>;
 
-/**
- * World-space coordinate in editor pixels.
- */
+/** World-space coordinate in editor pixels. */
 export type WorldCoordinate = Readonly<{
   worldX: number;
   worldY: number;
 }>;
 
-/**
- * Input for screen-to-world conversion.
- */
+/** Input for screen-to-world conversion. */
 export type ScreenToWorldCoordinateInput = Readonly<{
   camera: QuiltCamera;
   screenCoordinate: ScreenCoordinate;
 }>;
 
-/**
- * Input for world-to-screen conversion.
- */
+/** Input for world-to-screen conversion. */
 export type WorldToScreenCoordinateInput = Readonly<{
   camera: QuiltCamera;
   worldCoordinate: WorldCoordinate;
 }>;
 
-/**
- * Input for world-to-tile conversion.
- */
+/** Input for world-to-tile conversion. */
 export type WorldToTileCoordinateInput = Readonly<{
   tileSize: number;
   worldCoordinate: WorldCoordinate;
 }>;
 
-/**
- * Input for screen-to-tile conversion.
- */
+/** Input for screen-to-tile conversion. */
 export type ScreenToTileCoordinateInput = Readonly<{
   camera: QuiltCamera;
   screenCoordinate: ScreenCoordinate;
   tileSize: number;
 }>;
 
-/**
- * Converts screen pixels to world coordinates.
- */
+/** Converts screen pixels to world coordinates. */
 export const screenToWorldCoordinate = (
   input: ScreenToWorldCoordinateInput,
 ): WorldCoordinate => ({
@@ -62,9 +48,7 @@ export const screenToWorldCoordinate = (
     input.screenCoordinate.screenY / input.camera.zoom + input.camera.worldY,
 });
 
-/**
- * Converts world coordinates to screen pixels.
- */
+/** Converts world coordinates to screen pixels. */
 export const worldToScreenCoordinate = (
   input: WorldToScreenCoordinateInput,
 ): ScreenCoordinate => ({
@@ -74,9 +58,7 @@ export const worldToScreenCoordinate = (
     (input.worldCoordinate.worldY - input.camera.worldY) * input.camera.zoom,
 });
 
-/**
- * Converts world coordinates to integer tile coordinates.
- */
+/** Converts world coordinates to integer tile coordinates. */
 export const worldToTileCoordinate = (
   input: WorldToTileCoordinateInput,
 ): TileCoordinate => ({
@@ -84,9 +66,7 @@ export const worldToTileCoordinate = (
   tileY: Math.floor(input.worldCoordinate.worldY / input.tileSize),
 });
 
-/**
- * Converts screen coordinates directly to integer tile coordinates.
- */
+/** Converts screen coordinates directly to integer tile coordinates. */
 export const screenToTileCoordinate = (
   input: ScreenToTileCoordinateInput,
 ): TileCoordinate =>

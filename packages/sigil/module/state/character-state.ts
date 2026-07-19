@@ -27,9 +27,7 @@ const selectionUnicode = (
   return grapheme === undefined ? fallbackUnicode : grapheme;
 };
 
-/**
- * Maps required glyph selections to typed characters by schema order.
- */
+/** Maps required glyph selections to typed characters by schema order. */
 const requiredGlyphSelectionsForCharacters = (
   characters: string,
   selections: ReadonlyArray<RequiredGlyphSelection>,

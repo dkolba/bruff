@@ -4,9 +4,7 @@ import { screenToTileCoordinate } from "../render/coordinates.ts";
 import { executeEditorCommand } from "../state/execute-editor-command.ts";
 import type { QuiltState } from "../state/quilt-state.ts";
 
-/**
- * Input for creating Quilt pointer controller wiring.
- */
+/** Input for creating Quilt pointer controller wiring. */
 export type CreateQuiltControllerInput = Readonly<{
   overlayCanvas: HTMLCanvasElement;
   quiltState: QuiltState;
@@ -14,9 +12,7 @@ export type CreateQuiltControllerInput = Readonly<{
   onStateChange: (quiltState: QuiltState) => void;
 }>;
 
-/**
- * Runtime controller for pointer-to-command wiring.
- */
+/** Runtime controller for pointer-to-command wiring. */
 export type QuiltController = Readonly<{
   handlePointerDown: (pointerEvent: PointerEvent) => void;
   getState: () => QuiltState;
@@ -68,9 +64,7 @@ const computePointerPaint = (
   };
 };
 
-/**
- * Creates controller wiring that turns pointer input into editor commands.
- */
+/** Creates controller wiring that turns pointer input into editor commands. */
 export const createQuiltController = (
   input: CreateQuiltControllerInput,
 ): QuiltController => {

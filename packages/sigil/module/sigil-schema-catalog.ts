@@ -2,23 +2,17 @@ import { type Brand, brand, none, type Option, some } from "@bruff/utils";
 
 import type { RequiredSigilGlyphName } from "./glyph-json.js";
 
-/**
- * Stable id for a concrete sigil contract schema preset.
- */
+/** Stable id for a concrete sigil contract schema preset. */
 export type SigilSchemaId = Brand<string, "SigilSchemaId">;
 
-/**
- * One required glyph entry within a schema preset.
- */
+/** One required glyph entry within a schema preset. */
 export type SigilSchemaGlyph = Readonly<{
   defaultUnicode: string;
   name: RequiredSigilGlyphName;
   unicode: string;
 }>;
 
-/**
- * One schema preset selectable in the sigil tool.
- */
+/** One schema preset selectable in the sigil tool. */
 export type SigilSchemaOption = Readonly<{
   defaultCharacters: string;
   id: SigilSchemaId;
@@ -26,20 +20,14 @@ export type SigilSchemaOption = Readonly<{
   requiredGlyphs: ReadonlyArray<SigilSchemaGlyph>;
 }>;
 
-/**
- * Schema id for the shared `SigilGlyphMap` contract.
- */
+/** Schema id for the shared `SigilGlyphMap` contract. */
 export const SIGIL_GLYPH_MAP_SCHEMA_ID: SigilSchemaId =
   brand<"SigilSchemaId">("SigilGlyphMap");
 
-/**
- * Default concrete schema selected when the sigil tool loads.
- */
+/** Default concrete schema selected when the sigil tool loads. */
 export const DEFAULT_SIGIL_SCHEMA_ID: SigilSchemaId = SIGIL_GLYPH_MAP_SCHEMA_ID;
 
-/**
- * Concrete schema presets available in the sigil tool.
- */
+/** Concrete schema presets available in the sigil tool. */
 export const SIGIL_SCHEMA_OPTIONS: ReadonlyArray<SigilSchemaOption> = [
   {
     defaultCharacters: ".#+@e",

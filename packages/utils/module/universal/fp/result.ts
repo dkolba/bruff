@@ -1,11 +1,7 @@
-/**
- * The success variant of a {@link Result}.
- */
+/** The success variant of a {@link Result}. */
 export type Ok<T> = Readonly<{ type: "ok"; value: T }>;
 
-/**
- * The failure variant of a {@link Result}.
- */
+/** The failure variant of a {@link Result}. */
 export type Failure<E> = Readonly<{ error: E; type: "error" }>;
 
 /**

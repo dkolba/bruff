@@ -31,14 +31,10 @@ type GlyphTableDefinition = Readonly<{
   glyphs: GlyphTable;
 }>;
 
-/**
- * Stable group name for a top-level `@bruff/glyph` export table.
- */
+/** Stable group name for a top-level `@bruff/glyph` export table. */
 export type SigilGlyphGroupName = string;
 
-/**
- * One selectable glyph from the shared glyph catalog.
- */
+/** One selectable glyph from the shared glyph catalog. */
 export type SigilGlyphOption = Readonly<{
   groupName: SigilGlyphGroupName;
   glyphKey: string;
@@ -46,9 +42,7 @@ export type SigilGlyphOption = Readonly<{
   label: string;
 }>;
 
-/**
- * One selectable glyph group from the shared glyph catalog.
- */
+/** One selectable glyph group from the shared glyph catalog. */
 export type SigilGlyphGroup = Readonly<{
   groupName: SigilGlyphGroupName;
   label: string;
@@ -111,9 +105,7 @@ const glyphGroup = ({
   label: labelText(groupName),
 });
 
-/**
- * Ordered selectable glyph groups projected from `@bruff/glyph`.
- */
+/** Ordered selectable glyph groups projected from `@bruff/glyph`. */
 export const SIGIL_GLYPH_GROUPS: ReadonlyArray<SigilGlyphGroup> =
   GLYPH_TABLES.map((tableDefinition) => glyphGroup(tableDefinition)).filter(
     (group) => group.glyphs.length > EMPTY_LENGTH,
