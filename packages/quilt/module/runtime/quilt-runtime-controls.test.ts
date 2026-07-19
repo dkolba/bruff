@@ -127,9 +127,9 @@ describe("quilt runtime — grid resize", () => {
   test("resizes map from grid-size select", () => {
     const runtimeNodes = createRuntimeNodes();
     const gridSizeOption = document.createElement("option");
-    gridSizeOption.value = `${MAP_SIZE_9}`;
+    gridSizeOption.value = String(MAP_SIZE_9);
     runtimeNodes.gridSizeSelect.append(gridSizeOption);
-    runtimeNodes.gridSizeSelect.value = `${MAP_SIZE_9}`;
+    runtimeNodes.gridSizeSelect.value = String(MAP_SIZE_9);
     const runtime = makeRuntime(runtimeNodes);
 
     runtimeNodes.gridSizeSelect.dispatchEvent(new Event("change"));

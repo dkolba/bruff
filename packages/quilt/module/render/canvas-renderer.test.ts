@@ -24,19 +24,31 @@ const createContext = (): QuiltCanvasContext & {
 
   return {
     calls,
-    clearRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect) =>
-      calls.push(`clear:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`),
-    fill: (path, fillRule) => calls.push(`fill:${fillRule ?? "nonzero"}`),
-    fillRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect) =>
-      calls.push(`fill:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`),
+    clearRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect): void => {
+      calls.push(`clear:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`);
+    },
+    fill: (path, fillRule): void => {
+      calls.push(`fill:${fillRule ?? "nonzero"}`);
+    },
+    fillRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect): void => {
+      calls.push(`fill:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`);
+    },
     fillStyle: "#000000",
-    restore: () => calls.push("restore"),
-    save: () => calls.push("save"),
-    scale: (scaleX, scaleY) => calls.push(`scale:${scaleX}:${scaleY}`),
-    strokeRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect) =>
-      calls.push(`stroke:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`),
-    translate: (translateX, translateY) =>
-      calls.push(`translate:${translateX}:${translateY}`),
+    restore: (): void => {
+      calls.push("restore");
+    },
+    save: (): void => {
+      calls.push("save");
+    },
+    scale: (scaleX, scaleY): void => {
+      calls.push(`scale:${scaleX}:${scaleY}`);
+    },
+    strokeRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect): void => {
+      calls.push(`stroke:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`);
+    },
+    translate: (translateX, translateY): void => {
+      calls.push(`translate:${translateX}:${translateY}`);
+    },
   };
 };
 

@@ -19,12 +19,13 @@ export type ParseQuiltTerrainGlyphsError = Readonly<{
   source: ParseSigilGlyphMapError;
 }>;
 
+// eslint-disable-next-line unicorn/no-asterisk-prefix-in-documentation-comments -- JSDoc-style comment without asterisk prefixes is intentional
 /**
- * Parses an unknown input into Quilt terrain glyph rendering data,
- * extracting only floor, wall, and door entries from a Sigil glyph map.
- *
- * @param input - Unknown candidate value
- * @returns A typed result containing terrain glyphs or parse failure
+Parses an unknown input into Quilt terrain glyph rendering data,
+extracting only floor, wall, and door entries from a Sigil glyph map.
+
+@param input - Unknown candidate value
+@returns A typed result containing terrain glyphs or parse failure
  */
 export const parseQuiltTerrainGlyphs = (
   input: unknown,

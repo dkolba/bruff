@@ -104,7 +104,7 @@ const parseChunkCoordinate = (chunkKey: string): ChunkCoordinate => {
 
 const getTerrainChunkKeys = (quiltState: QuiltState): ReadonlyArray<string> =>
   quiltState.dirtyChunks.size === FALLBACK_CHUNK_COORDINATE
-    ? [...quiltState.tileMapData.chunks.keys()]
+    ? quiltState.tileMapData.chunks.keys().toArray()
     : [...quiltState.dirtyChunks];
 
 const createChunkTileCoordinates = (
@@ -123,7 +123,7 @@ const createChunkTileCoordinates = (
   );
 
   return Array.from({ length: height }).flatMap((_row, tileYOffset) =>
-    Array.from({ length: width }).map((_col, tileXOffset) => ({
+    Array.from({ length: width }, (_col, tileXOffset) => ({
       tileX: firstTileX + tileXOffset,
       tileY: firstTileY + tileYOffset,
     })),
@@ -142,12 +142,12 @@ const getTerrainGlyphForTileId = (
   quiltState: QuiltState,
   tileId: TileId,
 ):
+  undefined
   | {
       path: string;
       bounds: SigilGlyphBounds;
       unitsPerEm: number;
-    }
-  | undefined => {
+    } => {
   const terrain = tileIdToTerrain(tileId);
   const glyph = quiltState.terrainGlyphs[terrain];
 

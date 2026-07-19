@@ -68,15 +68,19 @@ export const createMapEntity = (input: CreateMapEntityInput): MapEntity => ({
 export const putMapEntity = (
   entities: MapEntityCollection,
   mapEntity: MapEntity,
-): MapEntityCollection => new Map(entities).set(mapEntity.id, mapEntity);
+): MapEntityCollection => {
+  const updatedEntities = new Map(entities);
+  updatedEntities.set(mapEntity.id, mapEntity);
+  return updatedEntities;
+};
 
 /** Gets every entity positioned on the requested tile. */
 export const getEntitiesAtTile = (
   entities: MapEntityCollection,
   tileCoordinate: TileCoordinate,
 ): ReadonlyArray<MapEntity> =>
-  [...entities.values()].filter(
+  entities.values().filter(
     (mapEntity) =>
       mapEntity.position.tileX === tileCoordinate.tileX &&
       mapEntity.position.tileY === tileCoordinate.tileY,
-  );
+  ).toArray();

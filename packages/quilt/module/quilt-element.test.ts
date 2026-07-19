@@ -55,7 +55,7 @@ describe("quilt element — canvas sizing", () => {
       '[data-quilt="terrain-canvas"]',
     );
     const viewportCanvasSize = Math.floor(
-      Math.min(globalThis.innerWidth, globalThis.innerHeight),
+      Math.min(innerWidth, innerHeight),
     );
 
     expect(terrainCanvas).toBeInstanceOf(HTMLCanvasElement);
@@ -68,7 +68,7 @@ describe("quilt element — canvas sizing", () => {
   test("updates runtime canvas size on window resize", () => {
     const quiltElement = appendElement();
 
-    globalThis.dispatchEvent(new Event("resize"));
+    dispatchEvent(new Event("resize"));
 
     expect(quiltElement).toBeInstanceOf(QuiltElement);
     quiltElement.remove();
@@ -106,7 +106,6 @@ describe("quilt element — registration", () => {
   });
 
   test("defines the custom element when not already registered", () => {
-    // eslint-disable-next-line unicorn/no-useless-undefined -- TS requires argument for typed mock
     const getSpy = vi.spyOn(customElements, "get").mockReturnValue(undefined);
     const defineSpy = vi
       .spyOn(customElements, "define")

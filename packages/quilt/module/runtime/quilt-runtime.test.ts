@@ -180,7 +180,7 @@ describe("quilt runtime — canvas sizing", () => {
 
     expect(runtime).toBeDefined();
     const expectedBufferSize =
-      CANVAS_SIZE_128 * (globalThis.devicePixelRatio ?? TILE_X_1);
+      CANVAS_SIZE_128 * (devicePixelRatio ?? TILE_X_1);
     expect(runtimeNodes.terrainCanvas.width).toBe(expectedBufferSize);
     expect(runtimeNodes.terrainCanvas.style.width).toBe(`${CANVAS_SIZE_128}px`);
   });
@@ -192,7 +192,7 @@ describe("quilt runtime — canvas sizing", () => {
     runtime.setCanvasSize(CANVAS_SIZE_128);
 
     const resizedBufferSize =
-      CANVAS_SIZE_128 * (globalThis.devicePixelRatio ?? TILE_X_1);
+      CANVAS_SIZE_128 * (devicePixelRatio ?? TILE_X_1);
     expect(runtimeNodes.overlayCanvas.width).toBe(resizedBufferSize);
     expect(runtimeNodes.overlayCanvas.style.height).toBe(
       `${CANVAS_SIZE_128}px`,

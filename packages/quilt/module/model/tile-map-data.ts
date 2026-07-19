@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- Core data model file with many necessary types and functions */
 import { type Brand, brand } from "@bruff/utils";
 
 import type { EntityId, MapEntity } from "../entities/map-entity.ts";
@@ -93,13 +94,9 @@ type WriteChunkLayerInput = Readonly<{
   tileId: TileId;
 }>;
 
-/** Terrain tile ID for floor cells. */
+/** Terrain tile IDs for floor, wall, and door cells. */
 export const floorTileId: TileId = brand<"TileId", number>(FLOOR_TILE_INDEX);
-
-/** Terrain tile ID for wall cells. */
 export const wallTileId: TileId = brand<"TileId", number>(WALL_TILE_INDEX);
-
-/** Terrain tile ID for door cells. */
 export const doorTileId: TileId = brand<"TileId", number>(DOOR_TILE_INDEX);
 
 /** Converts a tile coordinate to its owning chunk coordinate. */
@@ -121,12 +118,16 @@ const modulo = (number: number, divisor: number): number =>
 const createTileChunk = (
   chunkCoordinate: ChunkCoordinate,
   chunkSize: number,
-): TileChunk => ({
-  chunkCoordinate,
-  flagsLayer: new Uint32Array(chunkSize * chunkSize).fill(EMPTY_FLAGS_TILE),
-  objectLayer: new Uint16Array(chunkSize * chunkSize).fill(EMPTY_OBJECT_TILE),
-  terrainLayer: new Uint8Array(chunkSize * chunkSize).fill(floorTileId),
-});
+): TileChunk => {
+  const layerSize = chunkSize * chunkSize;
+  const flagsLayer = new Uint32Array(layerSize);
+  const objectLayer = new Uint16Array(layerSize);
+  const terrainLayer = new Uint8Array(layerSize);
+  flagsLayer.fill(EMPTY_FLAGS_TILE);
+  objectLayer.fill(EMPTY_OBJECT_TILE);
+  terrainLayer.fill(floorTileId);
+  return { chunkCoordinate, flagsLayer, objectLayer, terrainLayer };
+};
 
 const createChunkCoordinates = (
   width: number,
@@ -135,7 +136,8 @@ const createChunkCoordinates = (
 ): ReadonlyArray<ChunkCoordinate> =>
   Array.from({ length: Math.ceil(width / chunkSize) }).flatMap(
     (unusedColumn, chunkX) =>
-      Array.from({ length: Math.ceil(height / chunkSize) }).map(
+      Array.from(
+        { length: Math.ceil(height / chunkSize) },
         (unusedRow, chunkY) => ({ chunkX, chunkY }),
       ),
   );
