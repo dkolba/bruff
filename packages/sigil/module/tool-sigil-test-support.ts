@@ -68,7 +68,7 @@ const waitForSchemaFontProcessing = (
 /** Waits for component microtasks and file parsing to settle in browser tests. */
 export const waitForComponentUpdate = (): Promise<void> =>
   new Promise((resolve) => {
-    globalThis.setTimeout(resolve, COMPONENT_UPDATE_DELAY_MS);
+    setTimeout(resolve, COMPONENT_UPDATE_DELAY_MS);
   });
 
 /** Replaces a file input's selected files and dispatches change. */

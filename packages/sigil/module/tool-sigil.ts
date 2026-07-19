@@ -37,8 +37,8 @@ import {
 import { TOOL_SIGIL_TEMPLATE } from "./tool-sigil-template.js";
 
 /**
- * Development-only web component for extracting glyph JSON from uploaded fonts.
- */
+Development-only web component for extracting glyph JSON from uploaded fonts.
+*/
 // eslint-disable-next-line wc/define-tag-after-class-definition
 export class ToolSigil extends HTMLElement {
   #disconnectControls: DisconnectToolSigilControls | undefined;
@@ -53,54 +53,6 @@ export class ToolSigil extends HTMLElement {
   });
 
   #state: ToolSigilState = createToolSigilState();
-
-  connectedCallback(): void {
-    const shadowRoot = this.#ensureShadowRoot();
-
-    if (this.#disconnectControls === undefined) {
-      this.#disconnectControls = connectToolSigilControls(shadowRoot, {
-        onCharactersInput: (characters) => {
-          this.#handleCharactersInput(characters);
-        },
-        onDownloadClick: () => {
-          this.#handleDownloadClick();
-        },
-        onFontFileSelected: (fontFile) => {
-          this.#handleFontFileSelected(fontFile);
-        },
-        onGlyphGroupChange: (unicode, groupName) => {
-          this.#handleGlyphGroupChange(unicode, groupName);
-        },
-        onGlyphNameInput: (unicode, glyphName) => {
-          this.#handleGlyphNameInput(unicode, glyphName);
-        },
-        onLicenseChange: (unicode, licenseValue) => {
-          this.#handleLicenseChange(unicode, licenseValue);
-        },
-        onMappedGlyphChange: (unicode, mapping) => {
-          this.#handleMappedGlyphChange(unicode, mapping);
-        },
-        onRequiredGlyphCharacterChange: (glyphName, unicode) => {
-          this.#handleRequiredGlyphCharacterChange(glyphName, unicode);
-        },
-        onSchemaChange: (schemaId) => {
-          this.#handleSchemaChange(schemaId);
-        },
-      });
-    }
-
-    this.#renderState();
-  }
-
-  disconnectedCallback(): void {
-    this.#disconnectControls?.();
-    this.#disconnectControls = undefined;
-    this.#previewResource.disconnect();
-    this.#state = clearToolSigilPreviewFontFamily(
-      this.#state,
-      this.#state.fontLoadToken,
-    );
-  }
 
   static template(): string {
     return TOOL_SIGIL_TEMPLATE;
@@ -183,7 +135,7 @@ export class ToolSigil extends HTMLElement {
     this.#renderSelectionState();
   }
 
-  #handleFontFileSelected(fontFile: File | undefined): void {
+  async #handleFontFileSelected(fontFile: File | undefined): Promise<void> {
     const selection = startToolSigilFontSelection(this.#state, fontFile?.name);
     this.#state = selection.state;
     this.#previewResource.clear();
@@ -202,9 +154,8 @@ export class ToolSigil extends HTMLElement {
       selection.fontLoadToken,
       previewFontFamily,
     );
-    loadSigilFontFile(fontFile).then((fontResult) => {
-      this.#handleFontLoadResult(selection.fontLoadToken, fontResult);
-    });
+    const fontResult = await loadSigilFontFile(fontFile);
+    this.#handleFontLoadResult(selection.fontLoadToken, fontResult);
   }
 
   #handleFontLoadResult(
@@ -249,5 +200,53 @@ export class ToolSigil extends HTMLElement {
     }
 
     triggerJsonDownload(glyphMapResult.value);
+  }
+
+  connectedCallback(): void {
+    const shadowRoot = this.#ensureShadowRoot();
+
+    if (this.#disconnectControls === undefined) {
+      this.#disconnectControls = connectToolSigilControls(shadowRoot, {
+        onCharactersInput: (characters) => {
+          this.#handleCharactersInput(characters);
+        },
+        onDownloadClick: () => {
+          this.#handleDownloadClick();
+        },
+        onFontFileSelected: (fontFile) => {
+          this.#handleFontFileSelected(fontFile);
+        },
+        onGlyphGroupChange: (unicode, groupName) => {
+          this.#handleGlyphGroupChange(unicode, groupName);
+        },
+        onGlyphNameInput: (unicode, glyphName) => {
+          this.#handleGlyphNameInput(unicode, glyphName);
+        },
+        onLicenseChange: (unicode, licenseValue) => {
+          this.#handleLicenseChange(unicode, licenseValue);
+        },
+        onMappedGlyphChange: (unicode, mapping) => {
+          this.#handleMappedGlyphChange(unicode, mapping);
+        },
+        onRequiredGlyphCharacterChange: (glyphName, unicode) => {
+          this.#handleRequiredGlyphCharacterChange(glyphName, unicode);
+        },
+        onSchemaChange: (schemaId) => {
+          this.#handleSchemaChange(schemaId);
+        },
+      });
+    }
+
+    this.#renderState();
+  }
+
+  disconnectedCallback(): void {
+    this.#disconnectControls?.();
+    this.#disconnectControls = undefined;
+    this.#previewResource.disconnect();
+    this.#state = clearToolSigilPreviewFontFamily(
+      this.#state,
+      this.#state.fontLoadToken,
+    );
   }
 }

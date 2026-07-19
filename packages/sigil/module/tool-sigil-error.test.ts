@@ -15,9 +15,9 @@ import {
 const REQUIRED_SCHEMA_UNICODES = [".", "#", "+", "@", "e"];
 
 const selectSchemaMappingAndLicense = (shadowRoot: ShadowRoot): void => {
-  REQUIRED_SCHEMA_UNICODES.map((unicode) =>
-    selectDefaultMappingAndLicense(shadowRoot, unicode),
-  );
+  for (const unicode of REQUIRED_SCHEMA_UNICODES) {
+    selectDefaultMappingAndLicense(shadowRoot, unicode);
+  }
 };
 
 const expectAlertText = async (

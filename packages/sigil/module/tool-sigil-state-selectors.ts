@@ -182,14 +182,18 @@ const catalogErrors = (
 ];
 
 /**
- * Selects errors visible to the user, including glyph-name validation errors.
- *
- * @param state - Current tool state
- * @returns Visible extraction and naming errors
- */
+Selects errors visible to the user, including glyph-name validation errors.
+
+@param state - Current tool state
+@returns Visible extraction and naming errors
+*/
 const selectToolSigilVisibleErrors = (
   state: ToolSigilState,
 ): ReadonlyArray<SigilExtractionError> => {
+  if (state.drafts.length === EMPTY_COUNT) {
+    return state.errors;
+  }
+
   const nameResult = createSigilGlyphMap(
     selectedRequiredDrafts(state),
     outputNamesByUnicode(state),
@@ -204,10 +208,6 @@ const selectToolSigilVisibleErrors = (
     ...mappedGlyphErrors(state),
     ...licenseErrors(state),
   ];
-
-  if (state.drafts.length === EMPTY_COUNT) {
-    return state.errors;
-  }
 
   if (selectionErrors.length > EMPTY_COUNT) {
     const visibleNameErrors =
@@ -226,11 +226,11 @@ const selectToolSigilVisibleErrors = (
 };
 
 /**
- * Selects the downloadable glyph map result for the current state.
- *
- * @param state - Current tool state
- * @returns Glyph map or typed glyph-name validation errors
- */
+Selects the downloadable glyph map result for the current state.
+
+@param state - Current tool state
+@returns Glyph map or typed glyph-name validation errors
+*/
 export const selectToolSigilDownloadGlyphMap = (
   state: ToolSigilState,
 ): Result<SigilGlyphMap, ReadonlyArray<SigilExtractionError>> =>
@@ -245,11 +245,11 @@ export const selectToolSigilDownloadGlyphMap = (
   );
 
 /**
- * Selects whether the JSON download command should be disabled.
- *
- * @param state - Current tool state
- * @returns True when the current state cannot produce a valid glyph map
- */
+Selects whether the JSON download command should be disabled.
+
+@param state - Current tool state
+@returns True when the current state cannot produce a valid glyph map
+*/
 export const selectToolSigilDownloadDisabled = (
   state: ToolSigilState,
 ): boolean =>
@@ -262,11 +262,11 @@ export const selectToolSigilDownloadDisabled = (
   state.drafts.length === EMPTY_COUNT;
 
 /**
- * Creates the render-ready view model for the current state.
- *
- * @param state - Current tool state
- * @returns View model consumed by DOM rendering helpers
- */
+Creates the render-ready view model for the current state.
+
+@param state - Current tool state
+@returns View model consumed by DOM rendering helpers
+*/
 export const selectToolSigilViewModel = (
   state: ToolSigilState,
 ): ToolSigilViewModel => ({

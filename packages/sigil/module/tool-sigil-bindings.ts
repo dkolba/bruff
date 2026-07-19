@@ -242,12 +242,12 @@ const removeToolSigilEventListeners = (
 };
 
 /**
- * Connects shadow DOM controls to coordinator handlers.
- *
- * @param shadowRoot - Component shadow root containing the static template
- * @param handlers - Coordinator callbacks for user interactions
- * @returns A function that removes the connected event listeners
- */
+Connects shadow DOM controls to coordinator handlers.
+
+@param shadowRoot - Component shadow root containing the static template
+@param handlers - Coordinator callbacks for user interactions
+@returns A function that removes the connected event listeners
+*/
 export const connectToolSigilControls = (
   shadowRoot: ShadowRoot,
   handlers: ToolSigilControlHandlers,

@@ -1,4 +1,7 @@
-import "./module/register-tool-sigil.js";
+import { registerToolSigil } from "./module/register-tool-sigil.js";
+
+// eslint-disable-next-line unicorn/no-top-level-side-effects -- Entry point must register the custom element
+registerToolSigil();
 
 export { codePointKey } from "./module/code-point-key.js";
 export { extractSigilGlyphs } from "./module/extract-glyphs.js";

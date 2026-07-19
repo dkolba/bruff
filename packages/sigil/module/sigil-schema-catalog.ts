@@ -44,12 +44,12 @@ export const SIGIL_SCHEMA_OPTIONS: ReadonlyArray<SigilSchemaOption> = [
 ];
 
 /**
- * Finds a concrete sigil schema option by id.
- *
- * @param schemaOptions - Available concrete schema presets
- * @param schemaId - Schema id to find
- * @returns The matching schema option, or none when no option exists
- */
+Finds a concrete sigil schema option by id.
+
+@param schemaOptions - Available concrete schema presets
+@param schemaId - Schema id to find
+@returns The matching schema option, or none when no option exists
+*/
 export const findSigilSchemaOption = (
   schemaOptions: ReadonlyArray<SigilSchemaOption>,
   schemaId: SigilSchemaId,
@@ -60,21 +60,21 @@ export const findSigilSchemaOption = (
 };
 
 /**
- * Builds the source character string for a schema option.
- *
- * @param schemaOption - Concrete schema option
- * @returns Source characters in schema order
- */
+Builds the source character string for a schema option.
+
+@param schemaOption - Concrete schema option
+@returns Source characters in schema order
+*/
 export const sigilSchemaCharacters = (
   schemaOption: SigilSchemaOption | undefined,
 ): string => schemaOption?.defaultCharacters ?? "";
 
 /**
- * Builds default glyph names keyed by source Unicode character.
- *
- * @param schemaOption - Concrete schema option
- * @returns Required glyph names keyed by source character
- */
+Builds default glyph names keyed by source Unicode character.
+
+@param schemaOption - Concrete schema option
+@returns Required glyph names keyed by source character
+*/
 export const sigilSchemaNamesByUnicode = (
   schemaOption: SigilSchemaOption | undefined,
 ): Readonly<Record<string, string>> =>

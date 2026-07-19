@@ -12,10 +12,10 @@ import { extractionCharacters } from "./extraction-characters.js";
 const NEXT_FONT_LOAD_TOKEN_OFFSET = 1;
 
 /** Starts a new font selection.
- * @param state - Current tool state.
- * @param fontFileName - Selected file name.
- * @returns Cleared state and async load token.
- */
+@param state - Current tool state.
+@param fontFileName - Selected file name.
+@returns Cleared state and async load token.
+*/
 export const startToolSigilFontSelection = (
   state: ToolSigilState,
   fontFileName: string | undefined,
@@ -37,11 +37,11 @@ export const startToolSigilFontSelection = (
 };
 
 /** Applies a parsed font result.
- * @param state - Current tool state.
- * @param fontLoadToken - Captured load token.
- * @param fontResult - Parsed font result.
- * @returns Updated tool state.
- */
+@param state - Current tool state.
+@param fontLoadToken - Captured load token.
+@param fontResult - Parsed font result.
+@returns Updated tool state.
+*/
 export const applyToolSigilFontLoadResult = (
   state: ToolSigilState,
   fontLoadToken: number,
@@ -71,11 +71,11 @@ export const applyToolSigilFontLoadResult = (
 };
 
 /** Applies a preview font family.
- * @param state - Current tool state.
- * @param fontLoadToken - Captured load token.
- * @param previewFontFamily - Preview font family.
- * @returns Updated tool state.
- */
+@param state - Current tool state.
+@param fontLoadToken - Captured load token.
+@param previewFontFamily - Preview font family.
+@returns Updated tool state.
+*/
 export const setToolSigilPreviewFontFamily = (
   state: ToolSigilState,
   fontLoadToken: number,
@@ -89,10 +89,10 @@ export const setToolSigilPreviewFontFamily = (
     : state;
 
 /** Clears the preview font family.
- * @param state - Current tool state.
- * @param fontLoadToken - Captured load token.
- * @returns Updated tool state.
- */
+@param state - Current tool state.
+@param fontLoadToken - Captured load token.
+@returns Updated tool state.
+*/
 export const clearToolSigilPreviewFontFamily = (
   state: ToolSigilState,
   fontLoadToken: number,

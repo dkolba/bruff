@@ -32,11 +32,11 @@ const requiredGlyphSelectionsForCharacters = (
   characters: string,
   selections: ReadonlyArray<RequiredGlyphSelection>,
 ): ReadonlyArray<RequiredGlyphSelection> => {
-  const graphemes = distinctGraphemes(characters);
-
   if (!hasRequiredGraphemeCount(characters, selections)) {
     return selections;
   }
+
+  const graphemes = distinctGraphemes(characters);
 
   return selections.map((selection, selectionIndex) => ({
     ...selection,
@@ -45,10 +45,10 @@ const requiredGlyphSelectionsForCharacters = (
 };
 
 /** Updates editable characters.
- * @param state - Current tool state.
- * @param characters - Characters requested for extraction.
- * @returns Updated tool state.
- */
+@param state - Current tool state.
+@param characters - Characters requested for extraction.
+@returns Updated tool state.
+*/
 export const setToolSigilCharacters = (
   state: ToolSigilState,
   characters: string,
@@ -72,11 +72,11 @@ export const setToolSigilCharacters = (
 };
 
 /** Updates a required schema glyph.
- * @param state - Current tool state.
- * @param name - Required glyph name.
- * @param unicode - Selected source character.
- * @returns Updated tool state.
- */
+@param state - Current tool state.
+@param name - Required glyph name.
+@param Unicode - Selected source character.
+@returns Updated tool state.
+*/
 export const setToolSigilRequiredGlyphCharacter = (
   state: ToolSigilState,
   name: string,
@@ -106,10 +106,10 @@ export const setToolSigilRequiredGlyphCharacter = (
 };
 
 /** Selects a schema.
- * @param state - Current tool state.
- * @param schemaId - Schema identifier to select.
- * @returns Updated tool state.
- */
+@param state - Current tool state.
+@param schemaId - Schema identifier to select.
+@returns Updated tool state.
+*/
 export const setToolSigilSchema = (
   state: ToolSigilState,
   schemaId: SigilSchemaId,

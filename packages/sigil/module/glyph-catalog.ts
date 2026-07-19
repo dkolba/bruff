@@ -112,23 +112,23 @@ export const SIGIL_GLYPH_GROUPS: ReadonlyArray<SigilGlyphGroup> =
   );
 
 /**
- * Finds a selectable glyph group by catalog group name.
- *
- * @param groupName - Glyph group name
- * @returns Matching group, or undefined when unavailable
- */
+Finds a selectable glyph group by catalog group name.
+
+@param groupName - Glyph group name
+@returns Matching group, or undefined when unavailable
+*/
 export const findSigilGlyphGroup = (
   groupName: SigilGlyphGroupName,
 ): SigilGlyphGroup | undefined =>
   SIGIL_GLYPH_GROUPS.find((group) => group.groupName === groupName);
 
 /**
- * Finds a selectable glyph by group and key.
- *
- * @param groupName - Glyph group name
- * @param glyphKey - Glyph key inside the group
- * @returns Matching glyph, or undefined when unavailable
- */
+Finds a selectable glyph by group and key.
+
+@param groupName - Glyph group name
+@param glyphKey - Glyph key inside the group
+@returns Matching glyph, or undefined when unavailable
+*/
 export const findSigilGlyphOption = (
   groupName: SigilGlyphGroupName,
   glyphKey: string,

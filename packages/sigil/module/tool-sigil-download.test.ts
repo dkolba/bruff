@@ -56,9 +56,9 @@ const mappedStateForUnicode = (
   );
 
 const selectSchemaMappingAndLicense = (shadowRoot: ShadowRoot): void => {
-  REQUIRED_SCHEMA_UNICODES.map((unicode) =>
-    selectDefaultMappingAndLicense(shadowRoot, unicode),
-  );
+  for (const unicode of REQUIRED_SCHEMA_UNICODES) {
+    selectDefaultMappingAndLicense(shadowRoot, unicode);
+  }
 };
 
 const expectSourceGlyphJson = (blobText: string): void => {
@@ -121,7 +121,7 @@ describe("ToolSigil selected glyph download state", () => {
     if (glyphMapResult.type === "error") {
       return;
     }
-    expect(Object.keys(glyphMapResult.value).toSorted()).toStrictEqual([
+    expect(Object.keys(glyphMapResult.value).toSorted((first, second) => first.localeCompare(second))).toStrictEqual([
       "door",
       "enemy",
       "floor",

@@ -206,11 +206,11 @@ const renderErrors = (
 };
 
 /**
- * Renders validation-only regions without replacing focused glyph inputs.
- *
- * @param shadowRoot - Component shadow root to update
- * @param viewModel - Render-ready sigil tool state
- */
+Renders validation-only regions without replacing focused glyph inputs.
+
+@param shadowRoot - Component shadow root to update
+@param viewModel - Render-ready sigil tool state
+*/
 export const renderToolSigilValidation = (
   shadowRoot: ShadowRoot,
   viewModel: ToolSigilViewModel,
@@ -233,7 +233,7 @@ const renderMappedGlyphSelect = (
   viewModel: ToolSigilViewModel,
 ): void => {
   const select = shadowRoot.querySelector<HTMLSelectElement>(
-    `select[name="${mappedGlyphSelectName(draft.glyph.unicode)}"]`,
+    `select[name="${CSS.escape(mappedGlyphSelectName(draft.glyph.unicode))}"]`,
   );
   if (select === null) {
     return;
@@ -254,21 +254,21 @@ const renderMappedGlyphSelect = (
 };
 
 /**
- * Renders selection regions without replacing glyph rows.
- *
- * @param shadowRoot - Component shadow root to update
- * @param viewModel - Render-ready sigil tool state
- */
+Renders selection regions without replacing glyph rows.
+
+@param shadowRoot - Component shadow root to update
+@param viewModel - Render-ready sigil tool state
+*/
 export const renderToolSigilSelection = (
   shadowRoot: ShadowRoot,
   viewModel: ToolSigilViewModel,
 ): void => {
   for (const draft of viewModel.drafts) {
     const groupSelect = shadowRoot.querySelector<HTMLSelectElement>(
-      `select[name="${glyphGroupSelectName(draft.glyph.unicode)}"]`,
+      `select[name="${CSS.escape(glyphGroupSelectName(draft.glyph.unicode))}"]`,
     );
     const licenseSelect = shadowRoot.querySelector<HTMLSelectElement>(
-      `select[name="${licenseSelectName(draft.glyph.unicode)}"]`,
+      `select[name="${CSS.escape(licenseSelectName(draft.glyph.unicode))}"]`,
     );
 
     if (groupSelect !== null) {
@@ -285,11 +285,11 @@ export const renderToolSigilSelection = (
 };
 
 /**
- * Renders the complete sigil tool state into the component shadow root.
- *
- * @param shadowRoot - Component shadow root to update
- * @param viewModel - Render-ready sigil tool state
- */
+Renders the complete sigil tool state into the component shadow root.
+
+@param shadowRoot - Component shadow root to update
+@param viewModel - Render-ready sigil tool state
+*/
 export const renderToolSigil = (
   shadowRoot: ShadowRoot,
   viewModel: ToolSigilViewModel,

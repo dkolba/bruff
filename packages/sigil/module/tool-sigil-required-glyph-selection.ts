@@ -7,11 +7,11 @@ import type {
 import { distinctGraphemes } from "./unicode-graphemes.js";
 
 /**
- * Creates one option for each distinct typed character.
- *
- * @param characters - User-entered candidate characters
- * @returns Select options in first-seen character order
- */
+Creates one option for each distinct typed character.
+
+@param characters - User-entered candidate characters
+@returns Select options in first-seen character order
+*/
 export const requiredGlyphCharacterOptions = (
   characters: string,
 ): ReadonlyArray<RequiredGlyphCharacterOption> =>
@@ -21,11 +21,11 @@ export const requiredGlyphCharacterOptions = (
   }));
 
 /**
- * Creates default required glyph selections for a schema.
- *
- * @param schemaOption - Selected schema option
- * @returns Required glyph selections using each schema default character
- */
+Creates default required glyph selections for a schema.
+
+@param schemaOption - Selected schema option
+@returns Required glyph selections using each schema default character
+*/
 export const defaultRequiredGlyphSelections = (
   schemaOption: SigilSchemaOption | undefined,
 ): ReadonlyArray<RequiredGlyphSelection> =>
@@ -35,12 +35,12 @@ export const defaultRequiredGlyphSelections = (
   })) ?? [];
 
 /**
- * Projects required glyph selections for rendering.
- *
- * @param characters - User-entered candidate characters
- * @param selections - Current required glyph selections
- * @returns Render-ready required glyph selection views
- */
+Projects required glyph selections for rendering.
+
+@param characters - User-entered candidate characters
+@param selections - Current required glyph selections
+@returns Render-ready required glyph selection views
+*/
 const hasRequiredGlyphSelectionCharacter = (
   options: ReadonlyArray<RequiredGlyphCharacterOption>,
   unicode: string,
@@ -61,11 +61,11 @@ export const requiredGlyphSelectionViews = (
 };
 
 /**
- * Selects characters currently assigned to required glyphs.
- *
- * @param selections - Current required glyph selections
- * @returns Selected source characters
- */
+Selects characters currently assigned to required glyphs.
+
+@param selections - Current required glyph selections
+@returns Selected source characters
+*/
 export const selectedRequiredGlyphCharacters = (
   selections: ReadonlyArray<RequiredGlyphSelection>,
 ): string => selections.map((selection) => selection.unicode).join("");
