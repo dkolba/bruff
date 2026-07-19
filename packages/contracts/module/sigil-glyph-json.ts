@@ -4,8 +4,8 @@ import { type core, z } from "zod";
 const MIN_TEXT_LENGTH = 1;
 
 /**
- * Required glyph names for core broughlike map rendering.
- */
+Required glyph names for core broughlike map rendering.
+*/
 export const requiredSigilGlyphNames = [
   "floor",
   "wall",
@@ -15,13 +15,13 @@ export const requiredSigilGlyphNames = [
 ] as const;
 
 /**
- * Required Sigil glyph keys used by core broughlike maps.
- */
+Required Sigil glyph keys used by core broughlike maps.
+*/
 export type RequiredSigilGlyphName = (typeof requiredSigilGlyphNames)[number];
 
 /**
- * Runtime schema for extracted glyph bounds in font units.
- */
+Runtime schema for extracted glyph bounds in font units.
+*/
 export const sigilGlyphBoundsSchema = z.object({
   x1: z.number().finite(),
   x2: z.number().finite(),
@@ -30,13 +30,13 @@ export const sigilGlyphBoundsSchema = z.object({
 });
 
 /**
- * Readonly TypeScript type inferred from {@link sigilGlyphBoundsSchema}.
- */
+Readonly TypeScript type inferred from {@link sigilGlyphBoundsSchema}.
+*/
 export type SigilGlyphBounds = Readonly<z.infer<typeof sigilGlyphBoundsSchema>>;
 
 /**
- * Runtime schema for source-font glyph data.
- */
+Runtime schema for source-font glyph data.
+*/
 export const sigilSourceGlyphSchema = z.object({
   advanceWidth: z.number().finite(),
   bounds: sigilGlyphBoundsSchema,
@@ -46,13 +46,13 @@ export const sigilSourceGlyphSchema = z.object({
 });
 
 /**
- * Readonly TypeScript type inferred from {@link sigilSourceGlyphSchema}.
- */
+Readonly TypeScript type inferred from {@link sigilSourceGlyphSchema}.
+*/
 export type SigilSourceGlyph = Readonly<z.infer<typeof sigilSourceGlyphSchema>>;
 
 /**
- * Runtime schema for a selected `@bruff/glyph` mapping.
- */
+Runtime schema for a selected `@bruff/glyph` mapping.
+*/
 export const sigilGlyphMappingSchema = z.object({
   glyph: z.string().min(MIN_TEXT_LENGTH),
   glyphKey: z.string().min(MIN_TEXT_LENGTH),
@@ -60,15 +60,15 @@ export const sigilGlyphMappingSchema = z.object({
 });
 
 /**
- * Readonly TypeScript type inferred from {@link sigilGlyphMappingSchema}.
- */
+Readonly TypeScript type inferred from {@link sigilGlyphMappingSchema}.
+*/
 export type SigilGlyphMapping = Readonly<
   z.infer<typeof sigilGlyphMappingSchema>
 >;
 
 /**
- * Runtime schema for one downloadable Sigil glyph entry.
- */
+Runtime schema for one downloadable Sigil glyph entry.
+*/
 export const sigilGlyphSchema = sigilSourceGlyphSchema.extend({
   LICENSE: z.string().min(MIN_TEXT_LENGTH),
   mappedGlyph: sigilGlyphMappingSchema,
@@ -76,13 +76,13 @@ export const sigilGlyphSchema = sigilSourceGlyphSchema.extend({
 });
 
 /**
- * Readonly TypeScript type inferred from {@link sigilGlyphSchema}.
- */
+Readonly TypeScript type inferred from {@link sigilGlyphSchema}.
+*/
 export type SigilGlyph = Readonly<z.infer<typeof sigilGlyphSchema>>;
 
 /**
- * Runtime schema for downloadable Sigil glyph JSON keyed by glyph name.
- */
+Runtime schema for downloadable Sigil glyph JSON keyed by glyph name.
+*/
 export const sigilGlyphMapSchema = z
   .object({
     door: sigilGlyphSchema,
@@ -94,26 +94,26 @@ export const sigilGlyphMapSchema = z
   .catchall(sigilGlyphSchema);
 
 /**
- * Readonly TypeScript type inferred from {@link sigilGlyphMapSchema}.
- */
+Readonly TypeScript type inferred from {@link sigilGlyphMapSchema}.
+*/
 export type SigilGlyphMap = Readonly<
   Record<RequiredSigilGlyphName, SigilGlyph> & Record<string, SigilGlyph>
 >;
 
 /**
- * Structured parse failure for {@link parseSigilGlyphMap}.
- */
+Structured parse failure for {@link parseSigilGlyphMap}.
+*/
 export type ParseSigilGlyphMapError = Readonly<{
   reason: "INVALID_SIGIL_GLYPH_MAP";
   issues: ReadonlyArray<core.$ZodIssue>;
 }>;
 
 /**
- * Parses an unknown input into a Sigil glyph JSON map.
- *
- * @param input - Unknown candidate value
- * @returns A typed result containing a Sigil glyph map or parse failure
- */
+Parses an unknown input into a Sigil glyph JSON map.
+
+@param input - Unknown candidate value
+@returns A typed result containing a Sigil glyph map or parse failure
+*/
 export const parseSigilGlyphMap = (
   input: unknown,
 ): Result<SigilGlyphMap, ParseSigilGlyphMapError> => {
