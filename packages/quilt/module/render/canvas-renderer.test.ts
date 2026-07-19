@@ -24,13 +24,23 @@ const createContext = (): QuiltCanvasContext & {
 
   return {
     calls,
-    clearRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect): void => {
+    clearRect: ({
+      pixelHeight,
+      pixelWidth,
+      pixelX,
+      pixelY,
+    }: CanvasRect): void => {
       calls.push(`clear:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`);
     },
     fill: (path, fillRule): void => {
       calls.push(`fill:${fillRule ?? "nonzero"}`);
     },
-    fillRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect): void => {
+    fillRect: ({
+      pixelHeight,
+      pixelWidth,
+      pixelX,
+      pixelY,
+    }: CanvasRect): void => {
       calls.push(`fill:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`);
     },
     fillStyle: "#000000",
@@ -43,7 +53,12 @@ const createContext = (): QuiltCanvasContext & {
     scale: (scaleX, scaleY): void => {
       calls.push(`scale:${scaleX}:${scaleY}`);
     },
-    strokeRect: ({ pixelHeight, pixelWidth, pixelX, pixelY }: CanvasRect): void => {
+    strokeRect: ({
+      pixelHeight,
+      pixelWidth,
+      pixelX,
+      pixelY,
+    }: CanvasRect): void => {
       calls.push(`stroke:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`);
     },
     translate: (translateX, translateY): void => {

@@ -62,7 +62,7 @@ export const loadPreviewFontFace = async (
   const fontBuffer = await fontFile.arrayBuffer();
   const fontFace = new FontFace(fontFamily, fontBuffer);
   return fontFace.load();
-}
+};
 
 /** Adds a loaded preview font face to the document font set. */
 export const installPreviewFontFace = (

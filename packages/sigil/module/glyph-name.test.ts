@@ -159,9 +159,11 @@ describe("createSigilGlyphMap success", () => {
     if (glyphMapResult.type === "error") {
       return;
     }
-    expect(Object.keys(glyphMapResult.value).toSorted((first, second) => first.localeCompare(second)).join(",")).toBe(
-      "door,enemy,floor,player,star,u2665,wall",
-    );
+    expect(
+      Object.keys(glyphMapResult.value)
+        .toSorted((first, second) => first.localeCompare(second))
+        .join(","),
+    ).toBe("door,enemy,floor,player,star,u2665,wall");
     expect(glyphMapResult.value).toMatchObject({
       star: { name: "star" },
       u2665: { name: "u2665" },

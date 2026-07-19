@@ -126,18 +126,18 @@ const updateEnemiesOnTick = (state: GameState): ReadonlyArray<Enemy> => {
 };
 
 /**
- * Pure reducer for enemy movement. Runs the chase logic only on
- * a `tick` action; movement input variants leave enemies unchanged
- * (they are handled by `updatePlayer`). The `default` arm uses a
- * `never`-typed assignment so the compiler errors when a new
- * {@link GameAction} variant is added without a matching case
- * (per A-19).
- *
- * @param state - The current game state
- * @param action - The action to apply
- * @returns A new game state with enemy positions updated on tick,
- *   unchanged otherwise
- */
+Pure reducer for enemy movement. Runs the chase logic only on
+a `tick` action; movement input variants leave enemies unchanged
+(they are handled by `updatePlayer`). The `default` arm uses a
+`never`-typed assignment so the compiler errors when a new
+{@link GameAction} variant is added without a matching case
+(per A-19).
+
+@param state - The current game state
+@param action - The action to apply
+@returns A new game state with enemy positions updated on tick,
+  unchanged otherwise
+*/
 export const updateEnemies = (
   state: GameState,
   action: GameAction,

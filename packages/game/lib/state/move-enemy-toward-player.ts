@@ -4,12 +4,12 @@ import type { Enemy, GridCell, Player } from "../core/types.ts";
 const signedStep = (distance: number): number => Math.sign(distance) * ONE;
 
 /**
- * Chooses the next orthogonal grid cell for an enemy moving toward the player.
- *
- * @param enemy - Enemy that is choosing a destination
- * @param player - Player to move toward
- * @returns Candidate destination cell
- */
+Chooses the next orthogonal grid cell for an enemy moving toward the player.
+
+@param enemy - Enemy that is choosing a destination
+@param player - Player to move toward
+@returns Candidate destination cell
+*/
 export const nextEnemyCellTowardPlayer = (
   enemy: Enemy,
   player: Player,

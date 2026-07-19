@@ -38,33 +38,33 @@ export const stubObjectUrls = (): ObjectUrlStubState => {
   const originalRevokeObjectURL = URL.revokeObjectURL;
 
   Object.defineProperties(URL, {
-  	createObjectURL: {
-	    configurable: true,
-	    value: (blob: Blob): string => {
-	      createdBlobs.push(blob);
-	      return "blob:sigil-json";
-	    },
-	  },
-  	revokeObjectURL: {
-	    configurable: true,
-	    value: (url: string): void => {
-	      revokedUrls.push(url);
-	    },
-	  },
+    createObjectURL: {
+      configurable: true,
+      value: (blob: Blob): string => {
+        createdBlobs.push(blob);
+        return "blob:sigil-json";
+      },
+    },
+    revokeObjectURL: {
+      configurable: true,
+      value: (url: string): void => {
+        revokedUrls.push(url);
+      },
+    },
   });
 
   return {
     createdBlobs,
     restore: (): void => {
       Object.defineProperties(URL, {
-      	createObjectURL: {
-	        configurable: true,
-	        value: originalCreateObjectURL,
-	      },
-      	revokeObjectURL: {
-	        configurable: true,
-	        value: originalRevokeObjectURL,
-	      },
+        createObjectURL: {
+          configurable: true,
+          value: originalCreateObjectURL,
+        },
+        revokeObjectURL: {
+          configurable: true,
+          value: originalRevokeObjectURL,
+        },
       });
     },
     revokedUrls,
@@ -86,7 +86,7 @@ export const trackDownloadClicks = (): DownloadClickState => {
     event.preventDefault();
   };
 
-  document.addEventListener("click", trackClick, {capture: true});
+  document.addEventListener("click", trackClick, { capture: true });
 
   return {
     downloads,

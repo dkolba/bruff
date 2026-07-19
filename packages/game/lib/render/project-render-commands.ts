@@ -37,10 +37,10 @@ const colorForEntity = (entity: RenderCellEntity): string =>
   RENDER_CELL_COLORS[entity];
 
 /**
- * Projects a state snapshot into ordered foreground render commands.
- *
- * @param state - The state snapshot to project
- */
+Projects a state snapshot into ordered foreground render commands.
+
+@param state - The state snapshot to project
+*/
 export const projectRenderCommands = (
   state: GameState,
 ): ReadonlyArray<RenderCommand> =>

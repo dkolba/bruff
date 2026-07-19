@@ -7,12 +7,12 @@ const FRAME_INDEX_INCREMENT = 1;
 const NO_INPUTS = 0;
 
 /**
- * Applies one logical simulation tick.
- *
- * @param state - The state at the start of the tick
- * @param inputs - Normalised inputs queued before this tick
- * @returns The state after all queued inputs and the tick action
- */
+Applies one logical simulation tick.
+
+@param state - The state at the start of the tick
+@param inputs - Normalised inputs queued before this tick
+@returns The state after all queued inputs and the tick action
+*/
 export const advanceGameState = (
   state: GameState,
   inputs: ReadonlyArray<InputAction>,

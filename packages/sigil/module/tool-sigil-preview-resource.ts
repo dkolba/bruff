@@ -46,10 +46,7 @@ export const createToolSigilPreviewResource = (
     void (async (): Promise<void> => {
       try {
         // eslint-disable-next-line unicorn/no-declarations-before-early-exit -- The early exit check depends on the async operation completing
-        const previewFontFace = await loadPreviewFontFace(
-          fontFile,
-          fontFamily,
-        );
+        const previewFontFace = await loadPreviewFontFace(fontFile, fontFamily);
         if (fontLoadToken !== currentFontLoadToken) {
           return;
         }

@@ -79,8 +79,11 @@ export const getEntitiesAtTile = (
   entities: MapEntityCollection,
   tileCoordinate: TileCoordinate,
 ): ReadonlyArray<MapEntity> =>
-  entities.values().filter(
-    (mapEntity) =>
-      mapEntity.position.tileX === tileCoordinate.tileX &&
-      mapEntity.position.tileY === tileCoordinate.tileY,
-  ).toArray();
+  entities
+    .values()
+    .filter(
+      (mapEntity) =>
+        mapEntity.position.tileX === tileCoordinate.tileX &&
+        mapEntity.position.tileY === tileCoordinate.tileY,
+    )
+    .toArray();

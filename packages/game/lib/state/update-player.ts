@@ -29,17 +29,17 @@ const applyGridMove = (state: GameState, action: InputAction): GameState => {
 };
 
 /**
- * Pure reducer for player movement. Maps each {@link GameAction}
- * variant to a new {@link GameState}; the `tick` arm is a no-op
- * (enemies are advanced in `updateEnemies`). The `default` arm uses
- * a `never`-typed assignment so the compiler errors when a new
- * {@link GameAction} variant is added without a matching case
- * (per A-19).
- *
- * @param state - The current game state
- * @param action - The action to apply
- * @returns A new game state with the player position updated
- */
+Pure reducer for player movement. Maps each {@link GameAction}
+variant to a new {@link GameState}; the `tick` arm is a no-op
+(enemies are advanced in `updateEnemies`). The `default` arm uses
+a `never`-typed assignment so the compiler errors when a new
+{@link GameAction} variant is added without a matching case
+(per A-19).
+
+@param state - The current game state
+@param action - The action to apply
+@returns A new game state with the player position updated
+*/
 const updatePlayer = (state: GameState, action: GameAction): GameState => {
   switch (action.type) {
     case "move-up": {

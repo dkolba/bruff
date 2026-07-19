@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle, unicorn/prefer-global-this -- The public browser hook is intentionally named window.__bruffTestApi. */
+/* eslint-disable no-underscore-dangle, unicorn/no-global-object-property-assignment, unicorn/prefer-global-this -- The public browser hook is intentionally named window.__bruffTestApi. */
 import type { GameState } from "../../core/types.ts";
 import { normaliseKey } from "../../input/normalise-input.js";
 import type { FrameStepDriver } from "../frame-step-driver.ts";
@@ -17,11 +17,11 @@ const isTestApiHostElement = (
 const cloneGameState = (state: GameState): GameState => structuredClone(state);
 
 /**
- * Attaches the browser test API to both window and the game element.
- *
- * @param driver - The active frame-step driver
- * @returns A teardown function that removes the API again
- */
+Attaches the browser test API to both window and the game element.
+
+@param driver - The active frame-step driver
+@returns A teardown function that removes the API again
+*/
 export const attachTestApi = (driver: FrameStepDriver): (() => void) => {
   const dispatchInput = (input: string): void => {
     const normalisedInput = normaliseKey(input);

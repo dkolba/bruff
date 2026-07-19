@@ -3,12 +3,12 @@ import { ONE, ZERO } from "../core/constants.ts";
 import type { Board, GridCell } from "../core/types.ts";
 
 /**
- * Computes the adjacent cell targeted by a movement action.
- *
- * @param cell - Starting cell
- * @param action - Movement action to apply
- * @returns The candidate destination cell
- */
+Computes the adjacent cell targeted by a movement action.
+
+@param cell - Starting cell
+@param action - Movement action to apply
+@returns The candidate destination cell
+*/
 export const cellForAction = (
   cell: GridCell,
   action: InputAction,
@@ -36,22 +36,22 @@ export const cellForAction = (
 };
 
 /**
- * Compares two board cells.
- *
- * @param left - First cell
- * @param right - Second cell
- * @returns Whether both cells name the same board coordinate
- */
+Compares two board cells.
+
+@param left - First cell
+@param right - Second cell
+@returns Whether both cells name the same board coordinate
+*/
 export const cellsEqual = (left: GridCell, right: GridCell): boolean =>
   left.column === right.column && left.row === right.row;
 
 /**
- * Checks whether a cell is inside a board.
- *
- * @param cell - Cell to check
- * @param board - Board dimensions
- * @returns Whether the cell is inside the board
- */
+Checks whether a cell is inside a board.
+
+@param cell - Cell to check
+@param board - Board dimensions
+@returns Whether the cell is inside the board
+*/
 export const isCellInsideBoard = (cell: GridCell, board: Board): boolean =>
   cell.column >= ZERO &&
   cell.row >= ZERO &&

@@ -11,22 +11,22 @@ provide a clean touch interface
 */
 
 /**
- * Checks if an event is a touch event.
- *
- * @param event - The event to check
- * @returns True if the event is a KeyboardEvent
- */
+Checks if an event is a touch event.
+
+@param event - The event to check
+@returns True if the event is a KeyboardEvent
+*/
 const isTouchEvent = (event: Event): event is TouchEvent =>
   event instanceof TouchEvent;
 
 /**
- * Creates an observable that emits cardinal directions for a single touch gesture.
- *
- * @param startEvent - The touchstart event
- * @param touchMove$ - Observable of touchmove events
- * @param touchEnd$ - Observable of touchend events
- * @returns Observable of cardinal direction strings or null
- */
+Creates an observable that emits cardinal directions for a single touch gesture.
+
+@param startEvent - The touchstart event
+@param touchMove$ - Observable of touchmove events
+@param touchEnd$ - Observable of touchend events
+@returns Observable of cardinal direction strings or null
+*/
 const createTouchDirectionObservable = (
   startEvent: TouchEvent,
   touchMove$: Observable<TouchEvent>,
@@ -62,13 +62,13 @@ const createTouchDirectionObservable = (
 };
 
 /**
- * Creates an observable that emits a normalised {@link InputAction}
- * for each completed touch gesture. The cardinal direction produced
- * by the gesture is run through `normaliseKey`; gestures that don't
- * map to a known direction are silently dropped.
- *
- * @returns Observable that emits one `InputAction` per recognised swipe
- */
+Creates an observable that emits a normalised {@link InputAction}
+for each completed touch gesture. The cardinal direction produced
+by the gesture is run through `normaliseKey`; gestures that don't
+map to a known direction are silently dropped.
+
+@returns Observable that emits one `InputAction` per recognised swipe
+*/
 const createTouchObservable = (): Observable<InputAction> => {
   /* eslint-disable @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return -- !TODO remove type casts - document.when() is part of the WICG Observable API proposal; TypeScript types do not yet cover this interface */
   const touchStart$ = (document as any)

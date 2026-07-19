@@ -55,7 +55,7 @@ const readSeedAttribute = (): number | undefined => {
     return undefined;
   }
 
-  const seed = Number.parseInt(seedAttribute, 10);
+  const seed = Number(seedAttribute);
   return Number.isFinite(seed) ? seed : undefined;
 };
 

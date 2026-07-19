@@ -54,9 +54,7 @@ describe("quilt element — canvas sizing", () => {
     const terrainCanvas = quiltElement.shadowRoot?.querySelector(
       '[data-quilt="terrain-canvas"]',
     );
-    const viewportCanvasSize = Math.floor(
-      Math.min(innerWidth, innerHeight),
-    );
+    const viewportCanvasSize = Math.floor(Math.min(innerWidth, innerHeight));
 
     expect(terrainCanvas).toBeInstanceOf(HTMLCanvasElement);
     if (terrainCanvas instanceof HTMLCanvasElement) {

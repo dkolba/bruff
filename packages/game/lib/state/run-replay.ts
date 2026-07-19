@@ -72,11 +72,11 @@ const stepReplayFrame =
   };
 
 /**
- * Runs a deterministic replay fixture to completion.
- *
- * @param fixture - Validated replay fixture
- * @returns Final game state or a typed replay error
- */
+Runs a deterministic replay fixture to completion.
+
+@param fixture - Validated replay fixture
+@returns Final game state or a typed replay error
+*/
 export const runReplay = (
   fixture: ReplayFixture,
 ): Result<GameState, ReplayError> =>

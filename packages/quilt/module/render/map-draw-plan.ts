@@ -142,7 +142,7 @@ const getTerrainGlyphForTileId = (
   quiltState: QuiltState,
   tileId: TileId,
 ):
-  undefined
+  | undefined
   | {
       path: string;
       bounds: SigilGlyphBounds;

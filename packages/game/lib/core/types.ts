@@ -3,15 +3,15 @@ import type { Brand, PrngState } from "@bruff/utils";
 import type { InputAction } from "./actions.ts";
 
 /**
- * Branded identifier for {@link Enemy} entities.
- * Generated deterministically by the seeded PRNG — never construct directly.
- */
+Branded identifier for {@link Enemy} entities.
+Generated deterministically by the seeded PRNG — never construct directly.
+*/
 export type EnemyId = Brand<string, "EnemyId">;
 
 /**
- * Branded identifier for the {@link Player} entity.
- * Generated deterministically by the seeded PRNG — never construct directly.
- */
+Branded identifier for the {@link Player} entity.
+Generated deterministically by the seeded PRNG — never construct directly.
+*/
 export type PlayerId = Brand<string, "PlayerId">;
 
 /** A discrete board cell used by gameplay movement and occupancy. */

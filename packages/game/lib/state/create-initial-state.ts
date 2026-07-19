@@ -29,17 +29,17 @@ const drawId = <Tag extends string>(
 };
 
 /**
- * Creates the initial game state based on the canvas dimensions.
- * Seeds the PRNG, mints deterministic entity IDs, and places three
- * enemies at fixed starting positions. The hardcoded seed positions
- * are a placeholder until a spawn-driven simulation lands; the IDs
- * themselves come from the PRNG so the architecture invariant from
- * A-12 is preserved.
- *
- * @param canvas - Object containing the canvas dimensions
- * @param seed - Deterministic seed for entity identity and replay stability
- * @returns The initial game state
- */
+Creates the initial game state based on the canvas dimensions.
+Seeds the PRNG, mints deterministic entity IDs, and places three
+enemies at fixed starting positions. The hardcoded seed positions
+are a placeholder until a spawn-driven simulation lands; the IDs
+themselves come from the PRNG so the architecture invariant from
+A-12 is preserved.
+
+@param canvas - Object containing the canvas dimensions
+@param seed - Deterministic seed for entity identity and replay stability
+@returns The initial game state
+*/
 const createInitialState = (
   canvas: {
     height: number;

@@ -1,12 +1,12 @@
 import { Observable } from "observable-polyfill/fn";
 
 /**
- * Merges multiple observables into a single observable.
- * Subscribes to all input observables and emits values from any of them.
- *
- * @param observables - The observables to merge
- * @returns A new observable that emits values from all input observables
- */
+Merges multiple observables into a single observable.
+Subscribes to all input observables and emits values from any of them.
+
+@param observables - The observables to merge
+@returns A new observable that emits values from all input observables
+*/
 const mergeObservables = <T>(
   ...observables: Array<Observable<T>>
 ): Observable<T> =>
@@ -20,10 +20,9 @@ const mergeObservables = <T>(
     );
     /* eslint-enable @typescript-eslint/consistent-type-assertions */
     return () => {
-      // eslint-disable-next-line unicorn/no-array-for-each -- Declarative iteration is preferred per C-17; T47 explicitly mandates `.forEach`.
-      subs.forEach((sub) => {
+      for (const sub of subs) {
         sub.unsubscribe();
-      });
+      }
     };
   });
 

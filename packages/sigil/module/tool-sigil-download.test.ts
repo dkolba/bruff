@@ -121,13 +121,11 @@ describe("ToolSigil selected glyph download state", () => {
     if (glyphMapResult.type === "error") {
       return;
     }
-    expect(Object.keys(glyphMapResult.value).toSorted((first, second) => first.localeCompare(second))).toStrictEqual([
-      "door",
-      "enemy",
-      "floor",
-      "player",
-      "wall",
-    ]);
+    expect(
+      Object.keys(glyphMapResult.value).toSorted((first, second) =>
+        first.localeCompare(second),
+      ),
+    ).toStrictEqual(["door", "enemy", "floor", "player", "wall"]);
   });
 });
 

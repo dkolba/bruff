@@ -7,21 +7,21 @@ import type { InputAction } from "../../core/actions.ts";
 import { normaliseKey } from "../../input/normalise-input.js";
 
 /**
- * Checks if an event is a keyboard event.
- *
- * @param event - The event to check
- * @returns True if the event is a KeyboardEvent
- */
+Checks if an event is a keyboard event.
+
+@param event - The event to check
+@returns True if the event is a KeyboardEvent
+*/
 const isKeyboardEvent = (event: Event): event is KeyboardEvent =>
   event instanceof KeyboardEvent;
 
 /**
- * Creates an observable that emits a normalised {@link InputAction}
- * for each `keydown` event whose key has a known mapping. Unknown
- * keys are silently dropped (no action emitted).
- *
- * @returns Observable that emits one `InputAction` per recognised keydown
- */
+Creates an observable that emits a normalised {@link InputAction}
+for each `keydown` event whose key has a known mapping. Unknown
+keys are silently dropped (no action emitted).
+
+@returns Observable that emits one `InputAction` per recognised keydown
+*/
 const createKeyDownObservable = (): Observable<InputAction> =>
   document
     .when("keydown")
