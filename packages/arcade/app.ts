@@ -21,8 +21,8 @@ const mountApp = async (): Promise<void> => {
   if (import.meta.env.DEV) {
     const { mountDevRoute, routePathname } =
       await import("./dev-tools-router.js");
-    if (routePathname(globalThis.location.pathname) !== "game") {
-      mountDevRoute(globalThis.location.pathname);
+    if (routePathname(location.pathname) !== "game") {
+      mountDevRoute(location.pathname);
       return;
     }
 
