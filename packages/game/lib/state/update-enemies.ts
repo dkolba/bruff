@@ -1,7 +1,7 @@
 import type { GameAction } from "../core/actions.ts";
 import { CURRENT_STATE_VERSION } from "../core/constants.ts";
 import type { Board, Enemy, GameState, GridCell } from "../core/types.ts";
-import { cellsEqual, isCellInsideBoard } from "./grid.ts";
+import { isCellInsideBoard, isSameCell } from "./grid.ts";
 import { nextEnemyCellTowardPlayer } from "./move-enemy-toward-player.ts";
 import { isCellOccupiedByEnemy } from "./occupancy.ts";
 
@@ -29,13 +29,13 @@ type EnemyResolutionContext = Readonly<{
 }>;
 
 const isPlayerCell = (cell: GridCell, playerCell: GridCell): boolean =>
-  cellsEqual(cell, playerCell);
+  isSameCell(cell, playerCell);
 
 const isReservedCell = (
   cell: GridCell,
   reservedCells: ReadonlyArray<GridCell>,
 ): boolean =>
-  reservedCells.some((reservedCell) => cellsEqual(reservedCell, cell));
+  reservedCells.some((reservedCell) => isSameCell(reservedCell, cell));
 
 const isEnemyDestinationBlocked = (
   destination: GridCell,

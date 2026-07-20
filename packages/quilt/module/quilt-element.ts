@@ -29,7 +29,7 @@ const isInput = (element: unknown): element is HTMLInputElement =>
 const isElement = (element: unknown): element is HTMLElement =>
   element instanceof HTMLElement;
 
-const allElementsValid = (shadowRoot: ShadowRoot): boolean =>
+const isEveryElementValid = (shadowRoot: ShadowRoot): boolean =>
   isCanvas(queryElement(shadowRoot, '[data-quilt="terrain-canvas"]')) &&
   isCanvas(queryElement(shadowRoot, '[data-quilt="overlay-canvas"]')) &&
   isButton(queryElement(shadowRoot, '[data-quilt="paint-tool"]')) &&
@@ -45,7 +45,7 @@ const allElementsValid = (shadowRoot: ShadowRoot): boolean =>
 
 /* v8 ignore next -- The template owns these selectors; fallback is defensive shell code. */
 const createRuntime = (shadowRoot: ShadowRoot): QuiltRuntime | undefined =>
-  allElementsValid(shadowRoot)
+  isEveryElementValid(shadowRoot)
     ? createQuiltRuntime({
         canvasSize: getViewportCanvasSize(),
         doorToolButton: shadowRoot.querySelector('[data-quilt="door-tool"]')!,

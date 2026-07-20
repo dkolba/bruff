@@ -20,10 +20,6 @@ const createStencil = (templateMarkup: string): DocumentFragment => {
 /** A class to represent a game web component */
 // eslint-disable-next-line wc/define-tag-after-class-definition
 export class GameElement extends HTMLElement {
-  #testApi: GameElementTestApi | undefined;
-
-  #unsubscribe: (() => void) | undefined;
-
   static template(): string {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -61,6 +57,10 @@ export class GameElement extends HTMLElement {
           <canvas id="gamecanvas" width="${width}" height="${height}"></canvas>
         </template>`;
   }
+
+  #testApi: GameElementTestApi | undefined;
+
+  #unsubscribe: (() => void) | undefined;
 
   get testApi(): GameElementTestApi | undefined {
     return this.#testApi;

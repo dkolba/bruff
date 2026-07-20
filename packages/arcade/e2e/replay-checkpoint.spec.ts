@@ -26,7 +26,7 @@ test("freezes a replay checkpoint for a stable canvas screenshot @snapshot", asy
 }) => {
   await gotoTestMode(page);
 
-  const frozen = await page.evaluate(
+  const isFrozen = await page.evaluate(
     async (fixture: ReplayCheckpointFixture) => {
       const testApi = window.__bruffTestApi;
       if (testApi === undefined) {
@@ -59,7 +59,7 @@ test("freezes a replay checkpoint for a stable canvas screenshot @snapshot", asy
     canonicalFixture,
   );
 
-  expect(frozen).toBe(true);
+  expect(isFrozen).toBe(true);
 
   const canvas = page.locator("bruff-game").locator("canvas");
 

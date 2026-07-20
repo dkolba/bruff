@@ -1,5 +1,5 @@
 import type { Enemy, GameState, GridCell } from "../core/types.ts";
-import { cellsEqual } from "./grid.ts";
+import { isSameCell } from "./grid.ts";
 
 /**
  * Checks whether any enemy occupies a cell.
@@ -11,7 +11,7 @@ import { cellsEqual } from "./grid.ts";
 export const isCellOccupiedByEnemy = (
   cell: GridCell,
   enemies: ReadonlyArray<Enemy>,
-): boolean => enemies.some((enemy) => cellsEqual(enemy.cell, cell));
+): boolean => enemies.some((enemy) => isSameCell(enemy.cell, cell));
 
 /**
  * Checks whether the player or an enemy occupies a cell.
@@ -24,5 +24,5 @@ export const isCellOccupiedByActor = (
   cell: GridCell,
   state: GameState,
 ): boolean =>
-  cellsEqual(state.player.cell, cell) ||
+  isSameCell(state.player.cell, cell) ||
   isCellOccupiedByEnemy(cell, state.enemies);

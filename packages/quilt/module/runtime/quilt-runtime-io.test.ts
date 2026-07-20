@@ -128,15 +128,15 @@ describe("quilt runtime IO — export", () => {
 describe("quilt runtime IO — import button", () => {
   test("import button click triggers file input click", () => {
     const runtimeNodes = createRuntimeNodes();
-    let inputClicked = false;
+    let isInputClicked = false;
     runtimeNodes.importInput.click = (): void => {
-      inputClicked = true;
+      isInputClicked = true;
     };
     makeRuntimeForIO(runtimeNodes);
 
     runtimeNodes.importButton.click();
 
-    expect(inputClicked).toBe(true);
+    expect(isInputClicked).toBe(true);
   });
 });
 

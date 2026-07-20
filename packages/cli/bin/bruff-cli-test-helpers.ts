@@ -29,17 +29,17 @@ export const ignoreInput = (chunk: TextInputChunk): void => {
 /** Create a fake CLI text input port. */
 export const createFakeInput = (
   isTTY: boolean,
-  supportsRawMode = true,
+  hasRawMode = true,
 ): FakeInput => {
   const rawModeLog: Array<boolean> = [];
   let dataListener: (chunk: TextInputChunk) => void = ignoreInput;
-  let paused = true;
+  let isPaused = true;
   const input: FakeInput = {
     emit: (chunk: TextInputChunk): void => {
       dataListener(chunk);
     },
     hasListener: (): boolean => dataListener !== ignoreInput,
-    isPaused: (): boolean => paused,
+    isPaused: (): boolean => isPaused,
     isTTY,
     off: (
       _eventName: "data",
@@ -58,17 +58,17 @@ export const createFakeInput = (
       return input;
     },
     pause: (): TextInput => {
-      paused = true;
+      isPaused = true;
       return input;
     },
     rawModes: (): ReadonlyArray<boolean> => rawModeLog,
     resume: (): TextInput => {
-      paused = false;
+      isPaused = false;
       return input;
     },
-    setRawMode: supportsRawMode
-      ? (enabled: boolean): TextInput => {
-          rawModeLog.push(enabled);
+    setRawMode: hasRawMode
+      ? (isEnabled: boolean): TextInput => {
+          rawModeLog.push(isEnabled);
           return input;
         }
       : undefined,
@@ -79,7 +79,7 @@ export const createFakeInput = (
 /** Create a fake process input port. */
 export const createFakeProcessInput = (
   isTTY: boolean | undefined,
-  supportsRawMode = true,
+  hasRawMode = true,
 ): FakeProcessInput => {
   const eventLog: Array<string> = [];
   const rawModeLog: Array<boolean> = [];
@@ -104,9 +104,9 @@ export const createFakeProcessInput = (
       eventLog.push("resume");
       return undefined;
     },
-    setRawMode: supportsRawMode
-      ? (enabled: boolean): unknown => {
-          rawModeLog.push(enabled);
+    setRawMode: hasRawMode
+      ? (isEnabled: boolean): unknown => {
+          rawModeLog.push(isEnabled);
           return undefined;
         }
       : undefined,

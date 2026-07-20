@@ -8,7 +8,9 @@ let root: ShadowRoot = document
   .attachShadow({ mode: "open" });
 
 beforeEach(() => {
+  /* eslint-disable unicorn/no-top-level-assignment-in-function */
   root = document.createElement("div").attachShadow({ mode: "open" });
+  /* eslint-enable unicorn/no-top-level-assignment-in-function */
 });
 
 test("#getCanvas returns ok with the canvas element when found", () => {

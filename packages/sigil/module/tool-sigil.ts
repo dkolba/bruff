@@ -7,7 +7,7 @@ import {
   applyToolSigilFontLoadResult,
   clearToolSigilPreviewFontFamily,
   createToolSigilState,
-  selectToolSigilDownloadDisabled,
+  isToolSigilDownloadDisabled,
   selectToolSigilDownloadGlyphMap,
   selectToolSigilViewModel,
   setToolSigilCharacters,
@@ -41,6 +41,10 @@ import { TOOL_SIGIL_TEMPLATE } from "./tool-sigil-template.js";
  */
 // eslint-disable-next-line wc/define-tag-after-class-definition
 export class ToolSigil extends HTMLElement {
+  static template(): string {
+    return TOOL_SIGIL_TEMPLATE;
+  }
+
   #disconnectControls: DisconnectToolSigilControls | undefined;
 
   #previewResource: ToolSigilPreviewResource = createToolSigilPreviewResource({
@@ -53,10 +57,6 @@ export class ToolSigil extends HTMLElement {
   });
 
   #state: ToolSigilState = createToolSigilState();
-
-  static template(): string {
-    return TOOL_SIGIL_TEMPLATE;
-  }
 
   #ensureShadowRoot(): ShadowRoot {
     if (this.shadowRoot !== null) {
@@ -193,7 +193,7 @@ export class ToolSigil extends HTMLElement {
     const glyphMapResult = selectToolSigilDownloadGlyphMap(this.#state);
     if (
       glyphMapResult.type === "error" ||
-      selectToolSigilDownloadDisabled(this.#state)
+      isToolSigilDownloadDisabled(this.#state)
     ) {
       this.#renderState();
       return;

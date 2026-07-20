@@ -17,8 +17,10 @@ let canvas: HTMLCanvasElement = document.createElement("canvas");
 let context: CanvasRenderingContext2D = unwrapContext(canvas);
 
 beforeEach(() => {
+  /* eslint-disable unicorn/no-top-level-assignment-in-function */
   canvas = document.createElement("canvas");
   context = unwrapContext(canvas);
+  /* eslint-enable unicorn/no-top-level-assignment-in-function */
   vi.restoreAllMocks();
 });
 

@@ -1,5 +1,5 @@
 export {
-  selectToolSigilDownloadDisabled,
+  isToolSigilDownloadDisabled,
   selectToolSigilDownloadGlyphMap,
   selectToolSigilViewModel,
 } from "../tool-sigil-state-selectors.js";

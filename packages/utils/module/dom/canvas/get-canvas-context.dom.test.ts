@@ -6,7 +6,9 @@ import { getCanvasContext } from "./get-canvas-context.ts";
 let canvas: HTMLCanvasElement = document.createElement("canvas");
 
 beforeEach(() => {
+  /* eslint-disable unicorn/no-top-level-assignment-in-function */
   canvas = document.createElement("canvas");
+  /* eslint-enable unicorn/no-top-level-assignment-in-function */
 });
 
 test("#getCanvasContext returns ok with the 2d context when available", () => {
