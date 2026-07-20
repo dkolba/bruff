@@ -250,9 +250,7 @@ export const selectToolSigilDownloadGlyphMap = (
  * @param state - Current tool state
  * @returns True when the current state cannot produce a valid glyph map
  */
-export const selectToolSigilDownloadDisabled = (
-  state: ToolSigilState,
-): boolean =>
+export const isToolSigilDownloadDisabled = (state: ToolSigilState): boolean =>
   selectToolSigilDownloadGlyphMap(state).type === "error" ||
   state.errors.length > EMPTY_COUNT ||
   mappedGlyphErrors(state).length > EMPTY_COUNT ||
@@ -272,7 +270,7 @@ export const selectToolSigilViewModel = (
 ): ToolSigilViewModel => ({
   characters: state.characters,
   contractIssues: state.contractIssues,
-  downloadDisabled: selectToolSigilDownloadDisabled(state),
+  downloadDisabled: isToolSigilDownloadDisabled(state),
   drafts: state.drafts,
   errors: selectToolSigilVisibleErrors(state),
   fontFileNameText: fileNameText(state.fontFileName),

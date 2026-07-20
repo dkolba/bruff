@@ -9,7 +9,7 @@ import {
   ZERO,
 } from "../core/constants.js";
 import type { Board, GridCell } from "../core/types.ts";
-import { cellForAction, cellsEqual, isCellInsideBoard } from "./grid.js";
+import { cellForAction, isCellInsideBoard, isSameCell } from "./grid.js";
 
 const TEST_BOARD: Board = { columns: BOARD_COLUMNS, rows: BOARD_ROWS };
 const CENTER_CELL: GridCell = { column: TWO + ONE, row: TWO + ONE };
@@ -49,14 +49,14 @@ describe("cellForAction", () => {
   });
 });
 
-describe("cellsEqual", () => {
+describe("isSameCell", () => {
   it("returns true for matching coordinates", () => {
-    expect(cellsEqual(CENTER_CELL, { ...CENTER_CELL })).toBe(true);
+    expect(isSameCell(CENTER_CELL, { ...CENTER_CELL })).toBe(true);
   });
 
   it("returns false for different coordinates", () => {
     expect(
-      cellsEqual(CENTER_CELL, { column: CENTER_CELL.column, row: ZERO }),
+      isSameCell(CENTER_CELL, { column: CENTER_CELL.column, row: ZERO }),
     ).toBe(false);
   });
 });

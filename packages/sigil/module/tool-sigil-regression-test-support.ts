@@ -96,15 +96,12 @@ const resolveDeferredFontBuffer = (
 };
 
 const createDeferredFontBuffer = (): DeferredFontBuffer => {
-  let resolveFontBuffer: ((fontBuffer: ArrayBuffer) => void) | null = null;
-  const promise = new Promise<ArrayBuffer>((resolve) => {
-    resolveFontBuffer = resolve;
-  });
+  const { promise, resolve } = Promise.withResolvers<ArrayBuffer>();
 
   return {
     promise,
     resolve: (fontBuffer: ArrayBuffer): void => {
-      resolveDeferredFontBuffer(resolveFontBuffer, fontBuffer);
+      resolveDeferredFontBuffer(resolve, fontBuffer);
     },
   };
 };

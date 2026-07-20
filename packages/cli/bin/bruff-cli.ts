@@ -22,7 +22,7 @@ export type TextInput = Readonly<{
   /** Start reading input. */
   resume: () => TextInput;
   /** Enable or disable terminal raw mode. */
-  setRawMode?: (enabled: boolean) => TextInput;
+  setRawMode?: (isEnabled: boolean) => TextInput;
   /** Register an input listener. */
   on: (
     eventName: "data",
@@ -51,7 +51,7 @@ export type ProcessTextInput = Readonly<{
   /** Start reading input. */
   resume: () => unknown;
   /** Enable or disable terminal raw mode. */
-  setRawMode?: (enabled: boolean) => unknown;
+  setRawMode?: (isEnabled: boolean) => unknown;
 }>;
 
 /** Input and output ports for the CLI session. */
@@ -117,9 +117,9 @@ export const createTextInput = (source: ProcessTextInput): TextInput => {
       source.resume();
       return input;
     },
-    setRawMode: (enabled: boolean): TextInput => {
+    setRawMode: (isEnabled: boolean): TextInput => {
       if (source.isTTY === true && source.setRawMode !== undefined) {
-        source.setRawMode(enabled);
+        source.setRawMode(isEnabled);
       }
 
       return input;

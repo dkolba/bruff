@@ -42,7 +42,7 @@ export const cellForAction = (
  * @param right - Second cell
  * @returns Whether both cells name the same board coordinate
  */
-export const cellsEqual = (left: GridCell, right: GridCell): boolean =>
+export const isSameCell = (left: GridCell, right: GridCell): boolean =>
   left.column === right.column && left.row === right.row;
 
 /**

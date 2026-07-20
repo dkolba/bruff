@@ -8,10 +8,12 @@ let gameElement: HTMLElement = document.createElement("div");
 beforeEach(() => {
   document.body.innerHTML = "";
 
+  /* eslint-disable unicorn/no-top-level-assignment-in-function */
   gameElement = document.createElement("div");
   gameElement.id = "game";
   gameElement.attachShadow({ mode: "open" });
   document.body.append(gameElement);
+  /* eslint-enable unicorn/no-top-level-assignment-in-function */
 });
 
 test("#getShadowGameRoot returns ok with the shadow root when found", () => {

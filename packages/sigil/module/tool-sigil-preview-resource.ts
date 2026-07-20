@@ -45,7 +45,6 @@ export const createToolSigilPreviewResource = (
     // eslint-disable-next-line no-void -- Fire-and-forget in synchronous context; errors are handled inside the async IIFE.
     void (async (): Promise<void> => {
       try {
-        // eslint-disable-next-line unicorn/no-declarations-before-early-exit -- The early exit check depends on the async operation completing
         const previewFontFace = await loadPreviewFontFace(fontFile, fontFamily);
         if (fontLoadToken !== currentFontLoadToken) {
           return;

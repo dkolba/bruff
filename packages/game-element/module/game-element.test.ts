@@ -45,6 +45,7 @@ let gameElement: GameElement;
 
 beforeEach(() => {
   document.body.innerHTML = "";
+  // eslint-disable-next-line unicorn/no-top-level-assignment-in-function
   gameElement = createConnectedGameElement();
 });
 

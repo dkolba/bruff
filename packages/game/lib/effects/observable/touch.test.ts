@@ -23,7 +23,7 @@ const NEGATIVE_FORTY = -40;
 const isSafariNotChrome = (userAgent: string): boolean =>
   userAgent.includes("Safari") && !userAgent.includes("HeadlessChrome");
 
-const unsupportedBrowsers =
+const isUnsupportedBrowsers =
   navigator.userAgent.includes("Firefox") ||
   isSafariNotChrome(navigator.userAgent);
 
@@ -94,7 +94,7 @@ const simulateTouchMoveWithNoTouches = (
   document.dispatchEvent(endEvent);
 };
 
-describe.skipIf(unsupportedBrowsers)("createTouchObservable", () => {
+describe.skipIf(isUnsupportedBrowsers)("createTouchObservable", () => {
   beforeEach(() => {
     vi.mocked(getCardinalDirection).mockReturnValue("north");
   });
@@ -117,47 +117,50 @@ describe.skipIf(unsupportedBrowsers)("createTouchObservable", () => {
   });
 });
 
-describe.skipIf(unsupportedBrowsers)("createTouchObservable Edge Cases", () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-  it("should not emit a direction for small movements", () => {
-    const direction$ = createTouchObservable();
-    const next = vi.fn();
-    direction$.subscribe(next);
-
-    simulateTouchGesture(
-      { xPos: 10, yPos: 10 },
-      { xPos: 11, yPos: 11 },
-      { xPos: 11, yPos: 11 },
-    );
-
-    expect(getCardinalDirection).not.toHaveBeenCalled();
-    expect(next).not.toHaveBeenCalled();
-  });
-  it("should handle touchmove events with no touches", () => {
-    const direction$ = createTouchObservable();
-    const next = vi.fn();
-    direction$.subscribe(next);
-
-    simulateTouchMoveWithNoTouches(
-      { xPos: 10, yPos: 50 },
-      { xPos: 10, yPos: 10 },
-    );
-
-    expect(next).not.toHaveBeenCalled();
-    expect(getCardinalDirection).not.toHaveBeenCalled();
-  });
-  it("should not emit if touchstart has no touches", () => {
-    const direction$ = createTouchObservable();
-    const next = vi.fn();
-    direction$.subscribe({ next });
-
-    const startEvent = new TouchEvent("touchstart", {
-      touches: [],
+describe.skipIf(isUnsupportedBrowsers)(
+  "createTouchObservable Edge Cases",
+  () => {
+    afterEach(() => {
+      vi.clearAllMocks();
     });
-    document.dispatchEvent(startEvent);
+    it("should not emit a direction for small movements", () => {
+      const direction$ = createTouchObservable();
+      const next = vi.fn();
+      direction$.subscribe(next);
 
-    expect(next).not.toHaveBeenCalled();
-  });
-});
+      simulateTouchGesture(
+        { xPos: 10, yPos: 10 },
+        { xPos: 11, yPos: 11 },
+        { xPos: 11, yPos: 11 },
+      );
+
+      expect(getCardinalDirection).not.toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalled();
+    });
+    it("should handle touchmove events with no touches", () => {
+      const direction$ = createTouchObservable();
+      const next = vi.fn();
+      direction$.subscribe(next);
+
+      simulateTouchMoveWithNoTouches(
+        { xPos: 10, yPos: 50 },
+        { xPos: 10, yPos: 10 },
+      );
+
+      expect(next).not.toHaveBeenCalled();
+      expect(getCardinalDirection).not.toHaveBeenCalled();
+    });
+    it("should not emit if touchstart has no touches", () => {
+      const direction$ = createTouchObservable();
+      const next = vi.fn();
+      direction$.subscribe({ next });
+
+      const startEvent = new TouchEvent("touchstart", {
+        touches: [],
+      });
+      document.dispatchEvent(startEvent);
+
+      expect(next).not.toHaveBeenCalled();
+    });
+  },
+);

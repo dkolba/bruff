@@ -48,8 +48,8 @@ describe("nextNumber", () => {
 
   it("all values are in the half-open interval [0, 1)", () => {
     const values = generateNumberBatch(SEED_ONE, SEQUENCE_LENGTH);
-    const allInRange = values.every((value) => value >= ZERO && value < ONE);
-    expect(allInRange).toBe(true);
+    const isAllInRange = values.every((value) => value >= ZERO && value < ONE);
+    expect(isAllInRange).toBe(true);
   });
 
   it("sequence of 1001 values has no consecutive duplicates", () => {
@@ -64,8 +64,8 @@ describe("nextNumber", () => {
 describe("nextId", () => {
   it("generates unique values across 10000 draws", () => {
     const ids = generateIdBatch(SEED_ONE, ID_COUNT);
-    const setIds = new Set(ids);
-    expect(setIds.size).toBe(ID_COUNT);
+    const idSet = new Set(ids);
+    expect(idSet.size).toBe(ID_COUNT);
   });
 
   it("same seed produces the same ID sequence", () => {
