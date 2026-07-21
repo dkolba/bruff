@@ -23,7 +23,7 @@ jobs:
         uses: styfle/cancel-workflow-action@0.13.1
 
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       - name: 📦 Enable pnpm
         uses: pnpm/action-setup@v6
