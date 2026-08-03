@@ -62,7 +62,7 @@ const getTestApi = (): BruffTestApi => {
 };
 
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
   delete window.__bruffTestApi;
   vi.restoreAllMocks();
 });

@@ -6,7 +6,7 @@ import { getShadowGameRoot } from "./get-shadow-game-root.ts";
 let gameElement: HTMLElement = document.createElement("div");
 
 beforeEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
 
   /* eslint-disable unicorn/no-top-level-assignment-in-function */
   gameElement = document.createElement("div");

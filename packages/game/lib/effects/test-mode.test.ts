@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import isTestMode, { isTestModeForEnvironment } from "./test-mode.js";
 
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
   history.replaceState({}, "", "/");
 });
 

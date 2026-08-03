@@ -44,7 +44,7 @@ const getConnectedCallbackError = (element: GameElement): unknown => {
 let gameElement: GameElement;
 
 beforeEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
   // eslint-disable-next-line unicorn/no-top-level-assignment-in-function
   gameElement = createConnectedGameElement();
 });
