@@ -34,8 +34,8 @@ catalogs:
       specifier: 4.1.4
       version: 4.1.4
     eslint:
-      specifier: 10.8.0
-      version: 10.8.0
+      specifier: 10.8.1
+      version: 10.8.1
     eslint-plugin-playwright:
       specifier: 2.11.0
       version: 2.11.0
@@ -46,14 +46,14 @@ catalogs:
       specifier: 0.5.2
       version: 0.5.2
     eslint-plugin-unicorn:
-      specifier: 71.0.0
-      version: 71.0.0
+      specifier: 71.1.0
+      version: 71.1.0
     eslint-plugin-wc:
       specifier: 3.1.0
       version: 3.1.0
     globals:
-      specifier: 17.8.0
-      version: 17.8.0
+      specifier: 17.9.0
+      version: 17.9.0
     nyc:
       specifier: 18.0.0
       version: 18.0.0
@@ -121,10 +121,10 @@ importers:
         version: 1.62.1
       eslint:
         specifier: 'catalog:'
-        version: 10.8.0
+        version: 10.8.1
       eslint-plugin-playwright:
         specifier: 'catalog:'
-        version: 2.11.0(eslint@10.8.0)
+        version: 2.11.0(eslint@10.8.1)
       nyc:
         specifier: 'catalog:'
         version: 18.0.0
@@ -164,7 +164,7 @@ importers:
         version: 26.1.2
       eslint:
         specifier: 'catalog:'
-        version: 10.8.0
+        version: 10.8.1
       prettier:
         specifier: 'catalog:'
         version: 3.9.6
@@ -195,7 +195,7 @@ importers:
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
       eslint:
         specifier: 'catalog:'
-        version: 10.8.0
+        version: 10.8.1
       playwright:
         specifier: 'catalog:'
         version: 1.62.1
@@ -225,13 +225,13 @@ importers:
         version: 0.5.2(eslint@10.4.1)(typescript@5.9.3)
       eslint-plugin-unicorn:
         specifier: 'catalog:'
-        version: 71.0.0(eslint@10.4.1)
+        version: 71.1.0(eslint@10.4.1)
       eslint-plugin-wc:
         specifier: 'catalog:'
         version: 3.1.0(eslint@10.4.1)
       globals:
         specifier: 'catalog:'
-        version: 17.8.0
+        version: 17.9.0
       prettier:
         specifier: 'catalog:'
         version: 3.9.6
@@ -264,7 +264,7 @@ importers:
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
       eslint:
         specifier: 'catalog:'
-        version: 10.8.0
+        version: 10.8.1
       observable-polyfill:
         specifier: 'catalog:'
         version: 0.0.29
@@ -307,7 +307,7 @@ importers:
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
       eslint:
         specifier: 'catalog:'
-        version: 10.8.0
+        version: 10.8.1
       playwright:
         specifier: 'catalog:'
         version: 1.62.1
@@ -337,7 +337,7 @@ importers:
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
       eslint:
         specifier: 'catalog:'
-        version: 10.8.0
+        version: 10.8.1
       playwright:
         specifier: 'catalog:'
         version: 1.62.1
@@ -374,7 +374,7 @@ importers:
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
       eslint:
         specifier: 'catalog:'
-        version: 10.8.0
+        version: 10.8.1
       playwright:
         specifier: 'catalog:'
         version: 1.62.1
@@ -420,7 +420,7 @@ importers:
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
       eslint:
         specifier: 'catalog:'
-        version: 10.8.0
+        version: 10.8.1
       playwright:
         specifier: 'catalog:'
         version: 1.62.1
@@ -450,7 +450,7 @@ importers:
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
       eslint:
         specifier: 'catalog:'
-        version: 10.8.0
+        version: 10.8.1
       playwright:
         specifier: 'catalog:'
         version: 1.62.1
@@ -1099,11 +1099,6 @@ packages:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==, tarball: https://registry.npmjs.org/balanced-match/-/balanced-match-4.0.4.tgz}
     engines: {node: 18 || 20 || >=22}
 
-  baseline-browser-mapping@2.10.31:
-    resolution: {integrity: sha512-MujYO3eP72uvmSE0i4wltsodRfIpZATP3jvzRNRGGxgzId7aVocVJJV3nf01qnzzKFGxQVC9bpWxl5cjxTr/7Q==, tarball: https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.10.31.tgz}
-    engines: {node: '>=6.0.0'}
-    hasBin: true
-
   baseline-browser-mapping@2.11.10:
     resolution: {integrity: sha512-35JEvJ5/KKlbCHjMCsONI2w6HE88STjVdHk+C7d8LtcFxUjZR1KeLP9izofn2qs0KUxX5r4z73bwH/rd+JHacw==, tarball: https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.11.10.tgz}
     engines: {node: '>=6.0.0'}
@@ -1121,11 +1116,6 @@ packages:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==, tarball: https://registry.npmjs.org/braces/-/braces-3.0.3.tgz}
     engines: {node: '>=8'}
 
-  browserslist@4.28.2:
-    resolution: {integrity: sha512-48xSriZYYg+8qXna9kwqjIVzuQxi+KYWp2+5nCYnYKPTr0LvD89Jqk2Or5ogxz0NUMfIjhh2lIUX/LyX9B4oIg==, tarball: https://registry.npmjs.org/browserslist/-/browserslist-4.28.2.tgz}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-
   browserslist@4.28.7:
     resolution: {integrity: sha512-JxV13hNrFxqjOc8alRbq9dK1MM79NEXYpma2B2J4wAtpWS5zIEIKqWPGCl7N4o7Uc7B7itylh7SuDujATRyyTw==, tarball: https://registry.npmjs.org/browserslist/-/browserslist-4.28.7.tgz}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -1142,9 +1132,6 @@ packages:
   camelcase@5.3.1:
     resolution: {integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==, tarball: https://registry.npmjs.org/camelcase/-/camelcase-5.3.1.tgz}
     engines: {node: '>=6'}
-
-  caniuse-lite@1.0.30001793:
-    resolution: {integrity: sha512-iwSsYWaCOoh26cV8NwNRViHlrfUvYsHDfRVcbtmw0Kg6PJIZZXwMkj1442FYLBGkeUf1juAsU3DTfxW579mrPA==, tarball: https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001793.tgz}
 
   caniuse-lite@1.0.30001806:
     resolution: {integrity: sha512-72Cuvd95zbSYPKq6Fhg8eDJRlzgWDf7/mtoZv6Qe/DYNCEBdNxoA3+rZAU2ZhGCpZlns3EssFavaZomckT5Uuw==, tarball: https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001806.tgz}
@@ -1233,9 +1220,6 @@ packages:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==, tarball: https://registry.npmjs.org/dir-glob/-/dir-glob-3.0.1.tgz}
     engines: {node: '>=8'}
 
-  electron-to-chromium@1.5.360:
-    resolution: {integrity: sha512-GkcBt6YYAw9SxFWn+xVar4cLVGlXVuswwtRLBozi2zp0GjXs4ZnOrqV4zbXzg35n7w81hCkyJNYicgXlVHAmBA==, tarball: https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.360.tgz}
-
   electron-to-chromium@1.5.399:
     resolution: {integrity: sha512-lEcqhErbHjXRvd41rnWLpzbyU/IXfIYo7QwaFWmxGeLiLyY2TBCdHnWY88vB+p3ubnihRypDm66panXl7TylLA==, tarball: https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.399.tgz}
 
@@ -1278,8 +1262,8 @@ packages:
   eslint-plugin-tsdoc@0.5.2:
     resolution: {integrity: sha512-BlvqjWZdBJDIPO/YU3zcPCF23CvjYT3gyu63yo6b609NNV3D1b6zceAREy2xnweuBoDpZcLNuPyAUq9cvx6bbQ==, tarball: https://registry.npmjs.org/eslint-plugin-tsdoc/-/eslint-plugin-tsdoc-0.5.2.tgz}
 
-  eslint-plugin-unicorn@71.0.0:
-    resolution: {integrity: sha512-9LAN/lIeEY8x1PsP10wOe1bFhNVJ4s3GWfy2FGiiZiKUd2JXVFKbjFaSVSWMKaVyKx1ulj3g5LMPKjWtvQntwg==, tarball: https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-71.0.0.tgz}
+  eslint-plugin-unicorn@71.1.0:
+    resolution: {integrity: sha512-dn3YmR3qLLUeYyo/os3ubZ7UHQJ1WbBAgC9cIhnLTyMj9J6kivuc2U1fCmYetLexUlTDVYtBqhjSj/VaebTe6Q==, tarball: https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-71.1.0.tgz}
     engines: {node: '>=22'}
     peerDependencies:
       eslint: '>=10.4'
@@ -1311,8 +1295,8 @@ packages:
       jiti:
         optional: true
 
-  eslint@10.8.0:
-    resolution: {integrity: sha512-nuKKvN+oIBO0koN7Tm7dlkmnkc21mtt0QJLwAKzjLq14y6lRTdVG36MZHJ8eQHwdJMwZbQNMlPOYedMq/oVJvQ==, tarball: https://registry.npmjs.org/eslint/-/eslint-10.8.0.tgz}
+  eslint@10.8.1:
+    resolution: {integrity: sha512-wqA7W2jbsC/BnV9Iv1UZpKVFkO1AdNoSmYW8NWG4HNOBbkAMvIqDZ27pI2f07dqn583NcIC44ckjAcOXDL1QbQ==, tarball: https://registry.npmjs.org/eslint/-/eslint-10.8.1.tgz}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
     hasBin: true
     peerDependencies:
@@ -1485,6 +1469,10 @@ packages:
 
   globals@17.8.0:
     resolution: {integrity: sha512-Zz/LMDZScFmkakeL2cTHzf+PbWKdpU3uclqkZT7TjDG58j5WPt0PpA+n9uPI24fZtlw07q0OtEi84K+umsRzqQ==, tarball: https://registry.npmjs.org/globals/-/globals-17.8.0.tgz}
+    engines: {node: '>=18'}
+
+  globals@17.9.0:
+    resolution: {integrity: sha512-m/MvAW61QVU5VDNF1Vj8axt016h8w7L5TU1e9zlab7XIttAT2YAlCwl75K1fOqvMM9apmD7lbCIRhpfkhmxhCg==, tarball: https://registry.npmjs.org/globals/-/globals-17.9.0.tgz}
     engines: {node: '>=18'}
 
   globby@11.1.0:
@@ -1824,10 +1812,6 @@ packages:
   node-preload@0.2.1:
     resolution: {integrity: sha512-RM5oyBy45cLEoHqCeh+MNuFAxO0vTFBLskvQbOKnEE7YTTSN4tbN8QWDIPQ6L+WvKsB/qLEGpYe2ZZ9d4W9OIQ==, tarball: https://registry.npmjs.org/node-preload/-/node-preload-0.2.1.tgz}
     engines: {node: '>=8'}
-
-  node-releases@2.0.45:
-    resolution: {integrity: sha512-iIbHXV9eBB2nB0wa7oTsrrXq+qQt+9SIlx9AX3T96YgobtEQfis5n6TJ6vV+3QP8DwdriEAcGhARaFCu37peBg==, tarball: https://registry.npmjs.org/node-releases/-/node-releases-2.0.45.tgz}
-    engines: {node: '>=18'}
 
   node-releases@2.0.51:
     resolution: {integrity: sha512-wRNIrw4DmVLKQlbgOMdkMx27Wrpzes2hh5Jtbi2bjPd+4wJstWIqP5A+lscnqbm0xxmT5Bpg8Lec5ItEBwx6BQ==, tarball: https://registry.npmjs.org/node-releases/-/node-releases-2.0.51.tgz}
@@ -2458,7 +2442,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.29.3
       '@babel/helper-validator-option': 7.27.1
-      browserslist: 4.28.2
+      browserslist: 4.28.7
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -2683,9 +2667,9 @@ snapshots:
       eslint: 10.4.1
       eslint-visitor-keys: 3.4.3
 
-  '@eslint-community/eslint-utils@4.9.1(eslint@10.8.0)':
+  '@eslint-community/eslint-utils@4.9.1(eslint@10.8.1)':
     dependencies:
-      eslint: 10.8.0
+      eslint: 10.8.1
       eslint-visitor-keys: 3.4.3
 
   '@eslint-community/regexpp@4.12.2': {}
@@ -3188,8 +3172,6 @@ snapshots:
 
   balanced-match@4.0.4: {}
 
-  baseline-browser-mapping@2.10.31: {}
-
   baseline-browser-mapping@2.11.10: {}
 
   better-path-resolve@1.0.0:
@@ -3203,14 +3185,6 @@ snapshots:
   braces@3.0.3:
     dependencies:
       fill-range: 7.1.1
-
-  browserslist@4.28.2:
-    dependencies:
-      baseline-browser-mapping: 2.10.31
-      caniuse-lite: 1.0.30001793
-      electron-to-chromium: 1.5.360
-      node-releases: 2.0.45
-      update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
   browserslist@4.28.7:
     dependencies:
@@ -3230,8 +3204,6 @@ snapshots:
       write-file-atomic: 3.0.3
 
   camelcase@5.3.1: {}
-
-  caniuse-lite@1.0.30001793: {}
 
   caniuse-lite@1.0.30001806: {}
 
@@ -3267,7 +3239,7 @@ snapshots:
 
   core-js-compat@3.49.0:
     dependencies:
-      browserslist: 4.28.2
+      browserslist: 4.28.7
 
   cross-spawn@7.0.6:
     dependencies:
@@ -3297,8 +3269,6 @@ snapshots:
     dependencies:
       path-type: 4.0.0
 
-  electron-to-chromium@1.5.360: {}
-
   electron-to-chromium@1.5.399: {}
 
   emoji-regex@8.0.0: {}
@@ -3318,9 +3288,9 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-plugin-playwright@2.11.0(eslint@10.8.0):
+  eslint-plugin-playwright@2.11.0(eslint@10.8.1):
     dependencies:
-      eslint: 10.8.0
+      eslint: 10.8.1
       globals: 17.7.0
 
   eslint-plugin-simple-import-sort@13.0.0(eslint@10.4.1):
@@ -3337,7 +3307,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-unicorn@71.0.0(eslint@10.4.1):
+  eslint-plugin-unicorn@71.1.0(eslint@10.4.1):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.4.1)
       browserslist: 4.28.7
@@ -3410,9 +3380,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint@10.8.0:
+  eslint@10.8.1:
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@10.8.0)
+      '@eslint-community/eslint-utils': 4.9.1(eslint@10.8.1)
       '@eslint-community/regexpp': 4.12.2
       '@eslint/config-array': 0.23.5
       '@eslint/config-helpers': 0.7.0
@@ -3591,6 +3561,8 @@ snapshots:
   globals@17.7.0: {}
 
   globals@17.8.0: {}
+
+  globals@17.9.0: {}
 
   globby@11.1.0:
     dependencies:
@@ -3880,8 +3852,6 @@ snapshots:
   node-preload@0.2.1:
     dependencies:
       process-on-spawn: 1.1.0
-
-  node-releases@2.0.45: {}
 
   node-releases@2.0.51: {}
 
@@ -4260,12 +4230,6 @@ snapshots:
   undici-types@8.3.0: {}
 
   universalify@0.1.2: {}
-
-  update-browserslist-db@1.2.3(browserslist@4.28.2):
-    dependencies:
-      browserslist: 4.28.2
-      escalade: 3.2.0
-      picocolors: 1.1.1
 
   update-browserslist-db@1.2.3(browserslist@4.28.7):
     dependencies:
