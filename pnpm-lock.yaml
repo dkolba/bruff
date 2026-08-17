@@ -40,14 +40,14 @@ catalogs:
       specifier: 2.11.0
       version: 2.11.0
     eslint-plugin-simple-import-sort:
-      specifier: 13.0.0
-      version: 13.0.0
+      specifier: 14.0.0
+      version: 14.0.0
     eslint-plugin-tsdoc:
       specifier: 0.5.2
       version: 0.5.2
     eslint-plugin-unicorn:
-      specifier: 71.1.0
-      version: 71.1.0
+      specifier: 72.0.0
+      version: 72.0.0
     eslint-plugin-wc:
       specifier: 3.1.0
       version: 3.1.0
@@ -142,10 +142,10 @@ importers:
         version: 5.9.3
       vite:
         specifier: 'catalog:'
-        version: 8.2.1(@types/node@26.1.2)
+        version: 8.2.1(@types/node@26.1.2)(yaml@2.9.0)
       vite-plugin-istanbul:
         specifier: 'catalog:'
-        version: 9.0.1(vite@8.2.1(@types/node@26.1.2))
+        version: 9.0.1(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
 
   packages/cli:
     dependencies:
@@ -186,10 +186,10 @@ importers:
         version: link:../eslint-config
       '@vitest/browser':
         specifier: 'catalog:'
-        version: 4.1.4(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
@@ -207,7 +207,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2))
+        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
 
   packages/eslint-config:
     dependencies:
@@ -219,13 +219,13 @@ importers:
         version: 10.4.1
       eslint-plugin-simple-import-sort:
         specifier: 'catalog:'
-        version: 13.0.0(eslint@10.4.1)
+        version: 14.0.0(eslint@10.4.1)
       eslint-plugin-tsdoc:
         specifier: 'catalog:'
         version: 0.5.2(eslint@10.4.1)(typescript@5.9.3)
       eslint-plugin-unicorn:
         specifier: 'catalog:'
-        version: 71.1.0(eslint@10.4.1)
+        version: 72.0.0(eslint@10.4.1)
       eslint-plugin-wc:
         specifier: 'catalog:'
         version: 3.1.0(eslint@10.4.1)
@@ -255,10 +255,10 @@ importers:
         version: 0.4.1(vitest@4.1.4)
       '@vitest/browser':
         specifier: 'catalog:'
-        version: 4.1.4(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
@@ -279,13 +279,13 @@ importers:
         version: 5.9.3
       vite:
         specifier: 'catalog:'
-        version: 8.2.1(@types/node@26.1.2)
+        version: 8.2.1(@types/node@26.1.2)(yaml@2.9.0)
       vite-plugin-istanbul:
         specifier: 'catalog:'
-        version: 9.0.1(vite@8.2.1(@types/node@26.1.2))
+        version: 9.0.1(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2))
+        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
 
   packages/game-element:
     dependencies:
@@ -298,10 +298,10 @@ importers:
         version: link:../eslint-config
       '@vitest/browser':
         specifier: 'catalog:'
-        version: 4.1.4(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
@@ -319,7 +319,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2))
+        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
 
   packages/glyph:
     devDependencies:
@@ -328,10 +328,10 @@ importers:
         version: link:../eslint-config
       '@vitest/browser':
         specifier: 'catalog:'
-        version: 4.1.4(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
@@ -349,7 +349,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2))
+        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
 
   packages/quilt:
     dependencies:
@@ -365,10 +365,10 @@ importers:
         version: link:../eslint-config
       '@vitest/browser':
         specifier: 'catalog:'
-        version: 4.1.4(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
@@ -386,7 +386,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2))
+        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
 
   packages/sigil:
     dependencies:
@@ -411,10 +411,10 @@ importers:
         version: 1.3.10
       '@vitest/browser':
         specifier: 'catalog:'
-        version: 4.1.4(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
@@ -432,7 +432,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2))
+        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
 
   packages/utils:
     devDependencies:
@@ -441,10 +441,10 @@ importers:
         version: link:../eslint-config
       '@vitest/browser':
         specifier: 'catalog:'
-        version: 4.1.4(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+        version: 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
@@ -462,7 +462,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 'catalog:'
-        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2))
+        version: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
 
 packages:
 
@@ -645,6 +645,10 @@ packages:
 
   '@eslint/core@1.2.1':
     resolution: {integrity: sha512-MwcE1P+AZ4C6DWlpin/OmOA54mmIZ/+xZuJiQd4SyB29oAJjN30UW9wkKNptW2ctp4cEsvhlLY/CsQ1uoHDloQ==, tarball: https://registry.npmjs.org/@eslint/core/-/core-1.2.1.tgz}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@eslint/css-tree@4.0.5':
+    resolution: {integrity: sha512-iPmijIAq4hlIJB86PYmY/fcZORHtjphSqICDbwuw32A/JmkhZQ/K/6TjHE03zqf3n5yABpVcbRAMG8Mi9ojy8g==, tarball: https://registry.npmjs.org/@eslint/css-tree/-/css-tree-4.0.5.tgz}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
   '@eslint/js@10.0.1':
@@ -1230,6 +1234,10 @@ packages:
     resolution: {integrity: sha512-rRqJg/6gd538VHvR3PSrdRBb/1Vy2YfzHqzvbhGIQpDRKIa4FgV/54b5Q1xYSxOOwKvjXweS26E0Q+nAMwp2pQ==, tarball: https://registry.npmjs.org/enquirer/-/enquirer-2.4.1.tgz}
     engines: {node: '>=8.6'}
 
+  entities@4.5.0:
+    resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==, tarball: https://registry.npmjs.org/entities/-/entities-4.5.0.tgz}
+    engines: {node: '>=0.12'}
+
   es-errors@1.3.0:
     resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==, tarball: https://registry.npmjs.org/es-errors/-/es-errors-1.3.0.tgz}
     engines: {node: '>= 0.4'}
@@ -1254,16 +1262,16 @@ packages:
     peerDependencies:
       eslint: '>=8.40.0'
 
-  eslint-plugin-simple-import-sort@13.0.0:
-    resolution: {integrity: sha512-McAc+/Nlvcg4byY/CABGH8kqnefWBj8s3JA2okEtz8ixbECQgU46p0HkTUKa4YS7wvgGceimlc34p1nXqbWqtA==, tarball: https://registry.npmjs.org/eslint-plugin-simple-import-sort/-/eslint-plugin-simple-import-sort-13.0.0.tgz}
+  eslint-plugin-simple-import-sort@14.0.0:
+    resolution: {integrity: sha512-NUJO0+XFCkk+o5EsAJruTgnfMEpeWrPWeJS15UVF60GgXmqz1BJ9/3hzlvG7lkL8Bubzos5cCLptThbFfPnSMQ==, tarball: https://registry.npmjs.org/eslint-plugin-simple-import-sort/-/eslint-plugin-simple-import-sort-14.0.0.tgz}
     peerDependencies:
       eslint: '>=5.0.0'
 
   eslint-plugin-tsdoc@0.5.2:
     resolution: {integrity: sha512-BlvqjWZdBJDIPO/YU3zcPCF23CvjYT3gyu63yo6b609NNV3D1b6zceAREy2xnweuBoDpZcLNuPyAUq9cvx6bbQ==, tarball: https://registry.npmjs.org/eslint-plugin-tsdoc/-/eslint-plugin-tsdoc-0.5.2.tgz}
 
-  eslint-plugin-unicorn@71.1.0:
-    resolution: {integrity: sha512-dn3YmR3qLLUeYyo/os3ubZ7UHQJ1WbBAgC9cIhnLTyMj9J6kivuc2U1fCmYetLexUlTDVYtBqhjSj/VaebTe6Q==, tarball: https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-71.1.0.tgz}
+  eslint-plugin-unicorn@72.0.0:
+    resolution: {integrity: sha512-hqO6ksoOHO+ZhdseTuKRVQbx9U7PRO/cv8qAR1mctwzdVO2hYud8uS9luAhp43RJgziYgHAph8eHyipT8GL0ng==, tarball: https://registry.npmjs.org/eslint-plugin-unicorn/-/eslint-plugin-unicorn-72.0.0.tgz}
     engines: {node: '>=22'}
     peerDependencies:
       eslint: '>=10.4'
@@ -1465,10 +1473,6 @@ packages:
 
   globals@17.7.0:
     resolution: {integrity: sha512-Czmyns5dUsq4seFBR/Kdydhmo8y9kC79hiSkPn0YcGtNnYWnrgt0vjrSjx9tspoDGWm2CMarffRuLjM4xUz8xg==, tarball: https://registry.npmjs.org/globals/-/globals-17.7.0.tgz}
-    engines: {node: '>=18'}
-
-  globals@17.8.0:
-    resolution: {integrity: sha512-Zz/LMDZScFmkakeL2cTHzf+PbWKdpU3uclqkZT7TjDG58j5WPt0PpA+n9uPI24fZtlw07q0OtEi84K+umsRzqQ==, tarball: https://registry.npmjs.org/globals/-/globals-17.8.0.tgz}
     engines: {node: '>=18'}
 
   globals@17.9.0:
@@ -1773,6 +1777,9 @@ packages:
   make-dir@4.0.0:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==, tarball: https://registry.npmjs.org/make-dir/-/make-dir-4.0.0.tgz}
     engines: {node: '>=10'}
+
+  mdn-data@2.29.0:
+    resolution: {integrity: sha512-pVxQFCcaYUEAH853+v7yoI/qzhxXSq1bTb9obMYGYAN1c3Hen+XDCEvr296XhstrwlSTNgOR7mCSD4JPjbJe5A==, tarball: https://registry.npmjs.org/mdn-data/-/mdn-data-2.29.0.tgz}
 
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==, tarball: https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz}
@@ -2372,6 +2379,11 @@ packages:
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==, tarball: https://registry.npmjs.org/yallist/-/yallist-3.1.1.tgz}
 
+  yaml@2.9.0:
+    resolution: {integrity: sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==, tarball: https://registry.npmjs.org/yaml/-/yaml-2.9.0.tgz}
+    engines: {node: '>= 14.6'}
+    hasBin: true
+
   yargs-parser@18.1.3:
     resolution: {integrity: sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ==, tarball: https://registry.npmjs.org/yargs-parser/-/yargs-parser-18.1.3.tgz}
     engines: {node: '>=6'}
@@ -2694,6 +2706,11 @@ snapshots:
     dependencies:
       '@types/json-schema': 7.0.15
 
+  '@eslint/css-tree@4.0.5':
+    dependencies:
+      mdn-data: 2.29.0
+      source-map-js: 1.2.1
+
   '@eslint/js@10.0.1(eslint@10.4.1)':
     optionalDependencies:
       eslint: 10.4.1
@@ -2708,7 +2725,7 @@ snapshots:
   '@fast-check/vitest@0.4.1(vitest@4.1.4)':
     dependencies:
       fast-check: 4.8.0
-      vitest: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2))
+      vitest: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -3026,29 +3043,29 @@ snapshots:
       '@typescript-eslint/types': 8.66.0
       eslint-visitor-keys: 5.0.1
 
-  '@vitest/browser-playwright@4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)':
+  '@vitest/browser-playwright@4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)':
     dependencies:
-      '@vitest/browser': 4.1.4(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
-      '@vitest/mocker': 4.1.4(vite@8.2.1(@types/node@26.1.2))
+      '@vitest/browser': 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
+      '@vitest/mocker': 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
       playwright: 1.62.1
       tinyrainbow: 3.1.0
-      vitest: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2))
+      vitest: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
     transitivePeerDependencies:
       - bufferutil
       - msw
       - utf-8-validate
       - vite
 
-  '@vitest/browser@4.1.4(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)':
+  '@vitest/browser@4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)':
     dependencies:
       '@blazediff/core': 1.9.1
-      '@vitest/mocker': 4.1.4(vite@8.2.1(@types/node@26.1.2))
+      '@vitest/mocker': 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
       '@vitest/utils': 4.1.4
       magic-string: 0.30.21
       pngjs: 7.0.0
       sirv: 3.0.2
       tinyrainbow: 3.1.0
-      vitest: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2))
+      vitest: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
       ws: 8.20.1
     transitivePeerDependencies:
       - bufferutil
@@ -3068,9 +3085,9 @@ snapshots:
       obug: 2.1.1
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2))
+      vitest: 4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
     optionalDependencies:
-      '@vitest/browser': 4.1.4(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+      '@vitest/browser': 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
 
   '@vitest/expect@4.1.4':
     dependencies:
@@ -3081,13 +3098,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.4(vite@8.2.1(@types/node@26.1.2))':
+  '@vitest/mocker@4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))':
     dependencies:
       '@vitest/spy': 4.1.4
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.2.1(@types/node@26.1.2)
+      vite: 8.2.1(@types/node@26.1.2)(yaml@2.9.0)
 
   '@vitest/pretty-format@4.1.4':
     dependencies:
@@ -3278,6 +3295,8 @@ snapshots:
       ansi-colors: 4.1.3
       strip-ansi: 6.0.1
 
+  entities@4.5.0: {}
+
   es-errors@1.3.0: {}
 
   es-module-lexer@2.1.0: {}
@@ -3293,7 +3312,7 @@ snapshots:
       eslint: 10.8.1
       globals: 17.7.0
 
-  eslint-plugin-simple-import-sort@13.0.0(eslint@10.4.1):
+  eslint-plugin-simple-import-sort@14.0.0(eslint@10.4.1):
     dependencies:
       eslint: 10.4.1
 
@@ -3307,17 +3326,19 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-unicorn@71.1.0(eslint@10.4.1):
+  eslint-plugin-unicorn@72.0.0(eslint@10.4.1):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.4.1)
+      '@eslint/css-tree': 4.0.5
       browserslist: 4.28.7
       change-case: 5.4.4
       ci-info: 4.4.0
       core-js-compat: 3.49.0
       detect-indent: 7.0.2
+      entities: 4.5.0
       eslint: 10.4.1
       find-up-simple: 1.0.1
-      globals: 17.8.0
+      globals: 17.9.0
       indent-string: 5.0.0
       is-builtin-module: 5.0.0
       is-identifier: 1.1.0
@@ -3327,6 +3348,7 @@ snapshots:
       reserved-identifiers: 1.2.0
       semver: 7.8.5
       strip-indent: 4.1.1
+      yaml: 2.9.0
 
   eslint-plugin-wc@3.1.0(eslint@10.4.1):
     dependencies:
@@ -3559,8 +3581,6 @@ snapshots:
       path-scurry: 2.0.2
 
   globals@17.7.0: {}
-
-  globals@17.8.0: {}
 
   globals@17.9.0: {}
 
@@ -3825,6 +3845,8 @@ snapshots:
   make-dir@4.0.0:
     dependencies:
       semver: 7.8.5
+
+  mdn-data@2.29.0: {}
 
   merge2@1.4.1: {}
 
@@ -4243,7 +4265,7 @@ snapshots:
 
   uuid@8.3.2: {}
 
-  vite-plugin-istanbul@9.0.1(vite@8.2.1(@types/node@26.1.2)):
+  vite-plugin-istanbul@9.0.1(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0)):
     dependencies:
       '@babel/generator': 7.29.7
       '@istanbuljs/load-nyc-config': 1.1.0
@@ -4253,11 +4275,11 @@ snapshots:
       picocolors: 1.1.1
       source-map: 0.7.6
       test-exclude: 8.0.0
-      vite: 8.2.1(@types/node@26.1.2)
+      vite: 8.2.1(@types/node@26.1.2)(yaml@2.9.0)
     transitivePeerDependencies:
       - supports-color
 
-  vite@8.2.1(@types/node@26.1.2):
+  vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.5
@@ -4267,11 +4289,12 @@ snapshots:
     optionalDependencies:
       '@types/node': 26.1.2
       fsevents: 2.3.3
+      yaml: 2.9.0
 
-  vitest@4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)):
+  vitest@4.1.4(@types/node@26.1.2)(@vitest/browser-playwright@4.1.4)(@vitest/coverage-v8@4.1.4)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0)):
     dependencies:
       '@vitest/expect': 4.1.4
-      '@vitest/mocker': 4.1.4(vite@8.2.1(@types/node@26.1.2))
+      '@vitest/mocker': 4.1.4(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))
       '@vitest/pretty-format': 4.1.4
       '@vitest/runner': 4.1.4
       '@vitest/snapshot': 4.1.4
@@ -4288,11 +4311,11 @@ snapshots:
       tinyexec: 1.1.2
       tinyglobby: 0.2.16
       tinyrainbow: 3.1.0
-      vite: 8.2.1(@types/node@26.1.2)
+      vite: 8.2.1(@types/node@26.1.2)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 26.1.2
-      '@vitest/browser-playwright': 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2))(vitest@4.1.4)
+      '@vitest/browser-playwright': 4.1.4(playwright@1.62.1)(vite@8.2.1(@types/node@26.1.2)(yaml@2.9.0))(vitest@4.1.4)
       '@vitest/coverage-v8': 4.1.4(@vitest/browser@4.1.4)(vitest@4.1.4)
     transitivePeerDependencies:
       - msw
@@ -4330,6 +4353,8 @@ snapshots:
   y18n@4.0.3: {}
 
   yallist@3.1.1: {}
+
+  yaml@2.9.0: {}
 
   yargs-parser@18.1.3:
     dependencies:
