@@ -117,8 +117,10 @@ const canResolveGridEnemies = (state: GameState): boolean =>
 
 const updateEnemiesOnTick = (state: GameState): ReadonlyArray<Enemy> => {
   const { board, enemies, player, playerMoved } = state;
+  const didNeitherEnemiesNorPlayerMove =
+    !canResolveGridEnemies(state) || !playerMoved;
 
-  if (!canResolveGridEnemies(state) || !playerMoved) {
+  if (didNeitherEnemiesNorPlayerMove) {
     return enemies;
   }
 
