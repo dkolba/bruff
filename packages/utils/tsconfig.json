@@ -1,13 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "composite": true,
-    "paths": {
-      "@bruff/utils": ["index.ts"],
-      "@bruff/utils/dom": ["dom.ts"],
-      "@/*": ["module/*"]
-    }
+    "composite": true
   },
   "include": [
     "dom.ts",

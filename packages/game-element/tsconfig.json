@@ -1,11 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "composite": true,
-    "paths": {
-      "@/*": ["module/*"]
-    }
+    "composite": true
   },
   "include": ["module/**/**.ts", "vitest.config.ts"],
   "exclude": ["node_modules", "eslint.config.js"]

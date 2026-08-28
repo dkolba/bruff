@@ -17,7 +17,6 @@
     "noImplicitAny": true,
 
     /* Imports & Modules */
-    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
