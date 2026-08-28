@@ -70,8 +70,8 @@ catalogs:
       specifier: 6.1.3
       version: 6.1.3
     typescript:
-      specifier: npm:@typescript/typescript6@6.0.2
-      version: 6.0.2
+      specifier: 6.0.3
+      version: 6.0.3
     typescript-eslint:
       specifier: 8.68.0
       version: 8.68.0
@@ -139,7 +139,7 @@ importers:
         version: 6.1.3
       typescript:
         specifier: 'catalog:'
-        version: '@typescript/typescript6@6.0.2'
+        version: 6.0.3
       vite:
         specifier: 'catalog:'
         version: 8.2.2(@types/node@26.3.0)(yaml@2.9.0)
@@ -170,7 +170,7 @@ importers:
         version: 3.9.6
       typescript:
         specifier: 'catalog:'
-        version: '@typescript/typescript6@6.0.2'
+        version: 6.0.3
 
   packages/contracts:
     dependencies:
@@ -204,7 +204,7 @@ importers:
         version: 3.9.6
       typescript:
         specifier: 'catalog:'
-        version: '@typescript/typescript6@6.0.2'
+        version: 6.0.3
       vitest:
         specifier: 'catalog:'
         version: 4.1.11(@types/node@26.3.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@26.3.0)(yaml@2.9.0))
@@ -276,7 +276,7 @@ importers:
         version: 3.9.6
       typescript:
         specifier: 'catalog:'
-        version: '@typescript/typescript6@6.0.2'
+        version: 6.0.3
       vite:
         specifier: 'catalog:'
         version: 8.2.2(@types/node@26.3.0)(yaml@2.9.0)
@@ -316,7 +316,7 @@ importers:
         version: 3.9.6
       typescript:
         specifier: 'catalog:'
-        version: '@typescript/typescript6@6.0.2'
+        version: 6.0.3
       vitest:
         specifier: 'catalog:'
         version: 4.1.11(@types/node@26.3.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@26.3.0)(yaml@2.9.0))
@@ -346,7 +346,7 @@ importers:
         version: 3.9.6
       typescript:
         specifier: 'catalog:'
-        version: '@typescript/typescript6@6.0.2'
+        version: 6.0.3
       vitest:
         specifier: 'catalog:'
         version: 4.1.11(@types/node@26.3.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@26.3.0)(yaml@2.9.0))
@@ -383,7 +383,7 @@ importers:
         version: 3.9.6
       typescript:
         specifier: 'catalog:'
-        version: '@typescript/typescript6@6.0.2'
+        version: 6.0.3
       vitest:
         specifier: 'catalog:'
         version: 4.1.11(@types/node@26.3.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@26.3.0)(yaml@2.9.0))
@@ -429,7 +429,7 @@ importers:
         version: 3.9.6
       typescript:
         specifier: 'catalog:'
-        version: '@typescript/typescript6@6.0.2'
+        version: 6.0.3
       vitest:
         specifier: 'catalog:'
         version: 4.1.11(@types/node@26.3.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@26.3.0)(yaml@2.9.0))
@@ -459,7 +459,7 @@ importers:
         version: 3.9.6
       typescript:
         specifier: 'catalog:'
-        version: '@typescript/typescript6@6.0.2'
+        version: 6.0.3
       vitest:
         specifier: 'catalog:'
         version: 4.1.11(@types/node@26.3.0)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@8.2.2(@types/node@26.3.0)(yaml@2.9.0))
@@ -986,10 +986,6 @@ packages:
   '@typescript-eslint/visitor-keys@8.68.0':
     resolution: {integrity: sha512-YR65gGdGvTUAWLldC3xLOvOzamdGzB4A5/N8rehEaHs3Zvoe39BhgY+u0SPch1OvrVTfLcc55wsSgK2NcnTS/A==, tarball: https://registry.npmjs.org/@typescript-eslint/visitor-keys/-/visitor-keys-8.68.0.tgz}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@typescript/typescript6@6.0.2':
-    resolution: {integrity: sha512-mbCddXd+jm7hfx7w2YU64/Av4/NqqeG3GoRZgxPcgoTxYjhrcfJRw9ULch71SS4G+Q3bOXFhRvPqjguN0Hyp5w==, tarball: https://registry.npmjs.org/@typescript/typescript6/-/typescript6-6.0.2.tgz}
-    hasBin: true
 
   '@vitest/browser-playwright@4.1.11':
     resolution: {integrity: sha512-riLBxPqwnJ0lWs2DN2WeUfYeKLoAjbP2Xx8cLQdSddzMi20sksIa6K2mPz79DyMZKKVKH2ksOC2yJvtNcZg8cg==, tarball: https://registry.npmjs.org/@vitest/browser-playwright/-/browser-playwright-4.1.11.tgz}
@@ -2852,10 +2848,6 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.68.0
       eslint-visitor-keys: 5.0.1
-
-  '@typescript/typescript6@6.0.2':
-    dependencies:
-      '@typescript/old': typescript@6.0.3
 
   '@vitest/browser-playwright@4.1.11(playwright@1.62.1)(vite@8.2.2(@types/node@26.3.0)(yaml@2.9.0))(vitest@4.1.11)':
     dependencies:
