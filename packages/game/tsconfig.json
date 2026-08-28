@@ -1,11 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "composite": true,
-    "paths": {
-      "@/*": ["lib/*"]
-    }
+    "composite": true
   },
   "include": [
     "lib/**/*.ts",

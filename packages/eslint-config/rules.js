@@ -43,7 +43,14 @@ export const overrideRulesTsdoc = {
 /** ESLint rule overrides for the unicorn plugin */
 export const overrideRulesUnicorn = {
   "unicorn/better-regex": "warn",
+  // Conflicts with `arrow-body-style: error` (core "all" config) for any
+  // multiline expression body: the two rules demand opposite fixes. The
+  // codebase deliberately favours concise `=> expr` bodies.
+  "unicorn/consistent-arrow-return-style": "off",
   "unicorn/no-array-reduce": "off",
+  // Package entry points and public API surfaces are barrel files by design
+  // (see the workspace map in AGENTS.md). The rule has no ignore option.
+  "unicorn/no-barrel-files": "off",
   "unicorn/no-null": "off",
   "unicorn/try-complexity": ["error", { max: 2 }],
   "unicorn/prefer-includes-over-repeated-comparisons": [
@@ -54,6 +61,9 @@ export const overrideRulesUnicorn = {
   "unicorn/no-unsafe-dom-html": "off", // Set to "true" when baseline: https://developer.mozilla.org/en-US/docs/Web/API/Element/setHTML
   "unicorn/prefer-minimal-ternary": "off",
   "unicorn/prefer-scoped-selector": "off",
+  // Single-line `/** doc */` TSDoc comments are the established convention;
+  // the default "multiline" style would mangle them into three-line blocks.
+  "unicorn/single-line-block-comment-style": ["error", "single-line"],
   "unicorn/no-asterisk-prefix-in-documentation-comments": "off",
 };
 
