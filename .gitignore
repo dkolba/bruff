@@ -14,3 +14,9 @@ packages/arcade/e2e/*.spec.ts-snapshots/*-darwin.png
 .vitest-attachments
 secrets
 .pi/agent/models.json
+
+# Ignore for the time being
+Dockerfile.agent
+makefile
+.claude
+CLAUDE.md
