@@ -17,7 +17,7 @@ catalog:
   "@eslint/js": 10.0.1
   "@fast-check/vitest": 0.4.1
   "@playwright/test": 1.62.1
-  "@types/node": 26.4.1
+  "@types/node": 26.5.1
   "@vitest/browser": 4.1.11
   "@vitest/browser-playwright": 4.1.11
   "@vitest/coverage-v8": 4.1.11
@@ -38,4 +38,4 @@ catalog:
   vite-plugin-istanbul: 9.0.1
   vite: 8.2.2
   vitest: 4.1.11
-  zod: 4.5.4
+  zod: 4.6.1
