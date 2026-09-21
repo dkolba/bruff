@@ -85,8 +85,8 @@ catalogs:
       specifier: 4.1.11
       version: 4.1.11
     zod:
-      specifier: 4.6.1
-      version: 4.6.1
+      specifier: 4.6.5
+      version: 4.6.5
 
 importers:
 
@@ -179,7 +179,7 @@ importers:
         version: link:../utils
       zod:
         specifier: 'catalog:'
-        version: 4.6.1
+        version: 4.6.5
     devDependencies:
       '@bruff/eslint-config':
         specifier: workspace:0.0.0
@@ -2429,8 +2429,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==, tarball: https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz}
     engines: {node: '>=10'}
 
-  zod@4.6.1:
-    resolution: {integrity: sha512-341aRWQsve0rvronKNTqZpjmzdbUDlFuzHaI/XLg/Ej82qffDJRRfBTCuv7+9q/rMjB6LSLyEBnW4InJeMtt/Q==, tarball: https://registry.npmjs.org/zod/-/zod-4.6.1.tgz}
+  zod@4.6.5:
+    resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==, tarball: https://registry.npmjs.org/zod/-/zod-4.6.5.tgz}
 
 snapshots:
 
@@ -4377,4 +4377,4 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod@4.6.1: {}
+  zod@4.6.5: {}
