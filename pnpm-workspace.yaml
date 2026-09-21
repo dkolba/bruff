@@ -36,6 +36,6 @@ catalog:
   typescript-eslint: 8.70.0
   typescript: 7.0.2
   vite-plugin-istanbul: 9.0.1
-  vite: 8.2.2
+  vite: 8.3.0
   vitest: 4.1.11
   zod: 4.6.5
