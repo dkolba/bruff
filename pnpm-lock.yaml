@@ -37,8 +37,8 @@ catalogs:
       specifier: 10.11.0
       version: 10.11.0
     eslint-plugin-playwright:
-      specifier: 2.12.0
-      version: 2.12.0
+      specifier: 2.12.1
+      version: 2.12.1
     eslint-plugin-simple-import-sort:
       specifier: 14.0.0
       version: 14.0.0
@@ -52,8 +52,8 @@ catalogs:
       specifier: 3.1.0
       version: 3.1.0
     globals:
-      specifier: 17.12.0
-      version: 17.12.0
+      specifier: 17.13.0
+      version: 17.13.0
     nyc:
       specifier: 18.0.0
       version: 18.0.0
@@ -124,7 +124,7 @@ importers:
         version: 10.11.0(supports-color@7.2.0)
       eslint-plugin-playwright:
         specifier: 'catalog:'
-        version: 2.12.0(eslint@10.11.0(supports-color@7.2.0))
+        version: 2.12.1(eslint@10.11.0(supports-color@7.2.0))
       nyc:
         specifier: 'catalog:'
         version: 18.0.0(supports-color@7.2.0)
@@ -231,7 +231,7 @@ importers:
         version: 3.1.0(eslint@10.9.1(supports-color@7.2.0))
       globals:
         specifier: 'catalog:'
-        version: 17.12.0
+        version: 17.13.0
       prettier:
         specifier: 'catalog:'
         version: 3.9.9
@@ -1376,8 +1376,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==, tarball: https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz}
     engines: {node: '>=10'}
 
-  eslint-plugin-playwright@2.12.0:
-    resolution: {integrity: sha512-7HpSKR/D2oCH4RKRauFskcrnDrHvLQKopW7Nen8lqrFZtx/SB+FgqVaH+zyQd32noZSZy9Lrsa+DsYrVUpn6hg==, tarball: https://registry.npmjs.org/eslint-plugin-playwright/-/eslint-plugin-playwright-2.12.0.tgz}
+  eslint-plugin-playwright@2.12.1:
+    resolution: {integrity: sha512-JhavNuYBIq7SE/Zg9Esf9RGHkXoDbzrEKS383cowzMyvZ4JMbmdNCN6CoW+RU1Cjzwcoea1tou0je58uXmT/9A==, tarball: https://registry.npmjs.org/eslint-plugin-playwright/-/eslint-plugin-playwright-2.12.1.tgz}
     engines: {node: '>=16.9.0'}
     peerDependencies:
       eslint: '>=8.40.0'
@@ -1582,6 +1582,10 @@ packages:
 
   globals@17.12.0:
     resolution: {integrity: sha512-cezEd/DTyyht9cvSSURyygXPfy04GtWO/5e6ZPvH7fCtjKz9PYOmuawphw1Ctd1f6C+5JypXfGD7ahNMXvevBA==, tarball: https://registry.npmjs.org/globals/-/globals-17.12.0.tgz}
+    engines: {node: '>=18'}
+
+  globals@17.13.0:
+    resolution: {integrity: sha512-RwMTC61u7hrG3ZJMkZQOK4JLJrKS8QtoTii63EmWvFXHqycY9FObBJQCbsLxSO8kjKhWE5kV1GC+Vb1g3RI0Zg==, tarball: https://registry.npmjs.org/globals/-/globals-17.13.0.tgz}
     engines: {node: '>=18'}
 
   graceful-fs@4.2.11:
@@ -3371,7 +3375,7 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-plugin-playwright@2.12.0(eslint@10.11.0(supports-color@7.2.0)):
+  eslint-plugin-playwright@2.12.1(eslint@10.11.0(supports-color@7.2.0)):
     dependencies:
       eslint: 10.11.0(supports-color@7.2.0)
       globals: 17.12.0
@@ -3403,7 +3407,7 @@ snapshots:
       entities: 8.1.0
       eslint: 10.9.1(supports-color@7.2.0)
       find-up-simple: 1.0.1
-      globals: 17.12.0
+      globals: 17.13.0
       indent-string: 5.0.0
       is-builtin-module: 5.0.0
       is-identifier: 1.1.0
@@ -3629,6 +3633,8 @@ snapshots:
       path-scurry: 2.0.2
 
   globals@17.12.0: {}
+
+  globals@17.13.0: {}
 
   graceful-fs@4.2.11: {}
 
