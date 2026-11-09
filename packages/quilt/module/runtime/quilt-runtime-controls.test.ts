@@ -48,13 +48,12 @@ const createRuntimeNodes = (): Readonly<{
   wallToolButton: document.createElement("button"),
 });
 
-const dispatchPointerDown = (
-  overlayCanvas: HTMLCanvasElement,
-  clientX: number,
-  clientY: number,
-): void => {
+const dispatchPointerDown = (overlayCanvas: HTMLCanvasElement): void => {
   overlayCanvas.dispatchEvent(
-    new PointerEvent("pointerdown", { clientX, clientY }),
+    new PointerEvent("pointerdown", {
+      clientX: CANVAS_POINTER_OFFSET,
+      clientY: CANVAS_POINTER_OFFSET,
+    }),
   );
 };
 
@@ -111,11 +110,7 @@ describe("quilt runtime — terrain draw buttons", () => {
     const runtime = makeRuntime(runtimeNodes);
 
     runtimeNodes.doorToolButton.click();
-    dispatchPointerDown(
-      runtimeNodes.overlayCanvas,
-      CANVAS_POINTER_OFFSET,
-      CANVAS_POINTER_OFFSET,
-    );
+    dispatchPointerDown(runtimeNodes.overlayCanvas);
 
     expect(
       getTile(runtime.getState().tileMapData, paintedTileCoordinate, "terrain"),
@@ -170,11 +165,7 @@ describe("quilt runtime — lifecycle", () => {
     runtime.setMapData(tileMapData);
     runtime.disconnect();
     runtimeNodes.eraseToolButton.click();
-    dispatchPointerDown(
-      runtimeNodes.overlayCanvas,
-      CANVAS_POINTER_OFFSET,
-      CANVAS_POINTER_OFFSET,
-    );
+    dispatchPointerDown(runtimeNodes.overlayCanvas);
 
     expect(runtime.getState().tileMapData).toBe(tileMapData);
   });

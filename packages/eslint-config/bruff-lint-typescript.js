@@ -201,6 +201,13 @@ const typescriptConfig = tseslint.config(
   // TSDoc
   tsdocTypescriptConfig,
   webComponentsConfig,
+  // Vitest configs must invoke factories (e.g. playwright()) at module top level
+  {
+    files: ["**/vitest*.config.*"],
+    rules: {
+      "unicorn/no-top-level-side-effects": "off",
+    },
+  },
   // Layer-boundary import restrictions (packages-game.md A-1..A-4)
   ...layerImportRestrictions,
   // Simple import sort

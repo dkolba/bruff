@@ -21,11 +21,9 @@ const applyAcceptedGridMove = (
 
 const applyGridMove = (state: GameState, action: InputAction): GameState => {
   const destination = cellForAction(state.player.cell, action);
-  if (isGridMoveBlocked(state, destination)) {
-    return state;
-  }
-
-  return applyAcceptedGridMove(state, destination);
+  return isGridMoveBlocked(state, destination)
+    ? state
+    : applyAcceptedGridMove(state, destination);
 };
 
 /**

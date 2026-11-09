@@ -62,12 +62,14 @@ describe("sigil glyph map storage", () => {
     const parsed = parseQuiltTerrainGlyphs(VALID_GLYPH_JSON);
 
     expect(isOk(parsed)).toBe(true);
-    if (isOk(parsed)) {
-      expect(parsed.value.floor).toBeDefined();
-      expect(parsed.value.wall).toBeDefined();
-      expect(parsed.value.door).toBeDefined();
-      // Player and enemy are available in the source but not needed for terrain.
+    if (!isOk(parsed)) {
+      return;
     }
+
+    expect(parsed.value.floor).toBeDefined();
+    expect(parsed.value.wall).toBeDefined();
+    expect(parsed.value.door).toBeDefined();
+    // Player and enemy are available in the source but not needed for terrain.
   });
 
   test("ignores non-terrain entries in valid glyph JSON", () => {

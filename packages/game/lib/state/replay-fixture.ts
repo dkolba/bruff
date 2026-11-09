@@ -89,11 +89,9 @@ const parseInitialCanvas = (
     return invalidFixture("initialCanvas must be an object");
   }
 
-  if (!isNumber(raw.height) || !isNumber(raw.width)) {
-    return invalidFixture("initialCanvas height and width must be numbers");
-  }
-
-  return ok({ height: raw.height, width: raw.width });
+  return !isNumber(raw.height) || !isNumber(raw.width)
+    ? invalidFixture("initialCanvas height and width must be numbers")
+    : ok({ height: raw.height, width: raw.width });
 };
 
 const parseReplayFrame = (raw: unknown): Result<ReplayFrame, ReplayError> => {
@@ -105,11 +103,9 @@ const parseReplayFrame = (raw: unknown): Result<ReplayFrame, ReplayError> => {
     return invalidFixture("frame must be an integer");
   }
 
-  if (typeof raw.input !== "string") {
-    return invalidFixture("input must be a string");
-  }
-
-  return ok({ frame: raw.frame, input: raw.input });
+  return typeof raw.input === "string"
+    ? ok({ frame: raw.frame, input: raw.input })
+    : invalidFixture("input must be a string");
 };
 
 const parseFrames = (

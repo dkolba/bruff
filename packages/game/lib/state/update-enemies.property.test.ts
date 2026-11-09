@@ -84,8 +84,7 @@ describe("updateEnemies (property-based)", () => {
   test.prop([gridGameStateArb, gameActionArb])(
     "grid enemies stay inside board bounds after any action",
     (state, action) => {
-      const next = updateEnemies(state, action);
-      const { board, enemies } = next;
+      const { board, enemies } = updateEnemies(state, action);
 
       expect(
         enemies.every(

@@ -1,11 +1,9 @@
-type AppElementName = "bruff-game";
-
-const mountElement = (elementName: AppElementName): void => {
-  const element = document.createElement(elementName);
+const mountGameElement = (): void => {
+  const element = document.createElement("bruff-game");
   const mountRoot = document.querySelector("#arcade-root");
 
   if (mountRoot instanceof HTMLElement) {
-    const existingElement = mountRoot.querySelector(elementName);
+    const existingElement = mountRoot.querySelector("bruff-game");
     if (existingElement instanceof HTMLElement) {
       return;
     }
@@ -26,12 +24,12 @@ const mountApp = async (): Promise<void> => {
       return;
     }
 
-    mountElement("bruff-game");
+    mountGameElement();
     await import("@bruff/game");
     return;
   }
 
-  mountElement("bruff-game");
+  mountGameElement();
   await import("@bruff/game");
 };
 

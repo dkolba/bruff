@@ -32,8 +32,8 @@ const createContext = (): QuiltCanvasContext & {
     }: CanvasRect): void => {
       calls.push(`clear:${pixelX}:${pixelY}:${pixelWidth}:${pixelHeight}`);
     },
-    fill: (path, fillRule): void => {
-      calls.push(`fill:${fillRule ?? "nonzero"}`);
+    fill: (path, fillRule = "nonzero"): void => {
+      calls.push(`fill:${fillRule}`);
     },
     fillRect: ({
       pixelHeight,

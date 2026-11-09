@@ -43,8 +43,12 @@ vi.mock("./test-mode.js", () => ({
   default: vi.fn(() => false),
 }));
 
-const createActionObservable = (eventName: string): Observable<InputAction> =>
-  document.when(eventName).map((): InputAction => ({ type: "move-up" }));
+const TOUCH_ACTION_EVENT = "bruff-test-touch-action";
+
+const createActionObservable = (): Observable<InputAction> =>
+  document
+    .when(TOUCH_ACTION_EVENT)
+    .map((): InputAction => ({ type: "move-up" }));
 
 const createPreparedCanvas = (): {
   canvas: HTMLCanvasElement;
@@ -87,9 +91,7 @@ describe("loop logging", () => {
     vi.mocked(curtainUp).mockReturnValue(
       ok({ canvas, context, removeCanvasResizeListener: vi.fn() }),
     );
-    vi.mocked(createTouchObservable).mockReturnValue(
-      createActionObservable("bruff-test-touch-action"),
-    );
+    vi.mocked(createTouchObservable).mockReturnValue(createActionObservable());
 
     loop();
     document.dispatchEvent(new Event("bruff-test-touch-action"));
@@ -108,9 +110,7 @@ describe("loop logging", () => {
     vi.mocked(curtainUp).mockReturnValue(
       ok({ canvas, context, removeCanvasResizeListener: vi.fn() }),
     );
-    vi.mocked(createTouchObservable).mockReturnValue(
-      createActionObservable("bruff-test-touch-action"),
-    );
+    vi.mocked(createTouchObservable).mockReturnValue(createActionObservable());
 
     loop();
 

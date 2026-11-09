@@ -13,10 +13,12 @@ describe("loadSigilFontFile", () => {
     );
 
     expect(fontResult.type).toBe("ok");
-    if (fontResult.type === "ok") {
-      expect(fontResult.value.unitsPerEm).toBe(TEST_FONT_UNITS_PER_EM);
-      expect(fontResult.value.hasChar("★")).toBe(true);
+    if (fontResult.type !== "ok") {
+      return;
     }
+
+    expect(fontResult.value.unitsPerEm).toBe(TEST_FONT_UNITS_PER_EM);
+    expect(fontResult.value.hasChar("★")).toBe(true);
   });
 
   it("reports invalid font files", async () => {

@@ -14,8 +14,7 @@ const ZERO = 0;
 export type PrngState = Readonly<{ accumulator: number; type: "prng-state" }>;
 
 /**
- * Seeds a new PRNG from a plain integer. The seed uniquely determines
- * the full output sequence; identical seeds produce identical sequences.
+ * Seeds a new PRNG from a plain integer. The seed uniquely determines the full output sequence; identical seeds produce identical sequences.
  *
  * @param seed - Any integer seed value
  * @returns A fresh {@link PrngState} anchored to `seed`
@@ -61,8 +60,7 @@ export const nextNumber = (
  * Generates a raw string ID by drawing two consecutive PRNG steps and
  * formatting the two unsigned 32-bit integers as `"<a>-<b>"`. Advances
  * the state twice. Callers brand the returned string at the entity layer.
- * IDs are unique with overwhelming probability across all draws from the
- * same seed.
+ * IDs are unique with overwhelming probability across all draws from the same seed.
  *
  * @param prng - The current PRNG state
  * @returns `{ prng, value }` — `value` is the raw ID string, `prng` is the next state

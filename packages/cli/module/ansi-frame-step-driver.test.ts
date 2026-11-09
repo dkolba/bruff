@@ -41,14 +41,14 @@ const createWriterProbe = (): WriterProbe => {
   };
 };
 
-const createDriver = (
-  initialState = createHeadlessGame({
-    canvas: defaultCanvas,
-    seed: defaultSeed,
-  }),
-): ReturnType<typeof createAnsiFrameStepDriver> =>
+const defaultInitialState = createHeadlessGame({
+  canvas: defaultCanvas,
+  seed: defaultSeed,
+});
+
+const createDriver = (): ReturnType<typeof createAnsiFrameStepDriver> =>
   createAnsiFrameStepDriver({
-    initialState,
+    initialState: defaultInitialState,
     writer: createWriterProbe().writer,
   });
 

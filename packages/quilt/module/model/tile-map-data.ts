@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- Core data model file with many necessary types and functions */
 import { type Brand, brand } from "@bruff/utils";
 
 import type { EntityId, MapEntity } from "../entities/map-entity.ts";
@@ -199,19 +198,17 @@ const readChunkLayer = (input: ReadChunkLayerInput): number => {
     );
   }
 
-  if (input.layerId === "flags") {
-    return readUint32LayerItem(
-      input.chunk.flagsLayer,
-      input.layerIndex,
-      EMPTY_FLAGS_TILE,
-    );
-  }
-
-  return readUint8LayerItem(
-    input.chunk.terrainLayer,
-    input.layerIndex,
-    floorTileId,
-  );
+  return input.layerId === "flags"
+    ? readUint32LayerItem(
+        input.chunk.flagsLayer,
+        input.layerIndex,
+        EMPTY_FLAGS_TILE,
+      )
+    : readUint8LayerItem(
+        input.chunk.terrainLayer,
+        input.layerIndex,
+        floorTileId,
+      );
 };
 
 const writeObjectLayer = (input: WriteChunkLayerInput): TileChunk => {

@@ -79,10 +79,12 @@ describe("broughlike map — parsing", () => {
     });
 
     expect(isOk(parsed)).toBe(true);
-    if (isOk(parsed)) {
-      expect(getTile(parsed.value, doorCoordinate, "terrain")).toBe(doorTileId);
-      expect(getTile(parsed.value, wallCoordinate, "terrain")).toBe(wallTileId);
+    if (!isOk(parsed)) {
+      return;
     }
+
+    expect(getTile(parsed.value, doorCoordinate, "terrain")).toBe(doorTileId);
+    expect(getTile(parsed.value, wallCoordinate, "terrain")).toBe(wallTileId);
   });
 
   test("returns typed errors for invalid input", () => {

@@ -161,11 +161,7 @@ const tileIdToFillStyle = (tileId: TileId): string => {
     return WALL_FILL_STYLE;
   }
 
-  if (tileId === doorTileId) {
-    return DOOR_FILL_STYLE;
-  }
-
-  return FLOOR_FILL_STYLE;
+  return tileId === doorTileId ? DOOR_FILL_STYLE : FLOOR_FILL_STYLE;
 };
 
 const createGridCommand = (input: CreateDrawPlanInput): DrawGridCommand => ({

@@ -175,9 +175,7 @@ export const isCliEntryPoint = (
 ): boolean => {
   const [, entryPath] = argv;
 
-  return entryPath === undefined
-    ? false
-    : pathToFileURL(entryPath).href === moduleUrl;
+  return entryPath !== undefined && pathToFileURL(entryPath).href === moduleUrl;
 };
 
 /** Render the CLI using process-like ports. */
