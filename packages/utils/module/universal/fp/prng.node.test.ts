@@ -9,17 +9,17 @@ const ID_COUNT = 10_000;
 const ONE = 1;
 const ZERO = 0;
 
-const generateNumberBatch = (seed: number, count: number): number[] => {
+const generateNumberBatch = (seed: number = SEED_ONE): number[] => {
   let state: PrngState = createPrng(seed);
-  return Array.from({ length: count }, () => {
+  return Array.from({ length: SEQUENCE_LENGTH }, () => {
     const step = nextNumber(state);
     state = step.prng;
     return step.value;
   });
 };
 
-const generateIdBatch = (seed: number, count: number): string[] => {
-  let state: PrngState = createPrng(seed);
+const generateIdBatch = (count: number): string[] => {
+  let state: PrngState = createPrng(SEED_ONE);
   return Array.from({ length: count }, () => {
     const step = nextId(state);
     state = step.prng;
@@ -35,25 +35,25 @@ describe("createPrng", () => {
 
 describe("nextNumber", () => {
   it("produces the same sequence for the same seed", () => {
-    const runA = generateNumberBatch(SEED_ONE, SEQUENCE_LENGTH);
-    const runB = generateNumberBatch(SEED_ONE, SEQUENCE_LENGTH);
+    const runA = generateNumberBatch();
+    const runB = generateNumberBatch();
     expect(runA).toEqual(runB);
   });
 
   it("produces different sequences for different seeds", () => {
-    const runA = generateNumberBatch(SEED_ONE, SEQUENCE_LENGTH);
-    const runB = generateNumberBatch(SEED_TWO, SEQUENCE_LENGTH);
+    const runA = generateNumberBatch();
+    const runB = generateNumberBatch(SEED_TWO);
     expect(runA).not.toEqual(runB);
   });
 
   it("all values are in the half-open interval [0, 1)", () => {
-    const values = generateNumberBatch(SEED_ONE, SEQUENCE_LENGTH);
+    const values = generateNumberBatch();
     const isAllInRange = values.every((value) => value >= ZERO && value < ONE);
     expect(isAllInRange).toBe(true);
   });
 
   it("sequence of 1001 values has no consecutive duplicates", () => {
-    const values = generateNumberBatch(SEED_ONE, SEQUENCE_LENGTH);
+    const values = generateNumberBatch();
     const hasConsecutiveDuplicate = values.some(
       (value, index) => index > ZERO && value === values[index - ONE],
     );
@@ -63,14 +63,14 @@ describe("nextNumber", () => {
 
 describe("nextId", () => {
   it("generates unique values across 10000 draws", () => {
-    const ids = generateIdBatch(SEED_ONE, ID_COUNT);
+    const ids = generateIdBatch(ID_COUNT);
     const idSet = new Set(ids);
     expect(idSet.size).toBe(ID_COUNT);
   });
 
   it("same seed produces the same ID sequence", () => {
-    const runA = generateIdBatch(SEED_ONE, SEQUENCE_LENGTH);
-    const runB = generateIdBatch(SEED_ONE, SEQUENCE_LENGTH);
+    const runA = generateIdBatch(SEQUENCE_LENGTH);
+    const runB = generateIdBatch(SEQUENCE_LENGTH);
     expect(runA).toEqual(runB);
   });
 });

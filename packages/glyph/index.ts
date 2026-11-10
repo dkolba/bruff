@@ -6,8 +6,7 @@ const BRAILLE_PATTERN_COUNT = 256;
 /**
  * Unicode glyph catalog for a roguelike renderer.
  *
- * Prefer glyphs that render clearly in the target game font. Width and coverage
- * vary by platform, especially outside the Basic Multilingual Plane.
+ * Prefer glyphs that render clearly in the target game font. Width and coverage vary by platform, especially outside the Basic Multilingual Plane.
  */
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -20,8 +20,7 @@ export type ParseQuiltTerrainGlyphsError = Readonly<{
 }>;
 
 /**
- * Parses an unknown input into Quilt terrain glyph rendering data,
- * extracting only floor, wall, and door entries from a Sigil glyph map.
+ * Parses an unknown input into Quilt terrain glyph rendering data, extracting only floor, wall, and door entries from a Sigil glyph map.
  *
  * @param input - Unknown candidate value
  * @returns A typed result containing terrain glyphs or parse failure

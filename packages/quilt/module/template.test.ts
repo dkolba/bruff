@@ -35,21 +35,23 @@ describe("quilt template — grid-size select", () => {
     );
 
     expect(gridSizeSelect).toBeInstanceOf(HTMLSelectElement);
-    if (gridSizeSelect instanceof HTMLSelectElement) {
-      expect(gridSizeSelect.options.length).toBe(GRID_OPTION_COUNT);
-      expect(gridSizeSelect.options[FIRST_GRID_INDEX]?.value).toBe(
-        String(FIRST_GRID_SIZE),
-      );
-      expect(gridSizeSelect.options[FIRST_GRID_INDEX]?.textContent).toBe(
-        `${String(FIRST_GRID_SIZE)}×${String(FIRST_GRID_SIZE)}`,
-      );
-      expect(gridSizeSelect.options[LAST_GRID_INDEX]?.value).toBe(
-        String(LAST_GRID_SIZE),
-      );
-      expect(gridSizeSelect.options[LAST_GRID_INDEX]?.textContent).toBe(
-        `${LAST_GRID_SIZE}×${LAST_GRID_SIZE}`,
-      );
+    if (!(gridSizeSelect instanceof HTMLSelectElement)) {
+      return;
     }
+
+    expect(gridSizeSelect.options.length).toBe(GRID_OPTION_COUNT);
+    expect(gridSizeSelect.options[FIRST_GRID_INDEX]?.value).toBe(
+      String(FIRST_GRID_SIZE),
+    );
+    expect(gridSizeSelect.options[FIRST_GRID_INDEX]?.textContent).toBe(
+      `${String(FIRST_GRID_SIZE)}×${String(FIRST_GRID_SIZE)}`,
+    );
+    expect(gridSizeSelect.options[LAST_GRID_INDEX]?.value).toBe(
+      String(LAST_GRID_SIZE),
+    );
+    expect(gridSizeSelect.options[LAST_GRID_INDEX]?.textContent).toBe(
+      `${LAST_GRID_SIZE}×${LAST_GRID_SIZE}`,
+    );
   });
 });
 
@@ -82,10 +84,12 @@ describe("quilt template — import/export", () => {
     const importInput = template.content.querySelector(
       '[data-quilt="import-input"]',
     );
-    if (importInput instanceof HTMLInputElement) {
-      expect(importInput.type).toBe("file");
-      expect(importInput.accept).toBe(".json");
+    if (!(importInput instanceof HTMLInputElement)) {
+      return;
     }
+
+    expect(importInput.type).toBe("file");
+    expect(importInput.accept).toBe(".json");
   });
 });
 

@@ -38,8 +38,7 @@ const drawBar = ({
 
 /**
  * Creates an animated background pattern of radiating bars that rotate and pulse.
- * The bars emanate from the center of the canvas in both directions, with colors
- * that shift based on position and time.
+ * The bars emanate from the center of the canvas in both directions, with colors that shift based on position and time.
  *
  * @param context - The 2D rendering context of the canvas
  * @param timestamp - The current timestamp for animation timing

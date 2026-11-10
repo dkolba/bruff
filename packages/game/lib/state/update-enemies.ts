@@ -120,11 +120,9 @@ const updateEnemiesOnTick = (state: GameState): ReadonlyArray<Enemy> => {
   const didNeitherEnemiesNorPlayerMove =
     !canResolveGridEnemies(state) || !playerMoved;
 
-  if (didNeitherEnemiesNorPlayerMove) {
-    return enemies;
-  }
-
-  return resolveGridEnemies(state, board, player.cell);
+  return didNeitherEnemiesNorPlayerMove
+    ? enemies
+    : resolveGridEnemies(state, board, player.cell);
 };
 
 /**

@@ -125,7 +125,7 @@ test("applies queued movement inputs in FIFO order", async ({
 }) => {
   await gotoTestMode(page);
 
-  const result = await page.evaluate(() => {
+  const { queuedInputCount: queuedCount, state } = await page.evaluate(() => {
     const initialCount = 0;
     const inputCountStep = 1;
     const frameStep = 1;
@@ -141,8 +141,7 @@ test("applies queued movement inputs in FIFO order", async ({
     };
   });
 
-  const { queuedInputCount, state } = result;
-  expect(queuedInputCount).toBe(FIVE);
+  expect(queuedCount).toBe(FIVE);
   expect(state?.frameIndex).toBe(ONE);
   expect(state?.player.cell).toStrictEqual({ column: THREE, row: THREE });
   expect(state?.enemies.length).toBe(THREE);

@@ -7,8 +7,7 @@ import { normaliseKey } from "../../input/normalise-input.js";
 
 /**
  * !TODO:
- * This file is currently not included in coverage, because Playwright does not
- * provide a clean touch interface
+ * This file is currently not included in coverage, because Playwright does not provide a clean touch interface
  */
 
 /**
@@ -55,10 +54,9 @@ const createTouchDirectionObservable = (
     controller.abort();
     const dx = lastTouch.clientX - startTouch.clientX;
     const dy = lastTouch.clientY - startTouch.clientY;
-    if (Math.abs(dx) < FIVE && Math.abs(dy) < FIVE) {
-      return null;
-    }
-    return getCardinalDirection(dx, dy);
+    return Math.abs(dx) < FIVE && Math.abs(dy) < FIVE
+      ? null
+      : getCardinalDirection(dx, dy);
   });
 };
 

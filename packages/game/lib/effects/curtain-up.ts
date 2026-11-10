@@ -22,8 +22,7 @@ export type CurtainUpStage = Readonly<{
 }>;
 
 /**
- * Composes the shadow root → canvas → 2D-context boundary chain into
- * a single railway. Each step short-circuits on its own typed error.
+ * Composes the shadow root → canvas → 2D-context boundary chain into a single railway. Each step short-circuits on its own typed error.
  *
  * @param selector - The selector for the game-root element
  * @returns `ok` with both the canvas and its 2D context, or `error`

@@ -156,12 +156,11 @@ test("grid-size select contains expected options", async ({ page }) => {
   await expect(quiltElement).toHaveCount(MOUNTED_COUNT);
   await expect(gridSizeSelect).toHaveValue("4");
 
-  const options = await gridSizeSelect.evaluate((select) => {
-    if (!(select instanceof HTMLSelectElement)) {
-      return [];
-    }
-    return [...select.options].map((opt) => opt.value);
-  });
+  const options = await gridSizeSelect.evaluate((select) =>
+    select instanceof HTMLSelectElement
+      ? [...select.options].map((opt) => opt.value)
+      : [],
+  );
 
   expect(options).toStrictEqual(["4", "5", "6", "7", "8", "9"]);
 });

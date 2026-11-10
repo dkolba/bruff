@@ -25,8 +25,10 @@ const FIRST_GLYPH_GROUP_INDEX = 0;
 const glyphCountText = (drafts: ReadonlyArray<SigilGlyphDraft>): string =>
   `Glyphs ready: ${drafts.length}`;
 
-const fileNameText = (fileName: string | undefined): string =>
-  fileName ?? "No font selected";
+const DEFAULT_FILE_NAME_TEXT = "No font selected";
+
+const fileNameText = (fileName: string = DEFAULT_FILE_NAME_TEXT): string =>
+  fileName;
 
 const firstGlyphGroupName = (
   glyphGroups: ReadonlyArray<SigilGlyphGroup>,

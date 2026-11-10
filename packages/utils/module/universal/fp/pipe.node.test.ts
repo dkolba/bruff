@@ -8,15 +8,12 @@ const SIX = 6;
 const TWELVE = 12;
 
 /**
- * Adds a number to the input value.
+ * Adds two to the input value.
  *
- * @param number - The number to add
- * @returns (first: number) =\> number - A function that adds num to its input
+ * @param first - The number to increment
+ * @returns number - Two more than the input
  */
-const add =
-  (second: number): ((first: number) => number) =>
-  (first: number): number =>
-    first + second;
+const addTwo = (first: number): number => first + TWO;
 
 /**
  * Doubles a number.
@@ -27,7 +24,6 @@ const add =
 const double = (operand: number): number => operand + operand;
 
 test("#pipe", () => {
-  const addTwo = add(TWO);
   const pipeline = pipe(addTwo, double);
   // (1 + 2) * 2 = 6
   expect(pipeline(ONE)).toBe(SIX);
@@ -35,7 +31,6 @@ test("#pipe", () => {
 
 // Additional test for multiple functions
 test("#pipe with multiple functions", () => {
-  const addTwo = add(TWO);
   const pipeline = pipe(addTwo, double, double);
   // ((1 + 2) * 2) * 2 = 12
   expect(pipeline(ONE)).toBe(TWELVE);
