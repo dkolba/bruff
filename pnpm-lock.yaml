@@ -19,8 +19,8 @@ catalogs:
       specifier: 0.5.0
       version: 0.5.0
     '@playwright/test':
-      specifier: 1.64.1
-      version: 1.64.1
+      specifier: 1.65.0
+      version: 1.65.0
     '@types/node':
       specifier: 26.6.6
       version: 26.6.6
@@ -61,8 +61,8 @@ catalogs:
       specifier: 0.0.29
       version: 0.0.29
     playwright:
-      specifier: 1.64.1
-      version: 1.64.1
+      specifier: 1.65.0
+      version: 1.65.0
     prettier:
       specifier: 3.9.10
       version: 3.9.10
@@ -103,7 +103,7 @@ importers:
     devDependencies:
       '@axe-core/playwright':
         specifier: 'catalog:'
-        version: 4.14.0(playwright-core@1.64.1)
+        version: 4.14.0(playwright-core@1.65.0)
       '@bruff/eslint-config':
         specifier: workspace:0.0.0
         version: link:../eslint-config
@@ -118,7 +118,7 @@ importers:
         version: link:../sigil
       '@playwright/test':
         specifier: 'catalog:'
-        version: 1.64.1
+        version: 1.65.0
       eslint:
         specifier: 'catalog:'
         version: 10.14.0(supports-color@7.2.0)
@@ -130,7 +130,7 @@ importers:
         version: 18.0.0(supports-color@7.2.0)
       playwright:
         specifier: 'catalog:'
-        version: 1.64.1
+        version: 1.65.0
       prettier:
         specifier: 'catalog:'
         version: 3.9.10
@@ -189,7 +189,7 @@ importers:
         version: 4.1.11(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.11(playwright@1.64.1)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
+        version: 4.1.11(playwright@1.65.0)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
@@ -198,7 +198,7 @@ importers:
         version: 10.14.0(supports-color@7.2.0)
       playwright:
         specifier: 'catalog:'
-        version: 1.64.1
+        version: 1.65.0
       prettier:
         specifier: 'catalog:'
         version: 3.9.10
@@ -258,7 +258,7 @@ importers:
         version: 4.1.11(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.11(playwright@1.64.1)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
+        version: 4.1.11(playwright@1.65.0)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
@@ -270,7 +270,7 @@ importers:
         version: 0.0.29
       playwright:
         specifier: 'catalog:'
-        version: 1.64.1
+        version: 1.65.0
       prettier:
         specifier: 'catalog:'
         version: 3.9.10
@@ -301,7 +301,7 @@ importers:
         version: 4.1.11(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.11(playwright@1.64.1)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
+        version: 4.1.11(playwright@1.65.0)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
@@ -310,7 +310,7 @@ importers:
         version: 10.14.0(supports-color@7.2.0)
       playwright:
         specifier: 'catalog:'
-        version: 1.64.1
+        version: 1.65.0
       prettier:
         specifier: 'catalog:'
         version: 3.9.10
@@ -331,7 +331,7 @@ importers:
         version: 4.1.11(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.11(playwright@1.64.1)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
+        version: 4.1.11(playwright@1.65.0)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
@@ -340,7 +340,7 @@ importers:
         version: 10.14.0(supports-color@7.2.0)
       playwright:
         specifier: 'catalog:'
-        version: 1.64.1
+        version: 1.65.0
       prettier:
         specifier: 'catalog:'
         version: 3.9.10
@@ -368,7 +368,7 @@ importers:
         version: 4.1.11(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.11(playwright@1.64.1)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
+        version: 4.1.11(playwright@1.65.0)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
@@ -377,7 +377,7 @@ importers:
         version: 10.14.0(supports-color@7.2.0)
       playwright:
         specifier: 'catalog:'
-        version: 1.64.1
+        version: 1.65.0
       prettier:
         specifier: 'catalog:'
         version: 3.9.10
@@ -414,7 +414,7 @@ importers:
         version: 4.1.11(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.11(playwright@1.64.1)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
+        version: 4.1.11(playwright@1.65.0)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
@@ -423,7 +423,7 @@ importers:
         version: 10.14.0(supports-color@7.2.0)
       playwright:
         specifier: 'catalog:'
-        version: 1.64.1
+        version: 1.65.0
       prettier:
         specifier: 'catalog:'
         version: 3.9.10
@@ -444,7 +444,7 @@ importers:
         version: 4.1.11(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/browser-playwright':
         specifier: 'catalog:'
-        version: 4.1.11(playwright@1.64.1)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
+        version: 4.1.11(playwright@1.65.0)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
@@ -453,7 +453,7 @@ importers:
         version: 10.14.0(supports-color@7.2.0)
       playwright:
         specifier: 'catalog:'
-        version: 1.64.1
+        version: 1.65.0
       prettier:
         specifier: 'catalog:'
         version: 3.9.10
@@ -776,8 +776,8 @@ packages:
   '@oxc-project/types@0.156.0':
     resolution: {integrity: sha512-1Duyg48TdJNdyhEB8Xn1L36bT9Pv6GUtlKjHxOys8xkaF/rQq3XJE+bAurSK/AgIz5mGFsb77cn9Pb20+WCScw==, tarball: https://registry.npmjs.org/@oxc-project/types/-/types-0.156.0.tgz}
 
-  '@playwright/test@1.64.1':
-    resolution: {integrity: sha512-IaYGml/nSOiZWROfPtuIL7neuu9qDOZ3TNvNljUIrhDMxiGTgPjzj/g9p9RxpS2tSepPDRY+UwAaEeiKtUvIAg==, tarball: https://registry.npmjs.org/@playwright/test/-/test-1.64.1.tgz}
+  '@playwright/test@1.65.0':
+    resolution: {integrity: sha512-iGURLGuKDLakSEl7Pgfv8h7f+XLT+V861Wfhz0zlEl5nyFuKUopdkFBPKqTllTUp06aOwPuH8iuUEb3yp3MpbQ==, tarball: https://registry.npmjs.org/@playwright/test/-/test-1.65.0.tgz}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -2020,13 +2020,13 @@ packages:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==, tarball: https://registry.npmjs.org/pkg-dir/-/pkg-dir-4.2.0.tgz}
     engines: {node: '>=8'}
 
-  playwright-core@1.64.1:
-    resolution: {integrity: sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ==, tarball: https://registry.npmjs.org/playwright-core/-/playwright-core-1.64.1.tgz}
+  playwright-core@1.65.0:
+    resolution: {integrity: sha512-vNSKgH6YqtN7cdT/L334zo0a+YwkrpicyrHJlWWPIm/Q+Nn2SWInil01oT0mbu96U4GgoRtCYQD9CzJQgju+lA==, tarball: https://registry.npmjs.org/playwright-core/-/playwright-core-1.65.0.tgz}
     engines: {node: '>=20'}
     hasBin: true
 
-  playwright@1.64.1:
-    resolution: {integrity: sha512-HCrVhHr5QQuwYoswEUGTb7gGp522yflbv/ST8nF4sFWGuLjQCt17Q/EubpGGSNKYn1tsTCPZxqHhHCfVURu7UA==, tarball: https://registry.npmjs.org/playwright/-/playwright-1.64.1.tgz}
+  playwright@1.65.0:
+    resolution: {integrity: sha512-F3AMWcR44qMBt4kq+6Kb6mX7bjGXshktKFOPULd7reED6ZJWevjbNRqysP7q+AATE9kdPEZBibex1BYsvpVoeA==, tarball: https://registry.npmjs.org/playwright/-/playwright-1.65.0.tgz}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -2448,10 +2448,10 @@ packages:
 
 snapshots:
 
-  '@axe-core/playwright@4.14.0(playwright-core@1.64.1)':
+  '@axe-core/playwright@4.14.0(playwright-core@1.65.0)':
     dependencies:
       axe-core: 4.14.0
-      playwright-core: 1.64.1
+      playwright-core: 1.65.0
 
   '@babel/code-frame@7.29.0':
     dependencies:
@@ -2848,9 +2848,9 @@ snapshots:
 
   '@oxc-project/types@0.156.0': {}
 
-  '@playwright/test@1.64.1':
+  '@playwright/test@1.65.0':
     dependencies:
-      playwright: 1.64.1
+      playwright: 1.65.0
 
   '@pnpm/deps.graph-sequencer@1100.0.1': {}
 
@@ -3136,11 +3136,11 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@vitest/browser-playwright@4.1.11(playwright@1.64.1)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)':
+  '@vitest/browser-playwright@4.1.11(playwright@1.65.0)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)':
     dependencies:
       '@vitest/browser': 4.1.11(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/mocker': 4.1.11(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))
-      playwright: 1.64.1
+      playwright: 1.65.0
       tinyrainbow: 3.1.1
       vitest: 4.1.11(@types/node@26.6.6)(@vitest/browser-playwright@4.1.11)(@vitest/coverage-v8@4.1.11)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))
     transitivePeerDependencies:
@@ -4040,11 +4040,11 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  playwright-core@1.64.1: {}
+  playwright-core@1.65.0: {}
 
-  playwright@1.64.1:
+  playwright@1.65.0:
     dependencies:
-      playwright-core: 1.64.1
+      playwright-core: 1.65.0
 
   pluralize@8.0.0: {}
 
@@ -4338,7 +4338,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 26.6.6
-      '@vitest/browser-playwright': 4.1.11(playwright@1.64.1)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
+      '@vitest/browser-playwright': 4.1.11(playwright@1.65.0)(vite@8.3.7(@types/node@26.6.6)(yaml@2.9.1))(vitest@4.1.11)
       '@vitest/coverage-v8': 4.1.11(@vitest/browser@4.1.11)(vitest@4.1.11)
     transitivePeerDependencies:
       - msw
