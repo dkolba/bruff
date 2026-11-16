@@ -89,9 +89,9 @@ const parseInitialCanvas = (
     return invalidFixture("initialCanvas must be an object");
   }
 
-  return !isNumber(raw.height) || !isNumber(raw.width)
-    ? invalidFixture("initialCanvas height and width must be numbers")
-    : ok({ height: raw.height, width: raw.width });
+  return isNumber(raw.height) && isNumber(raw.width)
+    ? ok({ height: raw.height, width: raw.width })
+    : invalidFixture("initialCanvas height and width must be numbers");
 };
 
 const parseReplayFrame = (raw: unknown): Result<ReplayFrame, ReplayError> => {
