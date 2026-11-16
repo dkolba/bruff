@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function -- Loop shell tests keep mocked setup close to assertions. */
 import type * as Utilities from "@bruff/utils";
 import { error, log, ok } from "@bruff/utils";
 import type { Observable } from "observable-polyfill/fn";
