@@ -64,8 +64,8 @@ catalogs:
       specifier: 1.65.1
       version: 1.65.1
     prettier:
-      specifier: 3.10.0
-      version: 3.10.0
+      specifier: 3.10.1
+      version: 3.10.1
     rimraf:
       specifier: 6.1.4
       version: 6.1.4
@@ -97,7 +97,7 @@ importers:
         version: 3.0.3
       prettier:
         specifier: 'catalog:'
-        version: 3.10.0
+        version: 3.10.1
 
   packages/arcade:
     devDependencies:
@@ -133,7 +133,7 @@ importers:
         version: 1.65.1
       prettier:
         specifier: 'catalog:'
-        version: 3.10.0
+        version: 3.10.1
       rimraf:
         specifier: 'catalog:'
         version: 6.1.4
@@ -167,7 +167,7 @@ importers:
         version: 10.14.0(supports-color@7.2.0)
       prettier:
         specifier: 'catalog:'
-        version: 3.10.0
+        version: 3.10.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -201,7 +201,7 @@ importers:
         version: 1.65.1
       prettier:
         specifier: 'catalog:'
-        version: 3.10.0
+        version: 3.10.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -234,7 +234,7 @@ importers:
         version: 17.14.0
       prettier:
         specifier: 'catalog:'
-        version: 3.10.0
+        version: 3.10.1
       typescript-eslint:
         specifier: 'catalog:'
         version: 8.72.2(eslint@10.9.1(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
@@ -273,7 +273,7 @@ importers:
         version: 1.65.1
       prettier:
         specifier: 'catalog:'
-        version: 3.10.0
+        version: 3.10.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -313,7 +313,7 @@ importers:
         version: 1.65.1
       prettier:
         specifier: 'catalog:'
-        version: 3.10.0
+        version: 3.10.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -343,7 +343,7 @@ importers:
         version: 1.65.1
       prettier:
         specifier: 'catalog:'
-        version: 3.10.0
+        version: 3.10.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -380,7 +380,7 @@ importers:
         version: 1.65.1
       prettier:
         specifier: 'catalog:'
-        version: 3.10.0
+        version: 3.10.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -426,7 +426,7 @@ importers:
         version: 1.65.1
       prettier:
         specifier: 'catalog:'
-        version: 3.10.0
+        version: 3.10.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -456,7 +456,7 @@ importers:
         version: 1.65.1
       prettier:
         specifier: 'catalog:'
-        version: 3.10.0
+        version: 3.10.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -2119,8 +2119,8 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==, tarball: https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz}
     engines: {node: '>= 0.8.0'}
 
-  prettier@3.10.0:
-    resolution: {integrity: sha512-mBi4765LgjO1PFjlEs7pUeK0nb1bw71c+N4/ItfeUWNdY5cV2pRKaFpbbFRYmDJMO+5ZwzGxHRqHxFZna7iv5w==, tarball: https://registry.npmjs.org/prettier/-/prettier-3.10.0.tgz}
+  prettier@3.10.1:
+    resolution: {integrity: sha512-70vp3ZUYoPlFbF9uiTdXHUUCGEIp7d4+6p+8DYbkm2jP7x/3i/paXVF6dopSI3zd/CEitrZN1rc4i85xWmmXlg==, tarball: https://registry.npmjs.org/prettier/-/prettier-3.10.1.tgz}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -4266,7 +4266,7 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier@3.10.0: {}
+  prettier@3.10.1: {}
 
   process-on-spawn@1.1.0:
     dependencies:
