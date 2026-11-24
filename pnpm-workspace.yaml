@@ -33,7 +33,7 @@ catalog:
   playwright: 1.65.1
   prettier: 3.10.1
   rimraf: 6.1.4
-  typescript-eslint: 8.72.2
+  typescript-eslint: 8.73.0
   typescript: 7.0.2
   vite-plugin-istanbul: 9.0.1
   vite: 8.3.8
